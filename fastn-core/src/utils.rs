@@ -47,10 +47,11 @@ pub fn get_cache_file(id: &str) -> Option<std::path::PathBuf> {
     let base_path = cache_dir.join("fastn.com");
 
     if !base_path.exists()
-        && let Err(err) = std::fs::create_dir_all(&base_path) {
-            eprintln!("Failed to create cache directory: {err}");
-            return None;
-        }
+        && let Err(err) = std::fs::create_dir_all(&base_path)
+    {
+        eprintln!("Failed to create cache directory: {err}");
+        return None;
+    }
 
     Some(
         base_path

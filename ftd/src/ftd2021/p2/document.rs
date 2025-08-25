@@ -36,9 +36,10 @@ impl Document {
                 if let ftd::ftd2021::variable::VariableFlags {
                     always_include: Some(f),
                 } = flag
-                    && *f {
-                        always_include.push(k.to_string());
-                    }
+                    && *f
+                {
+                    always_include.push(k.to_string());
+                }
             }
         }
         return (d, always_include);
@@ -91,16 +92,17 @@ impl Document {
                     }
                     for (k, v) in fields {
                         if let Ok(val) = v.resolve(0, doc)
-                            && let Some(val) = get_value(&val, doc) {
-                                value_fields.insert(
-                                    if k.eq("size") {
-                                        "font-size".to_string()
-                                    } else {
-                                        k
-                                    },
-                                    val,
-                                );
-                            }
+                            && let Some(val) = get_value(&val, doc)
+                        {
+                            value_fields.insert(
+                                if k.eq("size") {
+                                    "font-size".to_string()
+                                } else {
+                                    k
+                                },
+                                val,
+                            );
+                        }
                     }
                     if let Some(val) = value_fields.get_mut("font-size") {
                         let size = serde_json::to_string(val).unwrap();
@@ -491,9 +493,10 @@ impl Document {
                         }
 
                         if let Some((_, _, ref external_children)) = container.external_children
-                            && let Some(t) = finder(external_children, f) {
-                                return Some(t);
-                            }
+                            && let Some(t) = finder(external_children, f)
+                        {
+                            return Some(t);
+                        }
                     }
                     ftd::Element::Null => {}
                 }
@@ -795,9 +798,10 @@ pub fn set_region_id(elements: &mut [ftd::Element]) {
                     && let Some(h) = ftd::ftd2021::p2::Document::get_heading(
                         vec![element.clone()].as_slice(),
                         &|r| r.is_heading(),
-                    ) {
-                        map.insert(idx, slug::slugify(h.original));
-                    }
+                    )
+                {
+                    map.insert(idx, slug::slugify(h.original));
+                }
             }
             _ => continue,
         }

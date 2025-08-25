@@ -223,12 +223,12 @@ pub fn is_argument_in_component_or_loop(
         && let Some(referenced_argument) = name
             .strip_prefix(format!("{component_name}.").as_str())
             .or_else(|| name.strip_prefix(format!("{}#{}.", doc.name, component_name).as_str()))
-        {
-            let (p1, _p2) = ftd::interpreter::utils::split_at(referenced_argument, ".");
-            if arguments.iter().contains(&p1) {
-                return true;
-            }
+    {
+        let (p1, _p2) = ftd::interpreter::utils::split_at(referenced_argument, ".");
+        if arguments.iter().contains(&p1) {
+            return true;
         }
+    }
     if let Some(loop_name) = loop_object_name_and_kind {
         let name = doc.resolve_name(name);
         if name.starts_with(format!("{loop_name}.").as_str())
@@ -256,18 +256,18 @@ pub fn get_mut_argument_for_reference<'a>(
         && let Some(referenced_argument) = name
             .strip_prefix(format!("{component_name}.").as_str())
             .or_else(|| name.strip_prefix(format!("{doc_name}#{component_name}.").as_str()))
-        {
-            let (p1, _) = ftd::interpreter::utils::split_at(referenced_argument, ".");
-            return if let Some(argument) = arguments.iter_mut().find(|v| v.name.eq(p1.as_str())) {
-                Ok(Some((component_name.to_string(), argument)))
-            } else {
-                ftd::interpreter::utils::e2(
-                    format!("{p1} is not the argument in {component_name}"),
-                    doc_name,
-                    line_number,
-                )
-            };
-        }
+    {
+        let (p1, _) = ftd::interpreter::utils::split_at(referenced_argument, ".");
+        return if let Some(argument) = arguments.iter_mut().find(|v| v.name.eq(p1.as_str())) {
+            Ok(Some((component_name.to_string(), argument)))
+        } else {
+            ftd::interpreter::utils::e2(
+                format!("{p1} is not the argument in {component_name}"),
+                doc_name,
+                line_number,
+            )
+        };
+    }
     Ok(None)
 }
 
@@ -335,22 +335,22 @@ pub fn get_argument_for_reference_and_remaining(
         && let Some(referenced_argument) = name
             .strip_prefix(format!("{component_name}.").as_str())
             .or_else(|| name.strip_prefix(format!("{}#{}.", doc.name, component_name).as_str()))
-        {
-            let (p1, p2) = ftd::interpreter::utils::split_at(referenced_argument, ".");
-            return if let Some(argument) = arguments.iter().find(|v| v.name.eq(p1.as_str())) {
-                Ok(Some((
-                    argument.to_owned(),
-                    p2,
-                    fastn_resolved::PropertyValueSource::Local(component_name.to_string()),
-                )))
-            } else {
-                ftd::interpreter::utils::e2(
-                    format!("{p1} is not the argument in {component_name}"),
-                    doc.name,
-                    line_number,
-                )
-            };
-        }
+    {
+        let (p1, p2) = ftd::interpreter::utils::split_at(referenced_argument, ".");
+        return if let Some(argument) = arguments.iter().find(|v| v.name.eq(p1.as_str())) {
+            Ok(Some((
+                argument.to_owned(),
+                p2,
+                fastn_resolved::PropertyValueSource::Local(component_name.to_string()),
+            )))
+        } else {
+            ftd::interpreter::utils::e2(
+                format!("{p1} is not the argument in {component_name}"),
+                doc.name,
+                line_number,
+            )
+        };
+    }
     if let Some((loop_name, loop_argument, loop_counter_alias)) = loop_object_name_and_kind {
         let p2 = ftd::interpreter::utils::split_at(name, ".").1;
         let name = doc.resolve_name(name);
@@ -380,18 +380,19 @@ pub fn get_argument_for_reference_and_remaining(
         }
 
         if let Some(loop_counter_alias) = loop_counter_alias
-            && name.starts_with(loop_counter_alias.as_str()) {
-                return Ok(Some((
-                    fastn_resolved::Field::default(
-                        loop_counter_alias,
-                        fastn_resolved::Kind::integer()
-                            .into_optional()
-                            .into_kind_data(),
-                    ),
-                    None,
-                    fastn_resolved::PropertyValueSource::Loop(loop_name.to_string()),
-                )));
-            }
+            && name.starts_with(loop_counter_alias.as_str())
+        {
+            return Ok(Some((
+                fastn_resolved::Field::default(
+                    loop_counter_alias,
+                    fastn_resolved::Kind::integer()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                None,
+                fastn_resolved::PropertyValueSource::Loop(loop_name.to_string()),
+            )));
+        }
     }
 
     Ok(None)
@@ -424,9 +425,10 @@ pub fn validate_record_value(
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<()> {
     if let fastn_resolved::PropertyValue::Value { value, .. } = value
-        && let Some(fastn_resolved::Value::Record { fields, .. }) = value.ref_inner() {
-            validate_fields(fields.values().collect(), doc)?;
-        }
+        && let Some(fastn_resolved::Value::Record { fields, .. }) = value.ref_inner()
+    {
+        validate_fields(fields.values().collect(), doc)?;
+    }
     return Ok(());
 
     fn validate_fields(
@@ -469,16 +471,17 @@ pub fn validate_property_value_for_mutable(
 ) -> ftd::interpreter::Result<()> {
     if let Some(name) = value.reference_name() {
         if let Ok(ref_variable) = doc.get_variable(name, value.line_number())
-            && !ref_variable.mutable {
-                return ftd::interpreter::utils::e2(
-                    format!(
-                        "Cannot pass immutable reference `{}` to mutable",
-                        ref_variable.name
-                    ),
-                    doc.name,
-                    value.line_number(),
-                );
-            }
+            && !ref_variable.mutable
+        {
+            return ftd::interpreter::utils::e2(
+                format!(
+                    "Cannot pass immutable reference `{}` to mutable",
+                    ref_variable.name
+                ),
+                doc.name,
+                value.line_number(),
+            );
+        }
     } else if let Some(function_call) = value.get_function() {
         validate_function_call(function_call, doc)?;
     }
@@ -633,13 +636,14 @@ pub(crate) fn find_inherited_variables(
     };
 
     if local_container.is_none()
-        && let Some(((reference, _), rem)) = values.last() {
-            return Some(if let Some(rem) = rem {
-                format!("{reference}.{rem}")
-            } else {
-                reference.to_string()
-            });
-        }
+        && let Some(((reference, _), rem)) = values.last()
+    {
+        return Some(if let Some(rem) = rem {
+            format!("{reference}.{rem}")
+        } else {
+            reference.to_string()
+        });
+    }
 
     if let Some(local_container) = local_container {
         for ((reference, container), rem) in values.iter() {

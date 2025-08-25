@@ -822,9 +822,10 @@ impl VariableValue {
             for h in headers.0.iter() {
                 if h.key.trim_end_matches('$').eq("processor")
                     && let ftd_ast::VariableValue::String { ref value, .. } = h.value
-                        && value.contains("request-data") {
-                            return true;
-                        }
+                    && value.contains("request-data")
+                {
+                    return true;
+                }
             }
         }
         false

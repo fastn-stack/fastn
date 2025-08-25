@@ -1022,39 +1022,41 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
             Default::default();
         for field in record.fields.iter() {
             if field.is_caption()
-                && let Some(caption) = caption.as_ref() {
-                    let caption = caption.clone();
-                    let property_value =
-                        try_ok_state!(fastn_resolved::PropertyValue::from_ast_value_with_argument(
-                            caption,
-                            doc,
-                            field.mutable || is_mutable,
-                            Some(&field.kind),
-                            definition_name_with_arguments,
-                            loop_object_name_and_kind
-                        )?);
-                    result_field.insert(field.name.to_string(), property_value);
-                    continue;
-                }
+                && let Some(caption) = caption.as_ref()
+            {
+                let caption = caption.clone();
+                let property_value =
+                    try_ok_state!(fastn_resolved::PropertyValue::from_ast_value_with_argument(
+                        caption,
+                        doc,
+                        field.mutable || is_mutable,
+                        Some(&field.kind),
+                        definition_name_with_arguments,
+                        loop_object_name_and_kind
+                    )?);
+                result_field.insert(field.name.to_string(), property_value);
+                continue;
+            }
             if field.is_body()
-                && let Some(body) = body.as_ref() {
-                    let property_value =
-                        try_ok_state!(fastn_resolved::PropertyValue::from_ast_value_with_argument(
-                            ftd_ast::VariableValue::String {
-                                value: body.value.to_string(),
-                                line_number: body.line_number,
-                                source: ftd_ast::ValueSource::Body,
-                                condition: None
-                            },
-                            doc,
-                            field.mutable || is_mutable,
-                            Some(&field.kind),
-                            definition_name_with_arguments,
-                            loop_object_name_and_kind
-                        )?);
-                    result_field.insert(field.name.to_string(), property_value);
-                    continue;
-                }
+                && let Some(body) = body.as_ref()
+            {
+                let property_value =
+                    try_ok_state!(fastn_resolved::PropertyValue::from_ast_value_with_argument(
+                        ftd_ast::VariableValue::String {
+                            value: body.value.to_string(),
+                            line_number: body.line_number,
+                            source: ftd_ast::ValueSource::Body,
+                            condition: None
+                        },
+                        doc,
+                        field.mutable || is_mutable,
+                        Some(&field.kind),
+                        definition_name_with_arguments,
+                        loop_object_name_and_kind
+                    )?);
+                result_field.insert(field.name.to_string(), property_value);
+                continue;
+            }
             let headers =
                 headers.get_by_key_optional(field.name.as_str(), doc.name, line_number)?;
 

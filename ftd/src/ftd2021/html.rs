@@ -75,24 +75,24 @@ impl Node {
                             v.to_string()
                         }
                     })
-                    && self.open_id.is_none()
-                    && external_children_container.is_empty()
-                    && ((self.is_visible(data) && is_parent_visible) || is_last)
-                {
-                    for child in ext_children.iter() {
-                        if let Some(data_id) = child.attrs.get("data-id") {
-                            for child in child.children.iter() {
-                                let mut child = child.clone();
-                                child.attrs.insert(
-                                    "data-ext-id".to_string(),
-                                    format!("{data_id}:{parent_id}"),
-                                );
-                                children.push(child);
-                            }
+                && self.open_id.is_none()
+                && external_children_container.is_empty()
+                && ((self.is_visible(data) && is_parent_visible) || is_last)
+            {
+                for child in ext_children.iter() {
+                    if let Some(data_id) = child.attrs.get("data-id") {
+                        for child in child.children.iter() {
+                            let mut child = child.clone();
+                            child.attrs.insert(
+                                "data-ext-id".to_string(),
+                                format!("{data_id}:{parent_id}"),
+                            );
+                            children.push(child);
                         }
                     }
-                    *external_children = None;
                 }
+                *external_children = None;
+            }
             children
         };
 
@@ -222,9 +222,10 @@ impl Node {
                         continue;
                     }
                     if let Some(child) = all_children.get(*container)
-                        && !child.node.is_empty() {
-                            return true;
-                        }
+                        && !child.node.is_empty()
+                    {
+                        return true;
+                    }
                 }
             }
             false
@@ -1591,9 +1592,10 @@ impl ftd::Container {
                 .filter(|v| {
                     let mut bool = false;
                     if let Some(common) = v.get_common()
-                        && Some(ftd::Anchor::Parent) == common.anchor {
-                            bool = true;
-                        }
+                        && Some(ftd::Anchor::Parent) == common.anchor
+                    {
+                        bool = true;
+                    }
                     bool
                 })
                 .count()

@@ -42,33 +42,30 @@ impl Value {
                         variant: Some(variant),
                         full_variant: Some(full_variant),
                     } = value.kind().inner()
-                    {
-                        let (js_variant, has_value) = ftd_to_js_variant(
-                            name.as_str(),
-                            variant.as_str(),
-                            full_variant.as_str(),
-                            value,
-                        );
+                {
+                    let (js_variant, has_value) = ftd_to_js_variant(
+                        name.as_str(),
+                        variant.as_str(),
+                        full_variant.as_str(),
+                        value,
+                    );
 
-                        // return or-type value with reference
-                        if has_value {
-                            return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
-                                variant: js_variant,
-                                value: Some(Box::new(fastn_js::SetPropertyValue::Reference(
-                                    fastn_runtime::utils::update_reference(
-                                        data.name.as_str(),
-                                        rdata,
-                                    ),
-                                ))),
-                            });
-                        }
-
-                        // return or-type value
+                    // return or-type value with reference
+                    if has_value {
                         return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
                             variant: js_variant,
-                            value: None,
+                            value: Some(Box::new(fastn_js::SetPropertyValue::Reference(
+                                fastn_runtime::utils::update_reference(data.name.as_str(), rdata),
+                            ))),
                         });
                     }
+
+                    // return or-type value
+                    return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
+                        variant: js_variant,
+                        value: None,
+                    });
+                }
 
                 // for other datatypes, simply return a reference
                 fastn_js::SetPropertyValue::Reference(fastn_runtime::utils::update_reference(

@@ -2075,9 +2075,10 @@ impl Device {
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
         if let Some(device) = rdata.device
-            && device.ne(&self.device) {
-                return component_statements;
-            }
+            && device.ne(&self.device)
+        {
+            return component_statements;
+        }
 
         let kernel = create_element(
             fastn_js::ElementKind::Device,

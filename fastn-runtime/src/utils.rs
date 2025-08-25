@@ -127,14 +127,16 @@ pub(crate) fn update_reference(reference: &str, rdata: &fastn_runtime::ResolverD
     }
 
     if let Some(component_definition_name) = rdata.component_definition_name
-        && let Some(alias) = name.strip_prefix(format!("{component_definition_name}.").as_str()) {
-            return format!("{}.{alias}", fastn_js::LOCAL_VARIABLE_MAP);
-        }
+        && let Some(alias) = name.strip_prefix(format!("{component_definition_name}.").as_str())
+    {
+        return format!("{}.{alias}", fastn_js::LOCAL_VARIABLE_MAP);
+    }
 
     if let Some(record_definition_name) = rdata.record_definition_name
-        && let Some(alias) = name.strip_prefix(format!("{record_definition_name}.").as_str()) {
-            return format!("{}.{alias}", fastn_js::LOCAL_RECORD_MAP);
-        }
+        && let Some(alias) = name.strip_prefix(format!("{record_definition_name}.").as_str())
+    {
+        return format!("{}.{alias}", fastn_js::LOCAL_RECORD_MAP);
+    }
 
     if let Some(loop_alias) = rdata.loop_alias {
         if let Some(alias) = name.strip_prefix(format!("{loop_alias}.").as_str()) {
@@ -149,20 +151,21 @@ pub(crate) fn update_reference(reference: &str, rdata: &fastn_runtime::ResolverD
     }
 
     if let Some(loop_counter_alias) = rdata.loop_counter_alias
-        && let Some(ref doc_id) = rdata.doc_name {
-            let (doc_name, _, _) =
-                fastn_runtime::utils::get_doc_name_and_thing_name_and_remaining(&name, doc_id);
+        && let Some(ref doc_id) = rdata.doc_name
+    {
+        let (doc_name, _, _) =
+            fastn_runtime::utils::get_doc_name_and_thing_name_and_remaining(&name, doc_id);
 
-            let resolved_alias = fastn_runtime::utils::resolve_name(
-                loop_counter_alias,
-                &doc_name,
-                &fastn_builtins::default_aliases(),
-            );
+        let resolved_alias = fastn_runtime::utils::resolve_name(
+            loop_counter_alias,
+            &doc_name,
+            &fastn_builtins::default_aliases(),
+        );
 
-            if name == resolved_alias {
-                return "index".to_string();
-            }
+        if name == resolved_alias {
+            return "index".to_string();
         }
+    }
 
     if name.contains(fastn_builtins::constants::FTD_LOOP_COUNTER) {
         return "index".to_string();

@@ -111,9 +111,9 @@ impl Library2022 {
                     .iter()
                     .find(|app| app.package.name == package_name)
                     && let Some(val) = get_for_package_(name, lib, &app.package, session_id).await?
-                    {
-                        return Ok(val);
-                    }
+                {
+                    return Ok(val);
+                }
             }
 
             if let Some(val) = get_for_package_(name, lib, &package, session_id).await? {

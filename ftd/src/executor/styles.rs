@@ -55,9 +55,10 @@ impl Length {
         if let Some(value) = or_type_value {
             let binding = value.clone().resolve(&doc.itdoc(), line_number)?;
             if let fastn_resolved::Value::Optional { data, .. } = &binding
-                && data.is_none() {
-                    return Ok(None);
-                }
+                && data.is_none()
+            {
+                return Ok(None);
+            }
             return Ok(Some(Length::from_value(value, doc, line_number)?));
         }
         Ok(None)
@@ -1576,9 +1577,10 @@ impl BackgroundRepeat {
 
         let binding = value.resolve(&doc.itdoc(), line_number)?;
         if let fastn_resolved::Value::Optional { data, .. } = &binding
-            && data.is_none() {
-                return Ok(None);
-            }
+            && data.is_none()
+        {
+            return Ok(None);
+        }
 
         let value = binding.get_or_type(doc.name, line_number)?;
         let value = (value.1.to_owned(), value.2.to_owned());
@@ -1651,9 +1653,10 @@ impl BackgroundSize {
 
         let binding = value.resolve(&doc.itdoc(), line_number)?;
         if let fastn_resolved::Value::Optional { data, .. } = &binding
-            && data.is_none() {
-                return Ok(None);
-            }
+            && data.is_none()
+        {
+            return Ok(None);
+        }
 
         let value = binding.get_or_type(doc.name, line_number)?;
         let value = (value.1.to_owned(), value.2.to_owned());
@@ -1725,9 +1728,10 @@ impl BackgroundPosition {
 
         let binding = value.resolve(&doc.itdoc(), line_number)?;
         if let fastn_resolved::Value::Optional { data, .. } = &binding
-            && data.is_none() {
-                return Ok(None);
-            }
+            && data.is_none()
+        {
+            return Ok(None);
+        }
 
         let value = binding.get_or_type(doc.name, line_number)?;
         let value = (value.1.to_owned(), value.2.to_owned());

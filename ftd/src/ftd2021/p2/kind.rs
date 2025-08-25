@@ -668,9 +668,10 @@ impl Kind {
         }
 
         if let Some((obj_name, obj_kind)) = object_kind
-            && k == obj_name {
-                return Ok(obj_kind);
-            }
+            && k == obj_name
+        {
+            return Ok(obj_kind);
+        }
 
         let (key, default) = {
             if k.contains("with default") {

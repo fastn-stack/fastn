@@ -282,13 +282,13 @@ impl Package {
                     if let Some(alias) = &dependency.alias
                         && (alias.as_str().eq(ai.path.as_str())
                             || ai.path.starts_with(format!("{alias}/").as_str()))
-                        {
-                            import_doc_path = ai.path.replacen(
-                                dependency.alias.as_ref()?.as_str(),
-                                dependency.package.name.as_str(),
-                                1,
-                            );
-                        }
+                    {
+                        import_doc_path = ai.path.replacen(
+                            dependency.alias.as_ref()?.as_str(),
+                            dependency.package.name.as_str(),
+                            1,
+                        );
+                    }
                 }
             }
 
@@ -338,9 +338,10 @@ impl Package {
 
         for dependency in &self.dependencies {
             if let Some(dep_alias) = &dependency.alias
-                && dep_alias.as_str().eq(alias) {
-                    full_path = Some(dependency.package.name.clone());
-                }
+                && dep_alias.as_str().eq(alias)
+            {
+                full_path = Some(dependency.package.name.clone());
+            }
         }
 
         full_path
@@ -767,20 +768,21 @@ impl Package {
         fastn_core::utils::validate_base_url(&package)?;
 
         if package.import_auto_imports_from_original
-            && let Some(ref original_package) = package.translation_of {
-                if package.auto_import.is_empty() {
-                    package
-                        .auto_import
-                        .clone_from(&original_package.auto_import)
-                } else {
-                    return Err(fastn_core::Error::PackageError {
-                        message: format!(
-                            "Can't use `inherit-auto-imports-from-original` along with auto-imports defined for the translation package. Either set `inherit-auto-imports-from-original` to false or remove `fastn.auto-import` from the {package_name}/FASTN.ftd file",
-                            package_name = package.name.as_str()
-                        ),
-                    });
-                }
+            && let Some(ref original_package) = package.translation_of
+        {
+            if package.auto_import.is_empty() {
+                package
+                    .auto_import
+                    .clone_from(&original_package.auto_import)
+            } else {
+                return Err(fastn_core::Error::PackageError {
+                    message: format!(
+                        "Can't use `inherit-auto-imports-from-original` along with auto-imports defined for the translation package. Either set `inherit-auto-imports-from-original` to false or remove `fastn.auto-import` from the {package_name}/FASTN.ftd file",
+                        package_name = package.name.as_str()
+                    ),
+                });
             }
+        }
 
         Ok(package)
     }
@@ -804,13 +806,15 @@ impl Package {
                 .map(|module| (module, request_lang.to_string()));
         }
 
-        if lang_module_path_with_language.is_none() && !main_package_selected_language.eq(&req_lang)
-            && let Some(main_package_selected_language) = main_package_selected_language.as_ref() {
-                lang_module_path_with_language = lang
-                    .available_languages
-                    .get(main_package_selected_language)
-                    .map(|module| (module, main_package_selected_language.to_string()));
-            }
+        if lang_module_path_with_language.is_none()
+            && !main_package_selected_language.eq(&req_lang)
+            && let Some(main_package_selected_language) = main_package_selected_language.as_ref()
+        {
+            lang_module_path_with_language = lang
+                .available_languages
+                .get(main_package_selected_language)
+                .map(|module| (module, main_package_selected_language.to_string()));
+        }
 
         if lang_module_path_with_language.is_none() {
             lang_module_path_with_language = lang

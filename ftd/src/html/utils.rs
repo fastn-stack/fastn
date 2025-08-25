@@ -521,9 +521,9 @@ pub(crate) fn to_argument_string(
                 ftd::html::utils::get_formatted_dep_string_from_property_value(
                     id, doc, value, &None, None, false,
                 )
-            {
-                result_value = value_string;
-            }
+        {
+            result_value = value_string;
+        }
         properties_string = format!(
             "{}\nargs[\"{}\"][\"{}\"] = {};",
             properties_string, node, argument.name, result_value

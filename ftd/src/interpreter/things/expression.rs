@@ -348,11 +348,12 @@ pub(crate) fn update_node_with_value(
 ) -> fastn_resolved::evalexpr::ExprNode {
     let mut operator = expr.operator().clone();
     if let fastn_resolved::evalexpr::Operator::VariableIdentifierRead { ref identifier } = operator
-        && let Some(value) = values.get(identifier) {
-            operator = fastn_resolved::evalexpr::Operator::Const {
-                value: value.to_owned(),
-            }
+        && let Some(value) = values.get(identifier)
+    {
+        operator = fastn_resolved::evalexpr::Operator::Const {
+            value: value.to_owned(),
         }
+    }
     let mut children = vec![];
     for child in expr.children() {
         children.push(update_node_with_value(child, values));

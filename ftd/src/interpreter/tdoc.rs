@@ -628,21 +628,21 @@ impl<'a> TDoc<'a> {
 
         if let Some(remaining) = remaining
             && !initial_kind.is_module()
-                && !initial_kind
-                    .kind
-                    .is_or_type_with_variant(&initial_kind.kind.get_name(), remaining.as_str())
-            {
-                return Ok(ftd::interpreter::StateWithThing::new_thing((
-                    source,
-                    try_ok_state!(get_kind_(
-                        initial_kind.kind,
-                        remaining.as_str(),
-                        self,
-                        line_number
-                    )?),
-                    mutable,
-                )));
-            }
+            && !initial_kind
+                .kind
+                .is_or_type_with_variant(&initial_kind.kind.get_name(), remaining.as_str())
+        {
+            return Ok(ftd::interpreter::StateWithThing::new_thing((
+                source,
+                try_ok_state!(get_kind_(
+                    initial_kind.kind,
+                    remaining.as_str(),
+                    self,
+                    line_number
+                )?),
+                mutable,
+            )));
+        }
 
         return Ok(ftd::interpreter::StateWithThing::new_thing((
             source,
@@ -1436,10 +1436,10 @@ impl<'a> TDoc<'a> {
                             if property_value.unwrap().is_clone()
                                 && let Ok(mut variable) =
                                     thing.clone().variable(doc.name, thing.line_number())
-                                {
-                                    variable.mutable = mutable;
-                                    thing = ftd::interpreter::Thing::Variable(variable);
-                                }
+                            {
+                                variable.mutable = mutable;
+                                thing = ftd::interpreter::Thing::Variable(variable);
+                            }
 
                             thing
                         }

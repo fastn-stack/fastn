@@ -107,9 +107,10 @@ fn resolve_variable_from_headers(
     };
 
     if let ftd_ast::VariableValue::String { value, .. } = &header.value
-        && let Some(stripped) = value.strip_prefix('$') {
-            return resolve_variable_from_doc(stripped, doc, line_number);
-        }
+        && let Some(stripped) = value.strip_prefix('$')
+    {
+        return resolve_variable_from_doc(stripped, doc, line_number);
+    }
 
     Ok(header_value_to_bind(&header.value))
 }

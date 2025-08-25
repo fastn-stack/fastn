@@ -164,9 +164,10 @@ impl InterpreterState {
     /// AST stack of the `to_process` field of `InterpreterState` instance.
     pub fn increase_scan_count(&mut self) {
         if let Some((_, ast_list)) = self.to_process.stack.last_mut()
-            && let Some(item) = ast_list.first_mut() {
-                item.number_of_scan += 1;
-            }
+            && let Some(item) = ast_list.first_mut()
+        {
+            item.number_of_scan += 1;
+        }
     }
 
     /// Detects cycles in the component processing sequence and raises an error if a cycle is found.
@@ -614,9 +615,9 @@ impl InterpreterState {
                 ast,
                 ..
             }) = ast_list.first()
-            {
-                return Some((doc_name.to_string(), *number_of_scan, ast));
-            }
+        {
+            return Some((doc_name.to_string(), *number_of_scan, ast));
+        }
         None
     }
 
@@ -636,14 +637,14 @@ impl InterpreterState {
                     ast,
                     exports: export,
                 }) = ast_list.first()
-                {
-                    return Some((
-                        doc_name.to_string(),
-                        *number_of_scan,
-                        ast.clone(),
-                        export.clone(),
-                    ));
-                }
+            {
+                return Some((
+                    doc_name.to_string(),
+                    *number_of_scan,
+                    ast.clone(),
+                    export.clone(),
+                ));
+            }
 
             if self
                 .to_process
@@ -1444,9 +1445,9 @@ impl Document {
                             && let Some(value) = value
                                 .resolve(&tdoc, v.line_number)?
                                 .to_json_string(&tdoc, false)?
-                            {
-                                headers.insert(name.to_string(), value.to_string());
-                            }
+                        {
+                            headers.insert(name.to_string(), value.to_string());
+                        }
                     }
                     headers
                 }

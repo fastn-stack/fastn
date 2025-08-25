@@ -1143,17 +1143,18 @@ impl ExpressionGenerator {
 pub fn get_chained_getter_string(value: &str) -> String {
     let chain_dot_operator_count = value.matches('.').count();
     if chain_dot_operator_count > 1
-        && let Some((variable, key)) = value.rsplit_once('.') {
-            // Ignore values which are already resolved with get()
-            if key.contains("get") {
-                return value.to_string();
-            }
-            return format!(
-                "fastn_utils.getterByKey({}, \"{}\")",
-                get_chained_getter_string(variable),
-                key.replace('-', "_") // record fields are stored in snake case
-            );
+        && let Some((variable, key)) = value.rsplit_once('.')
+    {
+        // Ignore values which are already resolved with get()
+        if key.contains("get") {
+            return value.to_string();
         }
+        return format!(
+            "fastn_utils.getterByKey({}, \"{}\")",
+            get_chained_getter_string(variable),
+            key.replace('-', "_") // record fields are stored in snake case
+        );
+    }
     value.to_string()
 }
 

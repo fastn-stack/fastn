@@ -301,9 +301,9 @@ async fn remove_deleted_documents(
                 .get_all_file_path(&folder_parent, &[])
                 .await
                 .is_empty()
-            {
-                config.ds.remove(&folder_parent).await?;
-            }
+        {
+            config.ds.remove(&folder_parent).await?;
+        }
 
         c.documents.remove(removed_doc_id);
     }
@@ -400,13 +400,14 @@ async fn incremental_build(
 
                     resolved_dependencies.push(unresolved_dependency.to_string());
                     if unresolved_dependencies.is_empty()
-                        && let Some(resolving_dependency) = resolving_dependencies.pop() {
-                            if resolving_dependency.eq(&unresolved_dependency.as_str()) {
-                                // println!("[INCREMENTAL][CIRCULAR]: {}", &unresolved_dependency);
-                                continue;
-                            }
-                            unresolved_dependencies.push(resolving_dependency);
+                        && let Some(resolving_dependency) = resolving_dependencies.pop()
+                    {
+                        if resolving_dependency.eq(&unresolved_dependency.as_str()) {
+                            // println!("[INCREMENTAL][CIRCULAR]: {}", &unresolved_dependency);
+                            continue;
                         }
+                        unresolved_dependencies.push(resolving_dependency);
+                    }
                 } else {
                     // println!("Adding to RD: {}", unresolved_dependency.as_str());
                     resolving_dependencies.push(unresolved_dependency.to_string());
@@ -433,13 +434,14 @@ async fn incremental_build(
                     resolved_dependencies.push(unresolved_dependency.clone());
                 }
                 if unresolved_dependencies.is_empty()
-                    && let Some(resolving_dependency) = resolving_dependencies.pop() {
-                        if resolving_dependency.eq(&unresolved_dependency.as_str()) {
-                            // println!("[INCREMENTAL][CIRCULAR]: {}", &unresolved_dependency);
-                            continue;
-                        }
-                        unresolved_dependencies.push(resolving_dependency);
+                    && let Some(resolving_dependency) = resolving_dependencies.pop()
+                {
+                    if resolving_dependency.eq(&unresolved_dependency.as_str()) {
+                        // println!("[INCREMENTAL][CIRCULAR]: {}", &unresolved_dependency);
+                        continue;
                     }
+                    unresolved_dependencies.push(resolving_dependency);
+                }
             }
         }
 

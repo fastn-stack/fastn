@@ -323,9 +323,9 @@ pub async fn resolve_foreign_variable2022(
                 preview_session_id,
             )
             .await
-            {
-                return Ok(value);
-            }
+        {
+            return Ok(value);
+        }
         for (alias, package) in package.aliases() {
             if alias.eq(&package_name) {
                 let package = lib
@@ -634,17 +634,17 @@ pub async fn resolve_foreign_variable2(
         if package.name.eq(package_name)
             && let Ok(value) =
                 get_assets_value(&package, files, lib, base_url, download_assets, session_id).await
-            {
-                return Ok(value);
-            }
+        {
+            return Ok(value);
+        }
         for (alias, package) in package.aliases() {
             if alias.eq(package_name)
                 && let Ok(value) =
                     get_assets_value(package, files, lib, base_url, download_assets, session_id)
                         .await
-                {
-                    return Ok(value);
-                }
+            {
+                return Ok(value);
+            }
         }
     }
 

@@ -729,37 +729,41 @@ impl State {
 
     fn mut_latest_state(&mut self) -> Option<(&mut ftd_p1::Section, &mut ParsingStateReading)> {
         if let Some((section, state)) = self.state.last_mut()
-            && let Some(state) = state.last_mut() {
-                return Some((section, state));
-            }
+            && let Some(state) = state.last_mut()
+        {
+            return Some((section, state));
+        }
         None
     }
 
     fn get_latest_state(&self) -> Option<(ftd_p1::Section, ParsingStateReading)> {
         if let Some((section, state)) = self.state.last()
-            && let Some(state) = state.last() {
-                return Some((section.to_owned(), state.to_owned()));
-            }
+            && let Some(state) = state.last()
+        {
+            return Some((section.to_owned(), state.to_owned()));
+        }
         None
     }
 
     fn remove_latest_section(&mut self) -> ftd_p1::Result<Option<ftd_p1::Section>> {
         if let Some((section, state)) = self.state.last()
-            && !state.is_empty() {
-                return Err(ftd_p1::Error::ParseError {
-                    message: format!("`{}` section state is not yet empty", section.name),
-                    doc_id: self.doc_id.to_string(),
-                    line_number: ftd_p1::utils::i32_to_usize(self.line_number),
-                });
-            }
+            && !state.is_empty()
+        {
+            return Err(ftd_p1::Error::ParseError {
+                message: format!("`{}` section state is not yet empty", section.name),
+                doc_id: self.doc_id.to_string(),
+                line_number: ftd_p1::utils::i32_to_usize(self.line_number),
+            });
+        }
         Ok(self.state.pop().map(|v| v.0))
     }
 
     fn remove_latest_state(&mut self) -> Option<(&mut ftd_p1::Section, ParsingStateReading)> {
         if let Some((section, state)) = self.state.last_mut()
-            && let Some(state) = state.pop() {
-                return Some((section, state));
-            }
+            && let Some(state) = state.pop()
+        {
+            return Some((section, state));
+        }
         None
     }
 }
@@ -846,15 +850,16 @@ fn get_name_and_kind(name_with_kind: &str) -> (String, Option<String>) {
 
     // Fix spacing for functional parameters inside parenthesis (if user provides)
     if let (Some(si), Some(ei)) = (name_with_kind.find('('), name_with_kind.find(')'))
-        && si < ei {
-            // All Content before start ( bracket
-            let before_brackets = &name_with_kind[..si];
-            // All content after start ( bracket and all inner content excluding ) bracket
-            let mut bracket_content_and_beyond = name_with_kind[si..ei].replace(' ', "");
-            // Push any remaining characters including ) and after end bracket
-            bracket_content_and_beyond.push_str(&name_with_kind[ei..]);
-            name_with_kind = format!("{before_brackets}{bracket_content_and_beyond}");
-        }
+        && si < ei
+    {
+        // All Content before start ( bracket
+        let before_brackets = &name_with_kind[..si];
+        // All content after start ( bracket and all inner content excluding ) bracket
+        let mut bracket_content_and_beyond = name_with_kind[si..ei].replace(' ', "");
+        // Push any remaining characters including ) and after end bracket
+        bracket_content_and_beyond.push_str(&name_with_kind[ei..]);
+        name_with_kind = format!("{before_brackets}{bracket_content_and_beyond}");
+    }
 
     if let Some((kind, name)) = name_with_kind.rsplit_once(' ') {
         return (name.to_string(), Some(kind.to_string()));
@@ -971,9 +976,10 @@ fn remove_inline_comments(line: &str) -> String {
                     count = 0;
                 }
             } else if let Some(nc) = chars.peek()
-                && nc.eq(&';') {
-                    break;
-                }
+                && nc.eq(&';')
+            {
+                break;
+            }
         }
 
         if escape {
@@ -1036,10 +1042,11 @@ pub(crate) fn get_block_header_condition(
         let line = clean_line_with_trim(line);
         if let Ok((name_with_kind, caption)) =
             colon_separated_values(line_number, line.as_str(), doc_id)
-            && name_with_kind.eq(ftd_p1::utils::IF) {
-                condition = caption;
-                new_line_number = Some(line_number + 1);
-            }
+            && name_with_kind.eq(ftd_p1::utils::IF)
+        {
+            condition = caption;
+            new_line_number = Some(line_number + 1);
+        }
         break;
     }
 

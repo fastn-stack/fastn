@@ -164,12 +164,13 @@ pub(crate) fn find_value_by_argument(
                     break;
                 }
             } else if p.condition.is_none()
-                && let Some(v) = p.value.get_reference_or_clone() {
-                    value = Some(fastn_resolved::Value::new_string(
-                        format!("{{{v}}}").as_str(),
-                    ));
-                    line_number = Some(p.line_number);
-                }
+                && let Some(v) = p.value.get_reference_or_clone()
+            {
+                value = Some(fastn_resolved::Value::new_string(
+                    format!("{{{v}}}").as_str(),
+                ));
+                line_number = Some(p.line_number);
+            }
         }
     }
 

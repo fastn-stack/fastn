@@ -41,16 +41,17 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
             return Ok(vec![component]);
         }
         if let fastn_resolved::Value::List { data, kind } = value
-            && kind.is_ui() {
-                let mut children = vec![];
-                for value in data {
-                    let value = value.resolve(doc, property.line_number)?;
-                    if let fastn_resolved::Value::UI { component, .. } = value {
-                        children.push(component);
-                    }
+            && kind.is_ui()
+        {
+            let mut children = vec![];
+            for value in data {
+                let value = value.resolve(doc, property.line_number)?;
+                if let fastn_resolved::Value::UI { component, .. } = value {
+                    children.push(component);
                 }
-                return Ok(children);
             }
+            return Ok(children);
+        }
 
         Ok(vec![])
     }

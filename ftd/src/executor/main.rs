@@ -481,16 +481,18 @@ impl ExecuteDoc<'_> {
                 }
 
                 if let Some(condition) = instruction.condition.as_ref()
-                    && condition.is_static(&doc.itdoc()) && !condition.eval(&doc.itdoc())? {
-                        ExecuteDoc::insert_element(
-                            &mut elements,
-                            container.as_slice(),
-                            ftd::executor::Element::Null {
-                                line_number: instruction.line_number,
-                            },
-                        );
-                        break;
-                    }
+                    && condition.is_static(&doc.itdoc())
+                    && !condition.eval(&doc.itdoc())?
+                {
+                    ExecuteDoc::insert_element(
+                        &mut elements,
+                        container.as_slice(),
+                        ftd::executor::Element::Null {
+                            line_number: instruction.line_number,
+                        },
+                    );
+                    break;
+                }
 
                 if let Ok(web_component_definition) = doc
                     .itdoc()

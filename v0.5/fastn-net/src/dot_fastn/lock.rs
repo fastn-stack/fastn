@@ -23,4 +23,3 @@ pub fn exclusive(lock_file: &std::fs::File) -> eyre::Result<()> {
         .try_lock()
         .wrap_err_with(|| "failed to take exclusive lock")
 }
-

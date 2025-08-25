@@ -253,9 +253,10 @@ pub async fn process(
                 let mut resp_cookies = vec![];
                 r.headers.into_iter().for_each(|(k, v)| {
                     if k.as_str().eq("set-cookie")
-                        && let Ok(v) = String::from_utf8(v) {
-                            resp_cookies.push(v.to_string());
-                        }
+                        && let Ok(v) = String::from_utf8(v)
+                    {
+                        resp_cookies.push(v.to_string());
+                    }
                 });
                 Ok((Ok(r.body.into()), resp_cookies))
             }
@@ -327,31 +328,32 @@ fn parse_function_call(expr: &str) -> Option<(String, Vec<(String, String)>)> {
 
     if let Some(open_paren) = expr.find('(')
         && let Some(close_paren) = expr.rfind(')')
-            && close_paren > open_paren {
-                let function_name = expr[..open_paren].trim().to_string();
-                let args_str = &expr[open_paren + 1..close_paren];
+        && close_paren > open_paren
+    {
+        let function_name = expr[..open_paren].trim().to_string();
+        let args_str = &expr[open_paren + 1..close_paren];
 
-                if args_str.trim().is_empty() {
-                    return Some((function_name, vec![]));
-                }
+        if args_str.trim().is_empty() {
+            return Some((function_name, vec![]));
+        }
 
-                let mut args = vec![];
+        let mut args = vec![];
 
-                for arg_pair in args_str.split(',') {
-                    let arg_pair = arg_pair.trim();
-                    if arg_pair.is_empty() {
-                        continue;
-                    }
-
-                    if let Some(eq_pos) = arg_pair.find('=') {
-                        let arg_name = arg_pair[..eq_pos].trim().to_string();
-                        let arg_value = arg_pair[eq_pos + 1..].trim().to_string();
-                        args.push((arg_name, arg_value));
-                    }
-                }
-
-                return Some((function_name, args));
+        for arg_pair in args_str.split(',') {
+            let arg_pair = arg_pair.trim();
+            if arg_pair.is_empty() {
+                continue;
             }
+
+            if let Some(eq_pos) = arg_pair.find('=') {
+                let arg_name = arg_pair[..eq_pos].trim().to_string();
+                let arg_value = arg_pair[eq_pos + 1..].trim().to_string();
+                args.push((arg_name, arg_value));
+            }
+        }
+
+        return Some((function_name, args));
+    }
 
     None
 }

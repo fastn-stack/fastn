@@ -12,6 +12,7 @@
 //! - **Three Databases**: Separation of concerns with automerge.sqlite, mail.sqlite, db.sqlite
 //! - **Key Management**: Secure storage of private keys via keyring or files
 //! - **Email Integration**: Built-in support for email handling per alias
+//! - **P2P Messaging**: AccountToAccountMessage for peer-to-peer email delivery
 //!
 //! ## Architecture
 //!

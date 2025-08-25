@@ -215,17 +215,18 @@ impl Request {
         ) -> std::collections::HashMap<String, String> {
             let mut cookies = std::collections::HashMap::new();
             if let Some(cookie) = headers.get("cookie")
-                && let Ok(cookie) = cookie.to_str() {
-                    for cookie in cookie.split(';') {
-                        let cookie = cookie.trim();
-                        if let Some(index) = cookie.find('=') {
-                            let (key, value) = cookie.split_at(index);
-                            let key = key.trim();
-                            let value = value.trim_start_matches('=').trim();
-                            cookies.insert(key.to_string(), value.to_string());
-                        }
+                && let Ok(cookie) = cookie.to_str()
+            {
+                for cookie in cookie.split(';') {
+                    let cookie = cookie.trim();
+                    if let Some(index) = cookie.find('=') {
+                        let (key, value) = cookie.split_at(index);
+                        let key = key.trim();
+                        let value = value.trim_start_matches('=').trim();
+                        cookies.insert(key.to_string(), value.to_string());
                     }
                 }
+            }
             cookies
         }
     }
@@ -416,9 +417,10 @@ pub async fn http_post_with_cookie(
     let mut resp_cookies = vec![];
     res.headers().iter().for_each(|(k, v)| {
         if k.as_str().eq("set-cookie")
-            && let Ok(v) = v.to_str() {
-                resp_cookies.push(v.to_string());
-            }
+            && let Ok(v) = v.to_str()
+        {
+            resp_cookies.push(v.to_string());
+        }
     });
 
     if !res.status().eq(&http::StatusCode::OK) {
@@ -483,9 +485,10 @@ pub async fn http_get_with_cookie(
     let mut resp_cookies = vec![];
     res.headers().iter().for_each(|(k, v)| {
         if k.as_str().eq("set-cookie")
-            && let Ok(v) = v.to_str() {
-                resp_cookies.push(v.to_string());
-            }
+            && let Ok(v) = v.to_str()
+        {
+            resp_cookies.push(v.to_string());
+        }
     });
 
     if !res.status().eq(&http::StatusCode::OK) {

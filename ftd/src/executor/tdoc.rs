@@ -147,9 +147,9 @@ impl TDoc<'_> {
                 .resolve(&self.itdoc(), &Default::default())?
                 // TODO: Remove unwrap()
                 .unwrap()
-            {
-                return Ok(Some((name_in_component_definition, name, vec![])));
-            }
+        {
+            return Ok(Some((name_in_component_definition, name, vec![])));
+        }
 
         let (default, conditions) = properties.into_iter().fold(
             (None, vec![]),

@@ -118,9 +118,10 @@ impl Element {
                             },
                         ..
                     })) = local_variables.get(reference)
-                        && let Some(text) = text {
-                            *text = ftd::ftd2021::rendered::markup_line(value.to_string().as_str());
-                        }
+                        && let Some(text) = text
+                    {
+                        *text = ftd::ftd2021::rendered::markup_line(value.to_string().as_str());
+                    }
                 }
                 _ => {}
             }
@@ -262,13 +263,15 @@ impl Element {
 
             fn check(common: &mut ftd::Common) -> Option<String> {
                 if let Some(ref mut condition) = common.condition
-                    && condition.variable.contains("MOUSE-IN") {
-                        return Some(condition.variable.clone());
-                    }
+                    && condition.variable.contains("MOUSE-IN")
+                {
+                    return Some(condition.variable.clone());
+                }
                 if let Some(ref mut reference) = common.reference
-                    && reference.contains("MOUSE-IN") {
-                        return Some(reference.to_string());
-                    }
+                    && reference.contains("MOUSE-IN")
+                {
+                    return Some(reference.to_string());
+                }
                 for (_, v) in common.conditional_attribute.iter_mut() {
                     for (condition, _) in &mut v.conditions_with_value {
                         if condition.variable.contains("MOUSE-IN") {
@@ -401,26 +404,27 @@ impl Element {
                     Self::set_id(&mut container.children, &index_vec, external_id.clone());
                     if let Some((id, container, external_children)) =
                         &mut container.external_children
-                        && let Some(ftd::Element::Column(col)) = external_children.first_mut() {
-                            let index_string: String = index_vec
-                                .iter()
-                                .map(|v| v.to_string())
-                                .collect::<Vec<String>>()
-                                .join(",");
+                        && let Some(ftd::Element::Column(col)) = external_children.first_mut()
+                    {
+                        let index_string: String = index_vec
+                            .iter()
+                            .map(|v| v.to_string())
+                            .collect::<Vec<String>>()
+                            .join(",");
 
-                            let external_id = Some({
-                                if let Some(ref ext_id) = external_id {
-                                    format!("{ext_id}.{id}-external:{index_string}")
-                                } else {
-                                    format!("{id}-external:{index_string}")
-                                }
-                            });
-                            col.common.data_id.clone_from(&external_id);
-                            if let Some(val) = container.first_mut() {
-                                index_vec.append(&mut val.to_vec());
-                                Self::set_id(&mut col.container.children, &index_vec, external_id);
+                        let external_id = Some({
+                            if let Some(ref ext_id) = external_id {
+                                format!("{ext_id}.{id}-external:{index_string}")
+                            } else {
+                                format!("{id}-external:{index_string}")
                             }
+                        });
+                        col.common.data_id.clone_from(&external_id);
+                        if let Some(val) = container.first_mut() {
+                            index_vec.append(&mut val.to_vec());
+                            Self::set_id(&mut col.container.children, &index_vec, external_id);
                         }
+                    }
                     (id, is_dummy)
                 }
                 Self::Markup(ftd::Markups {
@@ -684,22 +688,23 @@ impl Element {
             }
             if let Some((external_open_id, external_children_container, external_children)) =
                 &container.external_children
-                && let Some(ftd::Element::Column(col)) = external_children.first() {
-                    let external_children_condition: Vec<ftd::ExternalChildrenCondition> = child
-                        .get_external_children_condition(
-                            &Some(external_open_id.to_string()),
-                            external_children_container,
-                        );
-                    d.insert(
-                        col.common.data_id.as_ref().expect("").to_string(),
-                        external_children_condition,
+                && let Some(ftd::Element::Column(col)) = external_children.first()
+            {
+                let external_children_condition: Vec<ftd::ExternalChildrenCondition> = child
+                    .get_external_children_condition(
+                        &Some(external_open_id.to_string()),
+                        external_children_container,
                     );
-                    let all_locals =
-                        ftd::Element::get_external_children_dependencies(&col.container.children);
-                    for (k, v) in all_locals {
-                        d.insert(k.to_string(), v);
-                    }
+                d.insert(
+                    col.common.data_id.as_ref().expect("").to_string(),
+                    external_children_condition,
+                );
+                let all_locals =
+                    ftd::Element::get_external_children_dependencies(&col.container.children);
+                for (k, v) in all_locals {
+                    d.insert(k.to_string(), v);
                 }
+            }
         }
         d
     }

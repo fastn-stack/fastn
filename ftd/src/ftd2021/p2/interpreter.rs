@@ -630,34 +630,36 @@ impl InterpreterState {
             doc: &ftd::ftd2021::p2::TDoc,
         ) -> Option<(Option<String>, Option<String>)> {
             if let ftd::Instruction::ChildComponent { child: cc } = instruction
-                && cc.root.eq("ftd#text") {
-                    let text_region =
-                        cc.properties
-                            .get("region")
-                            .and_then(|text_region_property| {
-                                text_region_property
-                                    .resolve_default_value_string(doc, cc.line_number)
-                                    .ok()
-                            });
-                    if let Some(text_region) = text_region
-                        && text_region.eq("title") {
-                            let header_and_title = cc
-                                .properties
-                                .get("text")
-                                .and_then(|text_property| text_property.default.as_ref())
-                                .and_then(|text_property_value| {
-                                    resolve_title_header_from_container(
-                                        text_property_value,
-                                        parent,
-                                        &child.properties,
-                                        doc,
-                                    )
-                                    .ok()
-                                });
+                && cc.root.eq("ftd#text")
+            {
+                let text_region = cc
+                    .properties
+                    .get("region")
+                    .and_then(|text_region_property| {
+                        text_region_property
+                            .resolve_default_value_string(doc, cc.line_number)
+                            .ok()
+                    });
+                if let Some(text_region) = text_region
+                    && text_region.eq("title")
+                {
+                    let header_and_title = cc
+                        .properties
+                        .get("text")
+                        .and_then(|text_property| text_property.default.as_ref())
+                        .and_then(|text_property_value| {
+                            resolve_title_header_from_container(
+                                text_property_value,
+                                parent,
+                                &child.properties,
+                                doc,
+                            )
+                            .ok()
+                        });
 
-                            return header_and_title;
-                        }
+                    return header_and_title;
                 }
+            }
             None
         }
 
@@ -862,22 +864,21 @@ impl InterpreterState {
             if let Some(last_heading) = tree_nodes.last_mut()
                 && let (Some(current_heading_region), Some(last_heading_region)) =
                     (&new_heading.region, &last_heading.region)
-                {
-                    let last_heading_priority =
-                        last_heading_region.heading_priority_value(doc_name)?;
-                    let current_heading_priority =
-                        current_heading_region.heading_priority_value(doc_name)?;
+            {
+                let last_heading_priority = last_heading_region.heading_priority_value(doc_name)?;
+                let current_heading_priority =
+                    current_heading_region.heading_priority_value(doc_name)?;
 
-                    if current_heading_priority < last_heading_priority {
-                        return insert_page_heading_in_tree(
-                            &mut last_heading.children,
-                            new_heading,
-                            &last_heading.number,
-                            doc_name,
-                            package_name,
-                        );
-                    }
+                if current_heading_priority < last_heading_priority {
+                    return insert_page_heading_in_tree(
+                        &mut last_heading.children,
+                        new_heading,
+                        &last_heading.number,
+                        doc_name,
+                        package_name,
+                    );
                 }
+            }
 
             new_heading.number = Some(new_heading_number.clone());
             if new_heading.url.is_none() {
@@ -939,9 +940,9 @@ impl InterpreterState {
             if let Some(caption) = caption
                 && let Some(cap) =
                     process_foreign_variables(caption, foreign_variables, doc, line_number)?
-                {
-                    return Ok(Some(cap));
-                }
+            {
+                return Ok(Some(cap));
+            }
 
             for (line_number, _, header) in header.0.iter_mut() {
                 if let Some(h) =
@@ -954,9 +955,9 @@ impl InterpreterState {
             if let Some((line_number, body)) = body
                 && let Some(b) =
                     process_foreign_variables(body, foreign_variables, doc, *line_number)?
-                {
-                    return Ok(Some(b));
-                }
+            {
+                return Ok(Some(b));
+            }
 
             Ok(None)
         }
@@ -971,13 +972,14 @@ impl InterpreterState {
                 return Ok(None);
             }
             if let Some(val) = value.clone().strip_prefix('$')
-                && is_foreign_variable(val, foreign_variables, doc, line_number)? {
-                    let val = doc.resolve_name(line_number, val)?;
-                    *value = ftd::ftd2021::InterpreterState::resolve_foreign_variable_name(
-                        format!("${}", val.as_str()).as_str(),
-                    );
-                    return Ok(Some(val));
-                }
+                && is_foreign_variable(val, foreign_variables, doc, line_number)?
+            {
+                let val = doc.resolve_name(line_number, val)?;
+                *value = ftd::ftd2021::InterpreterState::resolve_foreign_variable_name(
+                    format!("${}", val.as_str()).as_str(),
+                );
+                return Ok(Some(val));
+            }
             Ok(None)
         }
 
@@ -1019,23 +1021,23 @@ impl InterpreterState {
             doc,
             var_types,
             section.line_number,
-        )?
-            && let ftd::ftd2021::p2::Thing::Component(c) =
-                doc.get_thing(section.line_number, section.name.as_str())?
-                && ftd::ftd2021::p2::utils::is_markdown_component(
-                    doc,
-                    c.full_name.as_str(),
-                    section.line_number,
-                )? {
-                    replace_blocks.extend(resolve_id_from_all_sources(
-                        &section.caption,
-                        &section.header,
-                        &section.body,
-                        section.line_number,
-                        true,
-                        0,
-                    ));
-                }
+        )? && let ftd::ftd2021::p2::Thing::Component(c) =
+            doc.get_thing(section.line_number, section.name.as_str())?
+            && ftd::ftd2021::p2::utils::is_markdown_component(
+                doc,
+                c.full_name.as_str(),
+                section.line_number,
+            )?
+        {
+            replace_blocks.extend(resolve_id_from_all_sources(
+                &section.caption,
+                &section.header,
+                &section.body,
+                section.line_number,
+                true,
+                0,
+            ));
+        }
 
         for (subsection_index, subsection) in itertools::enumerate(section.sub_sections.0.iter()) {
             if ftd::ftd2021::p2::utils::is_section_subsection_component(
@@ -1043,23 +1045,23 @@ impl InterpreterState {
                 doc,
                 var_types,
                 subsection.line_number,
-            )?
-                && let ftd::ftd2021::p2::Thing::Component(c) =
-                    doc.get_thing(subsection.line_number, subsection.name.as_str())?
-                    && ftd::ftd2021::p2::utils::is_markdown_component(
-                        doc,
-                        c.full_name.as_str(),
-                        subsection.line_number,
-                    )? {
-                        replace_blocks.extend(resolve_id_from_all_sources(
-                            &subsection.caption,
-                            &subsection.header,
-                            &subsection.body,
-                            subsection.line_number,
-                            false,
-                            subsection_index,
-                        ));
-                    }
+            )? && let ftd::ftd2021::p2::Thing::Component(c) =
+                doc.get_thing(subsection.line_number, subsection.name.as_str())?
+                && ftd::ftd2021::p2::utils::is_markdown_component(
+                    doc,
+                    c.full_name.as_str(),
+                    subsection.line_number,
+                )?
+            {
+                replace_blocks.extend(resolve_id_from_all_sources(
+                    &subsection.caption,
+                    &subsection.header,
+                    &subsection.body,
+                    subsection.line_number,
+                    false,
+                    subsection_index,
+                ));
+            }
         }
 
         return Ok(replace_blocks);
@@ -1307,37 +1309,37 @@ impl InterpreterState {
         if let Some(current_processing_document) = self.document_stack.last_mut()
             && let Some(current_processing_section) =
                 current_processing_document.get_last_mut_section()
-            {
-                for (id_map, source, ln) in replace_blocks.iter() {
-                    let is_from_section = source.1.0;
-                    let target_text_source = &source.0;
+        {
+            for (id_map, source, ln) in replace_blocks.iter() {
+                let is_from_section = source.1.0;
+                let target_text_source = &source.0;
 
-                    match is_from_section {
-                        true => match target_text_source {
-                            ftd::TextSource::Caption => {
-                                if let Some(ref mut cap) = current_processing_section.caption {
-                                    replace_all_links(cap, id_map, self.id.clone(), *ln)?;
-                                }
+                match is_from_section {
+                    true => match target_text_source {
+                        ftd::TextSource::Caption => {
+                            if let Some(ref mut cap) = current_processing_section.caption {
+                                replace_all_links(cap, id_map, self.id.clone(), *ln)?;
                             }
-                            ftd::TextSource::Header => {
-                                for (_, _, v) in current_processing_section.header.0.iter_mut() {
-                                    replace_all_links(v, id_map, self.id.clone(), *ln)?;
-                                }
+                        }
+                        ftd::TextSource::Header => {
+                            for (_, _, v) in current_processing_section.header.0.iter_mut() {
+                                replace_all_links(v, id_map, self.id.clone(), *ln)?;
                             }
-                            ftd::TextSource::Body => {
-                                if let Some(ref mut body) = current_processing_section.body {
-                                    replace_all_links(&mut body.1, id_map, self.id.clone(), *ln)?;
-                                }
+                        }
+                        ftd::TextSource::Body => {
+                            if let Some(ref mut body) = current_processing_section.body {
+                                replace_all_links(&mut body.1, id_map, self.id.clone(), *ln)?;
                             }
-                            _ => {
-                                unimplemented!()
-                            }
-                        },
-                        false => {
-                            let target_subsection_index = source.1.1;
-                            let subsections = &mut current_processing_section.sub_sections.0;
+                        }
+                        _ => {
+                            unimplemented!()
+                        }
+                    },
+                    false => {
+                        let target_subsection_index = source.1.1;
+                        let subsections = &mut current_processing_section.sub_sections.0;
 
-                            let current_processing_subsection = subsections
+                        let current_processing_subsection = subsections
                                 .get_mut(target_subsection_index)
                                 .ok_or_else(|| ftd::ftd2021::p1::Error::UnknownData {
                                     message: format!(
@@ -1347,39 +1349,31 @@ impl InterpreterState {
                                     line_number: *ln,
                                 })?;
 
-                            match target_text_source {
-                                ftd::TextSource::Caption => {
-                                    if let Some(ref mut cap) = current_processing_subsection.caption
-                                    {
-                                        replace_all_links(cap, id_map, self.id.clone(), *ln)?;
-                                    }
+                        match target_text_source {
+                            ftd::TextSource::Caption => {
+                                if let Some(ref mut cap) = current_processing_subsection.caption {
+                                    replace_all_links(cap, id_map, self.id.clone(), *ln)?;
                                 }
-                                ftd::TextSource::Header => {
-                                    for (_, _, v) in
-                                        current_processing_subsection.header.0.iter_mut()
-                                    {
-                                        replace_all_links(v, id_map, self.id.clone(), *ln)?;
-                                    }
+                            }
+                            ftd::TextSource::Header => {
+                                for (_, _, v) in current_processing_subsection.header.0.iter_mut() {
+                                    replace_all_links(v, id_map, self.id.clone(), *ln)?;
                                 }
-                                ftd::TextSource::Body => {
-                                    if let Some(ref mut body) = current_processing_subsection.body {
-                                        replace_all_links(
-                                            &mut body.1,
-                                            id_map,
-                                            self.id.clone(),
-                                            *ln,
-                                        )?;
-                                    }
+                            }
+                            ftd::TextSource::Body => {
+                                if let Some(ref mut body) = current_processing_subsection.body {
+                                    replace_all_links(&mut body.1, id_map, self.id.clone(), *ln)?;
                                 }
-                                _ => {
-                                    unimplemented!()
-                                }
+                            }
+                            _ => {
+                                unimplemented!()
                             }
                         }
                     }
                 }
-                current_processing_section.done_processing_links();
             }
+            current_processing_section.done_processing_links();
+        }
 
         return self.continue_();
 
