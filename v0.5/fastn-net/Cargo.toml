@@ -14,7 +14,6 @@ bytes.workspace = true
 colored.workspace = true
 data-encoding.workspace = true
 eyre.workspace = true
-file-guard.workspace = true
 futures-util.workspace = true
 http-body-util.workspace = true
 hyper-util.workspace = true

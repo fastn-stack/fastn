@@ -1573,7 +1573,6 @@ dependencies = [
  "data-encoding",
  "eyre",
  "fastn-id52",
- "file-guard",
  "futures-util",
  "hex",
  "http-body-util",
@@ -1634,7 +1633,6 @@ dependencies = [
  "fastn-automerge",
  "fastn-id52",
  "fastn-net",
- "file-guard",
  "iroh",
  "rusqlite",
  "serde",
@@ -1758,16 +1756,6 @@ name = "fiat-crypto"
 version = "0.2.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "28dea519a9695b9977216879a3ebfddf92f1c08c05d984f8996aecd6ecdc811d"
-
-[[package]]
-name = "file-guard"
-version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "21ef72acf95ec3d7dbf61275be556299490a245f017cf084bd23b4f68cf9407c"
-dependencies = [
- "libc",
- "winapi",
-]
 
 [[package]]
 name = "flate2"

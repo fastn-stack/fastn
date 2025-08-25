@@ -25,8 +25,11 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
             source: e,
         })?;
 
-    let _lock_guard = match file_guard::lock(&lock_file, file_guard::Lock::Exclusive, 0, 1) {
-        Ok(guard) => guard,
+    // Acquire exclusive lock using standard library API
+    match lock_file.try_lock() {
+        Ok(()) => {
+            println!("🔒 Lock acquired: {}", lock_path.display());
+        }
         Err(e) => {
             eprintln!(
                 "❌ Another instance of fastn is already running at {}",
@@ -41,8 +44,10 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         }
     };
 
+    // Keep the file handle alive to maintain the lock
+    let _lock_guard = lock_file;
+
     println!("🚀 Starting fastn at {}", fastn_home.display());
-    println!("🔒 Lock acquired: {}", lock_path.display());
 
     // Load Rig and AccountManager (we know it's initialized)
     println!("📂 Loading existing fastn_home...");

@@ -85,7 +85,6 @@ fastn-utils = { path = "fastn-utils" }
 ed25519-dalek = { version = "2.1.1", features = ["rand_core"] }
 data-encoding = "2"
 eyre = "0.6"
-file-guard = "0.2"
 ft-sys-shared = { version = "0.2.1", features = ["rusqlite", "host-only"] }
 futures-util = { version = "0.3", default-features = false, features = ["std"] }
 http = "1"
