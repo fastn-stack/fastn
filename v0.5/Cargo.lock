@@ -1553,13 +1553,17 @@ dependencies = [
  "automerge",
  "autosurgeon",
  "chrono",
+ "eyre",
  "fastn-automerge",
  "fastn-id52",
+ "futures",
+ "regex",
  "rusqlite",
  "serde",
  "serde_json",
  "thiserror 2.0.16",
  "tokio",
+ "tokio-util",
  "tracing",
 ]
 
