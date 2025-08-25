@@ -204,13 +204,25 @@ pub struct EmailForDelivery {
     pub date_queued: i64,            // When queued for delivery
 }
 
+// Align with async-imap standard types
 pub struct FolderInfo {
-    pub name: String,                // Folder name
-    pub exists: u32,                 // Number of messages
-    pub recent: u32,                 // Number of recent messages
-    pub unseen: u32,                 // Number of unseen messages
-    pub uid_validity: u32,           // UID validity number
-    pub uid_next: u32,               // Next UID to be assigned
+    pub flags: Vec<Flag>,            // Defined flags in the mailbox
+    pub exists: u32,                 // Number of messages in mailbox
+    pub recent: u32,                 // Number of messages with \Recent flag
+    pub unseen: Option<u32>,         // Sequence number of first unseen message
+    pub permanent_flags: Vec<Flag>,  // Flags that can be changed permanently
+    pub uid_next: Option<u32>,       // Next UID to be assigned
+    pub uid_validity: Option<u32>,   // UID validity value
+}
+
+pub enum Flag {
+    Seen,
+    Answered, 
+    Flagged,
+    Deleted,
+    Draft,
+    Recent,
+    Custom(String),
 }
 
 pub struct ThreadTree {
@@ -339,3 +351,22 @@ CREATE TABLE fastn_email_delivery
 This design ensures that FASTN can act as a drop-in replacement for traditional
 mail servers (like Postfix + Dovecot) while providing decentralized P2P email
 delivery.
+
+## Crate Dependencies and Standards Compliance
+
+### **SMTP Server Implementation**
+- **Samotop**: For SMTP server framework with async support
+- **Types align with**: Samotop's Mail trait and Session handling
+- **Standards**: RFC 5321 (SMTP), RFC 6152 (8BITMIME), RFC 3207 (STARTTLS)
+
+### **IMAP Server Implementation** 
+- **async-imap**: For IMAP type definitions and client compatibility testing
+- **Types align with**: async-imap's Mailbox, Flag, and Uid types
+- **Standards**: RFC 3501 (IMAP4rev1), RFC 2177 (IDLE), RFC 4315 (UIDPLUS)
+
+### **Message Parsing**
+- **mail-parser**: For RFC 5322 message parsing (headers, MIME, attachments)
+- **maildir**: For mailbox storage format compatibility
+- **Standards**: RFC 5322 (Internet Message Format), RFC 2045-2049 (MIME)
+
+Our API types are designed to be compatible with these established crates, ensuring we can integrate with the Rust email ecosystem while maintaining our P2P delivery capabilities.
