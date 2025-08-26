@@ -47,6 +47,7 @@ mod p2p_receive_email;
 mod smtp_receive;
 mod store;
 mod types;
+mod utils;
 
 // Re-export main types
 pub use errors::{
@@ -56,5 +57,6 @@ pub use errors::{
 };
 pub use store::Store;
 pub use types::{
-    DefaultMail, EmailForDelivery, Flag, FolderInfo, PendingDelivery, ThreadNode, ThreadTree,
+    DefaultMail, EmailAddress, EmailForDelivery, Flag, FolderInfo, ParsedEmail, PendingDelivery,
+    ThreadNode, ThreadTree,
 };

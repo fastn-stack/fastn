@@ -2,6 +2,60 @@
 
 use serde::{Deserialize, Serialize};
 
+/// Parsed email address with optional display name
+#[derive(Debug, Clone)]
+pub struct EmailAddress {
+    pub address: String,
+    pub name: Option<String>,
+}
+
+/// Parsed email message with extracted headers matching database schema
+#[derive(Debug)]
+pub struct ParsedEmail {
+    // Database primary key
+    pub email_id: String,
+    pub folder: String,
+    pub file_path: String,
+
+    // RFC 5322 Headers
+    pub message_id: String,
+    pub from_addr: String,        // Full email address string for storage
+    pub to_addr: String,          // Comma-separated addresses
+    pub cc_addr: Option<String>,  // Comma-separated addresses
+    pub bcc_addr: Option<String>, // Comma-separated addresses
+    pub subject: String,
+
+    // P2P Routing Information (extracted from email addresses)
+    pub our_alias_used: Option<String>, // Which of our aliases was used
+    pub our_username: Option<String>,   // Our username part
+    pub their_alias: Option<String>,    // Other party's alias
+    pub their_username: Option<String>, // Other party's username
+
+    // Threading Support
+    pub in_reply_to: Option<String>,      // In-Reply-To header
+    pub email_references: Option<String>, // References header (space-separated)
+
+    // Timestamps
+    pub date_sent: Option<i64>, // Date header (unix timestamp)
+    pub date_received: i64,     // When we received it
+
+    // MIME Information
+    pub content_type: String,             // Content-Type header
+    pub content_encoding: Option<String>, // Content-Transfer-Encoding
+    pub has_attachments: bool,            // Multipart/mixed detection
+
+    // File Metadata
+    pub size_bytes: usize, // Complete message size
+
+    // IMAP Flags (defaults)
+    pub is_seen: bool,                // \Seen flag
+    pub is_flagged: bool,             // \Flagged flag
+    pub is_draft: bool,               // \Draft flag
+    pub is_answered: bool,            // \Answered flag
+    pub is_deleted: bool,             // \Deleted flag
+    pub custom_flags: Option<String>, // JSON array of custom IMAP flags
+}
+
 /// IMAP flags aligned with async-imap standards
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum Flag {
