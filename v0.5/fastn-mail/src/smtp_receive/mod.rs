@@ -15,10 +15,10 @@
 //! - `validate_email_for_smtp`: P2P-only address validation and security checks
 //! - `store_email`: File system and database storage operations
 
-mod parse_email_headers;
+mod parse_email;
 mod validate_email_for_smtp;
 
-pub use parse_email_headers::parse_email_headers;
+pub use parse_email::parse_email;
 pub use validate_email_for_smtp::validate_email_for_smtp;
 
 use crate::errors::SmtpReceiveError;
@@ -49,7 +49,7 @@ impl crate::Store {
         // TODO: Load DefaultMail from automerge database for validation
         // For now, create a placeholder for validation testing
         // Step 1: Parse email message headers
-        let parsed_email = parse_email_headers(&raw_message)?;
+        let parsed_email = parse_email(&raw_message)?;
 
         // Step 2: Validate email for SMTP acceptance
         validate_email_for_smtp(&parsed_email)?;
