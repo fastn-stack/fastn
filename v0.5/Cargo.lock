@@ -1555,6 +1555,7 @@ dependencies = [
  "chrono",
  "fastn-automerge",
  "fastn-id52",
+ "mail-parser",
  "rusqlite",
  "serde",
  "serde_json",
@@ -3039,6 +3040,15 @@ dependencies = [
  "md-5",
  "sha2",
  "tiger",
+]
+
+[[package]]
+name = "mail-parser"
+version = "0.9.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "93c3b9e5d8b17faf573330bbc43b37d6e918c0a3bf8a88e7d0a220ebc84af9fc"
+dependencies = [
+ "encoding_rs",
 ]
 
 [[package]]

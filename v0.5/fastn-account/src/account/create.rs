@@ -201,6 +201,7 @@ impl fastn_account::Account {
                 .unwrap()
                 .as_secs() as i64,
             first_connected_to: *public_key, // Self-referential for our own account
+            allow_mail: true,                // Default: allow mail
         };
         alias_notes.save(db).map_err(|e| {
             fastn_account::CreateInitialDocumentsError::AliasDocumentCreationFailed {

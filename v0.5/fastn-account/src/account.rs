@@ -56,6 +56,7 @@ impl fastn_account::Account {
                         notes: None,
                         relationship_started_at: now,
                         first_connected_to: *our_alias,
+                        allow_mail: true, // Default: accept mail from all peers
                     }
                 },
             )

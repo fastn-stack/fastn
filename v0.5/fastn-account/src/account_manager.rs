@@ -198,13 +198,14 @@ impl fastn_account::AccountManager {
             crate::AccountToAccountMessage::Email { raw_message } => {
                 println!("📧 Processing email message: {} bytes", raw_message.len());
 
-                // 3. Store in appropriate mailbox (INBOX for incoming P2P email)
-                // Note: smtp_receive should handle peer tracking internally
-                let email_id = account.mail.smtp_receive(raw_message).await.map_err(|e| {
-                    crate::HandleAccountMessageError::EmailStorageFailed {
+                // 3. Store in INBOX (this is incoming P2P email from peer)
+                let email_id = account
+                    .mail
+                    .p2p_receive_email(raw_message, peer_id52)
+                    .await
+                    .map_err(|e| crate::HandleAccountMessageError::EmailStorageFailed {
                         source: Box::new(e),
-                    }
-                })?;
+                    })?;
 
                 println!("✅ Email stored with ID: {}", email_id);
 

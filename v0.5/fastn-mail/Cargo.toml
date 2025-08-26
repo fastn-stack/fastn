@@ -24,3 +24,6 @@ rusqlite.workspace = true
 
 # For timestamps
 chrono.workspace = true
+
+# For email parsing
+mail-parser = "0.9"

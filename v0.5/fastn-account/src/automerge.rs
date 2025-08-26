@@ -45,4 +45,6 @@ pub struct AliasNotes {
     pub relationship_started_at: i64,
     /// Our alias that this peer first connected to
     pub first_connected_to: fastn_id52::PublicKey,
+    /// Whether to accept email from this peer (default: true)
+    pub allow_mail: bool,
 }

@@ -81,30 +81,8 @@ impl Store {
         }
     }
 
-    // === SMTP Operations ===
-
-    /// SMTP server receives an email and handles delivery (local storage or P2P queuing)
-    pub async fn smtp_receive(&self, _raw_message: Vec<u8>) -> Result<String, SmtpReceiveError> {
-        // TODO: Parse message headers to extract:
-        // - message_id, from_addr, to_addr, cc_addr, bcc_addr, subject
-        // - date_sent, content_type, has_attachments
-        // - our_alias_used, our_username, their_alias, their_username
-
-        // TODO: Generate unique email_id
-        // TODO: Determine target folder (INBOX for inbound, Sent for outbound)
-        // TODO: Generate file_path (timestamp + message_id based filename)
-        // TODO: Store raw_message as .eml file
-        // TODO: Insert parsed data into fastn_emails table
-        // TODO: If external recipient, insert into fastn_email_delivery table
-
-        // For now, return a proper error indicating this is not yet implemented
-        // This prevents catastrophic panics while indicating the feature is incomplete
-        Err(SmtpReceiveError::MessageParsingFailed {
-            message: "SMTP message parsing and storage not yet implemented".to_string(),
-        })
-    }
-
     // === P2P Delivery Queue Management ===
+    // Note: SMTP Operations are implemented in smtp_receive.rs module
 
     /// Called by periodic task to check outbound queue
     pub async fn get_pending_deliveries(
