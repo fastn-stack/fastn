@@ -1553,6 +1553,7 @@ dependencies = [
  "automerge",
  "autosurgeon",
  "chrono",
+ "clap",
  "fastn-automerge",
  "fastn-id52",
  "mail-parser",
@@ -1562,6 +1563,7 @@ dependencies = [
  "thiserror 2.0.16",
  "tokio",
  "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]

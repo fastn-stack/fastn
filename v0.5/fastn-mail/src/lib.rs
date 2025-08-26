@@ -39,6 +39,8 @@
 
 extern crate self as fastn_mail;
 
+#[cfg(feature = "cli")]
+pub mod cli;
 mod database;
 mod errors;
 mod p2p_receive_email;
