@@ -253,6 +253,69 @@ impl fastn_automerge::Db {
     {
         self.get_impl(path)
     }
+
+    /// Load a document or create it with a default value if it doesn't exist
+    ///
+    /// # Usage
+    /// ```rust,ignore
+    /// // Simple usage with a closure
+    /// let notes = db.load_or_create_with(&path, || AliasNotes {
+    ///     alias: peer_id52,
+    ///     nickname: None,
+    ///     notes: None,
+    ///     relationship_started_at: now,
+    ///     first_connected_to: Some(our_alias),
+    /// })?;
+    ///
+    /// // With Default trait
+    /// let config = db.load_or_create_with(&config_path, || AppConfig::default())?;
+    ///
+    /// // With complex initialization
+    /// let user_profile = db.load_or_create_with(&profile_path, || {
+    ///     UserProfile::new_with_defaults(&user_id, current_time())
+    /// })?;
+    /// ```
+    ///
+    /// This replaces the verbose pattern:
+    /// ```rust,ignore
+    /// match Document::load(&db, &id) {
+    ///     Ok(doc) => doc,
+    ///     Err(GetError::NotFound(_)) => {
+    ///         let default = create_default();
+    ///         default.save(&db, &path)?;
+    ///         default
+    ///     }
+    ///     Err(e) => return Err(e),
+    /// }
+    /// ```
+    pub fn load_or_create_with<T, F>(
+        &self,
+        path: &fastn_automerge::DocumentPath,
+        default_fn: F,
+    ) -> Result<T, LoadOrCreateError>
+    where
+        T: autosurgeon::Hydrate + autosurgeon::Reconcile + serde::Serialize,
+        F: FnOnce() -> T,
+    {
+        match self.get_impl(path) {
+            Ok(document) => Ok(document),
+            Err(GetError::NotFound(_)) => {
+                let default_doc = default_fn();
+                self.create_impl(path, &default_doc)
+                    .map_err(|e| LoadOrCreateError::Create(Box::new(e)))?;
+                Ok(default_doc)
+            }
+            Err(e) => Err(LoadOrCreateError::Get(Box::new(e))),
+        }
+    }
+}
+
+#[derive(Debug, thiserror::Error)]
+pub enum LoadOrCreateError {
+    #[error("Failed to load document")]
+    Get(Box<GetError>),
+    #[error("Failed to create default document")]
+    Create(Box<CreateError>),
 }
 
 #[derive(Debug, thiserror::Error)]

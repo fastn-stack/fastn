@@ -49,8 +49,9 @@ pub mod p2p;
 // Re-export specific error types
 pub use errors::{
     AccountCreateError, AccountLoadError, AccountManagerCreateError, AccountManagerLoadError,
-    CreateInitialDocumentsError, GetAllEndpointsError, HandleAccountMessageError, HashPasswordError, 
-    MigrateUserDatabaseError, StoreCreateError, VerifyPasswordError,
+    AuthorizeConnectionError, CreateInitialDocumentsError, FindAccountByAliasError,
+    GetAllEndpointsError, HandleAccountMessageError, HashPasswordError, MigrateUserDatabaseError,
+    StoreCreateError, VerifyPasswordError,
 };
 
 // Re-export message types
@@ -66,11 +67,9 @@ pub struct Account {
     pub(crate) aliases: std::sync::Arc<tokio::sync::RwLock<Vec<Alias>>>,
 
     /// Database connection for Automerge documents and configuration
-    #[expect(unused)]
     pub(crate) automerge: std::sync::Arc<tokio::sync::Mutex<fastn_automerge::Db>>,
 
     /// Mail handling system
-    #[expect(unused)]
     pub(crate) mail: fastn_mail::Store,
 
     /// Database connection for user space data

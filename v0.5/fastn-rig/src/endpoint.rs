@@ -2,10 +2,7 @@ impl fastn_rig::EndpointManager {
     /// Create a new EndpointManager with a message channel
     pub fn new(
         graceful: fastn_net::Graceful,
-    ) -> (
-        Self,
-        tokio::sync::mpsc::Receiver<(String, fastn_rig::OwnerType, Vec<u8>)>,
-    ) {
+    ) -> (Self, tokio::sync::mpsc::Receiver<fastn_rig::P2PMessage>) {
         let (message_tx, message_rx) = tokio::sync::mpsc::channel(1000);
 
         (
@@ -25,6 +22,7 @@ impl fastn_rig::EndpointManager {
         secret_key: Vec<u8>,
         owner_type: fastn_rig::OwnerType,
         owner_path: std::path::PathBuf,
+        account_manager: std::sync::Arc<fastn_account::AccountManager>,
     ) -> Result<(), fastn_rig::EndpointError> {
         if self.active.contains_key(&id52) {
             return Err(fastn_rig::EndpointError::EndpointAlreadyOnline { id52 });
@@ -57,19 +55,28 @@ impl fastn_rig::EndpointManager {
         tracing::info!("Endpoint {} (node_id: {}) listening", id52, node_id);
 
         // Spawn the endpoint listener using graceful
-        let id52_clone = id52.clone();
         let endpoint_clone = endpoint.clone();
         let owner_type_clone = owner_type.clone();
         let message_tx = self.message_tx.clone();
         let graceful_for_endpoint = self.graceful.clone();
 
+        let our_endpoint_key: fastn_id52::PublicKey =
+            id52.parse()
+                .map_err(|_| fastn_rig::EndpointError::IrohEndpointCreationFailed {
+                    source: Box::new(std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        "Invalid ID52",
+                    )) as Box<dyn std::error::Error + Send + Sync>,
+                })?;
+
         let handle = self.graceful.spawn(async move {
             endpoint_listener(
-                id52_clone,
+                our_endpoint_key,
                 endpoint_clone,
                 owner_type_clone,
                 message_tx,
                 graceful_for_endpoint,
+                account_manager,
             )
             .await;
         });
@@ -136,16 +143,14 @@ impl fastn_rig::EndpointManager {
 
 /// Endpoint listener that uses fastn-net utilities for proper connection handling
 async fn endpoint_listener(
-    id52: String,
+    our_endpoint: fastn_id52::PublicKey,
     endpoint: iroh::Endpoint,
     owner_type: fastn_rig::OwnerType,
-    message_tx: tokio::sync::mpsc::Sender<(String, fastn_rig::OwnerType, Vec<u8>)>,
+    message_tx: tokio::sync::mpsc::Sender<fastn_rig::P2PMessage>,
     graceful: fastn_net::Graceful,
+    account_manager: std::sync::Arc<fastn_account::AccountManager>,
 ) {
-    tracing::debug!("Starting listener for endpoint {}", id52);
-
-    // Create connection pool for reusing connections
-    let peer_stream_senders = fastn_net::PeerStreamSenders::default();
+    tracing::debug!("Starting listener for endpoint {our_endpoint}");
 
     loop {
         tokio::select! {
@@ -154,17 +159,16 @@ async fn endpoint_listener(
                 let conn = match conn {
                     Some(conn) => conn,
                     None => {
-                        tracing::debug!("Endpoint {} closed", id52);
+                        tracing::debug!("Endpoint {} closed", our_endpoint);
                         break;
                     }
                 };
 
                 // Spawn a task to handle the incoming connection
-                let id52_clone = id52.clone();
                 let owner_type_clone = owner_type.clone();
                 let message_tx_clone = message_tx.clone();
-                let peer_stream_senders_clone = peer_stream_senders.clone();
                 let graceful_for_conn = graceful.clone();
+                let account_manager_clone = account_manager.clone();
 
                 graceful.spawn(async move {
                     let conn = match conn.await {
@@ -176,12 +180,12 @@ async fn endpoint_listener(
                     };
 
                     if let Err(e) = handle_connection(
-                        id52_clone,
+                        our_endpoint,
                         owner_type_clone,
                         conn,
                         message_tx_clone,
                         graceful_for_conn,
-                        peer_stream_senders_clone,
+                        account_manager_clone,
                     ).await {
                         tracing::error!("Connection error: {}", e);
                     }
@@ -190,7 +194,7 @@ async fn endpoint_listener(
 
             // Handle graceful shutdown
             _ = graceful.cancelled() => {
-                tracing::debug!("Shutting down listener for endpoint {}", id52);
+                tracing::debug!("Shutting down listener for endpoint {our_endpoint}");
                 break;
             }
         }
@@ -199,15 +203,15 @@ async fn endpoint_listener(
 
 /// Handle an incoming connection using fastn-net protocol utilities
 async fn handle_connection(
-    endpoint_id52: String,
+    our_endpoint: fastn_id52::PublicKey,
     owner_type: fastn_rig::OwnerType,
     conn: iroh::endpoint::Connection,
-    message_tx: tokio::sync::mpsc::Sender<(String, fastn_rig::OwnerType, Vec<u8>)>,
+    message_tx: tokio::sync::mpsc::Sender<fastn_rig::P2PMessage>,
     graceful: fastn_net::Graceful,
-    #[allow(unused)] peer_stream_senders: fastn_net::PeerStreamSenders,
+    account_manager: std::sync::Arc<fastn_account::AccountManager>,
 ) -> Result<(), fastn_rig::EndpointError> {
-    // Get remote ID52
-    let remote_id52 = fastn_net::get_remote_id52(&conn).await.map_err(|e| {
+    // Get remote peer's PublicKey
+    let peer_key = fastn_net::get_remote_id52(&conn).await.map_err(|e| {
         fastn_rig::EndpointError::ConnectionHandlingFailed {
             source: Box::new(std::io::Error::other(format!(
                 "Failed to get remote ID52: {e}"
@@ -215,11 +219,35 @@ async fn handle_connection(
         }
     })?;
 
-    tracing::debug!(
-        "Handling connection from {} to endpoint {}",
-        remote_id52,
-        endpoint_id52
-    );
+    tracing::debug!("Handling connection from {peer_key} to endpoint {our_endpoint}");
+
+    // Perform connection authorization directly
+    tracing::debug!("Authorizing connection from {peer_key} to {our_endpoint}");
+
+    // Find the account that owns this endpoint
+    let account = match account_manager.find_account_by_alias(&our_endpoint).await {
+        Ok(account) => account,
+        Err(e) => {
+            tracing::warn!("No account found for endpoint {our_endpoint}: {e}");
+            return Ok(()); // Close connection silently
+        }
+    };
+
+    // Authorize the connection
+    let authorized = match account.authorize_connection(&peer_key, &our_endpoint).await {
+        Ok(auth) => auth,
+        Err(e) => {
+            tracing::error!("Authorization failed for peer {peer_key}: {e}");
+            return Ok(()); // Close connection
+        }
+    };
+
+    if !authorized {
+        tracing::warn!("Connection rejected for peer {peer_key} to endpoint {our_endpoint}");
+        return Ok(()); // Close connection immediately
+    }
+
+    tracing::info!("✅ Connection authorized for peer {peer_key} to endpoint {our_endpoint}");
 
     // Handle multiple streams on this connection
     loop {
@@ -259,16 +287,18 @@ async fn handle_connection(
                                 // TODO: Parse and process the message based on protocol type
                                 // For now, just log it
                                 tracing::info!(
-                                    "Received {:?} message on {} from {}: {} bytes",
-                                    protocol,
-                                    endpoint_id52,
-                                    remote_id52,
+                                    "Received {protocol:?} message on {our_endpoint} from {peer_key}: {} bytes",
                                     message_str.len()
                                 );
 
                                 // Send the message through the channel for processing
                                 if let Err(e) = message_tx
-                                    .send((endpoint_id52.clone(), owner_type.clone(), message_str.into_bytes()))
+                                    .send(fastn_rig::P2PMessage {
+                                        our_endpoint,
+                                        owner_type: owner_type.clone(),
+                                        peer_id52: peer_key,
+                                        message: message_str.into_bytes(),
+                                    })
                                     .await
                                 {
                                     tracing::error!("Failed to send message to channel: {}", e);

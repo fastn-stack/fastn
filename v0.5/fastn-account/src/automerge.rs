@@ -43,4 +43,6 @@ pub struct AliasNotes {
     pub notes: Option<String>,
     /// Unix timestamp when this alias became part of our relationships
     pub relationship_started_at: i64,
+    /// Our alias that this peer first connected to
+    pub first_connected_to: fastn_id52::PublicKey,
 }

@@ -85,10 +85,23 @@ pub struct Rig {
 pub struct EndpointManager {
     /// Active endpoints only
     pub(crate) active: std::collections::HashMap<String, fastn_rig::EndpointHandle>,
-    /// Channel to send all incoming messages with owner type
-    pub(crate) message_tx: tokio::sync::mpsc::Sender<(String, fastn_rig::OwnerType, Vec<u8>)>,
+    /// Channel to send all incoming P2P messages
+    pub(crate) message_tx: tokio::sync::mpsc::Sender<P2PMessage>,
     /// Graceful handler for spawning tasks
     pub(crate) graceful: fastn_net::Graceful,
+}
+
+/// P2P message received on an endpoint
+#[derive(Debug, Clone)]
+pub struct P2PMessage {
+    /// Our endpoint that received the message
+    pub our_endpoint: fastn_id52::PublicKey,
+    /// Type of endpoint owner (Account, Device, Rig)
+    pub owner_type: OwnerType,
+    /// Peer who sent the message
+    pub peer_id52: fastn_id52::PublicKey,
+    /// Raw message content
+    pub message: Vec<u8>,
 }
 
 /// Handle for an active endpoint

@@ -158,11 +158,53 @@ pub enum GetAllEndpointsError {
     },
 }
 
+/// Error type for AccountManager::find_account_by_alias function
+#[derive(Error, Debug)]
+pub enum FindAccountByAliasError {
+    #[error("Failed to scan accounts directory: {path}")]
+    AccountsScanFailed {
+        path: std::path::PathBuf,
+        #[source]
+        source: std::io::Error,
+    },
+
+    #[error("Account not found for alias: {alias_id52}")]
+    AccountNotFound { alias_id52: String },
+}
+
+/// Error type for Account::authorize_connection function
+#[derive(Error, Debug)]
+pub enum AuthorizeConnectionError {
+    #[error("Failed to track peer connection")]
+    PeerTrackingFailed {
+        peer_id52: fastn_id52::PublicKey,
+        #[source]
+        source: Box<dyn std::error::Error + Send + Sync>,
+    },
+
+    #[error("Connection rejected by security policy")]
+    ConnectionRejected { reason: String },
+
+    #[error("Failed to access database")]
+    DatabaseAccessFailed {
+        #[source]
+        source: Box<dyn std::error::Error + Send + Sync>,
+    },
+}
+
 /// Error type for AccountManager::handle_account_message function
 #[derive(Error, Debug)]
 pub enum HandleAccountMessageError {
     #[error("Account not found for endpoint: {endpoint_id52}")]
-    AccountNotFound { endpoint_id52: fastn_id52::PublicKey },
+    AccountNotFound {
+        endpoint_id52: fastn_id52::PublicKey,
+    },
+
+    #[error("Failed to find account")]
+    AccountLookupFailed {
+        #[source]
+        source: FindAccountByAliasError,
+    },
 
     #[error("Failed to store email message")]
     EmailStorageFailed {

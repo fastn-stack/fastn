@@ -53,9 +53,11 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     println!("📂 Loading existing fastn_home...");
     let rig = fastn_rig::Rig::load(fastn_home.clone())
         .map_err(|e| fastn_rig::RunError::RigLoadingFailed { source: e })?;
-    let account_manager = fastn_account::AccountManager::load(fastn_home.clone())
-        .await
-        .map_err(|e| fastn_rig::RunError::AccountManagerLoadFailed { source: e })?;
+    let account_manager = std::sync::Arc::new(
+        fastn_account::AccountManager::load(fastn_home.clone())
+            .await
+            .map_err(|e| fastn_rig::RunError::AccountManagerLoadFailed { source: e })?,
+    );
 
     println!("🔑 Rig ID52: {}", rig.id52());
     println!("👤 Owner: {}", rig.owner());
@@ -94,6 +96,7 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
                     secret_key,
                     fastn_rig::OwnerType::Account,
                     account_path,
+                    account_manager.clone(),
                 )
                 .await
                 .map_err(|e| fastn_rig::RunError::EndpointOnlineFailed { source: e })?;
@@ -114,6 +117,7 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
                 rig.secret_key().to_bytes().to_vec(),
                 fastn_rig::OwnerType::Rig,
                 fastn_home.clone(),
+                account_manager.clone(),
             )
             .await
             .map_err(|e| fastn_rig::RunError::EndpointOnlineFailed { source: e })?;
@@ -137,22 +141,23 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         println!("\n📬 P2P handler started...");
         loop {
             tokio::select! {
-                Some((endpoint_id52, owner_type, message)) = message_rx.recv() => {
+                Some(p2p_msg) = message_rx.recv() => {
                     tracing::info!(
-                        "Received message on endpoint {} (type: {:?})",
-                        endpoint_id52,
-                        owner_type
+                        "Received message on endpoint {} from {} (type: {:?})",
+                        p2p_msg.our_endpoint.id52(),
+                        p2p_msg.peer_id52.id52(),
+                        p2p_msg.owner_type
                     );
 
                     // Route message based on owner type
-                    let result = match owner_type {
+                    let result = match p2p_msg.owner_type {
                         fastn_rig::OwnerType::Account => {
-                            process_account_message(&account_manager, &endpoint_id52, message).await
+                            process_account_message(&account_manager, p2p_msg).await
                         }
                         fastn_rig::OwnerType::Device => {
-                            process_device_message(&endpoint_id52, message).await
+                            process_device_message(&p2p_msg.our_endpoint, p2p_msg.message).await
                         }
-                        fastn_rig::OwnerType::Rig => process_rig_message(&endpoint_id52, message).await,
+                        fastn_rig::OwnerType::Rig => process_rig_message(&p2p_msg.our_endpoint, p2p_msg.message).await,
                     };
 
                     if let Err(e) = result {
@@ -209,60 +214,53 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
 
 /// Process a message received on an account endpoint
 async fn process_account_message(
-    _account_manager: &fastn_account::AccountManager,
-    endpoint_id52: &str,
-    message: Vec<u8>,
+    account_manager: &fastn_account::AccountManager,
+    p2p_msg: fastn_rig::P2PMessage,
 ) -> Result<(), fastn_rig::MessageProcessingError> {
+    // All connections are pre-authorized, so we only handle actual messages
     println!(
-        "📨 Account message on {}: {} bytes",
-        endpoint_id52,
-        message.len()
+        "📨 Processing message from {} to {} ({} bytes)",
+        p2p_msg.peer_id52.id52(),
+        p2p_msg.our_endpoint.id52(),
+        p2p_msg.message.len()
     );
 
-    // Parse the P2P message
-    let _p2p_message = serde_json::from_slice::<fastn_account::AccountToAccountMessage>(&message)
-        .map_err(|e| fastn_rig::MessageProcessingError::MessageDeserializationFailed { source: e })?;
+    let account_message =
+        serde_json::from_slice::<fastn_account::AccountToAccountMessage>(&p2p_msg.message)
+            .map_err(
+                |e| fastn_rig::MessageProcessingError::MessageDeserializationFailed { source: e },
+            )?;
 
-    // Parse endpoint ID52 string to PublicKey
-    let _our_endpoint_id52: fastn_id52::PublicKey = endpoint_id52.parse()
-        .map_err(|_| fastn_rig::MessageProcessingError::InvalidEndpointId52 {
-            endpoint_id52: endpoint_id52.to_string(),
-        })?;
+    // Delegate to AccountManager for proper handling
+    account_manager
+        .handle_account_message(&p2p_msg.peer_id52, &p2p_msg.our_endpoint, account_message)
+        .await
+        .map_err(
+            |e| fastn_rig::MessageProcessingError::AccountMessageHandlingFailed { source: e },
+        )?;
 
-    // TODO: Get actual peer ID52 from P2P connection context
-    // Current limitation: message channel doesn't include peer information
-    // For now, return error indicating missing peer context
-    Err(fastn_rig::MessageProcessingError::NotImplemented {
-        endpoint_id52: "Peer ID52 extraction from P2P connection not yet implemented".to_string(),
-    })
+    println!("✅ Account message handled successfully");
+    Ok(())
 }
 
 /// Process a message received on a device endpoint
 async fn process_device_message(
-    endpoint_id52: &str,
+    endpoint: &fastn_id52::PublicKey,
     message: Vec<u8>,
 ) -> Result<(), fastn_rig::MessageProcessingError> {
+    // Device message processing (connection already authorized)
+    println!("📱 Device message on {endpoint}: {} bytes", message.len());
     // TODO: Handle device sync messages
-    println!(
-        "📱 Device message on {}: {} bytes",
-        endpoint_id52,
-        message.len()
-    );
-
     Ok(())
 }
 
 /// Process a message received on the rig endpoint
 async fn process_rig_message(
-    endpoint_id52: &str,
+    endpoint: &fastn_id52::PublicKey,
     message: Vec<u8>,
 ) -> Result<(), fastn_rig::MessageProcessingError> {
+    // Rig control message processing (connection already authorized)
+    println!("⚙️ Rig message on {endpoint}: {} bytes", message.len());
     // TODO: Handle rig control messages
-    println!(
-        "⚙️ Rig message on {}: {} bytes",
-        endpoint_id52,
-        message.len()
-    );
-
     Ok(())
 }

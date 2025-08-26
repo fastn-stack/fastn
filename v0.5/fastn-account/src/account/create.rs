@@ -200,6 +200,7 @@ impl fastn_account::Account {
                 .duration_since(std::time::UNIX_EPOCH)
                 .unwrap()
                 .as_secs() as i64,
+            first_connected_to: *public_key, // Self-referential for our own account
         };
         alias_notes.save(db).map_err(|e| {
             fastn_account::CreateInitialDocumentsError::AliasDocumentCreationFailed {

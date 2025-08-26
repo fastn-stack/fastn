@@ -31,6 +31,46 @@ impl fastn_account::Account {
         aliases.clone()
     }
 
+    /// Handle incoming P2P connection authorization and peer tracking
+    /// Returns true if connection should be accepted, false if rejected
+    pub async fn authorize_connection(
+        &self,
+        peer_id52: &fastn_id52::PublicKey,
+        our_alias: &fastn_id52::PublicKey,
+    ) -> Result<bool, crate::AuthorizeConnectionError> {
+        // TODO: Check security policies (block list, allowlist, lockdown mode)
+        // For now, accept all connections
+
+        // Ensure peer notes document exists for alias association tracking
+        let automerge_db = self.automerge.lock().await;
+        let now = chrono::Utc::now().timestamp();
+
+        automerge_db
+            .load_or_create_with(
+                &crate::automerge::AliasNotes::document_path(peer_id52),
+                || {
+                    tracing::debug!("Creating new peer notes document for {}", peer_id52);
+                    crate::automerge::AliasNotes {
+                        alias: *peer_id52,
+                        nickname: None,
+                        notes: None,
+                        relationship_started_at: now,
+                        first_connected_to: *our_alias,
+                    }
+                },
+            )
+            .map_err(|e| crate::AuthorizeConnectionError::DatabaseAccessFailed {
+                source: Box::new(e),
+            })?;
+
+        tracing::info!(
+            "✅ Connection authorized for peer {} to alias {}",
+            peer_id52.id52(),
+            our_alias.id52()
+        );
+        Ok(true) // Accept connection
+    }
+
     /// Create a test account in memory (for testing only)
     #[cfg(test)]
     pub(crate) async fn new_for_test(

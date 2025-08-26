@@ -10,7 +10,7 @@
 //! ```rust,no_run
 //! use fastn_mail::Store;
 //! use std::path::Path;
-//! 
+//!
 //! async fn example() -> Result<(), Box<dyn std::error::Error>> {
 //!     let account_path = Path::new("/path/to/account");
 //!     
@@ -39,34 +39,18 @@
 
 extern crate self as fastn_mail;
 
-mod store;
-mod types;
 mod database;
 mod errors;
+mod store;
+mod types;
 
 // Re-export main types
+pub use errors::{
+    GetEmailsForPeerError, GetPendingDeliveriesError, ImapExpungeError, ImapFetchError,
+    ImapListFoldersError, ImapSearchError, ImapSelectFolderError, ImapStoreFlagsError,
+    ImapThreadError, MarkDeliveredError, SmtpReceiveError, StoreCreateError, StoreLoadError,
+};
 pub use store::Store;
 pub use types::{
-    Flag,
-    FolderInfo, 
-    ThreadTree,
-    ThreadNode,
-    PendingDelivery,
-    EmailForDelivery,
-    DefaultMail,
-};
-pub use errors::{
-    StoreCreateError,
-    StoreLoadError,
-    SmtpReceiveError,
-    GetPendingDeliveriesError,
-    GetEmailsForPeerError,
-    MarkDeliveredError,
-    ImapListFoldersError,
-    ImapSelectFolderError,
-    ImapFetchError,
-    ImapSearchError,
-    ImapStoreFlagsError,
-    ImapExpungeError,
-    ImapThreadError,
+    DefaultMail, EmailForDelivery, Flag, FolderInfo, PendingDelivery, ThreadNode, ThreadTree,
 };

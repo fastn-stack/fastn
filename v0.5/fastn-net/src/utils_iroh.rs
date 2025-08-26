@@ -1,14 +1,16 @@
 // Functions that work with iroh types
 
-/// Gets the ID52 string of the remote peer from a connection.
+/// Gets the remote peer's PublicKey from a connection.
 ///
-/// Extracts the remote node's public key and converts it to ID52 format
-/// (52-character BASE32_DNSSEC encoding).
+/// Extracts the remote node's public key and converts it to fastn_id52::PublicKey.
 ///
 /// # Errors
 ///
-/// Returns an error if the remote node ID cannot be read from the connection.
-pub async fn get_remote_id52(conn: &iroh::endpoint::Connection) -> eyre::Result<String> {
+/// Returns an error if the remote node ID cannot be read from the connection
+/// or if the key conversion fails.
+pub async fn get_remote_id52(
+    conn: &iroh::endpoint::Connection,
+) -> eyre::Result<fastn_id52::PublicKey> {
     let remote_node_id = match conn.remote_node_id() {
         Ok(id) => id,
         Err(e) => {
@@ -23,9 +25,10 @@ pub async fn get_remote_id52(conn: &iroh::endpoint::Connection) -> eyre::Result<
         }
     };
 
-    // Convert iroh::PublicKey to ID52 string
+    // Convert iroh::PublicKey to fastn_id52::PublicKey
     let bytes = remote_node_id.as_bytes();
-    Ok(data_encoding::BASE32_DNSSEC.encode(bytes))
+    fastn_id52::PublicKey::from_bytes(bytes)
+        .map_err(|e| eyre::anyhow!("Failed to convert remote node ID to PublicKey: {e}"))
 }
 
 async fn ack(send: &mut iroh::endpoint::SendStream) -> eyre::Result<()> {

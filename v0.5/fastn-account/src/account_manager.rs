@@ -129,6 +129,48 @@ impl fastn_account::AccountManager {
         Ok(all_endpoints)
     }
 
+    /// Find account that owns the given alias PublicKey
+    pub async fn find_account_by_alias(
+        &self,
+        alias_key: &fastn_id52::PublicKey,
+    ) -> Result<crate::Account, crate::FindAccountByAliasError> {
+        let accounts_dir = self.path.join("accounts");
+
+        let entries = std::fs::read_dir(&accounts_dir).map_err(|e| {
+            crate::FindAccountByAliasError::AccountsScanFailed {
+                path: accounts_dir.clone(),
+                source: e,
+            }
+        })?;
+
+        for entry in entries {
+            let entry = entry.map_err(|e| crate::FindAccountByAliasError::AccountsScanFailed {
+                path: accounts_dir.clone(),
+                source: e,
+            })?;
+
+            let account_path = entry.path();
+            if account_path.is_dir() {
+                match crate::Account::load(&account_path).await {
+                    Ok(account) => {
+                        if account.has_alias(&alias_key.id52()).await {
+                            return Ok(account);
+                        }
+                    }
+                    Err(e) => {
+                        tracing::warn!("Failed to load account at {:?}: {}", account_path, e);
+                        // Continue checking other accounts
+                        continue;
+                    }
+                }
+            }
+        }
+
+        Err(crate::FindAccountByAliasError::AccountNotFound {
+            alias_id52: alias_key.id52(),
+        })
+    }
+
     /// Handle an incoming P2P message from another account
     pub async fn handle_account_message(
         &self,
@@ -136,23 +178,41 @@ impl fastn_account::AccountManager {
         our_endpoint_id52: &fastn_id52::PublicKey,
         message: crate::AccountToAccountMessage,
     ) -> Result<(), crate::HandleAccountMessageError> {
-        // TODO: Implement account message handling
-        // 1. Find which account owns our_endpoint_id52
-        // 2. Process the message based on type (Email, etc.)
-        // 3. Store in appropriate mailbox using account.mail.smtp_receive()
-        // 4. Update peer tracking information
-        
         println!(
             "📨 Handling account message from {} to {} (message size: {} bytes)",
             peer_id52.id52(),
             our_endpoint_id52.id52(),
             message.size()
         );
-        
-        // For now, return a proper error indicating this is not yet implemented
-        // This prevents catastrophic panics while indicating the feature is incomplete
-        Err(crate::HandleAccountMessageError::InvalidMessage {
-            reason: "Account message handling not yet implemented".to_string(),
-        })
+
+        // 1. Find which account owns our_endpoint_id52
+        let account = self
+            .find_account_by_alias(our_endpoint_id52)
+            .await
+            .map_err(|e| crate::HandleAccountMessageError::AccountLookupFailed { source: e })?;
+
+        println!("✅ Found account that owns endpoint {our_endpoint_id52}");
+
+        // 2. Process the message based on type
+        match message {
+            crate::AccountToAccountMessage::Email { raw_message } => {
+                println!("📧 Processing email message: {} bytes", raw_message.len());
+
+                // 3. Store in appropriate mailbox (INBOX for incoming P2P email)
+                // Note: smtp_receive should handle peer tracking internally
+                let email_id = account.mail.smtp_receive(raw_message).await.map_err(|e| {
+                    crate::HandleAccountMessageError::EmailStorageFailed {
+                        source: Box::new(e),
+                    }
+                })?;
+
+                println!("✅ Email stored with ID: {}", email_id);
+
+                // 4. Ensure peer tracking (connection should have already called authorize_connection)
+                // The peer notes document should already exist from connection establishment
+
+                Ok(())
+            }
+        }
     }
 }
