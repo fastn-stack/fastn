@@ -75,11 +75,8 @@ impl Store {
         let connection = rusqlite::Connection::open_in_memory().unwrap();
         crate::database::create_schema(&connection).unwrap();
 
-        // Use temp directory for test files
-        let temp_dir = std::env::temp_dir().join(format!("fastn-mail-test-{}", std::process::id()));
-
         Self {
-            account_path: temp_dir,
+            account_path: std::path::PathBuf::from(":memory:"),
             connection: std::sync::Arc::new(tokio::sync::Mutex::new(connection)),
         }
     }

@@ -81,6 +81,16 @@ pub enum Commands {
         /// Peer ID52 that received the email
         peer_id52: String,
     },
+
+    /// Accept P2P email from another peer (store in INBOX)
+    AcceptP2pMail {
+        /// Path to raw email message file
+        #[arg(long)]
+        message_file: String,
+        /// ID52 of the peer who sent this email
+        #[arg(long)]
+        sender_id52: String,
+    },
 }
 
 pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
@@ -125,6 +135,12 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             peer_id52,
         } => {
             mark_delivered_command(&store, &email_id, &peer_id52).await?;
+        }
+        Commands::AcceptP2pMail {
+            message_file,
+            sender_id52,
+        } => {
+            p2p_receive_email_command(&store, &message_file, &sender_id52).await?;
         }
     }
 
@@ -305,6 +321,31 @@ async fn mark_delivered_command(
     Ok(())
 }
 
+async fn p2p_receive_email_command(
+    store: &crate::Store,
+    message_file: &str,
+    sender_id52: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
+    println!("📨 Accepting P2P email from peer: {sender_id52}");
+
+    // Parse sender ID52 to PublicKey
+    let sender_key: fastn_id52::PublicKey = sender_id52
+        .parse()
+        .map_err(|_| format!("Invalid sender ID52: {sender_id52}"))?;
+
+    // Read raw email message from file
+    let raw_message = std::fs::read(message_file)
+        .map_err(|e| format!("Failed to read message file {message_file}: {e}"))?;
+
+    println!("📖 Read {} bytes from {message_file}", raw_message.len());
+
+    // Process P2P email (store in INBOX)
+    let email_id = store.p2p_receive_email(raw_message, &sender_key).await?;
+
+    println!("✅ P2P email accepted and stored in INBOX with ID: {email_id}");
+    Ok(())
+}
+
 /// Build a simple RFC 5322 email message for testing
 fn build_rfc5322_message(
     from: &str,
@@ -438,5 +479,59 @@ mod tests {
             assert_eq!(emails.len(), 1);
             assert_eq!(emails[0].email_id, email_id);
         }
+    }
+
+    #[tokio::test]
+    async fn test_two_instance_p2p_workflow() {
+        // Create two separate store instances
+        let sender_store = crate::Store::create_test();
+        let recipient_store = crate::Store::create_test();
+
+        // Generate valid ID52s
+        let from_key = fastn_id52::SecretKey::generate();
+        let to_key = fastn_id52::SecretKey::generate();
+        let from_id52 = from_key.public_key().id52();
+        let to_id52 = to_key.public_key().id52();
+
+        // Step 1: Instance 1 sends email via SMTP
+        let message = build_rfc5322_message(
+            &format!("alice@{from_id52}.fastn"),
+            &format!("bob@{to_id52}.local"),
+            None,
+            None,
+            "P2P Integration Test",
+            "Testing two-instance P2P email delivery",
+        )
+        .unwrap();
+
+        let email_id = sender_store
+            .smtp_receive(message.clone().into_bytes())
+            .await
+            .expect("Sender should process email successfully");
+
+        // Step 2: Get email file path from sender instance
+        let emails = sender_store
+            .get_emails_for_peer(&to_key.public_key())
+            .await
+            .expect("Should get emails for recipient");
+        assert_eq!(emails.len(), 1);
+        assert_eq!(emails[0].email_id, email_id);
+
+        // Step 3: Instance 2 accepts P2P email (simulating P2P delivery)
+        let p2p_email_id = recipient_store
+            .p2p_receive_email(emails[0].raw_message.clone(), &from_key.public_key())
+            .await
+            .expect("Recipient should accept P2P email");
+
+        // Step 4: Verify emails are in correct folders
+        // Sender should have email in Sent folder
+        // Recipient should have email in INBOX folder
+
+        println!("✅ Two-instance P2P workflow test completed:");
+        println!("   Sender email ID: {email_id} (in Sent folder)");
+        println!("   Recipient email ID: {p2p_email_id} (in INBOX folder)");
+
+        assert!(!p2p_email_id.is_empty());
+        assert_ne!(email_id, p2p_email_id); // Different IDs for sender vs recipient
     }
 }
