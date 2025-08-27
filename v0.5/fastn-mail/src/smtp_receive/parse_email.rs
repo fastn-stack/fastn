@@ -296,7 +296,7 @@ mod tests {
         let to_key = fastn_id52::SecretKey::generate();
         let from_id52 = from_key.public_key().id52();
         let to_id52 = to_key.public_key().id52();
-        
+
         let message = test_email! {"
             From: alice@{from_id52}.fastn
             To: bob@{to_id52}.local
@@ -307,7 +307,10 @@ mod tests {
 
         let headers = extract_headers_simple(&message).unwrap();
 
-        assert_eq!(headers.get("From"), Some(&format!("alice@{from_id52}.fastn")));
+        assert_eq!(
+            headers.get("From"),
+            Some(&format!("alice@{from_id52}.fastn"))
+        );
         assert_eq!(headers.get("To"), Some(&format!("bob@{to_id52}.local")));
         assert_eq!(headers.get("Subject"), Some(&"Test".to_string()));
     }
@@ -320,7 +323,7 @@ mod tests {
 
         let from_key = fastn_id52::SecretKey::generate();
         let from_id52 = from_key.public_key().id52();
-        
+
         let email = test_email! {"
             From: alice@{from_id52}.fastn
             To: bob@{to_id52}.local
@@ -331,7 +334,7 @@ mod tests {
 
         let result = parse_email(email.as_bytes()).unwrap();
 
-        // We are the sender (From address) 
+        // We are the sender (From address)
         assert_eq!(result.our_username, Some("alice".to_string()));
         assert_eq!(result.our_alias_used, Some(from_id52));
 
@@ -353,7 +356,7 @@ mod tests {
 
         // Parsing succeeds (we parse any RFC 5322 format)
         let result = parse_email(email.as_bytes()).unwrap();
-        
+
         // But validation should fail for external addresses
         assert!(crate::smtp_receive::validate_email_for_smtp(&result).is_err());
     }

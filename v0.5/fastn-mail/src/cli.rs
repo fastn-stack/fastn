@@ -67,6 +67,12 @@ pub enum Commands {
 
     /// Check pending P2P deliveries
     PendingDeliveries,
+
+    /// Get emails to deliver to a specific peer
+    GetEmailsForPeer {
+        /// Peer ID52 to get emails for
+        peer_id52: String,
+    },
 }
 
 pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
@@ -102,6 +108,9 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         }
         Commands::PendingDeliveries => {
             pending_deliveries_command(&store).await?;
+        }
+        Commands::GetEmailsForPeer { peer_id52 } => {
+            get_emails_for_peer_command(&store, &peer_id52).await?;
         }
     }
 
@@ -230,6 +239,39 @@ async fn pending_deliveries_command(
     Ok(())
 }
 
+async fn get_emails_for_peer_command(
+    store: &crate::Store,
+    peer_id52: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
+    println!("📨 Getting emails for peer: {peer_id52}");
+
+    // Parse peer ID52 to PublicKey
+    let peer_key: fastn_id52::PublicKey = peer_id52
+        .parse()
+        .map_err(|_| format!("Invalid peer ID52: {peer_id52}"))?;
+
+    let emails = store.get_emails_for_peer(&peer_key).await?;
+
+    if emails.is_empty() {
+        println!("✅ No emails pending for peer {peer_id52}");
+    } else {
+        println!("📋 {} emails pending for peer {peer_id52}:", emails.len());
+        for email in &emails {
+            println!("  📧 {}: {} bytes", email.email_id, email.size_bytes);
+        }
+
+        // Show total size
+        let total_size: usize = emails.iter().map(|e| e.size_bytes).sum();
+        println!(
+            "📊 Total: {} bytes across {} emails",
+            total_size,
+            emails.len()
+        );
+    }
+
+    Ok(())
+}
+
 /// Build a simple RFC 5322 email message for testing
 fn build_rfc5322_message(
     from: &str,
@@ -263,4 +305,105 @@ fn build_rfc5322_message(
     message.push_str("\r\n");
 
     Ok(message)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn test_send_email_and_check_pending_deliveries() {
+        // Create test store
+        let store = crate::Store::create_test();
+
+        // Generate valid ID52s for testing
+        let from_key = fastn_id52::SecretKey::generate();
+        let to_key = fastn_id52::SecretKey::generate();
+        let from_id52 = from_key.public_key().id52();
+        let to_id52 = to_key.public_key().id52();
+
+        // Build test email message
+        let message = build_rfc5322_message(
+            &format!("alice@{from_id52}.fastn"),
+            &format!("bob@{to_id52}.local"),
+            None,
+            None,
+            "CLI Integration Test",
+            "Testing complete workflow from send to pending delivery",
+        )
+        .unwrap();
+
+        // Step 1: Send email via SMTP
+        let email_id = store
+            .smtp_receive(message.into_bytes())
+            .await
+            .expect("Email should be processed successfully");
+
+        assert!(!email_id.is_empty());
+        assert!(email_id.starts_with("email-"));
+
+        // Step 2: Check pending deliveries
+        let pending = store
+            .get_pending_deliveries()
+            .await
+            .expect("Should get pending deliveries");
+
+        assert_eq!(pending.len(), 1);
+        assert_eq!(pending[0].peer_id52, to_key.public_key());
+        assert_eq!(pending[0].email_count, 1);
+
+        // Step 3: Get emails for specific peer
+        let emails = store
+            .get_emails_for_peer(&to_key.public_key())
+            .await
+            .expect("Should get emails for peer");
+
+        assert_eq!(emails.len(), 1);
+        assert_eq!(emails[0].email_id, email_id);
+        assert!(emails[0].size_bytes > 0);
+    }
+
+    #[tokio::test]
+    async fn test_multiple_recipients_pending_deliveries() {
+        let store = crate::Store::create_test();
+
+        let from_key = fastn_id52::SecretKey::generate();
+        let to_key = fastn_id52::SecretKey::generate();
+        let cc_key = fastn_id52::SecretKey::generate();
+        let from_id52 = from_key.public_key().id52();
+        let to_id52 = to_key.public_key().id52();
+        let cc_id52 = cc_key.public_key().id52();
+
+        // Send email with multiple fastn recipients
+        let message = build_rfc5322_message(
+            &format!("sender@{from_id52}.fastn"),
+            &format!("to@{to_id52}.local"),
+            Some(&format!("cc@{cc_id52}.fastn")),
+            None,
+            "Multi-recipient Test",
+            "Testing multiple P2P deliveries",
+        )
+        .unwrap();
+
+        let email_id = store
+            .smtp_receive(message.into_bytes())
+            .await
+            .expect("Email should be processed");
+
+        // Should have 2 pending deliveries (To + CC)
+        let pending = store.get_pending_deliveries().await.unwrap();
+        assert_eq!(pending.len(), 2);
+
+        // Each peer should have 1 email
+        for delivery in &pending {
+            assert_eq!(delivery.email_count, 1);
+
+            let emails = store
+                .get_emails_for_peer(&delivery.peer_id52)
+                .await
+                .unwrap();
+            assert_eq!(emails.len(), 1);
+            assert_eq!(emails[0].email_id, email_id);
+        }
+    }
 }
