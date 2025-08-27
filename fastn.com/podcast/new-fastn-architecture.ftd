@@ -136,7 +136,6 @@ Individual devices belonging to an account
 The fastn home folder contains:
 - **rig/**: Contains rig configuration and keys
 - **accounts/**: Account-specific data
-- **public/**: fastn applications and files
 
 Each entity stores its ID52 (public key) and private key, with fallback
 mechanisms for key storage including keychain integration.
@@ -152,11 +151,12 @@ multiple people share access.
 - Emails sent to you will bounce during downtime
 - Optimal service requires accounts to be online most of the time
 
-**Devices** belong to accounts and can have more relaxed uptime requirements.
 We recommend running accounts on:
 - Cloud servers (Linode, DigitalOcean, AWS)
 - Raspberry Pi or desktop at home/office with reliable internet and power
 - Our hosted fastn cloud service
+
+**Devices** belong to accounts and can have more relaxed uptime requirements.
 
 -- ds.h2: Email Architecture
 
@@ -200,7 +200,7 @@ all your devices without custom syncing code.
 Documents have paths that encode ownership:
 - Your documents use your account ID as prefix
 - Shared documents use the sharing alias as prefix
-- Special documents use `/dash` prefix for system configuration
+- Special documents use `/-/` prefix for system configuration
 
 -- ds.h3: Document Types
 
