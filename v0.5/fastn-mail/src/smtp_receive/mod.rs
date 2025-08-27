@@ -121,7 +121,7 @@ impl crate::Store {
             println!("💾 Skipped file storage for test store");
             return Ok(());
         }
-        
+
         let full_path = self.account_path().join(file_path);
 
         // Create directory structure if needed
@@ -367,10 +367,11 @@ mod tests {
         assert_eq!(result.cc_addr, Some(format!("charlie@{cc_id52}.fastn")));
         assert_eq!(result.subject, "Integration Test");
 
-        // P2P routing should be extracted with valid ID52s
-        assert_eq!(result.our_username, Some("bob".to_string()));
-        assert_eq!(result.our_alias_used, Some(to_id52));
-        assert_eq!(result.their_username, Some("alice".to_string()));
-        assert_eq!(result.their_alias, Some(from_id52));
+        // P2P routing should be extracted correctly (we are sender)
+        assert_eq!(result.our_username, Some("alice".to_string()));
+        assert_eq!(result.our_alias_used, Some(from_id52));
+        // Recipients info not stored in single fields (multiple possible)
+        assert_eq!(result.their_username, None);
+        assert_eq!(result.their_alias, None);
     }
 }

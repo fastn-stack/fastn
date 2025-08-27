@@ -86,9 +86,13 @@ pub fn parse_email(raw_message: &[u8]) -> Result<crate::ParsedEmail, SmtpReceive
     let size_bytes = raw_message.len();
 
     // Extract P2P routing information from addresses
-    let (their_username, their_alias) = parse_id52_address(&from_addr).unwrap_or((None, None));
+    // We are the sender (From address), they are recipients (To/CC/BCC)
+    let (our_username, our_alias_used) = parse_id52_address(&from_addr).unwrap_or((None, None));
 
-    let (our_username, our_alias_used) = parse_id52_address(&to_addr_str).unwrap_or((None, None));
+    // For recipients, we'll extract their info during P2P delivery queue processing
+    // Here we just mark as None since there could be multiple recipients
+    let their_username = None; // Multiple possible recipients
+    let their_alias = None; // Multiple possible recipients
 
     Ok(crate::ParsedEmail {
         email_id,
@@ -288,13 +292,23 @@ mod tests {
 
     #[test]
     fn test_extract_headers_simple() {
-        let message =
-            "From: alice@test.com\r\nTo: bob@example.com\r\nSubject: Test\r\n\r\nBody content";
+        let from_key = fastn_id52::SecretKey::generate();
+        let to_key = fastn_id52::SecretKey::generate();
+        let from_id52 = from_key.public_key().id52();
+        let to_id52 = to_key.public_key().id52();
+        
+        let message = test_email! {"
+            From: alice@{from_id52}.fastn
+            To: bob@{to_id52}.local
+            Subject: Test
+            
+            Body content
+        "};
 
-        let headers = extract_headers_simple(message).unwrap();
+        let headers = extract_headers_simple(&message).unwrap();
 
-        assert_eq!(headers.get("From"), Some(&"alice@test.com".to_string()));
-        assert_eq!(headers.get("To"), Some(&"bob@example.com".to_string()));
+        assert_eq!(headers.get("From"), Some(&format!("alice@{from_id52}.fastn")));
+        assert_eq!(headers.get("To"), Some(&format!("bob@{to_id52}.local")));
         assert_eq!(headers.get("Subject"), Some(&"Test".to_string()));
     }
 
@@ -304,9 +318,12 @@ mod tests {
         let to_key = fastn_id52::SecretKey::generate();
         let to_id52 = to_key.public_key().id52();
 
+        let from_key = fastn_id52::SecretKey::generate();
+        let from_id52 = from_key.public_key().id52();
+        
         let email = test_email! {"
-            From: alice@external.com
-            To: bob@{to_id52}.fastn
+            From: alice@{from_id52}.fastn
+            To: bob@{to_id52}.local
             Subject: P2P Test
             
             Body content
@@ -314,12 +331,30 @@ mod tests {
 
         let result = parse_email(email.as_bytes()).unwrap();
 
-        // From address is external
+        // We are the sender (From address) 
+        assert_eq!(result.our_username, Some("alice".to_string()));
+        assert_eq!(result.our_alias_used, Some(from_id52));
+
+        // Recipients info not stored in single fields (multiple possible)
         assert_eq!(result.their_username, None);
         assert_eq!(result.their_alias, None);
+    }
 
-        // To address is fastn peer
-        assert_eq!(result.our_username, Some("bob".to_string()));
-        assert_eq!(result.our_alias_used, Some(to_id52));
+    #[test]
+    fn test_external_addresses_should_fail_validation() {
+        // Email with external addresses should fail during validation
+        let email = test_email! {"
+            From: alice@external.com
+            To: bob@example.com
+            Subject: External Test
+            
+            Body content
+        "};
+
+        // Parsing succeeds (we parse any RFC 5322 format)
+        let result = parse_email(email.as_bytes()).unwrap();
+        
+        // But validation should fail for external addresses
+        assert!(crate::smtp_receive::validate_email_for_smtp(&result).is_err());
     }
 }
