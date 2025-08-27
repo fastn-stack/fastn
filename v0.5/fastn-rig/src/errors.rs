@@ -218,6 +218,18 @@ pub enum EmailDeliveryError {
         #[source]
         source: fastn_mail::MarkDeliveredError,
     },
+
+    #[error("Invalid alias ID52 format: {alias}")]
+    InvalidAliasFormat { alias: String },
+
+    #[error("No sender alias found for peer: {peer_id52}")]
+    NoSenderAliasFound { peer_id52: String },
+
+    #[error("Failed to get account endpoints")]
+    EndpointEnumerationFailed {
+        #[source]
+        source: fastn_account::GetAllEndpointsError,
+    },
 }
 
 /// Error type for message processing functions
