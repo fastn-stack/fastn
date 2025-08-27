@@ -152,7 +152,6 @@
 extern crate self as fastn_automerge;
 
 // Private modules
-#[cfg(feature = "cli")]
 pub mod cli;
 mod migration;
 #[cfg(test)]
@@ -337,7 +336,6 @@ pub struct DocumentHistory {
 // =============================================================================
 
 /// Main function for the CLI binary (hidden from docs)
-#[cfg(feature = "cli")]
 #[doc(hidden)]
 pub fn main() {
     use clap::Parser;

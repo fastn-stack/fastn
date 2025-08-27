@@ -10,10 +10,6 @@ homepage.workspace = true
 [[bin]]
 name = "fastn-mail"
 path = "src/main.rs"
-required-features = ["cli"]
-
-[features]
-cli = ["clap", "tracing-subscriber"]
 
 [dependencies]
 # Core dependencies
@@ -36,9 +32,9 @@ chrono.workspace = true
 # For email parsing
 mail-parser = "0.9"
 
-# CLI dependencies (optional)
-clap = { workspace = true, optional = true }
-tracing-subscriber = { workspace = true, optional = true }
+# CLI dependencies  
+clap.workspace = true
+tracing-subscriber.workspace = true
 
 # Test dependencies
-indoc = { workspace = true }
+indoc.workspace = true

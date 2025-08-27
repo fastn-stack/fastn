@@ -10,11 +10,6 @@ homepage.workspace = true
 [[bin]]
 name = "fastn-automerge"
 path = "src/main.rs"
-required-features = ["cli"]
-
-[features]
-default = []
-cli = ["clap", "eyre"]
 
 [dependencies]
 # Core library dependencies
@@ -28,8 +23,8 @@ fastn-automerge-derive.workspace = true
 fastn-id52 = { workspace = true, features = ["automerge"] }
 tempfile = "3"
 
-# CLI-only dependencies
-clap = { workspace = true, optional = true }
-eyre = { workspace = true, optional = true }
+# CLI dependencies
+clap.workspace = true
+eyre.workspace = true
 
 [dev-dependencies]

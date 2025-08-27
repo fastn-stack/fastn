@@ -32,7 +32,7 @@ impl crate::Store {
         sender_id52: &fastn_id52::PublicKey,
     ) -> Result<String, SmtpReceiveError> {
         // Step 1: Parse email headers
-        let mut parsed_email = crate::smtp_receive::parse_email(&raw_message)?;
+        let mut parsed_email = crate::store::smtp_receive::parse_email(&raw_message)?;
 
         // Step 2: Override folder to INBOX (P2P emails are inbound)
         parsed_email.folder = "INBOX".to_string();

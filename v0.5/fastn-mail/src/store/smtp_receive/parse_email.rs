@@ -361,6 +361,6 @@ mod tests {
         let result = parse_email(email.as_bytes()).unwrap();
 
         // But validation should fail for external addresses
-        assert!(crate::smtp_receive::validate_email_for_smtp(&result).is_err());
+        assert!(crate::store::smtp_receive::validate_email_for_smtp(&result).is_err());
     }
 }
