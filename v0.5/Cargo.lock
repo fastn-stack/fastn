@@ -1636,6 +1636,7 @@ dependencies = [
  "fastn-account",
  "fastn-automerge",
  "fastn-id52",
+ "fastn-mail",
  "fastn-net",
  "iroh",
  "rusqlite",

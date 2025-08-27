@@ -29,6 +29,7 @@
 extern crate self as fastn_rig;
 
 pub mod automerge;
+mod email_delivery;
 pub mod endpoint;
 pub mod errors;
 mod rig;
@@ -55,7 +56,7 @@ pub fn resolve_fastn_home(
 
 // Re-export specific error types
 pub use errors::{
-    CurrentEntityError, EndpointError, EntityStatusError, MessageProcessingError, RigCreateError,
+    CurrentEntityError, EmailDeliveryError, EndpointError, EntityStatusError, MessageProcessingError, RigCreateError,
     RigLoadError, RunError,
 };
 

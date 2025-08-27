@@ -192,6 +192,34 @@ pub enum RunError {
     },
 }
 
+/// Error type for email delivery operations
+#[derive(Error, Debug)]
+pub enum EmailDeliveryError {
+    #[error("Failed to load account mail store")]
+    MailStoreLoadFailed {
+        #[source]
+        source: fastn_mail::StoreLoadError,
+    },
+
+    #[error("Failed to get pending deliveries")]
+    PendingDeliveriesQueryFailed {
+        #[source]
+        source: fastn_mail::GetPendingDeliveriesError,
+    },
+
+    #[error("Failed to get emails for peer")]
+    EmailsForPeerQueryFailed {
+        #[source]
+        source: fastn_mail::GetEmailsForPeerError,
+    },
+
+    #[error("Failed to mark email as delivered")]
+    MarkDeliveredFailed {
+        #[source]
+        source: fastn_mail::MarkDeliveredError,
+    },
+}
+
 /// Error type for message processing functions
 #[derive(Error, Debug)]
 pub enum MessageProcessingError {

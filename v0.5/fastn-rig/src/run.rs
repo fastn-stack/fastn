@@ -130,9 +130,14 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     // Display service information
     println!("\n📨 fastn is running. Press Ctrl+C to stop.");
     println!("   P2P: active on {total_endpoints} endpoints");
+    println!("   Email Delivery: polling every 30 seconds");
     println!("   SMTP: planned (port 2525)");
     println!("   IMAP: planned (port 1143)");
     println!("   HTTP: planned (port 8000)");
+
+    // Start email delivery poller  
+    crate::email_delivery::start_email_delivery_poller(account_manager.clone(), graceful.clone()).await
+        .map_err(|e| fastn_rig::RunError::ShutdownFailed { source: Box::new(e) })?;
 
     // Spawn P2P message handler as a background task
     let p2p_endpoint_manager = std::sync::Arc::new(tokio::sync::Mutex::new(endpoint_manager));
