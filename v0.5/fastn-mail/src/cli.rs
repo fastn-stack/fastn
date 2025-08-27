@@ -153,8 +153,8 @@ async fn send_mail_command(
             println!("✅ Email processed with ID: {email_id}");
         }
         Err(e) => {
-            println!("⚠️  SMTP processing: {e}");
-            println!("   (This is expected - implementation in progress)");
+            println!("❌ SMTP processing failed: {e}");
+            // Don't hide actual errors during development
         }
     }
 

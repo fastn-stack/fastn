@@ -157,8 +157,112 @@ fn validate_required_headers(parsed_email: &crate::ParsedEmail) -> Result<(), Sm
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+
+    fn create_test_parsed_email() -> crate::ParsedEmail {
+        // Generate valid ID52s for testing
+        let from_key = fastn_id52::SecretKey::generate();
+        let to_key = fastn_id52::SecretKey::generate();
+        let from_id52 = from_key.public_key().id52();
+        let to_id52 = to_key.public_key().id52();
+
+        crate::ParsedEmail {
+            email_id: "test-email-id".to_string(),
+            folder: "Sent".to_string(),
+            file_path: "test.eml".to_string(),
+            message_id: "test-message-id".to_string(),
+            from_addr: format!("alice@{from_id52}.fastn"),
+            to_addr: format!("bob@{to_id52}.local"),
+            cc_addr: None,
+            bcc_addr: None,
+            subject: "Test Subject".to_string(),
+            our_alias_used: Some(to_id52),
+            our_username: Some("bob".to_string()),
+            their_alias: Some(from_id52),
+            their_username: Some("alice".to_string()),
+            in_reply_to: None,
+            email_references: None,
+            date_sent: None,
+            date_received: chrono::Utc::now().timestamp(),
+            content_type: "text/plain".to_string(),
+            content_encoding: None,
+            has_attachments: false,
+            size_bytes: 100,
+            is_seen: false,
+            is_flagged: false,
+            is_draft: false,
+            is_answered: false,
+            is_deleted: false,
+            custom_flags: None,
+        }
+    }
+
     #[test]
-    fn test_smtp_receive_integration() {
-        // TODO: Test complete SMTP receive flow
+    fn test_validate_email_for_smtp_success() {
+        let email = create_test_parsed_email();
+
+        // Should succeed with valid P2P addresses
+        let result = validate_email_for_smtp(&email);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_parse_email_address_valid_id52() {
+        let addr = "alice@i66fo538lfl5ombdf6tcdbrabp4hmp9asv7nrffuc2im13ct4q60.fastn";
+
+        let result = parse_email_address(addr).unwrap();
+
+        assert_eq!(
+            result,
+            (
+                "alice".to_string(),
+                "i66fo538lfl5ombdf6tcdbrabp4hmp9asv7nrffuc2im13ct4q60".to_string()
+            )
+        );
+    }
+
+    #[test]
+    fn test_parse_email_address_invalid_format() {
+        let addr = "invalid-email";
+
+        let result = parse_email_address(addr);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_parse_email_address_invalid_id52() {
+        let addr = "alice@invalid-id52.fastn";
+
+        let result = parse_email_address(addr);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_validate_message_size_ok() {
+        let result = validate_message_size(1000);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_validate_message_size_too_large() {
+        let result = validate_message_size(30 * 1024 * 1024); // 30MB
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_validate_required_headers_success() {
+        let email = create_test_parsed_email();
+
+        let result = validate_required_headers(&email);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_validate_required_headers_missing_from() {
+        let mut email = create_test_parsed_email();
+        email.from_addr = "".to_string();
+
+        let result = validate_required_headers(&email);
+        assert!(result.is_err());
     }
 }

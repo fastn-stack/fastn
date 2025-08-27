@@ -81,6 +81,16 @@ impl Store {
         }
     }
 
+    /// Get account path for file operations
+    pub fn account_path(&self) -> &std::path::Path {
+        &self.account_path
+    }
+
+    /// Get database connection for email operations
+    pub fn connection(&self) -> &std::sync::Arc<tokio::sync::Mutex<rusqlite::Connection>> {
+        &self.connection
+    }
+
     // === P2P Delivery Queue Management ===
     // Note: SMTP Operations are implemented in smtp_receive.rs module
 

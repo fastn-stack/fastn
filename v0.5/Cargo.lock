@@ -1556,6 +1556,7 @@ dependencies = [
  "clap",
  "fastn-automerge",
  "fastn-id52",
+ "indoc",
  "mail-parser",
  "rusqlite",
  "serde",

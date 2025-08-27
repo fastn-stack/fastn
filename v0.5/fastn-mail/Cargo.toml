@@ -39,3 +39,6 @@ mail-parser = "0.9"
 # CLI dependencies (optional)
 clap = { workspace = true, optional = true }
 tracing-subscriber = { workspace = true, optional = true }
+
+# Test dependencies
+indoc = { workspace = true }
