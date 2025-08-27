@@ -116,12 +116,6 @@ impl crate::Store {
         file_path: &str,
         raw_message: &[u8],
     ) -> Result<(), SmtpReceiveError> {
-        // Skip file operations for test stores (in-memory database)
-        if self.account_path() == std::path::Path::new(":memory:") {
-            println!("💾 Skipped file storage for test store");
-            return Ok(());
-        }
-
         let full_path = self.account_path().join(file_path);
 
         // Create directory structure if needed

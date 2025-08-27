@@ -22,6 +22,8 @@ pub fn parse_email(raw_message: &[u8]) -> Result<crate::ParsedEmail, SmtpReceive
         let mut hasher = DefaultHasher::new();
         raw_message.hash(&mut hasher);
         chrono::Utc::now().timestamp_millis().hash(&mut hasher);
+        std::process::id().hash(&mut hasher);
+        std::thread::current().id().hash(&mut hasher);
 
         format!(
             "generated-{}-{:x}",
@@ -75,9 +77,10 @@ pub fn parse_email(raw_message: &[u8]) -> Result<crate::ParsedEmail, SmtpReceive
 
     // Generate storage information
     let email_id = format!(
-        "email-{}-{}",
+        "email-{}-{}-{}",
         chrono::Utc::now().timestamp_millis(),
-        message_id.len()
+        message_id.len(),
+        std::process::id() // Add process ID for uniqueness in tests
     );
     let folder = "Sent".to_string(); // SMTP emails go to Sent folder
     let timestamp = chrono::Utc::now().format("%Y/%m/%d");

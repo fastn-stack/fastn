@@ -73,6 +73,14 @@ pub enum Commands {
         /// Peer ID52 to get emails for
         peer_id52: String,
     },
+
+    /// Mark an email as delivered to a peer
+    MarkDelivered {
+        /// Email ID that was delivered
+        email_id: String,
+        /// Peer ID52 that received the email
+        peer_id52: String,
+    },
 }
 
 pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
@@ -111,6 +119,12 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         }
         Commands::GetEmailsForPeer { peer_id52 } => {
             get_emails_for_peer_command(&store, &peer_id52).await?;
+        }
+        Commands::MarkDelivered {
+            email_id,
+            peer_id52,
+        } => {
+            mark_delivered_command(&store, &email_id, &peer_id52).await?;
         }
     }
 
@@ -269,6 +283,25 @@ async fn get_emails_for_peer_command(
         );
     }
 
+    Ok(())
+}
+
+async fn mark_delivered_command(
+    store: &crate::Store,
+    email_id: &str,
+    peer_id52: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
+    println!("✅ Marking email {email_id} as delivered to peer: {peer_id52}");
+
+    // Parse peer ID52 to PublicKey
+    let peer_key: fastn_id52::PublicKey = peer_id52
+        .parse()
+        .map_err(|_| format!("Invalid peer ID52: {peer_id52}"))?;
+
+    // Mark as delivered
+    store.mark_delivered_to_peer(email_id, &peer_key).await?;
+
+    println!("🎉 Email {email_id} marked as delivered to {peer_id52}");
     Ok(())
 }
 

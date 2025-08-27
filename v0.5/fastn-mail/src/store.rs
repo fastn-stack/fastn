@@ -75,8 +75,11 @@ impl Store {
         let connection = rusqlite::Connection::open_in_memory().unwrap();
         crate::database::create_schema(&connection).unwrap();
 
+        // Use temp directory for test files
+        let temp_dir = std::env::temp_dir().join(format!("fastn-mail-test-{}", std::process::id()));
+
         Self {
-            account_path: std::path::PathBuf::from(":memory:"),
+            account_path: temp_dir,
             connection: std::sync::Arc::new(tokio::sync::Mutex::new(connection)),
         }
     }
@@ -103,7 +106,8 @@ impl Store {
         // Query delivery table for queued emails grouped by recipient
         let mut stmt = conn
             .prepare(
-                "SELECT recipient_id52, COUNT(*) as email_count, MIN(last_attempt) as oldest_date
+                "SELECT recipient_id52, COUNT(*) as email_count, 
+                        COALESCE(MIN(last_attempt), 0) as oldest_date
              FROM fastn_email_delivery 
              WHERE delivery_status = 'queued' OR (delivery_status = 'failed' AND next_retry <= ?)
              GROUP BY recipient_id52",
