@@ -38,13 +38,14 @@ pub enum DeliveryStatus {
 pub async fn start_email_delivery_poller(
     account_manager: std::sync::Arc<AccountManager>,
     graceful: fastn_net::Graceful,
+    peer_stream_senders: fastn_net::PeerStreamSenders,
 ) -> Result<(), fastn_rig::RunError> {
     tracing::info!("📬 Starting email delivery poller...");
     
     // Spawn background task for email delivery polling
     let graceful_clone = graceful.clone();
     graceful.spawn(async move {
-        email_delivery_poller_loop(account_manager, graceful_clone).await;
+        email_delivery_poller_loop(account_manager, graceful_clone, peer_stream_senders).await;
     });
     
     Ok(())
@@ -54,6 +55,7 @@ pub async fn start_email_delivery_poller(
 async fn email_delivery_poller_loop(
     account_manager: std::sync::Arc<AccountManager>,
     graceful: fastn_net::Graceful,
+    peer_stream_senders: fastn_net::PeerStreamSenders,
 ) {
     tracing::debug!("Email delivery poller loop started");
     
@@ -67,7 +69,7 @@ async fn email_delivery_poller_loop(
             
             // Wait before next poll cycle
             _ = tokio::time::sleep(std::time::Duration::from_secs(30)) => {
-                if let Err(e) = check_and_deliver_emails(&account_manager).await {
+                if let Err(e) = check_and_deliver_emails(&account_manager, &peer_stream_senders, &graceful).await {
                     tracing::error!("📬 Email delivery poll failed: {e}");
                 }
             }
@@ -90,9 +92,11 @@ struct DeliveryTask {
     email_count: usize,
 }
 
-/// Check all accounts for pending email deliveries and process them
+/// Check all accounts for pending email deliveries and process them  
 async fn check_and_deliver_emails(
     account_manager: &AccountManager,
+    peer_stream_senders: &fastn_net::PeerStreamSenders,
+    graceful: &fastn_net::Graceful,
 ) -> Result<(), fastn_rig::EmailDeliveryError> {
     tracing::debug!("📬 Checking all accounts for pending email deliveries");
     
@@ -111,7 +115,7 @@ async fn check_and_deliver_emails(
         tracing::info!("📤 Processing deliveries: {} emails to {} using alias {}", 
             task.email_count, task.peer_id52, task.our_alias);
             
-        match attempt_delivery_to_peer(&task).await {
+        match attempt_delivery_to_peer(&task, peer_stream_senders, graceful).await {
             Ok(delivered_count) => {
                 tracing::info!("✅ Successfully delivered {} emails to {}", 
                     delivered_count, task.peer_id52);
@@ -244,7 +248,11 @@ async fn get_sender_alias_for_peer(
 }
 
 /// Attempt to deliver all pending emails to a specific peer
-async fn attempt_delivery_to_peer(task: &DeliveryTask) -> Result<usize, fastn_rig::EmailDeliveryError> {
+async fn attempt_delivery_to_peer(
+    task: &DeliveryTask,
+    peer_stream_senders: &fastn_net::PeerStreamSenders, 
+    graceful: &fastn_net::Graceful,
+) -> Result<usize, fastn_rig::EmailDeliveryError> {
     tracing::debug!("📤 Attempting delivery to {} using alias {}", task.peer_id52, task.our_alias);
     
     // Step 1: Load mail store for this account
@@ -263,7 +271,7 @@ async fn attempt_delivery_to_peer(task: &DeliveryTask) -> Result<usize, fastn_ri
     tracing::info!("📧 Found {} emails to deliver to {}", emails.len(), task.peer_id52);
     
     // Step 3: Deliver all emails via single P2P connection (our_alias is already PublicKey)
-    let delivered_emails = deliver_emails_to_peer(&emails, &task.our_alias, &task.peer_id52).await?;
+    let delivered_emails = deliver_emails_to_peer(&emails, &task.our_alias, &task.peer_id52, peer_stream_senders, graceful).await?;
     
     // Step 5: Mark all successfully delivered emails in database  
     let mut delivered_count = 0;
@@ -283,6 +291,8 @@ async fn deliver_emails_to_peer(
     emails: &[fastn_mail::EmailForDelivery],
     our_alias: &fastn_id52::PublicKey,
     peer_id52: &fastn_id52::PublicKey,
+    _peer_stream_senders: &fastn_net::PeerStreamSenders,
+    _graceful: &fastn_net::Graceful,
 ) -> Result<Vec<String>, fastn_rig::EmailDeliveryError> {
     if emails.is_empty() {
         return Ok(vec![]);
@@ -291,40 +301,145 @@ async fn deliver_emails_to_peer(
     tracing::info!("📧 Establishing P2P connection from {} to {} for {} emails", 
         our_alias, peer_id52, emails.len());
     
-    // TODO: Get our endpoint for our_alias (need account lookup)
-    // TODO: Get peer_stream_senders from somewhere (global state?)
-    // TODO: Get graceful handler
+    // TODO: Get our endpoint for our_alias (need to find account that owns this alias)
+    // For now, we need a way to map our_alias → iroh::Endpoint
+    // This requires integration with EndpointManager to find the right endpoint
     
-    // For now, simulate the P2P delivery flow that we will implement
+    // Placeholder until we implement endpoint lookup
+    let our_endpoint = fastn_net::get_endpoint().await;
+    
     let mut delivered_email_ids = Vec::new();
     let total_bytes: usize = emails.iter().map(|e| e.size_bytes).sum();
     
-    tracing::info!("📤 Starting P2P email delivery: {} emails ({} bytes total) from {} to {}", 
+    tracing::info!("📤 Simulating P2P email delivery: {} emails ({} bytes total) from {} to {}", 
         emails.len(), total_bytes, our_alias, peer_id52);
     
-    // Simulate the request-response flow
+    // Establish P2P stream using fastn-net infrastructure
+    let (mut send, mut recv) = fastn_net::get_stream(
+        our_endpoint,
+        fastn_net::Protocol::AccountToAccount.into(),
+        peer_id52.id52(),
+        peer_stream_senders.clone(),
+        graceful.clone(),
+    ).await.map_err(|e| {
+        fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
+            source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
+                source: rusqlite::Error::InvalidColumnName(format!("P2P connection failed: {e}"))
+            }
+        }
+    })?;
+    
+    tracing::info!("🔗 P2P stream established from {} to {}", our_alias, peer_id52);
+    
+    // Send each email over the established stream with request-response
     for email in emails {
         // Create AccountToAccountMessage for P2P delivery
         let p2p_message = fastn_account::AccountToAccountMessage::new_email(email.raw_message.clone());
         
-        tracing::debug!("📦 Would send email {} ({} bytes) over P2P stream", 
+        tracing::debug!("📦 Sending email {} ({} bytes) over P2P stream", 
             email.email_id, p2p_message.size());
         
-        // TODO: Real implementation would be:
-        // 1. Get stream: fastn_net::get_stream(our_endpoint, Protocol::AccountToAccount, peer_id52, pool, graceful)
-        // 2. Send message: serde_json::to_writer(&mut send, &p2p_message)?; send.write_all(b"\n")?;
-        // 3. Wait for response: let response = fastn_net::next_json::<EmailDeliveryResponse>(&mut recv)?;
-        // 4. Handle response: match response.status { Accepted => mark_delivered, Rejected => create_bounce }
+        // Send email message
+        serde_json::to_writer(&mut send, &p2p_message).await.map_err(|e| {
+            fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
+                source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
+                    source: rusqlite::Error::InvalidColumnName(format!("Failed to send message: {e}"))
+                }
+            }
+        })?;
+        send.write_all(b"\n").await.map_err(|e| {
+            fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
+                source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
+                    source: rusqlite::Error::InvalidColumnName(format!("Failed to send newline: {e}"))
+                }
+            }
+        })?;
         
-        // For now, simulate successful delivery
-        delivered_email_ids.push(email.email_id.clone());
+        // Wait for delivery response  
+        let response = fastn_net::next_json::<EmailDeliveryResponse>(&mut recv).await.map_err(|e| {
+            fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
+                source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
+                    source: rusqlite::Error::InvalidColumnName(format!("Failed to receive response: {e}"))
+                }
+            }
+        })?;
         
-        // Simulate individual email transmission time
-        tokio::time::sleep(std::time::Duration::from_millis(50)).await;
+        // Handle individual email response
+        match response.status {
+            DeliveryStatus::Accepted => {
+                delivered_email_ids.push(email.email_id.clone());
+                tracing::debug!("✅ Email {} accepted by {}", email.email_id, peer_id52);
+            }
+            DeliveryStatus::Rejected { reason } => {
+                tracing::warn!("❌ Email {} rejected by {}: {}", email.email_id, peer_id52, reason);
+                
+                // Create bounce message for rejected email
+                if let Err(e) = create_bounce_message(&email.email_id, &reason, &task.account_path).await {
+                    tracing::error!("Failed to create bounce message for {}: {}", email.email_id, e);
+                }
+                
+                // Don't add to delivered list (it wasn't delivered)
+            }
+        }
     }
     
-    tracing::info!("✅ P2P delivery completed: {} emails delivered to {}", 
-        delivered_email_ids.len(), peer_id52);
+    tracing::info!("✅ P2P delivery completed: {} of {} emails delivered to {}", 
+        delivered_email_ids.len(), emails.len(), peer_id52);
     
     Ok(delivered_email_ids)
+}
+
+/// Create bounce message for rejected email delivery
+async fn create_bounce_message(
+    original_email_id: &str,
+    rejection_reason: &str,
+    account_path: &std::path::Path,
+) -> Result<(), fastn_rig::EmailDeliveryError> {
+    tracing::info!("📝 Creating bounce message for rejected email {}: {}", 
+        original_email_id, rejection_reason);
+    
+    // Load account's mail store
+    let mail_store = fastn_mail::Store::load(account_path).await
+        .map_err(|e| fastn_rig::EmailDeliveryError::MailStoreLoadFailed { source: e })?;
+    
+    // Create RFC 3464-style bounce message
+    let bounce_subject = format!("Mail Delivery Failure: {}", original_email_id);
+    let bounce_body = format!(
+        "Your email could not be delivered to the recipient.\n\n\
+        Original Email ID: {}\n\
+        Failure Reason: {}\n\n\
+        This is an automated message from the fastn mail delivery system.\n\
+        The original message has been removed from the delivery queue.",
+        original_email_id, rejection_reason
+    );
+    
+    // Build bounce email in RFC 5322 format
+    let timestamp = chrono::Utc::now().format("%a, %d %b %Y %H:%M:%S +0000");
+    let bounce_message_id = format!("bounce-{}", uuid::Uuid::new_v4());
+    
+    let bounce_email = format!(
+        "From: Mail Delivery System <mailer-daemon@system.local>\r\n\
+        To: Original Sender\r\n\
+        Subject: {}\r\n\
+        Date: {}\r\n\
+        Message-ID: <{}>\r\n\
+        MIME-Version: 1.0\r\n\
+        Content-Type: text/plain; charset=utf-8\r\n\
+        \r\n\
+        {}",
+        bounce_subject, timestamp, bounce_message_id, bounce_body
+    );
+    
+    // Store bounce message in sender's INBOX using p2p_receive_email
+    // This puts the bounce in INBOX where the sender will see it
+    let system_sender = fastn_id52::SecretKey::generate().public_key(); // System identity
+    mail_store.p2p_receive_email(bounce_email.into_bytes(), &system_sender).await
+        .map_err(|e| fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
+            source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
+                source: rusqlite::Error::InvalidColumnName(format!("Failed to create bounce: {e}"))
+            }
+        })?;
+    
+    tracing::info!("📝 Bounce message created for {} in INBOX", original_email_id);
+    Ok(())
 }
