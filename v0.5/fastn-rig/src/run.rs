@@ -130,7 +130,7 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     // Display service information
     println!("\n📨 fastn is running. Press Ctrl+C to stop.");
     println!("   P2P: active on {total_endpoints} endpoints");
-    println!("   Email Delivery: polling every 30 seconds");
+    println!("   Email Delivery: polling every 5 seconds");
     println!("   SMTP: planned (port 2525)");
     println!("   IMAP: planned (port 1143)");
     println!("   HTTP: planned (port 8000)");

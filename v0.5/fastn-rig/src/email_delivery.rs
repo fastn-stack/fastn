@@ -68,7 +68,7 @@ async fn email_delivery_poller_loop(
             }
             
             // Wait before next poll cycle
-            _ = tokio::time::sleep(std::time::Duration::from_secs(30)) => {
+            _ = tokio::time::sleep(std::time::Duration::from_secs(5)) => {
                 if let Err(e) = check_and_deliver_emails(&account_manager, &peer_stream_senders, &graceful).await {
                     tracing::error!("📬 Email delivery poll failed: {e}");
                 }
@@ -98,29 +98,37 @@ async fn check_and_deliver_emails(
     peer_stream_senders: &fastn_net::PeerStreamSenders,
     graceful: &fastn_net::Graceful,
 ) -> Result<(), fastn_rig::EmailDeliveryError> {
-    tracing::debug!("📬 Checking all accounts for pending email deliveries");
+    tracing::info!("📬 Starting email delivery poll cycle");
+    println!("🔄 Email delivery poller: checking all accounts for pending deliveries");
     
     // Step 1: Collect all pending deliveries across accounts with alias tracking
     let delivery_tasks = collect_pending_deliveries(account_manager).await?;
     
     if delivery_tasks.is_empty() {
+        println!("📭 No pending deliveries found across all accounts");
         tracing::debug!("📬 No pending deliveries across all accounts");
         return Ok(());
     }
     
+    println!("📬 Found {} delivery tasks across all accounts", delivery_tasks.len());
     tracing::info!("📬 Found {} delivery tasks across all accounts", delivery_tasks.len());
     
     // Step 2: Process each delivery task with correct alias pairing
     for task in delivery_tasks {
+        println!("📤 Processing {} emails to {} using alias {}", 
+            task.email_count, task.peer_id52, task.our_alias);
         tracing::info!("📤 Processing deliveries: {} emails to {} using alias {}", 
             task.email_count, task.peer_id52, task.our_alias);
             
         match attempt_delivery_to_peer(&task, peer_stream_senders, graceful, account_manager).await {
             Ok(delivered_count) => {
+                println!("✅ Successfully delivered {} emails to {}", 
+                    delivered_count, task.peer_id52);
                 tracing::info!("✅ Successfully delivered {} emails to {}", 
                     delivered_count, task.peer_id52);
             }
             Err(e) => {
+                println!("❌ Failed to deliver emails to {}: {}", task.peer_id52, e);
                 tracing::warn!("❌ Failed to deliver emails to {}: {}", task.peer_id52, e);
                 // TODO: Update retry logic and backoff
             }
@@ -137,8 +145,11 @@ async fn collect_pending_deliveries(
     let mut delivery_tasks = Vec::new();
     
     // Get all endpoints (each represents an account/alias pair)
+    println!("🔍 Getting all endpoints from account manager...");
     let all_endpoints = account_manager.get_all_endpoints().await
         .map_err(|e| fastn_rig::EmailDeliveryError::EndpointEnumerationFailed { source: e })?;
+    
+    println!("🔍 Found {} endpoints to check for pending emails", all_endpoints.len());
     
     // Group endpoints by account path to avoid checking same account multiple times
     let mut account_paths = std::collections::HashSet::new();
