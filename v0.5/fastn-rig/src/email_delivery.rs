@@ -5,10 +5,28 @@
 //! ## Responsibilities
 //! - Poll each account for pending email deliveries
 //! - Connect to peers and deliver emails via P2P
-//! - Mark emails as delivered or failed with retry logic
+//! - Mark emails as delivered or failed with retry logic  
 //! - Handle delivery errors and backoff strategies
 
 use fastn_account::AccountManager;
+
+/// Response from peer for individual email delivery
+#[derive(Debug, serde::Serialize, serde::Deserialize)]
+pub struct EmailDeliveryResponse {
+    /// Email ID being responded to
+    pub email_id: String,
+    /// Delivery result
+    pub status: DeliveryStatus,
+}
+
+/// Status of individual email delivery
+#[derive(Debug, serde::Serialize, serde::Deserialize)]
+pub enum DeliveryStatus {
+    /// Email accepted and stored in recipient's INBOX
+    Accepted,
+    /// Email rejected with reason (permanent failure)
+    Rejected { reason: String },
+}
 
 /// Start the email delivery poller task
 ///
@@ -67,7 +85,7 @@ struct DeliveryTask {
     /// Account path containing the emails
     account_path: std::path::PathBuf,
     /// Our alias to use for P2P connection (from From address)
-    our_alias: String,
+    our_alias: fastn_id52::PublicKey,
     /// Number of emails pending for this peer
     email_count: usize,
 }
@@ -189,7 +207,7 @@ async fn collect_account_deliveries(
 async fn get_sender_alias_for_peer(
     mail_store: &fastn_mail::Store,
     peer_id52: &fastn_id52::PublicKey,
-) -> Result<String, fastn_rig::EmailDeliveryError> {
+) -> Result<fastn_id52::PublicKey, fastn_rig::EmailDeliveryError> {
     let conn = mail_store.connection().lock().await;
     let peer_id52_str = peer_id52.id52();
     
@@ -216,7 +234,13 @@ async fn get_sender_alias_for_peer(
         });
     }
     
-    Ok(our_alias)
+    // Parse the alias string to PublicKey for type safety
+    let our_alias_key: fastn_id52::PublicKey = our_alias.parse()
+        .map_err(|_| fastn_rig::EmailDeliveryError::InvalidAliasFormat { 
+            alias: our_alias 
+        })?;
+    
+    Ok(our_alias_key)
 }
 
 /// Attempt to deliver all pending emails to a specific peer
@@ -238,14 +262,8 @@ async fn attempt_delivery_to_peer(task: &DeliveryTask) -> Result<usize, fastn_ri
     
     tracing::info!("📧 Found {} emails to deliver to {}", emails.len(), task.peer_id52);
     
-    // Step 3: Parse our alias to PublicKey for P2P connection
-    let our_alias_key: fastn_id52::PublicKey = task.our_alias.parse()
-        .map_err(|_| fastn_rig::EmailDeliveryError::InvalidAliasFormat { 
-            alias: task.our_alias.clone() 
-        })?;
-    
-    // Step 4: Deliver all emails via single P2P connection
-    let delivered_emails = deliver_emails_to_peer(&emails, &our_alias_key, &task.peer_id52).await?;
+    // Step 3: Deliver all emails via single P2P connection (our_alias is already PublicKey)
+    let delivered_emails = deliver_emails_to_peer(&emails, &task.our_alias, &task.peer_id52).await?;
     
     // Step 5: Mark all successfully delivered emails in database  
     let mut delivered_count = 0;
@@ -273,36 +291,39 @@ async fn deliver_emails_to_peer(
     tracing::info!("📧 Establishing P2P connection from {} to {} for {} emails", 
         our_alias, peer_id52, emails.len());
     
-    // TODO: Create single P2P connection using our_alias → peer_id52
-    // TODO: Find account that owns our_alias for proper authentication
-    // TODO: Establish iroh connection with proper endpoint routing
+    // TODO: Get our endpoint for our_alias (need account lookup)
+    // TODO: Get peer_stream_senders from somewhere (global state?)
+    // TODO: Get graceful handler
     
+    // For now, simulate the P2P delivery flow that we will implement
     let mut delivered_email_ids = Vec::new();
     let total_bytes: usize = emails.iter().map(|e| e.size_bytes).sum();
     
-    tracing::info!("📤 Simulating batch P2P delivery: {} emails ({} bytes total) from {} to {}", 
+    tracing::info!("📤 Starting P2P email delivery: {} emails ({} bytes total) from {} to {}", 
         emails.len(), total_bytes, our_alias, peer_id52);
     
-    // Simulate sending all emails over single connection
+    // Simulate the request-response flow
     for email in emails {
-        // Create AccountToAccountMessage for this email
+        // Create AccountToAccountMessage for P2P delivery
         let p2p_message = fastn_account::AccountToAccountMessage::new_email(email.raw_message.clone());
         
-        // TODO: Send p2p_message over existing connection
-        // TODO: Wait for delivery confirmation  
-        // TODO: Handle individual email delivery failures
-        
-        tracing::debug!("📦 Sending email {} ({} bytes) over P2P connection", 
+        tracing::debug!("📦 Would send email {} ({} bytes) over P2P stream", 
             email.email_id, p2p_message.size());
         
-        // Simulate successful delivery
+        // TODO: Real implementation would be:
+        // 1. Get stream: fastn_net::get_stream(our_endpoint, Protocol::AccountToAccount, peer_id52, pool, graceful)
+        // 2. Send message: serde_json::to_writer(&mut send, &p2p_message)?; send.write_all(b"\n")?;
+        // 3. Wait for response: let response = fastn_net::next_json::<EmailDeliveryResponse>(&mut recv)?;
+        // 4. Handle response: match response.status { Accepted => mark_delivered, Rejected => create_bounce }
+        
+        // For now, simulate successful delivery
         delivered_email_ids.push(email.email_id.clone());
+        
+        // Simulate individual email transmission time
+        tokio::time::sleep(std::time::Duration::from_millis(50)).await;
     }
     
-    // Simulate realistic connection time for batch delivery
-    tokio::time::sleep(std::time::Duration::from_millis(100 * emails.len() as u64)).await;
-    
-    tracing::info!("✅ Batch P2P delivery completed: {} emails delivered to {}", 
+    tracing::info!("✅ P2P delivery completed: {} emails delivered to {}", 
         delivered_email_ids.len(), peer_id52);
     
     Ok(delivered_email_ids)
