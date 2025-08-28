@@ -244,54 +244,66 @@ async fn attempt_delivery_to_peer(task: &DeliveryTask) -> Result<usize, fastn_ri
             alias: task.our_alias.clone() 
         })?;
     
-    let mut delivered_count = 0;
+    // Step 4: Deliver all emails via single P2P connection
+    let delivered_emails = deliver_emails_to_peer(&emails, &our_alias_key, &task.peer_id52).await?;
     
-    // Step 4: Deliver each email via P2P
-    for email in emails {
-        match deliver_single_email(&email, &our_alias_key, &task.peer_id52).await {
-            Ok(()) => {
-                // Mark as delivered in database
-                mail_store.mark_delivered_to_peer(&email.email_id, &task.peer_id52).await
-                    .map_err(|e| fastn_rig::EmailDeliveryError::MarkDeliveredFailed { source: e })?;
-                
-                delivered_count += 1;
-                tracing::debug!("✅ Delivered email {} to {}", email.email_id, task.peer_id52);
-            }
-            Err(e) => {
-                tracing::warn!("❌ Failed to deliver email {} to {}: {}", 
-                    email.email_id, task.peer_id52, e);
-                // TODO: Update failure count and retry timestamp
-                break; // Stop delivery on first failure to avoid connection spam
-            }
-        }
+    // Step 5: Mark all successfully delivered emails in database  
+    let mut delivered_count = 0;
+    for email_id in delivered_emails {
+        mail_store.mark_delivered_to_peer(&email_id, &task.peer_id52).await
+            .map_err(|e| fastn_rig::EmailDeliveryError::MarkDeliveredFailed { source: e })?;
+        
+        delivered_count += 1;
+        tracing::debug!("✅ Marked email {} as delivered to {}", email_id, task.peer_id52);
     }
     
     Ok(delivered_count)
 }
 
-/// Deliver a single email to a peer via P2P  
-async fn deliver_single_email(
-    email: &fastn_mail::EmailForDelivery,
+/// Deliver multiple emails to a peer via single P2P connection
+async fn deliver_emails_to_peer(
+    emails: &[fastn_mail::EmailForDelivery],
     our_alias: &fastn_id52::PublicKey,
     peer_id52: &fastn_id52::PublicKey,
-) -> Result<(), fastn_rig::EmailDeliveryError> {
-    tracing::debug!("📧 Delivering email {} from {} to {}", email.email_id, our_alias, peer_id52);
+) -> Result<Vec<String>, fastn_rig::EmailDeliveryError> {
+    if emails.is_empty() {
+        return Ok(vec![]);
+    }
     
-    // Create AccountToAccountMessage for P2P delivery
-    let p2p_message = fastn_account::AccountToAccountMessage::new_email(email.raw_message.clone());
+    tracing::info!("📧 Establishing P2P connection from {} to {} for {} emails", 
+        our_alias, peer_id52, emails.len());
     
-    // TODO: Find account that owns our_alias and get Account instance
-    // TODO: Create P2P connection to peer_id52 using our_alias for authentication
-    // TODO: Send p2p_message via the P2P connection
-    // TODO: Handle connection errors, timeouts, and authentication failures
+    // TODO: Create single P2P connection using our_alias → peer_id52
+    // TODO: Find account that owns our_alias for proper authentication
+    // TODO: Establish iroh connection with proper endpoint routing
     
-    // For now, simulate successful P2P delivery
-    tracing::info!("📤 Simulating P2P delivery: email {} ({} bytes) from {} to {}", 
-        email.email_id, email.size_bytes, our_alias, peer_id52);
-    tracing::debug!("📦 P2P message size: {} bytes", p2p_message.size());
+    let mut delivered_email_ids = Vec::new();
+    let total_bytes: usize = emails.iter().map(|e| e.size_bytes).sum();
     
-    // Simulate realistic delivery time
-    tokio::time::sleep(std::time::Duration::from_millis(500)).await;
+    tracing::info!("📤 Simulating batch P2P delivery: {} emails ({} bytes total) from {} to {}", 
+        emails.len(), total_bytes, our_alias, peer_id52);
     
-    Ok(())
+    // Simulate sending all emails over single connection
+    for email in emails {
+        // Create AccountToAccountMessage for this email
+        let p2p_message = fastn_account::AccountToAccountMessage::new_email(email.raw_message.clone());
+        
+        // TODO: Send p2p_message over existing connection
+        // TODO: Wait for delivery confirmation  
+        // TODO: Handle individual email delivery failures
+        
+        tracing::debug!("📦 Sending email {} ({} bytes) over P2P connection", 
+            email.email_id, p2p_message.size());
+        
+        // Simulate successful delivery
+        delivered_email_ids.push(email.email_id.clone());
+    }
+    
+    // Simulate realistic connection time for batch delivery
+    tokio::time::sleep(std::time::Duration::from_millis(100 * emails.len())).await;
+    
+    tracing::info!("✅ Batch P2P delivery completed: {} emails delivered to {}", 
+        delivered_email_ids.len(), peer_id52);
+    
+    Ok(delivered_email_ids)
 }
