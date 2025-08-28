@@ -300,7 +300,7 @@ async fn deliver_emails_to_peer(
     }
     
     // Simulate realistic connection time for batch delivery
-    tokio::time::sleep(std::time::Duration::from_millis(100 * emails.len())).await;
+    tokio::time::sleep(std::time::Duration::from_millis(100 * emails.len() as u64)).await;
     
     tracing::info!("✅ Batch P2P delivery completed: {} emails delivered to {}", 
         delivered_email_ids.len(), peer_id52);
