@@ -24,6 +24,24 @@ pub enum AccountToAccountMessage {
     },
 }
 
+/// Response from peer for individual email delivery
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub struct EmailDeliveryResponse {
+    /// Email ID being responded to
+    pub email_id: String,
+    /// Delivery result
+    pub status: DeliveryStatus,
+}
+
+/// Status of individual email delivery
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub enum DeliveryStatus {
+    /// Email accepted and stored in recipient's INBOX
+    Accepted,
+    /// Email rejected with reason (permanent failure)
+    Rejected { reason: String },
+}
+
 impl AccountToAccountMessage {
     /// Create a new email message from raw RFC 5322 bytes
     pub fn new_email(raw_message: Vec<u8>) -> Self {

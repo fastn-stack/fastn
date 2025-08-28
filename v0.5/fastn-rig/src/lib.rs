@@ -90,6 +90,8 @@ pub struct EndpointManager {
     pub(crate) message_tx: tokio::sync::mpsc::Sender<P2PMessage>,
     /// Graceful handler for spawning tasks
     pub(crate) graceful: fastn_net::Graceful,
+    /// Connection pool for P2P stream reuse
+    pub(crate) peer_stream_senders: fastn_net::PeerStreamSenders,
 }
 
 /// P2P message received on an endpoint

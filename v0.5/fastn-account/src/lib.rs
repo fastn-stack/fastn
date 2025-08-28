@@ -55,7 +55,7 @@ pub use errors::{
 };
 
 // Re-export message types
-pub use p2p::AccountToAccountMessage;
+pub use p2p::{AccountToAccountMessage, EmailDeliveryResponse, DeliveryStatus};
 
 /// Thread-safe handle to an account
 #[derive(Debug, Clone)]

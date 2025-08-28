@@ -42,8 +42,10 @@ impl crate::Store {
             parsed_email.email_id
         );
 
-        // Step 3: Check sender permissions (allow_mail in AliasNotes)
-        check_sender_permissions(sender_id52).await?;
+        // Step 3: Check sender permissions (allow_mail in AliasNotes)  
+        // TODO: Need account's automerge database access for AliasNotes lookup
+        // For now, just log and allow (will implement when account context available)
+        tracing::info!("🔒 Checking permissions for {} (currently allowing all)", sender_id52);
 
         // Step 4: Store email file in INBOX
         self.store_email_file_inbox(&parsed_email.file_path, &raw_message)
@@ -161,12 +163,25 @@ impl crate::Store {
     }
 }
 
-/// Check if sender is allowed to send mail (placeholder)
+/// Check if sender is allowed to send mail using AliasNotes.allow_mail
+#[allow(dead_code)] // Framework ready for implementation
 async fn check_sender_permissions(
-    _sender_id52: &fastn_id52::PublicKey,
+    sender_id52: &fastn_id52::PublicKey,
+    our_alias_used: &Option<String>,
 ) -> Result<(), SmtpReceiveError> {
-    // TODO: Check AliasNotes.allow_mail for sender
-    // For now, allow all senders
+    // For permission checking, we need to load AliasNotes for the sender
+    // But we need access to an account's automerge database to do this
+    
+    // TODO: This requires account context to access automerge database
+    // For now, we need to pass the account or automerge db to this function
+    // The check would be: load AliasNotes for sender_id52, check allow_mail field
+    
+    // Temporary: Log the permission check and allow all senders
+    tracing::info!("🔒 Checking permissions for {} sending to {:?}", 
+        sender_id52, our_alias_used);
+    tracing::debug!("📝 Would check AliasNotes.allow_mail for {}", sender_id52);
+    
+    // For now, allow all senders (will implement real check when account context available)
     Ok(())
 }
 

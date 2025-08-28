@@ -115,7 +115,7 @@ async fn check_and_deliver_emails(
         tracing::info!("📤 Processing deliveries: {} emails to {} using alias {}", 
             task.email_count, task.peer_id52, task.our_alias);
             
-        match attempt_delivery_to_peer(&task, peer_stream_senders, graceful).await {
+        match attempt_delivery_to_peer(&task, peer_stream_senders, graceful, account_manager).await {
             Ok(delivered_count) => {
                 tracing::info!("✅ Successfully delivered {} emails to {}", 
                     delivered_count, task.peer_id52);
@@ -252,6 +252,7 @@ async fn attempt_delivery_to_peer(
     task: &DeliveryTask,
     peer_stream_senders: &fastn_net::PeerStreamSenders, 
     graceful: &fastn_net::Graceful,
+    account_manager: &AccountManager,
 ) -> Result<usize, fastn_rig::EmailDeliveryError> {
     tracing::debug!("📤 Attempting delivery to {} using alias {}", task.peer_id52, task.our_alias);
     
@@ -271,7 +272,7 @@ async fn attempt_delivery_to_peer(
     tracing::info!("📧 Found {} emails to deliver to {}", emails.len(), task.peer_id52);
     
     // Step 3: Deliver all emails via single P2P connection (our_alias is already PublicKey)
-    let delivered_emails = deliver_emails_to_peer(&emails, &task.our_alias, &task.peer_id52, peer_stream_senders, graceful).await?;
+    let delivered_emails = deliver_emails_to_peer(&emails, &task.our_alias, &task.peer_id52, peer_stream_senders, graceful, &task.account_path, account_manager).await?;
     
     // Step 5: Mark all successfully delivered emails in database  
     let mut delivered_count = 0;
@@ -291,8 +292,10 @@ async fn deliver_emails_to_peer(
     emails: &[fastn_mail::EmailForDelivery],
     our_alias: &fastn_id52::PublicKey,
     peer_id52: &fastn_id52::PublicKey,
-    _peer_stream_senders: &fastn_net::PeerStreamSenders,
-    _graceful: &fastn_net::Graceful,
+    peer_stream_senders: &fastn_net::PeerStreamSenders,
+    graceful: &fastn_net::Graceful,
+    account_path: &std::path::Path,
+    account_manager: &AccountManager,
 ) -> Result<Vec<String>, fastn_rig::EmailDeliveryError> {
     if emails.is_empty() {
         return Ok(vec![]);
@@ -301,12 +304,23 @@ async fn deliver_emails_to_peer(
     tracing::info!("📧 Establishing P2P connection from {} to {} for {} emails", 
         our_alias, peer_id52, emails.len());
     
-    // TODO: Get our endpoint for our_alias (need to find account that owns this alias)
-    // For now, we need a way to map our_alias → iroh::Endpoint
-    // This requires integration with EndpointManager to find the right endpoint
+    // Get the account that owns our_alias and extract its secret key
+    let account = account_manager.find_account_by_alias(our_alias).await
+        .map_err(|_e| fastn_rig::EmailDeliveryError::NoSenderAliasFound { 
+            peer_id52: our_alias.id52() 
+        })?;
     
-    // Placeholder until we implement endpoint lookup
-    let our_endpoint = fastn_net::get_endpoint().await;
+    // Get the secret key for our_alias from the account
+    let our_secret_key = get_secret_key_for_alias(&account, our_alias).await?;
+    
+    // Create endpoint using the real secret key for our_alias
+    let our_endpoint = fastn_net::get_endpoint(our_secret_key).await.map_err(|e| {
+        fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
+            source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
+                source: rusqlite::Error::InvalidColumnName(format!("Failed to create endpoint: {e}"))
+            }
+        }
+    })?;
     
     let mut delivered_email_ids = Vec::new();
     let total_bytes: usize = emails.iter().map(|e| e.size_bytes).sum();
@@ -339,8 +353,16 @@ async fn deliver_emails_to_peer(
         tracing::debug!("📦 Sending email {} ({} bytes) over P2P stream", 
             email.email_id, p2p_message.size());
         
-        // Send email message
-        serde_json::to_writer(&mut send, &p2p_message).await.map_err(|e| {
+        // Send email message as JSON
+        let message_json = serde_json::to_string(&p2p_message).map_err(|e| {
+            fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
+                source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
+                    source: rusqlite::Error::InvalidColumnName(format!("Failed to serialize message: {e}"))
+                }
+            }
+        })?;
+        
+        send.write_all(message_json.as_bytes()).await.map_err(|e| {
             fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
                 source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
                     source: rusqlite::Error::InvalidColumnName(format!("Failed to send message: {e}"))
@@ -374,7 +396,10 @@ async fn deliver_emails_to_peer(
                 tracing::warn!("❌ Email {} rejected by {}: {}", email.email_id, peer_id52, reason);
                 
                 // Create bounce message for rejected email
-                if let Err(e) = create_bounce_message(&email.email_id, &reason, &task.account_path).await {
+                let mail_store = fastn_mail::Store::load(account_path).await
+                    .map_err(|e| fastn_rig::EmailDeliveryError::MailStoreLoadFailed { source: e })?;
+                    
+                if let Err(e) = mail_store.create_bounce_message(&email.email_id, &reason).await {
                     tracing::error!("Failed to create bounce message for {}: {}", email.email_id, e);
                 }
                 
@@ -389,57 +414,24 @@ async fn deliver_emails_to_peer(
     Ok(delivered_email_ids)
 }
 
-/// Create bounce message for rejected email delivery
-async fn create_bounce_message(
-    original_email_id: &str,
-    rejection_reason: &str,
-    account_path: &std::path::Path,
-) -> Result<(), fastn_rig::EmailDeliveryError> {
-    tracing::info!("📝 Creating bounce message for rejected email {}: {}", 
-        original_email_id, rejection_reason);
+/// Get secret key for a specific alias from an account
+async fn get_secret_key_for_alias(
+    account: &fastn_account::Account,
+    alias_key: &fastn_id52::PublicKey,
+) -> Result<fastn_id52::SecretKey, fastn_rig::EmailDeliveryError> {
+    // Get all aliases for this account
+    let aliases = account.aliases().await;
     
-    // Load account's mail store
-    let mail_store = fastn_mail::Store::load(account_path).await
-        .map_err(|e| fastn_rig::EmailDeliveryError::MailStoreLoadFailed { source: e })?;
+    // Find the alias that matches our target
+    for alias in aliases {
+        if *alias.public_key() == *alias_key {
+            return Ok(alias.secret_key().clone());
+        }
+    }
     
-    // Create RFC 3464-style bounce message
-    let bounce_subject = format!("Mail Delivery Failure: {}", original_email_id);
-    let bounce_body = format!(
-        "Your email could not be delivered to the recipient.\n\n\
-        Original Email ID: {}\n\
-        Failure Reason: {}\n\n\
-        This is an automated message from the fastn mail delivery system.\n\
-        The original message has been removed from the delivery queue.",
-        original_email_id, rejection_reason
-    );
-    
-    // Build bounce email in RFC 5322 format
-    let timestamp = chrono::Utc::now().format("%a, %d %b %Y %H:%M:%S +0000");
-    let bounce_message_id = format!("bounce-{}", uuid::Uuid::new_v4());
-    
-    let bounce_email = format!(
-        "From: Mail Delivery System <mailer-daemon@system.local>\r\n\
-        To: Original Sender\r\n\
-        Subject: {}\r\n\
-        Date: {}\r\n\
-        Message-ID: <{}>\r\n\
-        MIME-Version: 1.0\r\n\
-        Content-Type: text/plain; charset=utf-8\r\n\
-        \r\n\
-        {}",
-        bounce_subject, timestamp, bounce_message_id, bounce_body
-    );
-    
-    // Store bounce message in sender's INBOX using p2p_receive_email
-    // This puts the bounce in INBOX where the sender will see it
-    let system_sender = fastn_id52::SecretKey::generate().public_key(); // System identity
-    mail_store.p2p_receive_email(bounce_email.into_bytes(), &system_sender).await
-        .map_err(|e| fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
-            source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
-                source: rusqlite::Error::InvalidColumnName(format!("Failed to create bounce: {e}"))
-            }
-        })?;
-    
-    tracing::info!("📝 Bounce message created for {} in INBOX", original_email_id);
-    Ok(())
+    // If we get here, the alias wasn't found in the account
+    Err(fastn_rig::EmailDeliveryError::NoSenderAliasFound {
+        peer_id52: alias_key.id52(),
+    })
 }
+

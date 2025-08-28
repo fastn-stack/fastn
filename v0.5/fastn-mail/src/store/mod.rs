@@ -6,6 +6,7 @@
 //! Each Store method is implemented in its own focused file:
 
 mod create;
+mod create_bounce_message;
 mod get_emails_for_peer;
 mod get_pending_deliveries;
 mod imap_fetch;

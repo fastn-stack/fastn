@@ -199,15 +199,34 @@ impl fastn_account::AccountManager {
                 println!("📧 Processing email message: {} bytes", raw_message.len());
 
                 // 3. Store in INBOX (this is incoming P2P email from peer)
-                let email_id = account
+                let email_result = account
                     .mail
                     .p2p_receive_email(raw_message, peer_id52)
-                    .await
-                    .map_err(|e| crate::HandleAccountMessageError::EmailStorageFailed {
-                        source: Box::new(e),
-                    })?;
+                    .await;
 
-                println!("✅ Email stored with ID: {}", email_id);
+                // 4. Create response based on email processing result
+                let response = match email_result {
+                    Ok(email_id) => {
+                        println!("✅ Email stored with ID: {}", email_id);
+                        fastn_account::EmailDeliveryResponse {
+                            email_id,
+                            status: fastn_account::DeliveryStatus::Accepted,
+                        }
+                    }
+                    Err(e) => {
+                        println!("❌ Email rejected: {}", e);
+                        fastn_account::EmailDeliveryResponse {
+                            email_id: "unknown".to_string(),
+                            status: fastn_account::DeliveryStatus::Rejected { 
+                                reason: e.to_string() 
+                            },
+                        }
+                    }
+                };
+
+                // TODO: Send response back to sender
+                // This requires the P2P connection context to send the response
+                println!("📤 Would send response: {:?}", response);
 
                 // 4. Ensure peer tracking (connection should have already called authorize_connection)
                 // The peer notes document should already exist from connection establishment

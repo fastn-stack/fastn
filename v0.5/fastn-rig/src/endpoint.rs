@@ -10,9 +10,15 @@ impl fastn_rig::EndpointManager {
                 active: std::collections::HashMap::new(),
                 message_tx,
                 graceful,
+                peer_stream_senders: fastn_net::PeerStreamSenders::default(),
             },
             message_rx,
         )
+    }
+    
+    /// Get connection pool for P2P stream reuse
+    pub fn peer_stream_senders(&self) -> &fastn_net::PeerStreamSenders {
+        &self.peer_stream_senders
     }
 
     /// Bring an endpoint online
