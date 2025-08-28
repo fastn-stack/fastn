@@ -16,20 +16,7 @@ pub fn parse_email(raw_message: &[u8]) -> Result<crate::ParsedEmail, SmtpReceive
     // Extract message ID (generate unique one if missing)
     let message_id = headers.get("Message-ID").cloned().unwrap_or_else(|| {
         // Generate unique message ID if missing
-        use std::collections::hash_map::DefaultHasher;
-        use std::hash::{Hash, Hasher};
-
-        let mut hasher = DefaultHasher::new();
-        raw_message.hash(&mut hasher);
-        chrono::Utc::now().timestamp_millis().hash(&mut hasher);
-        std::process::id().hash(&mut hasher);
-        std::thread::current().id().hash(&mut hasher);
-
-        format!(
-            "generated-{}-{:x}",
-            chrono::Utc::now().timestamp_millis(),
-            hasher.finish()
-        )
+        format!("generated-{}", uuid::Uuid::new_v4())
     });
 
     // Extract From address (required)
@@ -75,13 +62,8 @@ pub fn parse_email(raw_message: &[u8]) -> Result<crate::ParsedEmail, SmtpReceive
     let content_encoding = headers.get("Content-Transfer-Encoding").cloned();
     let has_attachments = content_type.contains("multipart");
 
-    // Generate storage information
-    let email_id = format!(
-        "email-{}-{}-{}",
-        chrono::Utc::now().timestamp_millis(),
-        message_id.len(),
-        std::process::id() // Add process ID for uniqueness in tests
-    );
+    // Generate storage information with UUID for guaranteed uniqueness
+    let email_id = format!("email-{}", uuid::Uuid::new_v4());
     let folder = "Sent".to_string(); // SMTP emails go to Sent folder
     let timestamp = chrono::Utc::now().format("%Y/%m/%d");
     let file_path = format!("mails/default/Sent/{timestamp}/{email_id}.eml");

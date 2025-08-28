@@ -38,3 +38,6 @@ tracing-subscriber.workspace = true
 
 # Test dependencies
 indoc.workspace = true
+
+# UUID generation
+uuid = { version = "1", features = ["v4"] }
