@@ -218,3 +218,35 @@ fn convert_to_hyper_response(
             )))
         })
 }
+
+/// Proxy request to remote peer when ID52 is not local (following kulfi pattern)
+async fn proxy_to_remote_peer(
+    target_id52: &str,
+    request: &fastn_router::HttpRequest,
+    app: &HttpApp,
+) -> fastn_router::HttpResponse {
+    println!("🚀 Attempting to proxy to remote peer: {target_id52}");
+    
+    // TODO: Get our endpoint and peer_stream_senders from app context
+    // For now, return a placeholder response indicating P2P proxy would happen
+    let body = format!(
+        "🌐 P2P Proxy (Not Yet Implemented)\n\n\
+        Target ID52: {target_id52}\n\
+        Request: {} {}\n\
+        Host: {}\n\n\
+        This request would be proxied to remote peer {target_id52} via P2P.\n\n\
+        Implementation needed:\n\
+        - Get our iroh endpoint for P2P connection\n\
+        - Use fastn_net::get_stream() with Protocol::HttpProxy\n\
+        - Send HTTP request over P2P to remote peer\n\
+        - Receive and return HTTP response from remote peer\n\n\
+        Infrastructure ready:\n\
+        - P2P connection management ✅\n\
+        - HTTP request/response types ✅\n\
+        - Protocol header with proxy data ✅\n\
+        - Request serialization framework ✅",
+        request.method, request.path, request.host, target_id52
+    );
+    
+    fastn_router::HttpResponse::ok(body)
+}
