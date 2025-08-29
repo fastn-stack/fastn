@@ -346,41 +346,54 @@ async fn handle_incoming_http_request(
     our_endpoint: &fastn_id52::PublicKey,
     account_manager: &std::sync::Arc<fastn_account::AccountManager>,
 ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-    tracing::info!("Processing HTTP request from {} to {}", requester, our_endpoint);
-    
+    tracing::info!(
+        "Processing HTTP request from {} to {}",
+        requester,
+        our_endpoint
+    );
+
     // Parse HTTP request from P2P stream (following fastn_net::peer_to_http pattern)
     let http_req: fastn_net::http::Request = fastn_net::next_json(&mut recv).await?;
-    
-    tracing::info!("Received HTTP request: {} {}", http_req.method, http_req.uri);
-    
+
+    tracing::info!(
+        "Received HTTP request: {} {}",
+        http_req.method,
+        http_req.uri
+    );
+
     // Convert to our HttpRequest type
     let request = fastn_router::HttpRequest {
         method: http_req.method,
         path: http_req.uri,
         host: our_endpoint.id52(),
-        headers: http_req.headers.into_iter().map(|(k, v)| {
-            (k, String::from_utf8_lossy(&v).to_string())
-        }).collect(),
+        headers: http_req
+            .headers
+            .into_iter()
+            .map(|(k, v)| (k, String::from_utf8_lossy(&v).to_string()))
+            .collect(),
     };
-    
+
     // Route the request with requester context for permission control
-    let response = route_http_with_requester(&request, Some(requester), our_endpoint, account_manager).await;
-    
+    let response =
+        route_http_with_requester(&request, Some(requester), our_endpoint, account_manager).await;
+
     // Convert response back to P2P format
     let http_response = fastn_net::http::Response {
         status: response.status,
-        headers: response.headers.into_iter().map(|(k, v)| {
-            (k, v.into_bytes())
-        }).collect(),
+        headers: response
+            .headers
+            .into_iter()
+            .map(|(k, v)| (k, v.into_bytes()))
+            .collect(),
     };
-    
+
     // Send response back via P2P
     send.write_all(&serde_json::to_vec(&http_response)?).await?;
     send.write_all(b"\n").await?;
-    
+
     // TODO: Handle response body - for now just send empty body
     tracing::info!("Sent HTTP response back to {}", requester);
-    
+
     Ok(())
 }
 
@@ -393,16 +406,19 @@ async fn route_http_with_requester(
 ) -> fastn_router::HttpResponse {
     // Check if this endpoint belongs to an account
     if let Ok(account) = account_manager.find_account_by_alias(our_endpoint).await {
-        return account.route_http(request, requester).await.unwrap_or_else(|e| {
-            fastn_router::HttpResponse::internal_error(format!("Account routing error: {e}"))
-        });
+        return account
+            .route_http(request, requester)
+            .await
+            .unwrap_or_else(|e| {
+                fastn_router::HttpResponse::internal_error(format!("Account routing error: {e}"))
+            });
     }
-    
+
     // TODO: Check if this endpoint belongs to the rig
     // For now, return not found for rig endpoints accessed via P2P
-    
+
     fastn_router::HttpResponse::not_found(format!(
-        "Endpoint {} not found or not accessible via P2P", 
+        "Endpoint {} not found or not accessible via P2P",
         our_endpoint
     ))
 }

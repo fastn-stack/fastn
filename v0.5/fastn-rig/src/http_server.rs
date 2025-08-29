@@ -226,7 +226,7 @@ async fn proxy_to_remote_peer(
     app: &HttpApp,
 ) -> fastn_router::HttpResponse {
     println!("🚀 Attempting to proxy to remote peer: {target_id52}");
-    
+
     // TODO: Get our endpoint and peer_stream_senders from app context
     // For now, return a placeholder response indicating P2P proxy would happen
     let body = format!(
@@ -247,6 +247,6 @@ async fn proxy_to_remote_peer(
         - Request serialization framework ✅",
         request.method, request.path, request.host, target_id52
     );
-    
+
     fastn_router::HttpResponse::ok(body)
 }
