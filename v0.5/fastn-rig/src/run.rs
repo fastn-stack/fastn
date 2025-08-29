@@ -133,7 +133,15 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     println!("   Email Delivery: polling every 5 seconds");
     println!("   SMTP: planned (port 2525)");
     println!("   IMAP: planned (port 1143)");
-    println!("   HTTP: listening on port 8000");
+    let http_port = std::env::var("FASTN_HTTP_PORT")
+        .ok()
+        .and_then(|p| p.parse().ok())
+        .unwrap_or(0); // Default 0 = auto-select free port
+    if http_port == 0 {
+        println!("   HTTP: auto-selecting free port");
+    } else {
+        println!("   HTTP: listening on port {http_port}");
+    }
 
     // Get connection pool before endpoint_manager is moved
     let connection_pool = endpoint_manager.peer_stream_senders().clone();
@@ -150,8 +158,12 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     })?;
 
     // Start HTTP server for web interface
-    crate::http_server::start_http_server(account_manager.clone(), rig.clone(), graceful.clone())
-        .await?;
+    crate::http_server::start_http_server(
+        account_manager.clone(), 
+        rig.clone(), 
+        graceful.clone(),
+        Some(http_port)
+    ).await?;
 
     // Spawn P2P message handler as a background task
     let p2p_endpoint_manager = std::sync::Arc::new(tokio::sync::Mutex::new(endpoint_manager));

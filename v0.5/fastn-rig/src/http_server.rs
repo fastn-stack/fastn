@@ -17,25 +17,48 @@ pub async fn start_http_server(
     account_manager: std::sync::Arc<fastn_account::AccountManager>,
     rig: fastn_rig::Rig,
     graceful: fastn_net::Graceful,
+    port: Option<u16>,
 ) -> Result<(), fastn_rig::RunError> {
-    println!("🌐 Starting HTTP server on port 8000...");
-    tracing::info!("🌐 Starting HTTP server for web access");
-
     // Create HTTP service state
     let app = HttpApp {
         account_manager,
         rig,
     };
 
-    // Bind to localhost:8000
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:8000")
-        .await
-        .map_err(|e| fastn_rig::RunError::ShutdownFailed {
-            source: Box::new(e),
-        })?;
-
-    println!("🌐 HTTP server listening on http://localhost:8000");
-    tracing::info!("🌐 HTTP server bound to 127.0.0.1:8000");
+    // Bind to localhost with automatic port selection if port is 0
+    let listener = match port {
+        Some(0) | None => {
+            // Bind to any available port
+            let listener = tokio::net::TcpListener::bind("127.0.0.1:0")
+                .await
+                .map_err(|e| fastn_rig::RunError::ShutdownFailed {
+                    source: Box::new(e),
+                })?;
+            
+            let actual_port = listener.local_addr()
+                .map_err(|e| fastn_rig::RunError::ShutdownFailed {
+                    source: Box::new(e),
+                })?
+                .port();
+                
+            println!("🌐 HTTP server auto-selected port {actual_port}");
+            tracing::info!("🌐 HTTP server bound to 127.0.0.1:{actual_port}");
+            listener
+        }
+        Some(http_port) => {
+            // Bind to specific port
+            let bind_addr = format!("127.0.0.1:{http_port}");
+            let listener = tokio::net::TcpListener::bind(&bind_addr)
+                .await
+                .map_err(|e| fastn_rig::RunError::ShutdownFailed {
+                    source: Box::new(e),
+                })?;
+                
+            println!("🌐 HTTP server listening on http://localhost:{http_port}");
+            tracing::info!("🌐 HTTP server bound to {bind_addr}");
+            listener
+        }
+    };
 
     // Spawn HTTP server task following fastn/serve.rs pattern
     graceful.spawn(async move {
@@ -151,8 +174,9 @@ async fn route_request(
             return rig_route(&app.rig, request).await;
         }
 
-        // ID52 not found
-        fastn_router::HttpResponse::not_found(format!("ID52 {id52} not found"))
+        // ID52 not found locally - attempt P2P proxy to remote peer
+        println!("🌐 ID52 {id52} not local, attempting P2P proxy...");
+        proxy_to_remote_peer(&id52, request, app).await
     } else {
         // Default rig interface
         rig_route(&app.rig, request).await
