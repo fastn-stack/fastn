@@ -137,14 +137,17 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
 
     // Get connection pool before endpoint_manager is moved
     let connection_pool = endpoint_manager.peer_stream_senders().clone();
-    
-    // Start email delivery poller  
+
+    // Start email delivery poller
     crate::email_delivery::start_email_delivery_poller(
-        account_manager.clone(), 
+        account_manager.clone(),
         graceful.clone(),
-        connection_pool
-    ).await
-        .map_err(|e| fastn_rig::RunError::ShutdownFailed { source: Box::new(e) })?;
+        connection_pool,
+    )
+    .await
+    .map_err(|e| fastn_rig::RunError::ShutdownFailed {
+        source: Box::new(e),
+    })?;
 
     // Spawn P2P message handler as a background task
     let p2p_endpoint_manager = std::sync::Arc::new(tokio::sync::Mutex::new(endpoint_manager));

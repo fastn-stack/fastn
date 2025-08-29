@@ -9,9 +9,12 @@ impl crate::Store {
         original_email_id: &str,
         rejection_reason: &str,
     ) -> Result<String, SmtpReceiveError> {
-        tracing::info!("📝 Creating bounce message for rejected email {}: {}", 
-            original_email_id, rejection_reason);
-        
+        tracing::info!(
+            "📝 Creating bounce message for rejected email {}: {}",
+            original_email_id,
+            rejection_reason
+        );
+
         // Create RFC 3464-style bounce message
         let bounce_subject = format!("Mail Delivery Failure: {}", original_email_id);
         let bounce_body = format!(
@@ -22,11 +25,11 @@ impl crate::Store {
             The original message has been removed from the delivery queue.",
             original_email_id, rejection_reason
         );
-        
+
         // Build bounce email in RFC 5322 format
         let timestamp = chrono::Utc::now().format("%a, %d %b %Y %H:%M:%S +0000");
         let bounce_message_id = format!("bounce-{}", uuid::Uuid::new_v4());
-        
+
         let bounce_email = format!(
             "From: Mail Delivery System <mailer-daemon@system.local>\r\n\
             To: Original Sender\r\n\
@@ -39,13 +42,18 @@ impl crate::Store {
             {}",
             bounce_subject, timestamp, bounce_message_id, bounce_body
         );
-        
+
         // Store bounce message in sender's INBOX using p2p_receive_email
         // This puts the bounce in INBOX where the sender will see it
         let system_sender = fastn_id52::SecretKey::generate().public_key(); // System identity
-        let bounce_email_id = self.p2p_receive_email(bounce_email.into_bytes(), &system_sender).await?;
-        
-        tracing::info!("📝 Bounce message created with ID {} in INBOX", bounce_email_id);
+        let bounce_email_id = self
+            .p2p_receive_email(bounce_email.into_bytes(), &system_sender)
+            .await?;
+
+        tracing::info!(
+            "📝 Bounce message created with ID {} in INBOX",
+            bounce_email_id
+        );
         Ok(bounce_email_id)
     }
 }

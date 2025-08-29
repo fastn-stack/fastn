@@ -59,5 +59,4 @@ impl crate::Store {
             connection: std::sync::Arc::new(tokio::sync::Mutex::new(connection)),
         })
     }
-
 }

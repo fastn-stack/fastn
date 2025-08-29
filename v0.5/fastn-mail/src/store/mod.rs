@@ -21,7 +21,7 @@ pub mod smtp_receive;
 /// Email store for account-specific email operations
 #[derive(Debug, Clone)]
 pub struct Store {
-    /// Path to account directory 
+    /// Path to account directory
     pub(crate) account_path: std::path::PathBuf,
     /// Mail database connection
     pub(crate) connection: std::sync::Arc<tokio::sync::Mutex<rusqlite::Connection>>,
@@ -32,12 +32,12 @@ impl Store {
     pub fn account_path(&self) -> &std::path::Path {
         &self.account_path
     }
-    
+
     /// Get database connection for email operations
     pub fn connection(&self) -> &std::sync::Arc<tokio::sync::Mutex<rusqlite::Connection>> {
         &self.connection
     }
-    
+
     /// Create a test store in memory (for testing only)
     pub fn create_test() -> Self {
         let connection = rusqlite::Connection::open_in_memory().unwrap();

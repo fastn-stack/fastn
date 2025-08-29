@@ -1,7 +1,7 @@
 //! # IMAP Thread
 
-use crate::errors::*;
 use crate::ThreadTree;
+use crate::errors::*;
 
 impl crate::Store {
     /// Get thread tree for folder (IMAP THREAD extension)
@@ -12,7 +12,10 @@ impl crate::Store {
     ) -> Result<Vec<ThreadTree>, ImapThreadError> {
         if algorithm != "REFERENCES" {
             return Err(ImapThreadError::DatabaseQueryFailed {
-                source: rusqlite::Error::InvalidColumnName(format!("Unsupported algorithm: {}", algorithm)),
+                source: rusqlite::Error::InvalidColumnName(format!(
+                    "Unsupported algorithm: {}",
+                    algorithm
+                )),
             });
         }
 
@@ -20,20 +23,24 @@ impl crate::Store {
 
         // Basic threading by References header
         // TODO: Implement proper RFC 5256 threading algorithm
-        let mut stmt = conn.prepare(
-            "SELECT email_id, message_id, email_references 
+        let mut stmt = conn
+            .prepare(
+                "SELECT email_id, message_id, email_references 
              FROM fastn_emails 
              WHERE folder = ? AND is_deleted = 0 
              ORDER BY date_received",
-        ).map_err(|e| ImapThreadError::DatabaseQueryFailed { source: e })?;
+            )
+            .map_err(|e| ImapThreadError::DatabaseQueryFailed { source: e })?;
 
-        let _rows = stmt.query_map([folder], |row| {
-            Ok((
-                row.get::<_, String>(0)?, // email_id
-                row.get::<_, String>(1)?, // message_id
-                row.get::<_, Option<String>>(2)?, // email_references
-            ))
-        }).map_err(|e| ImapThreadError::DatabaseQueryFailed { source: e })?;
+        let _rows = stmt
+            .query_map([folder], |row| {
+                Ok((
+                    row.get::<_, String>(0)?,         // email_id
+                    row.get::<_, String>(1)?,         // message_id
+                    row.get::<_, Option<String>>(2)?, // email_references
+                ))
+            })
+            .map_err(|e| ImapThreadError::DatabaseQueryFailed { source: e })?;
 
         // For now, return empty thread tree
         // TODO: Implement proper threading logic

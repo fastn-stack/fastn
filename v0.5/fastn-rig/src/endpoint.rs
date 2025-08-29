@@ -15,7 +15,7 @@ impl fastn_rig::EndpointManager {
             message_rx,
         )
     }
-    
+
     /// Get connection pool for P2P stream reuse
     pub fn peer_stream_senders(&self) -> &fastn_net::PeerStreamSenders {
         &self.peer_stream_senders

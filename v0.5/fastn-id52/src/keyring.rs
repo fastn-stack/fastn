@@ -43,8 +43,8 @@ impl crate::SecretKey {
     pub fn store_in_keyring(&self) -> Result<(), keyring::Error> {
         let id52 = self.id52();
         let entry = keyring::Entry::new("fastn", &id52)?;
-        // Store as hex string for better UX (viewable in password managers)
-        entry.set_password(&self.to_string())
+        // Store as raw bytes (same as kulfi approach)
+        entry.set_secret(&self.to_bytes())
     }
 
     /// Loads a secret key from the system keyring.

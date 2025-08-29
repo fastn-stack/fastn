@@ -1,13 +1,17 @@
 //! # Get Pending Deliveries
 
-use crate::errors::*;
 use crate::PendingDelivery;
+use crate::errors::*;
 
 impl crate::Store {
     /// Called by periodic task to check outbound queue
     pub async fn get_pending_deliveries(
         &self,
     ) -> Result<Vec<PendingDelivery>, GetPendingDeliveriesError> {
+        println!(
+            "🔍 get_pending_deliveries() called for account: {}",
+            self.account_path().display()
+        );
         let conn = self.connection().lock().await;
 
         // Query delivery table for queued emails grouped by recipient
@@ -22,6 +26,11 @@ impl crate::Store {
             .map_err(|e| GetPendingDeliveriesError::DatabaseQueryFailed { source: e })?;
 
         let now = chrono::Utc::now().timestamp();
+        println!(
+            "🔍 Executing pending deliveries query with timestamp: {}",
+            now
+        );
+
         let rows = stmt
             .query_map([now], |row| {
                 let peer_id52_str: String = row.get(0)?;
@@ -42,12 +51,22 @@ impl crate::Store {
             .map_err(|e| GetPendingDeliveriesError::DatabaseQueryFailed { source: e })?;
 
         let mut deliveries = Vec::new();
+        let mut row_count = 0;
         for row in rows {
-            deliveries.push(
-                row.map_err(|e| GetPendingDeliveriesError::DatabaseQueryFailed { source: e })?,
+            let delivery =
+                row.map_err(|e| GetPendingDeliveriesError::DatabaseQueryFailed { source: e })?;
+            println!(
+                "🔍 Found pending delivery: peer={}, count={}",
+                delivery.peer_id52, delivery.email_count
             );
+            deliveries.push(delivery);
+            row_count += 1;
         }
 
+        println!(
+            "🔍 get_pending_deliveries() returning {} deliveries",
+            deliveries.len()
+        );
         Ok(deliveries)
     }
 }

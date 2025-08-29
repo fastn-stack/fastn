@@ -199,10 +199,7 @@ impl fastn_account::AccountManager {
                 println!("📧 Processing email message: {} bytes", raw_message.len());
 
                 // 3. Store in INBOX (this is incoming P2P email from peer)
-                let email_result = account
-                    .mail
-                    .p2p_receive_email(raw_message, peer_id52)
-                    .await;
+                let email_result = account.mail.p2p_receive_email(raw_message, peer_id52).await;
 
                 // 4. Create response based on email processing result
                 let response = match email_result {
@@ -217,8 +214,8 @@ impl fastn_account::AccountManager {
                         println!("❌ Email rejected: {}", e);
                         fastn_account::EmailDeliveryResponse {
                             email_id: "unknown".to_string(),
-                            status: fastn_account::DeliveryStatus::Rejected { 
-                                reason: e.to_string() 
+                            status: fastn_account::DeliveryStatus::Rejected {
+                                reason: e.to_string(),
                             },
                         }
                     }

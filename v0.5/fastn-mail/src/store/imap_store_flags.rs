@@ -1,7 +1,7 @@
 //! # IMAP Store Flags
 
-use crate::errors::*;
 use crate::Flag;
+use crate::errors::*;
 
 impl crate::Store {
     /// Store flags for email messages
@@ -41,10 +41,12 @@ impl crate::Store {
              WHERE folder = ? AND rowid = ?"
         };
 
-        let updated = conn.execute(
-            sql,
-            rusqlite::params![seen, flagged, draft, answered, deleted, folder, uid]
-        ).map_err(|e| ImapStoreFlagsError::DatabaseUpdateFailed { source: e })?;
+        let updated = conn
+            .execute(
+                sql,
+                rusqlite::params![seen, flagged, draft, answered, deleted, folder, uid],
+            )
+            .map_err(|e| ImapStoreFlagsError::DatabaseUpdateFailed { source: e })?;
 
         if updated == 0 {
             return Err(ImapStoreFlagsError::EmailNotFound { uid });

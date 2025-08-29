@@ -1,7 +1,7 @@
 //! # Get Emails for Peer
 
-use crate::errors::*;
 use crate::EmailForDelivery;
+use crate::errors::*;
 
 impl crate::Store {
     /// Called when peer contacts us requesting their emails
