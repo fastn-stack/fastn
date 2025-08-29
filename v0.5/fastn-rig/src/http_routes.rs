@@ -19,7 +19,7 @@ impl fastn_rig::Rig {
         let access_level = match requester {
             None => "Local (Full Admin)",
             Some(key) => {
-                if key.id52() == self.id52() || *key == self.owner() {
+                if key.id52() == self.id52() || *key == *self.owner() {
                     "Authorized (Full Admin)"
                 } else {
                     "Remote P2P (Public Info Only)"
