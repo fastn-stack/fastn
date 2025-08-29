@@ -17,6 +17,23 @@ impl crate::Account {
     ) -> Result<fastn_router::HttpResponse, crate::AccountHttpError> {
         let primary_id52 = self.primary_id52().await.unwrap_or_default();
 
+        // Determine access level based on requester
+        let access_level = match requester {
+            None => "Local (Full Access)",
+            Some(key) => {
+                if self.has_alias(&key.id52()).await {
+                    "Self (Full Access)" 
+                } else {
+                    "Remote P2P (Limited Access)"
+                }
+            }
+        };
+        
+        let requester_info = match requester {
+            None => "Local Browser".to_string(),
+            Some(key) => key.id52(),
+        };
+
         let body = format!(
             "📧 Account Web Interface\n\n\
             Account ID: {}\n\
