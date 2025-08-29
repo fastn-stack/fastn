@@ -23,6 +23,7 @@ fastn-router.workspace = true
 
 # HTTP server dependencies
 hyper = { workspace = true, features = ["full"] }
+hyper-util.workspace = true
 http-body-util.workspace = true
 automerge.workspace = true
 iroh.workspace = true

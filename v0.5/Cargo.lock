@@ -1643,6 +1643,7 @@ dependencies = [
  "fastn-router",
  "http-body-util",
  "hyper",
+ "hyper-util",
  "iroh",
  "rusqlite",
  "serde",
