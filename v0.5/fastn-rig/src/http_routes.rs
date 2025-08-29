@@ -28,9 +28,13 @@ impl fastn_rig::Rig {
             - Multi-account management ✅\n\
             - Endpoint lifecycle management ✅\n\
             - Real-time email processing ✅",
-            self.id52(), self.owner(), request.path, request.method, request.host
+            self.id52(),
+            self.owner(),
+            request.path,
+            request.method,
+            request.host
         );
-        
+
         Ok(fastn_router::HttpResponse::ok(body))
     }
 }

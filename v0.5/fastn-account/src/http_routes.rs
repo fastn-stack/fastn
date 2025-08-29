@@ -9,7 +9,7 @@ impl crate::Account {
         request: &fastn_router::HttpRequest,
     ) -> Result<fastn_router::HttpResponse, crate::AccountHttpError> {
         let primary_id52 = self.primary_id52().await.unwrap_or_default();
-        
+
         let body = format!(
             "📧 Account Web Interface\n\n\
             Account ID: {}\n\
@@ -30,7 +30,7 @@ impl crate::Account {
             - Email storage and indexing ✅",
             primary_id52, request.path, request.method, request.host
         );
-        
+
         Ok(fastn_router::HttpResponse::ok(body))
     }
 }

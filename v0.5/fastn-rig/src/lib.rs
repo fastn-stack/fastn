@@ -32,7 +32,7 @@ pub mod automerge;
 mod email_delivery;
 pub mod endpoint;
 pub mod errors;
-mod http_routes; 
+mod http_routes;
 mod http_server;
 mod rig;
 mod run;
@@ -56,10 +56,10 @@ pub fn resolve_fastn_home(
     }
 }
 
-// Re-export specific error types
+// Re-export specific error types  
 pub use errors::{
     CurrentEntityError, EmailDeliveryError, EndpointError, EntityStatusError,
-    MessageProcessingError, RigCreateError, RigLoadError, RunError,
+    MessageProcessingError, RigCreateError, RigHttpError, RigLoadError, RunError,
 };
 
 /// Type of owner for an endpoint

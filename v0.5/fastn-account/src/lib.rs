@@ -49,15 +49,15 @@ pub mod p2p;
 
 // Re-export specific error types
 pub use errors::{
-    AccountCreateError, AccountHttpError, AccountLoadError, AccountManagerCreateError, AccountManagerLoadError,
-    AuthorizeConnectionError, CreateInitialDocumentsError, FindAccountByAliasError,
-    GetAllEndpointsError, HandleAccountMessageError, HashPasswordError, MigrateUserDatabaseError,
-    StoreCreateError, VerifyPasswordError,
+    AccountCreateError, AccountHttpError, AccountLoadError, AccountManagerCreateError,
+    AccountManagerLoadError, AuthorizeConnectionError, CreateInitialDocumentsError,
+    FindAccountByAliasError, GetAllEndpointsError, HandleAccountMessageError, HashPasswordError,
+    MigrateUserDatabaseError, StoreCreateError, VerifyPasswordError,
 };
 
 // Re-export message types
-pub use p2p::{AccountToAccountMessage, DeliveryStatus, EmailDeliveryResponse};
 pub use fastn_router::{HttpRequest, HttpResponse};
+pub use p2p::{AccountToAccountMessage, DeliveryStatus, EmailDeliveryResponse};
 
 /// Thread-safe handle to an account
 #[derive(Debug, Clone)]

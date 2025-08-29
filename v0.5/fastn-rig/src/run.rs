@@ -148,13 +148,10 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     .map_err(|e| fastn_rig::RunError::ShutdownFailed {
         source: Box::new(e),
     })?;
-    
+
     // Start HTTP server for web interface
-    crate::http_server::start_http_server(
-        account_manager.clone(),
-        rig.clone(),
-        graceful.clone()
-    ).await?;
+    crate::http_server::start_http_server(account_manager.clone(), rig.clone(), graceful.clone())
+        .await?;
 
     // Spawn P2P message handler as a background task
     let p2p_endpoint_manager = std::sync::Arc::new(tokio::sync::Mutex::new(endpoint_manager));
