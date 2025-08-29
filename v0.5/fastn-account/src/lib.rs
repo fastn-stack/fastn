@@ -44,11 +44,12 @@ mod alias;
 pub mod auth;
 pub mod automerge;
 pub mod errors;
+mod http_routes;
 pub mod p2p;
 
 // Re-export specific error types
 pub use errors::{
-    AccountCreateError, AccountLoadError, AccountManagerCreateError, AccountManagerLoadError,
+    AccountCreateError, AccountHttpError, AccountLoadError, AccountManagerCreateError, AccountManagerLoadError,
     AuthorizeConnectionError, CreateInitialDocumentsError, FindAccountByAliasError,
     GetAllEndpointsError, HandleAccountMessageError, HashPasswordError, MigrateUserDatabaseError,
     StoreCreateError, VerifyPasswordError,
@@ -56,6 +57,7 @@ pub use errors::{
 
 // Re-export message types
 pub use p2p::{AccountToAccountMessage, DeliveryStatus, EmailDeliveryResponse};
+pub use fastn_router::{HttpRequest, HttpResponse};
 
 /// Thread-safe handle to an account
 #[derive(Debug, Clone)]

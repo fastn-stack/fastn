@@ -6,8 +6,10 @@ extern crate self as fastn_router;
 
 mod reader;
 mod route;
+mod http_types;
 
 pub use reader::reader;
+pub use http_types::{HttpRequest, HttpResponse};
 
 #[derive(serde::Deserialize, serde::Serialize, Debug, Clone, Default)]
 pub struct Router {

@@ -133,7 +133,7 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     println!("   Email Delivery: polling every 5 seconds");
     println!("   SMTP: planned (port 2525)");
     println!("   IMAP: planned (port 1143)");
-    println!("   HTTP: planned (port 8000)");
+    println!("   HTTP: listening on port 8000");
 
     // Get connection pool before endpoint_manager is moved
     let connection_pool = endpoint_manager.peer_stream_senders().clone();
@@ -148,6 +148,13 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     .map_err(|e| fastn_rig::RunError::ShutdownFailed {
         source: Box::new(e),
     })?;
+    
+    // Start HTTP server for web interface
+    crate::http_server::start_http_server(
+        account_manager.clone(),
+        rig.clone(),
+        graceful.clone()
+    ).await?;
 
     // Spawn P2P message handler as a background task
     let p2p_endpoint_manager = std::sync::Arc::new(tokio::sync::Mutex::new(endpoint_manager));

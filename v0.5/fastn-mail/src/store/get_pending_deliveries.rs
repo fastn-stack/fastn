@@ -51,7 +51,6 @@ impl crate::Store {
             .map_err(|e| GetPendingDeliveriesError::DatabaseQueryFailed { source: e })?;
 
         let mut deliveries = Vec::new();
-        let mut row_count = 0;
         for row in rows {
             let delivery =
                 row.map_err(|e| GetPendingDeliveriesError::DatabaseQueryFailed { source: e })?;
@@ -60,7 +59,6 @@ impl crate::Store {
                 delivery.peer_id52, delivery.email_count
             );
             deliveries.push(delivery);
-            row_count += 1;
         }
 
         println!(

@@ -32,6 +32,8 @@ pub mod automerge;
 mod email_delivery;
 pub mod endpoint;
 pub mod errors;
+mod http_routes; 
+mod http_server;
 mod rig;
 mod run;
 

@@ -19,6 +19,11 @@ autosurgeon.workspace = true
 fastn-id52 = { workspace = true, features = ["automerge"] }
 fastn-mail.workspace = true
 fastn-net.workspace = true
+fastn-router.workspace = true
+
+# HTTP server dependencies
+hyper = { workspace = true, features = ["full"] }
+http-body-util.workspace = true
 automerge.workspace = true
 iroh.workspace = true
 thiserror.workspace = true

@@ -192,6 +192,19 @@ pub enum AuthorizeConnectionError {
     },
 }
 
+/// Error type for Account HTTP routing
+#[derive(Error, Debug)]
+pub enum AccountHttpError {
+    #[error("Failed to get account primary ID52")]
+    PrimaryIdLookupFailed,
+
+    #[error("Invalid HTTP request path: {path}")]
+    InvalidPath { path: String },
+
+    #[error("HTTP method not supported: {method}")]
+    MethodNotSupported { method: String },
+}
+
 /// Error type for AccountManager::handle_account_message function
 #[derive(Error, Debug)]
 pub enum HandleAccountMessageError {

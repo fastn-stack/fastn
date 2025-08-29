@@ -232,6 +232,19 @@ pub enum EmailDeliveryError {
     },
 }
 
+/// Error type for Rig HTTP routing
+#[derive(Error, Debug)]
+pub enum RigHttpError {
+    #[error("Invalid HTTP request path: {path}")]
+    InvalidPath { path: String },
+
+    #[error("HTTP method not supported: {method}")]
+    MethodNotSupported { method: String },
+
+    #[error("Rig configuration access failed")]
+    ConfigAccessFailed,
+}
+
 /// Error type for message processing functions
 #[derive(Error, Debug)]
 pub enum MessageProcessingError {
