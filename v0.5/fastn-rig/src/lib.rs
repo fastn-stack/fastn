@@ -56,7 +56,7 @@ pub fn resolve_fastn_home(
     }
 }
 
-// Re-export specific error types  
+// Re-export specific error types
 pub use errors::{
     CurrentEntityError, EmailDeliveryError, EndpointError, EntityStatusError,
     MessageProcessingError, RigCreateError, RigHttpError, RigLoadError, RunError,

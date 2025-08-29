@@ -211,7 +211,9 @@ async fn account_route(
     account: &fastn_account::Account,
     request: &fastn_router::HttpRequest,
 ) -> fastn_router::HttpResponse {
-    match account.route_http(request).await {
+    // For now, all requests are treated as local (None)
+    // TODO: Implement P2P requester detection for remote browsing
+    match account.route_http(request, None).await {
         Ok(response) => response,
         Err(e) => fastn_router::HttpResponse::internal_error(format!("Account routing error: {e}")),
     }
@@ -222,7 +224,9 @@ async fn rig_route(
     rig: &fastn_rig::Rig,
     request: &fastn_router::HttpRequest,
 ) -> fastn_router::HttpResponse {
-    match rig.route_http(request).await {
+    // For now, all requests are treated as local (None)
+    // TODO: Implement P2P requester detection for remote browsing
+    match rig.route_http(request, None).await {
         Ok(response) => response,
         Err(e) => fastn_router::HttpResponse::internal_error(format!("Rig routing error: {e}")),
     }
