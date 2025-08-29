@@ -19,12 +19,12 @@ impl crate::Account {
 
         // Determine access level based on requester
         let access_level = match requester {
-            None => "Local (Full Access)",
+            None => fastn_router::AccessLevel::Local,
             Some(key) => {
                 if self.has_alias(&key.id52()).await {
-                    "Self (Full Access)" 
+                    fastn_router::AccessLevel::SelfAccess
                 } else {
-                    "Remote P2P (Limited Access)"
+                    fastn_router::AccessLevel::RemotePeer
                 }
             }
         };
@@ -54,7 +54,7 @@ impl crate::Account {
             - P2P email delivery ✅\n\
             - SMTP email processing ✅\n\
             - Email storage and indexing ✅",
-            primary_id52, request.path, request.method, request.host, access_level, requester_info
+            primary_id52, request.path, request.method, request.host, access_level.description(), requester_info
         );
 
         Ok(fastn_router::HttpResponse::ok(body))

@@ -5,6 +5,38 @@
 //! Note: fastn-router provides routing for FTD documents and WASM modules.
 //! These types are for general web application HTTP handling (account/rig interfaces).
 
+/// Access level for HTTP requests based on requester identity
+#[derive(Debug, Clone, PartialEq)]
+pub enum AccessLevel {
+    /// Local browser access (full permissions)
+    Local,
+    /// Self access (requester owns the resource)
+    SelfAccess,
+    /// Remote P2P access with limited permissions
+    RemotePeer,
+}
+
+impl AccessLevel {
+    /// Get human-readable description
+    pub fn description(&self) -> &'static str {
+        match self {
+            AccessLevel::Local => "Local (Full Access)",
+            AccessLevel::SelfAccess => "Self (Full Access)",
+            AccessLevel::RemotePeer => "Remote P2P (Limited Access)",
+        }
+    }
+    
+    /// Check if this access level allows full permissions
+    pub fn is_full_access(&self) -> bool {
+        matches!(self, AccessLevel::Local | AccessLevel::SelfAccess)
+    }
+    
+    /// Check if this is a remote peer request
+    pub fn is_remote(&self) -> bool {
+        matches!(self, AccessLevel::RemotePeer)
+    }
+}
+
 /// HTTP request representation
 #[derive(Debug, Clone)]
 pub struct HttpRequest {

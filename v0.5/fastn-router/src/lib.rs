@@ -8,7 +8,7 @@ mod http_types;
 mod reader;
 mod route;
 
-pub use http_types::{HttpRequest, HttpResponse};
+pub use http_types::{AccessLevel, HttpRequest, HttpResponse};
 pub use reader::reader;
 
 #[derive(serde::Deserialize, serde::Serialize, Debug, Clone, Default)]

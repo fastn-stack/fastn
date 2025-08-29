@@ -170,7 +170,7 @@ async fn route_request(
 
     // Extract ID52 from subdomain
     if let Some(id52) = extract_id52_from_host(&request.host) {
-        println!("🔍 Extracted ID52: {}", id52);
+        println!("🔍 Extracted ID52: {id52}");
 
         // Check if this ID52 belongs to an account
         if let Ok(id52_key) = id52.parse::<fastn_id52::PublicKey>()
@@ -213,10 +213,9 @@ async fn account_route(
 ) -> fastn_router::HttpResponse {
     // For now, all requests are treated as local (None)
     // TODO: Implement P2P requester detection for remote browsing
-    match account.route_http(request, None).await {
-        Ok(response) => response,
-        Err(e) => fastn_router::HttpResponse::internal_error(format!("Account routing error: {e}")),
-    }
+    account.route_http(request, None).await.unwrap_or_else(|e| {
+        fastn_router::HttpResponse::internal_error(format!("Account routing error: {e}"))
+    })
 }
 
 /// Handle requests routed to the rig
@@ -226,8 +225,7 @@ async fn rig_route(
 ) -> fastn_router::HttpResponse {
     // For now, all requests are treated as local (None)
     // TODO: Implement P2P requester detection for remote browsing
-    match rig.route_http(request, None).await {
-        Ok(response) => response,
-        Err(e) => fastn_router::HttpResponse::internal_error(format!("Rig routing error: {e}")),
-    }
+    rig.route_http(request, None).await.unwrap_or_else(|e| {
+        fastn_router::HttpResponse::internal_error(format!("Rig routing error: {e}"))
+    })
 }

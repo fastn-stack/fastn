@@ -17,12 +17,12 @@ impl fastn_rig::Rig {
     ) -> Result<fastn_router::HttpResponse, crate::RigHttpError> {
         // Determine access level based on requester
         let access_level = match requester {
-            None => "Local (Full Admin)",
+            None => fastn_router::AccessLevel::Local,
             Some(key) => {
                 if key.id52() == self.id52() || *key == *self.owner() {
-                    "Authorized (Full Admin)"
+                    fastn_router::AccessLevel::SelfAccess
                 } else {
-                    "Remote P2P (Public Info Only)"
+                    fastn_router::AccessLevel::RemotePeer
                 }
             }
         };

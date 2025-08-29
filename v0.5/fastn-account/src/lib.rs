@@ -56,7 +56,7 @@ pub use errors::{
 };
 
 // Re-export message types
-pub use fastn_router::{HttpRequest, HttpResponse};
+pub use fastn_router::{AccessLevel, HttpRequest, HttpResponse};
 pub use p2p::{AccountToAccountMessage, DeliveryStatus, EmailDeliveryResponse};
 
 /// Thread-safe handle to an account
