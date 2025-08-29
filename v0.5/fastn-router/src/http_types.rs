@@ -25,12 +25,12 @@ impl AccessLevel {
             AccessLevel::RemotePeer => "Remote P2P (Limited Access)",
         }
     }
-    
+
     /// Check if this access level allows full permissions
     pub fn is_full_access(&self) -> bool {
         matches!(self, AccessLevel::Local | AccessLevel::SelfAccess)
     }
-    
+
     /// Check if this is a remote peer request
     pub fn is_remote(&self) -> bool {
         matches!(self, AccessLevel::RemotePeer)

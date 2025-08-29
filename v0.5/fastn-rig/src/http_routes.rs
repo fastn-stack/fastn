@@ -26,12 +26,12 @@ impl fastn_rig::Rig {
                 }
             }
         };
-        
+
         let requester_info = match requester {
             None => "Local Browser".to_string(),
             Some(key) => key.id52(),
         };
-        
+
         let body = format!(
             "⚙️ Rig Management Interface\n\n\
             Rig ID: {}\n\

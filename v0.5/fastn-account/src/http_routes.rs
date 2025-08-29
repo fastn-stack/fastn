@@ -28,7 +28,7 @@ impl crate::Account {
                 }
             }
         };
-        
+
         let requester_info = match requester {
             None => "Local Browser".to_string(),
             Some(key) => key.id52(),
@@ -54,7 +54,12 @@ impl crate::Account {
             - P2P email delivery ✅\n\
             - SMTP email processing ✅\n\
             - Email storage and indexing ✅",
-            primary_id52, request.path, request.method, request.host, access_level.description(), requester_info
+            primary_id52,
+            request.path,
+            request.method,
+            request.host,
+            access_level.description(),
+            requester_info
         );
 
         Ok(fastn_router::HttpResponse::ok(body))
