@@ -58,7 +58,9 @@ impl fastn_rig::Rig {
             self.owner(),
             request.path,
             request.method,
-            request.host
+            request.host,
+            access_level,
+            requester_info
         );
 
         Ok(fastn_router::HttpResponse::ok(body))
