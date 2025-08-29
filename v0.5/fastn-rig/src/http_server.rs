@@ -102,8 +102,8 @@ async fn handle_connection(
     let n = stream.try_read(&mut buffer)?;
     let request = String::from_utf8_lossy(&buffer[..n]);
 
-    // Parse HTTP request
-    let http_request = parse_request(&request);
+    // Convert hyper request to our HttpRequest type
+    let http_request = convert_hyper_request(&req);
 
     println!(
         "🌐 HTTP Request: {} {}",
