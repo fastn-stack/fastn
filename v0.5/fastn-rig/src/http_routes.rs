@@ -59,7 +59,7 @@ impl fastn_rig::Rig {
             request.path,
             request.method,
             request.host,
-            access_level,
+            access_level.description(),
             requester_info
         );
 

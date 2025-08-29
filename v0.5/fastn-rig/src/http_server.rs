@@ -121,8 +121,8 @@ async fn handle_connection(
     Ok(())
 }
 
-/// Parse HTTP request for host and path
-fn parse_request(request: &str) -> fastn_router::HttpRequest {
+/// Convert hyper request to our HttpRequest type
+fn convert_hyper_request(req: &hyper::Request<hyper::body::Incoming>) -> fastn_router::HttpRequest {
     let mut host = "localhost".to_string();
     let mut path = "/".to_string();
     let mut method = "GET".to_string();
