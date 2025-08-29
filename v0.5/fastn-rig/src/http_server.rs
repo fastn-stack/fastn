@@ -245,7 +245,7 @@ async fn proxy_to_remote_peer(
         - HTTP request/response types ✅\n\
         - Protocol header with proxy data ✅\n\
         - Request serialization framework ✅",
-        request.method, request.path, request.host, target_id52
+        request.method, request.path, request.host
     );
 
     fastn_router::HttpResponse::ok(body)
