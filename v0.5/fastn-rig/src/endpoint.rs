@@ -287,37 +287,72 @@ async fn handle_connection(
                 // Accept a bidirectional stream with protocol negotiation
                 match fastn_net::accept_bi(&conn, &expected_protocols).await {
                     Ok((protocol, mut send, mut recv)) => {
-                        // Read the actual message content
-                        match fastn_net::next_string(&mut recv).await {
-                            Ok(message_str) => {
-                                // TODO: Parse and process the message based on protocol type
-                                // For now, just log it
-                                tracing::info!(
-                                    "Received {protocol:?} message on {our_endpoint} from {peer_key}: {} bytes",
-                                    message_str.len()
-                                );
+                        tracing::info!("Accepted {protocol:?} stream from {peer_key} to {our_endpoint}");
 
-                                // Send the message through the channel for processing
-                                if let Err(e) = message_tx
-                                    .send(fastn_rig::P2PMessage {
-                                        our_endpoint,
-                                        owner_type: owner_type.clone(),
-                                        peer_id52: peer_key,
-                                        message: message_str.into_bytes(),
-                                    })
-                                    .await
-                                {
-                                    tracing::error!("Failed to send message to channel: {}", e);
-                                }
-
-                                // Send acknowledgment
-                                if let Err(e) = send.write_all(format!("{}\n", fastn_net::ACK).as_bytes()).await {
-                                    tracing::error!("Failed to send ACK: {}", e);
+                        match protocol {
+                            fastn_net::Protocol::HttpProxy => {
+                                // Handle incoming HTTP request from remote peer
+                                tracing::info!("Handling HTTP proxy request from {} to {}", peer_key, our_endpoint);
+                                
+                                if let Err(e) = handle_incoming_http_request(
+                                    recv, send, &peer_key, &our_endpoint, &account_manager
+                                ).await {
+                                    tracing::error!("Failed to handle HTTP request: {}", e);
+                                    break;
                                 }
                             }
-                            Err(e) => {
-                                tracing::error!("Failed to read message: {}", e);
-                                break;
+                            fastn_net::Protocol::AccountToAccount => {
+                                // Handle email messages
+                                match fastn_net::next_string(&mut recv).await {
+                                    Ok(message_str) => {
+                                        tracing::info!(
+                                            "Received {protocol:?} message on {our_endpoint} from {peer_key}: {} bytes",
+                                            message_str.len()
+                                        );
+
+                                        // Send the message through the channel for processing
+                                        if let Err(e) = message_tx
+                                            .send(fastn_rig::P2PMessage {
+                                                our_endpoint,
+                                                owner_type: owner_type.clone(),
+                                                peer_id52: peer_key,
+                                                message: message_str.into_bytes(),
+                                            })
+                                            .await
+                                        {
+                                            tracing::error!("Failed to send message to channel: {}", e);
+                                        }
+
+                                        // Send acknowledgment
+                                        if let Err(e) = send.write_all(format!("{}\n", fastn_net::ACK).as_bytes()).await {
+                                            tracing::error!("Failed to send ACK: {}", e);
+                                        }
+                                    }
+                                    Err(e) => {
+                                        tracing::error!("Failed to read message: {}", e);
+                                        break;
+                                    }
+                                }
+                            }
+                            _ => {
+                                // Handle other protocols (ping, etc.)
+                                match fastn_net::next_string(&mut recv).await {
+                                    Ok(message_str) => {
+                                        tracing::info!(
+                                            "Received {protocol:?} message on {our_endpoint} from {peer_key}: {} bytes",
+                                            message_str.len()
+                                        );
+                                        
+                                        // Send acknowledgment for non-HTTP protocols
+                                        if let Err(e) = send.write_all(format!("{}\n", fastn_net::ACK).as_bytes()).await {
+                                            tracing::error!("Failed to send ACK: {}", e);
+                                        }
+                                    }
+                                    Err(e) => {
+                                        tracing::error!("Failed to read message: {}", e);
+                                        break;
+                                    }
+                                }
                             }
                         }
                     }
