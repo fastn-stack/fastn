@@ -124,6 +124,13 @@ impl fastn_account::Account {
         // Create Automerge documents for the account using type-safe API
         Self::create_initial_documents(&automerge_db, &public_key, None, None)?;
 
+        // Copy default UI content from fastn-home/src to account/public
+        copy_src_to_public(&account_path).await.map_err(|e| {
+            tracing::warn!("Failed to copy UI content: {}", e);
+            // Don't fail account creation if UI copy fails
+            e
+        }).ok();
+
         tracing::info!("Created new account with primary alias: {}", id52);
 
         // Create account instance
