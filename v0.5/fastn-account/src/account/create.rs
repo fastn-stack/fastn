@@ -286,6 +286,36 @@ async fn copy_src_to_public(
     Ok(())
 }
 
+/// Copy embedded directory contents to filesystem
+async fn copy_embedded_dir(
+    embedded_dir: &include_dir::Dir,
+    dst: &std::path::Path,
+) -> Result<(), std::io::Error> {
+    // Copy all files in the embedded directory
+    for file in embedded_dir.files() {
+        let file_path = dst.join(file.path());
+        
+        // Create parent directories if needed
+        if let Some(parent) = file_path.parent() {
+            tokio::fs::create_dir_all(parent).await?;
+        }
+        
+        // Write file content
+        tokio::fs::write(&file_path, file.contents()).await?;
+    }
+    
+    // Recursively copy subdirectories
+    for subdir in embedded_dir.dirs() {
+        let subdir_path = dst.join(subdir.path());
+        tokio::fs::create_dir_all(&subdir_path).await?;
+        
+        // Recursive call for subdirectory
+        Box::pin(copy_embedded_dir(subdir, &subdir_path)).await?;
+    }
+    
+    Ok(())
+}
+
 /// Recursively copy directory contents
 async fn copy_dir_recursive(
     src: &std::path::Path,
