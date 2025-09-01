@@ -232,3 +232,57 @@ impl fastn_account::Account {
         Ok(())
     }
 }
+
+/// Copy default UI content from fastn-home/src to account/public
+async fn copy_src_to_public(account_path: &std::path::Path) -> Result<(), crate::CreateInitialDocumentsError> {
+    // Find fastn-home directory (account_path is fastn-home/accounts/account-id52)
+    let fastn_home = account_path
+        .parent()
+        .and_then(|p| p.parent())
+        .ok_or_else(|| crate::CreateInitialDocumentsError::AliasDocumentCreationFailed {
+            source: Box::new(std::io::Error::new(
+                std::io::ErrorKind::NotFound,
+                "Could not find fastn-home directory"
+            )),
+        })?;
+    
+    let src_dir = fastn_home.join("src");
+    let public_dir = account_path.join("public");
+    
+    // Only copy if src directory exists
+    if src_dir.exists() {
+        tracing::info!("Copying default UI content from {} to {}", src_dir.display(), public_dir.display());
+        
+        copy_dir_recursive(&src_dir, &public_dir).await.map_err(|e| {
+            crate::CreateInitialDocumentsError::AliasDocumentCreationFailed {
+                source: Box::new(e),
+            }
+        })?;
+        
+        tracing::info!("✅ Copied default UI content to account public directory");
+    } else {
+        tracing::debug!("No src directory found at {}, skipping UI content copy", src_dir.display());
+    }
+    
+    Ok(())
+}
+
+/// Recursively copy directory contents
+async fn copy_dir_recursive(src: &std::path::Path, dst: &std::path::Path) -> Result<(), std::io::Error> {
+    tokio::fs::create_dir_all(dst).await?;
+    
+    let mut entries = tokio::fs::read_dir(src).await?;
+    while let Some(entry) = entries.next_entry().await? {
+        let entry_path = entry.path();
+        let file_name = entry.file_name();
+        let dst_path = dst.join(&file_name);
+        
+        if entry_path.is_dir() {
+            Box::pin(copy_dir_recursive(&entry_path, &dst_path)).await?;
+        } else {
+            tokio::fs::copy(&entry_path, &dst_path).await?;
+        }
+    }
+    
+    Ok(())
+}
