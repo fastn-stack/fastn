@@ -17,8 +17,18 @@ tokio.workspace = true
 # Error handling
 thiserror.workspace = true
 
-# HTML escaping for templates
-html-escape = "0.2"
+# Template engine (Django-style for Rust)
+tera = "1"
+
+# Async trait support
+async-trait.workspace = true
+
+# Serialization for template context
+serde.workspace = true
+serde_json.workspace = true
+
+# Time handling for templates
+chrono.workspace = true
 
 # Logging
 tracing.workspace = true

@@ -6,20 +6,40 @@ use crate::errors::FbrError;
 pub struct FolderBasedRouter {
     /// Path to the base directory (account or rig directory)
     base_path: std::path::PathBuf,
+    /// Template engine for .fthml processing
+    template_engine: Option<tera::Tera>,
 }
 
 impl FolderBasedRouter {
     /// Create new folder-based router for given directory
     pub fn new(base_path: impl Into<std::path::PathBuf>) -> Self {
+        let base_path = base_path.into();
+        
+        // Initialize template engine for the public directory
+        let template_engine = Self::init_template_engine(&base_path).ok();
+        
         Self {
-            base_path: base_path.into(),
+            base_path,
+            template_engine,
         }
     }
+    
+    /// Initialize Tera template engine for the public directory
+    fn init_template_engine(base_path: &std::path::Path) -> Result<tera::Tera, tera::Error> {
+        let public_dir = base_path.join("public");
+        let template_glob = public_dir.join("**").join("*.fthml");
+        
+        tracing::debug!("Initializing templates from: {}", template_glob.display());
+        
+        // Load all .fthml templates from public directory
+        tera::Tera::new(&template_glob.to_string_lossy())
+    }
 
-    /// Route HTTP request to file or template
+    /// Route HTTP request to file or template with context
     pub async fn route_request(
         &self,
         request: &fastn_router::HttpRequest,
+        context: Option<&crate::TemplateContext>,
     ) -> Result<fastn_router::HttpResponse, FbrError> {
         tracing::debug!("FBR routing: {} {}", request.method, request.path);
 
@@ -70,7 +90,7 @@ impl FolderBasedRouter {
         } else {
             // Serve file based on extension
             if file_path.extension().and_then(|e| e.to_str()) == Some("fthml") {
-                self.serve_template(&file_path).await
+                self.serve_template(&file_path, context).await
             } else {
                 self.serve_file(&file_path).await
             }
@@ -111,15 +131,57 @@ impl FolderBasedRouter {
         Ok(response)
     }
 
-    /// Serve .fthml template
+    /// Serve .fthml template with context
     async fn serve_template(
-        &self,
-        _template_path: &std::path::Path,
+        &self, 
+        template_path: &std::path::Path,
+        context: Option<&crate::TemplateContext>,
     ) -> Result<fastn_router::HttpResponse, FbrError> {
-        // TODO: Implement proper FTD template processing
-        // This requires integration with fastn-compiler for .fthml → HTML compilation
-
-        Ok(fastn_router::HttpResponse::new(501, "Not Implemented")
-            .body("FTD template processing not yet implemented".to_string()))
+        tracing::debug!("Processing .fthml template: {}", template_path.display());
+        
+        let template_engine = match &self.template_engine {
+            Some(engine) => engine,
+            None => {
+                return Ok(fastn_router::HttpResponse::new(500, "Internal Server Error")
+                    .body("Template engine not initialized".to_string()));
+            }
+        };
+        
+        // Get template name relative to public directory
+        let public_dir = self.base_path.join("public");
+        let template_name = template_path
+            .strip_prefix(&public_dir)
+            .map_err(|_| FbrError::InvalidPath {
+                path: template_path.display().to_string(),
+            })?
+            .to_string_lossy()
+            .to_string();
+        
+        // Create template context
+        let mut tera_context = match context {
+            Some(ctx) => ctx.to_tera_context(),
+            None => tera::Context::new(),
+        };
+        
+        // Add request context
+        tera_context.insert("request_path", &template_path.display().to_string());
+        tera_context.insert("timestamp", &chrono::Utc::now().timestamp());
+        
+        // Render template
+        match template_engine.render(&template_name, &tera_context) {
+            Ok(rendered) => {
+                let mut response = fastn_router::HttpResponse::new(200, "OK");
+                response.headers.insert("Content-Type".to_string(), "text/html; charset=utf-8".to_string());
+                response = response.body(rendered);
+                Ok(response)
+            }
+            Err(e) => {
+                tracing::error!("Template rendering failed: {}", e);
+                Err(FbrError::TemplateProcessingFailed {
+                    template: template_name,
+                    source: Box::new(e),
+                })
+            }
+        }
     }
 }

@@ -34,9 +34,10 @@ impl crate::Account {
             Some(key) => key.id52(),
         };
 
-        // Try folder-based routing first
+        // Try folder-based routing first with account context
         let fbr = fastn_fbr::FolderBasedRouter::new(self.path().await);
-        if let Ok(response) = fbr.route_request(request).await {
+        let account_context = self.create_template_context().await;
+        if let Ok(response) = fbr.route_request(request, Some(&account_context)).await {
             return Ok(response);
         }
 

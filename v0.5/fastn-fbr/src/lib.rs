@@ -28,9 +28,11 @@
 
 extern crate self as fastn_fbr;
 
+mod template_context;
 mod errors;
 mod router;
 
+pub use template_context::TemplateContext;
 pub use errors::*;
 pub use router::FolderBasedRouter;
 

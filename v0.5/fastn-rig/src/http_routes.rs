@@ -34,7 +34,7 @@ impl fastn_rig::Rig {
 
         // Try folder-based routing first
         let fbr = fastn_fbr::FolderBasedRouter::new(&self.path);
-        if let Ok(response) = fbr.route_request(request).await {
+        if let Ok(response) = fbr.route_request(request, Some(self)).await {
             return Ok(response);
         }
 
