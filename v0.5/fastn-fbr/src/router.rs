@@ -106,34 +106,13 @@ impl FolderBasedRouter {
         Ok(response)
     }
 
-    /// Serve .fthml template (placeholder)
-    async fn serve_template(&self, template_path: &std::path::Path) -> Result<fastn_router::HttpResponse, FbrError> {
-        tracing::info!("Processing .fthml template: {}", template_path.display());
-
-        // TODO: Implement FTD template processing
-        // For now, serve as plain HTML
-        let content = tokio::fs::read_to_string(template_path).await.map_err(|e| {
-            FbrError::FileReadFailed {
-                path: template_path.display().to_string(),
-                source: e,
-            }
-        })?;
-
-        let processed_content = format!(
-            "<!-- Processed .fthml template: {} -->\n\
-            <html><head><title>FTD Template</title></head><body>\n\
-            <h1>FTD Template (Processing TODO)</h1>\n\
-            <pre>{}</pre>\n\
-            </body></html>",
-            template_path.display(),
-            html_escape::encode_text(&content)
-        );
-
-        let mut response = fastn_router::HttpResponse::new(200, "OK");
-        response.headers.insert("Content-Type".to_string(), "text/html; charset=utf-8".to_string());
-        response = response.body(processed_content);
-
-        Ok(response)
+    /// Serve .fthml template 
+    async fn serve_template(&self, _template_path: &std::path::Path) -> Result<fastn_router::HttpResponse, FbrError> {
+        // TODO: Implement proper FTD template processing
+        // This requires integration with fastn-compiler for .fthml → HTML compilation
+        
+        Ok(fastn_router::HttpResponse::new(501, "Not Implemented")
+            .body("FTD template processing not yet implemented".to_string()))
     }
 
 }
