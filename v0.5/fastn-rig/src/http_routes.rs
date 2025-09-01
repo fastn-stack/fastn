@@ -32,9 +32,10 @@ impl fastn_rig::Rig {
             Some(key) => key.id52(),
         };
 
-        // Try folder-based routing first
+        // Try folder-based routing first with rig context
         let fbr = fastn_fbr::FolderBasedRouter::new(&self.path);
-        if let Ok(response) = fbr.route_request(request, Some(self)).await {
+        let rig_context = self.create_template_context().await;
+        if let Ok(response) = fbr.route_request(request, Some(&rig_context)).await {
             return Ok(response);
         }
 
