@@ -22,11 +22,8 @@ fastn-net.workspace = true
 fastn-router.workspace = true
 fastn-fbr.workspace = true
 
-# Template dependencies for rig template context
+# Template dependencies for rig template context  
 tera.workspace = true
-serde.workspace = true
-serde_json.workspace = true
-chrono.workspace = true
 
 # HTTP server dependencies
 hyper = { workspace = true, features = ["full"] }
