@@ -1,49 +1,56 @@
-//! # Template Context
+//! # Template Context with Custom Functions
 //!
-//! Generic context object for template rendering.
+//! Performance-oriented template context using Tera custom functions.
 
-/// Template context data container
+/// Function registry for template rendering
 /// 
-/// This allows passing arbitrary data to templates without fastn-fbr
-/// depending on specific crate types (Account, Rig, etc.)
-#[derive(Debug, Clone)]
+/// This allows registering functions that can be called from templates
+/// for dynamic data fetching, avoiding pre-loading all data.
+pub type TemplateFunctionRegistry = std::collections::HashMap<String, Box<dyn tera::Function>>;
+
+/// Template context with dynamic function support
+#[derive(Default)]
 pub struct TemplateContext {
-    /// Context data as JSON value
-    pub data: serde_json::Value,
+    /// Custom functions available to templates
+    pub functions: TemplateFunctionRegistry,
+    /// Minimal static data (only request info, etc.)
+    pub static_data: std::collections::HashMap<String, serde_json::Value>,
 }
 
 impl TemplateContext {
-    /// Create new empty template context
+    /// Create new template context
     pub fn new() -> Self {
-        Self {
-            data: serde_json::json!({}),
-        }
+        Self::default()
     }
     
-    /// Add data to template context
-    pub fn insert<T: serde::Serialize>(mut self, key: &str, value: &T) -> Self {
-        if let serde_json::Value::Object(ref mut map) = self.data {
-            map.insert(key.to_string(), serde_json::to_value(value).unwrap_or(serde_json::Value::Null));
-        }
+    /// Register a custom function for templates
+    pub fn register_function(mut self, name: &str, function: Box<dyn tera::Function>) -> Self {
+        self.functions.insert(name.to_string(), function);
         self
     }
     
-    /// Convert to Tera context for rendering
-    pub fn to_tera_context(&self) -> tera::Context {
-        let mut context = tera::Context::new();
+    /// Add static data to context
+    pub fn insert<T: serde::Serialize>(mut self, key: &str, value: &T) -> Self {
+        self.static_data.insert(
+            key.to_string(), 
+            serde_json::to_value(value).unwrap_or(serde_json::Value::Null)
+        );
+        self
+    }
+    
+    /// Convert to Tera context with registered functions
+    pub fn to_tera_context(&self, template_engine: &mut tera::Tera) -> tera::Context {
+        // Register all custom functions with the template engine
+        for (name, function) in &self.functions {
+            template_engine.register_function(name, function.clone());
+        }
         
-        if let serde_json::Value::Object(map) = &self.data {
-            for (key, value) in map {
-                context.insert(key, value);
-            }
+        // Create context with static data
+        let mut context = tera::Context::new();
+        for (key, value) in &self.static_data {
+            context.insert(key, value);
         }
         
         context
-    }
-}
-
-impl Default for TemplateContext {
-    fn default() -> Self {
-        Self::new()
     }
 }
