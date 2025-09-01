@@ -6,7 +6,7 @@
 /// 
 /// This allows registering functions that can be called from templates
 /// for dynamic data fetching, avoiding pre-loading all data.
-pub type TemplateFunctionRegistry = std::collections::HashMap<String, Box<dyn tera::Function>>;
+pub type TemplateFunctionRegistry = std::collections::HashMap<String, fn(&std::collections::HashMap<String, tera::Value>) -> tera::Result<tera::Value>>;
 
 /// Template context with dynamic function support
 #[derive(Default)]
@@ -24,7 +24,11 @@ impl TemplateContext {
     }
     
     /// Register a custom function for templates
-    pub fn register_function(mut self, name: &str, function: Box<dyn tera::Function>) -> Self {
+    pub fn register_function(
+        mut self, 
+        name: &str, 
+        function: fn(&std::collections::HashMap<String, tera::Value>) -> tera::Result<tera::Value>
+    ) -> Self {
         self.functions.insert(name.to_string(), function);
         self
     }
@@ -42,7 +46,7 @@ impl TemplateContext {
     pub fn to_tera_context(&self, template_engine: &mut tera::Tera) -> tera::Context {
         // Register all custom functions with the template engine
         for (name, function) in &self.functions {
-            template_engine.register_function(name, function.clone());
+            template_engine.register_function(name, *function);
         }
         
         // Create context with static data

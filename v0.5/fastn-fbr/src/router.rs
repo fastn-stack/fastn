@@ -177,7 +177,7 @@ impl FolderBasedRouter {
             let mut engine_copy = template_engine.clone();
             if let Some(ctx) = context {
                 for (name, function) in &ctx.functions {
-                    engine_copy.register_function(name, function.clone());
+                    engine_copy.register_function(name, *function);
                 }
             }
             &engine_copy
