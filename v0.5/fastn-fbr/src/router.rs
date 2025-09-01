@@ -171,21 +171,19 @@ impl FolderBasedRouter {
         tera_context.insert("request_path", &template_path.display().to_string());
         tera_context.insert("timestamp", &chrono::Utc::now().timestamp());
         
-        // Render template (use original engine or the copy with functions)
-        let engine_to_use = if context.is_some() {
-            // Create new engine with registered functions
-            let mut engine_copy = template_engine.clone();
-            if let Some(ctx) = context {
-                for (name, function) in &ctx.functions {
-                    engine_copy.register_function(name, *function);
-                }
+        // Register functions and render template
+        let rendered = if let Some(ctx) = context {
+            // Clone engine and register functions
+            let mut engine_with_functions = template_engine.clone();
+            for (name, function) in &ctx.functions {
+                engine_with_functions.register_function(name, *function);
             }
-            &engine_copy
+            engine_with_functions.render(&template_name, &tera_context)
         } else {
-            template_engine
+            template_engine.render(&template_name, &tera_context)
         };
         
-        match engine_to_use.render(&template_name, &tera_context) {
+        match rendered {
             Ok(rendered) => {
                 let mut response = fastn_router::HttpResponse::new(200, "OK");
                 response.headers.insert("Content-Type".to_string(), "text/html; charset=utf-8".to_string());
