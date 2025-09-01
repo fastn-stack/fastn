@@ -74,7 +74,6 @@ pub enum OwnerType {
 #[derive(Clone)]
 pub struct Rig {
     /// Path to fastn_home
-    #[expect(unused)]
     pub(crate) path: std::path::PathBuf,
     /// Rig's identity
     pub(crate) secret_key: fastn_id52::SecretKey,

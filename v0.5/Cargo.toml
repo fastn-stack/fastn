@@ -71,6 +71,7 @@ fastn-automerge = { path = "fastn-automerge" }
 fastn-builtins = { path = "../fastn-builtins" }
 fastn-compiler = { path = "fastn-compiler" }
 fastn-continuation = { path = "fastn-continuation" }
+fastn-fbr = { path = "fastn-fbr" }
 fastn-id52 = { path = "fastn-id52" }
 fastn-mail = { path = "fastn-mail" }
 fastn-net = { path = "fastn-net" }

@@ -32,6 +32,13 @@ impl fastn_rig::Rig {
             Some(key) => key.id52(),
         };
 
+        // Try folder-based routing first
+        let fbr = fastn_fbr::FolderBasedRouter::new(&self.path);
+        if let Ok(response) = fbr.route_request(request).await {
+            return Ok(response);
+        }
+        
+        // Fallback to default rig interface
         let body = format!(
             "⚙️ Rig Management Interface\n\n\
             Rig ID: {}\n\

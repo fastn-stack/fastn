@@ -1450,6 +1450,7 @@ dependencies = [
  "autosurgeon",
  "chrono",
  "fastn-automerge",
+ "fastn-fbr",
  "fastn-id52",
  "fastn-mail",
  "fastn-router",
@@ -1518,6 +1519,17 @@ version = "0.1.0"
 dependencies = [
  "tracing",
  "trait-variant",
+]
+
+[[package]]
+name = "fastn-fbr"
+version = "0.1.0"
+dependencies = [
+ "fastn-router",
+ "html-escape",
+ "thiserror 2.0.16",
+ "tokio",
+ "tracing",
 ]
 
 [[package]]
@@ -1637,6 +1649,7 @@ dependencies = [
  "dirs",
  "fastn-account",
  "fastn-automerge",
+ "fastn-fbr",
  "fastn-id52",
  "fastn-mail",
  "fastn-net",
@@ -2218,6 +2231,15 @@ name = "hostname-validator"
 version = "1.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f558a64ac9af88b5ba400d99b579451af0d39c6d360980045b91aac966d705e2"
+
+[[package]]
+name = "html-escape"
+version = "0.2.13"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6d1ad449764d627e22bfd7cd5e8868264fc9236e07c752972b4080cd351cb476"
+dependencies = [
+ "utf8-width",
+]
 
 [[package]]
 name = "http"
@@ -5504,6 +5526,12 @@ dependencies = [
  "percent-encoding",
  "serde",
 ]
+
+[[package]]
+name = "utf8-width"
+version = "0.1.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "86bd8d4e895da8537e5315b8254664e6b769c4ff3db18321b297a1e7004392e3"
 
 [[package]]
 name = "utf8_iter"

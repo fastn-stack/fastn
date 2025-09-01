@@ -34,6 +34,13 @@ impl crate::Account {
             Some(key) => key.id52(),
         };
 
+        // Try folder-based routing first
+        let fbr = fastn_fbr::FolderBasedRouter::new(self.path().await);
+        if let Ok(response) = fbr.route_request(request).await {
+            return Ok(response);
+        }
+        
+        // Fallback to default account interface
         let body = format!(
             "📧 Account Web Interface\n\n\
             Account ID: {}\n\

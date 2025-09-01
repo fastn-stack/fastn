@@ -13,6 +13,7 @@ fastn-id52 = { workspace = true, features = ["automerge"] }
 fastn-automerge.workspace = true
 fastn-mail.workspace = true
 fastn-router.workspace = true
+fastn-fbr.workspace = true
 autosurgeon.workspace = true
 serde.workspace = true
 serde_json.workspace = true

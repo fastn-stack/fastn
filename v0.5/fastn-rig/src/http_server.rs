@@ -34,13 +34,14 @@ pub async fn start_http_server(
                 .map_err(|e| fastn_rig::RunError::ShutdownFailed {
                     source: Box::new(e),
                 })?;
-            
-            let actual_port = listener.local_addr()
+
+            let actual_port = listener
+                .local_addr()
                 .map_err(|e| fastn_rig::RunError::ShutdownFailed {
                     source: Box::new(e),
                 })?
                 .port();
-                
+
             println!("🌐 HTTP server auto-selected port {actual_port}");
             tracing::info!("🌐 HTTP server bound to 127.0.0.1:{actual_port}");
             listener
@@ -53,7 +54,7 @@ pub async fn start_http_server(
                 .map_err(|e| fastn_rig::RunError::ShutdownFailed {
                     source: Box::new(e),
                 })?;
-                
+
             println!("🌐 HTTP server listening on http://localhost:{http_port}");
             tracing::info!("🌐 HTTP server bound to {bind_addr}");
             listener
@@ -247,7 +248,7 @@ fn convert_to_hyper_response(
 async fn proxy_to_remote_peer(
     target_id52: &str,
     request: &fastn_router::HttpRequest,
-    app: &HttpApp,
+    _app: &HttpApp,
 ) -> fastn_router::HttpResponse {
     println!("🚀 Attempting to proxy to remote peer: {target_id52}");
 

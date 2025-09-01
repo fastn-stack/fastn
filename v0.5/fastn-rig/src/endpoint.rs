@@ -293,7 +293,7 @@ async fn handle_connection(
                             fastn_net::Protocol::HttpProxy => {
                                 // Handle incoming HTTP request from remote peer
                                 tracing::info!("Handling HTTP proxy request from {} to {}", peer_key, our_endpoint);
-                                
+
                                 if let Err(e) = handle_incoming_http_request(
                                     recv, send, &peer_key, &our_endpoint, &account_manager
                                 ).await {
@@ -342,7 +342,7 @@ async fn handle_connection(
                                             "Received {protocol:?} message on {our_endpoint} from {peer_key}: {} bytes",
                                             message_str.len()
                                         );
-                                        
+
                                         // Send acknowledgment for non-HTTP protocols
                                         if let Err(e) = send.write_all(format!("{}\n", fastn_net::ACK).as_bytes()).await {
                                             tracing::error!("Failed to send ACK: {}", e);
