@@ -39,7 +39,7 @@ impl crate::Account {
         if let Ok(response) = fbr.route_request(request).await {
             return Ok(response);
         }
-        
+
         // Fallback to default account interface
         let body = format!(
             "📧 Account Web Interface\n\n\

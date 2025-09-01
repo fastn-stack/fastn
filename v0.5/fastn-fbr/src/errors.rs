@@ -22,9 +22,9 @@ pub enum FbrError {
     InvalidPath { path: String },
 
     #[error("Template processing failed: {template}")]
-    TemplateProcessingFailed { 
+    TemplateProcessingFailed {
         template: String,
-        #[source] 
+        #[source]
         source: Box<dyn std::error::Error + Send + Sync>,
     },
 

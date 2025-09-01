@@ -31,7 +31,7 @@ impl FolderBasedRouter {
 
         // Clean and validate path
         let clean_path = self.clean_path(&request.path)?;
-        
+
         // Check for directory traversal attacks
         if clean_path.contains("..") || clean_path.starts_with('/') {
             return Err(FbrError::InvalidPath {
@@ -61,18 +61,18 @@ impl FolderBasedRouter {
             // Try index.html in directory
             let index_path = file_path.join("index.html");
             if index_path.exists() {
-                return self.serve_file(&index_path).await;
+                self.serve_file(&index_path).await
             } else {
-                return Err(FbrError::FileNotFound {
+                Err(FbrError::FileNotFound {
                     path: file_path.display().to_string(),
-                });
+                })
             }
         } else {
             // Serve file based on extension
             if file_path.extension().and_then(|e| e.to_str()) == Some("fthml") {
-                return self.serve_template(&file_path).await;
+                self.serve_template(&file_path).await
             } else {
-                return self.serve_file(&file_path).await;
+                self.serve_file(&file_path).await
             }
         }
     }
@@ -84,13 +84,16 @@ impl FolderBasedRouter {
     }
 
     /// Serve static file
-    async fn serve_file(&self, file_path: &std::path::Path) -> Result<fastn_router::HttpResponse, FbrError> {
-        let content = tokio::fs::read(file_path).await.map_err(|e| {
-            FbrError::FileReadFailed {
+    async fn serve_file(
+        &self,
+        file_path: &std::path::Path,
+    ) -> Result<fastn_router::HttpResponse, FbrError> {
+        let content = tokio::fs::read(file_path)
+            .await
+            .map_err(|e| FbrError::FileReadFailed {
                 path: file_path.display().to_string(),
                 source: e,
-            }
-        })?;
+            })?;
 
         // Detect MIME type from file extension
         let mime_type = file_path
@@ -100,19 +103,23 @@ impl FolderBasedRouter {
             .unwrap_or("application/octet-stream");
 
         let mut response = fastn_router::HttpResponse::new(200, "OK");
-        response.headers.insert("Content-Type".to_string(), mime_type.to_string());
+        response
+            .headers
+            .insert("Content-Type".to_string(), mime_type.to_string());
         response = response.body(String::from_utf8_lossy(&content).to_string());
 
         Ok(response)
     }
 
-    /// Serve .fthml template 
-    async fn serve_template(&self, _template_path: &std::path::Path) -> Result<fastn_router::HttpResponse, FbrError> {
+    /// Serve .fthml template
+    async fn serve_template(
+        &self,
+        _template_path: &std::path::Path,
+    ) -> Result<fastn_router::HttpResponse, FbrError> {
         // TODO: Implement proper FTD template processing
         // This requires integration with fastn-compiler for .fthml → HTML compilation
-        
+
         Ok(fastn_router::HttpResponse::new(501, "Not Implemented")
             .body("FTD template processing not yet implemented".to_string()))
     }
-
 }

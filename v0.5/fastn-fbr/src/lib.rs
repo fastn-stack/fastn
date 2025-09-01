@@ -15,7 +15,7 @@
 //! ```
 //!
 //! ## Directory Structure
-//! ```
+//! ```ignore
 //! account_or_rig_directory/
 //! ├── public/           # Static files and templates  
 //! │   ├── index.html
