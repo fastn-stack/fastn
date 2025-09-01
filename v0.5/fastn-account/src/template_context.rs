@@ -5,7 +5,7 @@ impl crate::Account {
     pub async fn create_template_context(&self) -> fastn_fbr::TemplateContext {
         let primary_id52 = self.primary_id52().await.unwrap_or_default();
         let aliases = self.aliases().await;
-        
+
         // Create rich context data for templates
         let account_data = serde_json::json!({
             "account": {
@@ -24,13 +24,12 @@ impl crate::Account {
                 "unread_count": 0, // TODO: Get actual unread count
             },
             "p2p": {
-                // TODO: Add P2P status context  
+                // TODO: Add P2P status context
                 "status": "online",
                 "connections": [], // TODO: Get active connections
             }
         });
-        
-        fastn_fbr::TemplateContext::new()
-            .insert("account", &account_data)
+
+        fastn_fbr::TemplateContext::new().insert("account", &account_data)
     }
 }

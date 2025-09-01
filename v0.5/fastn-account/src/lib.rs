@@ -45,8 +45,8 @@ pub mod auth;
 pub mod automerge;
 pub mod errors;
 mod http_routes;
-mod template_context;
 pub mod p2p;
+mod template_context;
 
 // Re-export specific error types
 pub use errors::{

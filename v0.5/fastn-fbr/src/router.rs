@@ -14,23 +14,23 @@ impl FolderBasedRouter {
     /// Create new folder-based router for given directory
     pub fn new(base_path: impl Into<std::path::PathBuf>) -> Self {
         let base_path = base_path.into();
-        
+
         // Initialize template engine for the public directory
         let template_engine = Self::init_template_engine(&base_path).ok();
-        
+
         Self {
             base_path,
             template_engine,
         }
     }
-    
+
     /// Initialize Tera template engine for the public directory
     fn init_template_engine(base_path: &std::path::Path) -> Result<tera::Tera, tera::Error> {
         let public_dir = base_path.join("public");
         let template_glob = public_dir.join("**").join("*.fthml");
-        
+
         tracing::debug!("Initializing templates from: {}", template_glob.display());
-        
+
         // Load all .fthml templates from public directory
         tera::Tera::new(&template_glob.to_string_lossy())
     }
@@ -133,20 +133,22 @@ impl FolderBasedRouter {
 
     /// Serve .fthml template with context
     async fn serve_template(
-        &self, 
+        &self,
         template_path: &std::path::Path,
         context: Option<&crate::TemplateContext>,
     ) -> Result<fastn_router::HttpResponse, FbrError> {
         tracing::debug!("Processing .fthml template: {}", template_path.display());
-        
+
         let template_engine = match &self.template_engine {
             Some(engine) => engine,
             None => {
-                return Ok(fastn_router::HttpResponse::new(500, "Internal Server Error")
-                    .body("Template engine not initialized".to_string()));
+                return Ok(
+                    fastn_router::HttpResponse::new(500, "Internal Server Error")
+                        .body("Template engine not initialized".to_string()),
+                );
             }
         };
-        
+
         // Get template name relative to public directory
         let public_dir = self.base_path.join("public");
         let template_name = template_path
@@ -156,7 +158,7 @@ impl FolderBasedRouter {
             })?
             .to_string_lossy()
             .to_string();
-        
+
         // Create template context with custom functions
         let mut tera_context = match context {
             Some(ctx) => {
@@ -166,11 +168,11 @@ impl FolderBasedRouter {
             }
             None => tera::Context::new(),
         };
-        
+
         // Add request context
         tera_context.insert("request_path", &template_path.display().to_string());
         tera_context.insert("timestamp", &chrono::Utc::now().timestamp());
-        
+
         // Register functions and render template
         let rendered = if let Some(ctx) = context {
             // Clone engine and register functions
@@ -182,11 +184,14 @@ impl FolderBasedRouter {
         } else {
             template_engine.render(&template_name, &tera_context)
         };
-        
+
         match rendered {
             Ok(rendered) => {
                 let mut response = fastn_router::HttpResponse::new(200, "OK");
-                response.headers.insert("Content-Type".to_string(), "text/html; charset=utf-8".to_string());
+                response.headers.insert(
+                    "Content-Type".to_string(),
+                    "text/html; charset=utf-8".to_string(),
+                );
                 response = response.body(rendered);
                 Ok(response)
             }

@@ -6,7 +6,6 @@ impl crate::Rig {
         fastn_fbr::TemplateContext::new()
             // Add minimal static data
             .insert("request_time", &chrono::Utc::now().timestamp())
-            
             // Register dynamic functions for rig data
             .register_function("rig_id52", |_args| {
                 // TODO: Access actual rig data - for now return placeholder

@@ -35,8 +35,8 @@ pub mod errors;
 mod http_routes;
 mod http_server;
 mod rig;
-mod template_context;
 mod run;
+mod template_context;
 
 pub use run::run;
 

@@ -28,13 +28,13 @@
 
 extern crate self as fastn_fbr;
 
-mod template_context;
 mod errors;
 mod router;
+mod template_context;
 
-pub use template_context::TemplateContext;
 pub use errors::*;
 pub use router::FolderBasedRouter;
+pub use template_context::TemplateContext;
 
 /// MIME type detection for file extensions
 pub fn mime_type_for_extension(ext: &str) -> &'static str {
