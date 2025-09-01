@@ -67,14 +67,23 @@ impl FolderBasedRouter {
             public_dir.join(&clean_path)
         };
 
-        tracing::debug!("FBR file path: {}", file_path.display());
+        tracing::debug!(
+            "FBR base_path: {}, public_dir: {}, file_path: {}",
+            self.base_path.display(),
+            public_dir.display(),
+            file_path.display()
+        );
+        println!("🔍 FBR: Looking for file: {}", file_path.display());
 
         // Check if file exists
         if !file_path.exists() {
+            println!("❌ FBR: File not found: {}", file_path.display());
             return Err(FbrError::FileNotFound {
                 path: file_path.display().to_string(),
             });
         }
+
+        println!("✅ FBR: File exists: {}", file_path.display());
 
         // Handle different file types
         if file_path.is_dir() {

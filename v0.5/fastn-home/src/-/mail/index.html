@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Email Inbox - fastn</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f8fafc; }
+        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        .header { background: #7c3aed; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        .nav { display: flex; gap: 10px; margin-bottom: 20px; }
+        .nav a { padding: 8px 16px; background: #e2e8f0; text-decoration: none; border-radius: 6px; }
+        .nav a.active { background: #7c3aed; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📧 Email Inbox</h1>
+            <p>✅ Served via folder-based routing from /-/mail/</p>
+        </div>
+        
+        <div class="nav">
+            <a href="./" class="active">📥 Inbox</a>
+            <a href="./sent.html">📤 Sent</a>
+            <a href="./compose.html">✏️ Compose</a>
+        </div>
+        
+        <h2>📨 Email Interface Working!</h2>
+        <p>This email interface is served via fastn-fbr folder-based routing.</p>
+        <p>Template functions ready for dynamic email data from account!</p>
+        
+        <h3>🎯 Ready For:</h3>
+        <ul>
+            <li>Dynamic inbox listing with Tera templates</li>
+            <li>Real email data from account mail store</li>
+            <li>Template functions: {{ mail_unread_count() }}, {{ account_primary_id52() }}</li>
+        </ul>
+    </div>
+</body>
+</html>

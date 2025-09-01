@@ -37,10 +37,10 @@ impl crate::Account {
         // Try folder-based routing first with account context
         let account_path = self.path().await;
         println!("🔍 Account path: {}", account_path.display());
-        
+
         let fbr = fastn_fbr::FolderBasedRouter::new(&account_path);
         let account_context = self.create_template_context().await;
-        
+
         match fbr.route_request(request, Some(&account_context)).await {
             Ok(response) => {
                 println!("✅ Folder-based routing succeeded for {}", request.path);
