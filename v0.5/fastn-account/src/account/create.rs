@@ -288,7 +288,7 @@ async fn copy_src_to_public(
 
 /// Copy embedded directory contents to filesystem
 async fn copy_embedded_dir(
-    embedded_dir: &include_dir::Dir,
+    embedded_dir: &include_dir::Dir<'_>,
     dst: &std::path::Path,
 ) -> Result<(), std::io::Error> {
     // Copy all files in the embedded directory
