@@ -262,31 +262,26 @@ async fn copy_src_to_public(
 
     // Use embedded fastn-home content from build time
     static FASTN_HOME_CONTENT: include_dir::Dir = include_dir::include_dir!("../fastn-home/src");
+    
     let public_dir = account_path.join("public");
-
-    // Only copy if src directory exists
-    if src_dir.exists() {
-        tracing::info!(
-            "Copying default UI content from {} to {}",
-            src_dir.display(),
-            public_dir.display()
-        );
-
-        copy_dir_recursive(&src_dir, &public_dir)
-            .await
-            .map_err(
-                |e| crate::CreateInitialDocumentsError::AliasDocumentCreationFailed {
-                    source: Box::new(e),
-                },
-            )?;
-
-        tracing::info!("✅ Copied default UI content to account public directory");
-    } else {
-        tracing::debug!(
-            "No src directory found at {}, skipping UI content copy",
-            src_dir.display()
-        );
-    }
+    
+    tracing::info!("Copying embedded UI content to {}", public_dir.display());
+    
+    // Create public directory
+    tokio::fs::create_dir_all(&public_dir).await.map_err(|e| {
+        crate::CreateInitialDocumentsError::AliasDocumentCreationFailed {
+            source: Box::new(e),
+        }
+    })?;
+    
+    // Copy embedded content to public directory
+    copy_embedded_dir(&FASTN_HOME_CONTENT, &public_dir).await.map_err(|e| {
+        crate::CreateInitialDocumentsError::AliasDocumentCreationFailed {
+            source: Box::new(e),
+        }
+    })?;
+    
+    tracing::info!("✅ Copied embedded UI content to account public directory");
 
     Ok(())
 }
