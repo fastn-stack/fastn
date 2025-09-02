@@ -305,7 +305,14 @@ async fn collect_account_deliveries(
     // For each peer with pending deliveries, we need to determine the correct alias pairing
     for delivery in pending_deliveries {
         // Get the actual alias used in the From address for emails to this peer
-        let our_alias = get_sender_alias_for_peer(&mail_store, &delivery.peer_id52).await?;
+        let our_alias = match get_sender_alias_for_peer(&mail_store, &delivery.peer_id52).await {
+            Ok(alias) => alias,
+            Err(e) => {
+                tracing::warn!("Failed to get sender alias for peer {}: {}", delivery.peer_id52, e);
+                println!("⚠️  Skipping delivery to {} due to alias lookup failure: {}", delivery.peer_id52, e);
+                continue; // Skip this delivery and continue with others
+            }
+        };
 
         let task = DeliveryTask {
             peer_id52: delivery.peer_id52,
@@ -418,7 +425,8 @@ async fn attempt_delivery_to_peer(
     );
 
     // Step 3: Deliver all emails via single P2P connection (our_alias is already PublicKey)
-    let delivered_emails = deliver_emails_to_peer(
+    println!("🚀 DEBUG: About to deliver {} emails to peer {}", emails.len(), task.peer_id52);
+    let delivered_emails = match deliver_emails_to_peer(
         &emails,
         &task.our_alias,
         &task.peer_id52,
@@ -427,7 +435,16 @@ async fn attempt_delivery_to_peer(
         &task.account_path,
         account_manager,
     )
-    .await?;
+    .await {
+        Ok(emails) => {
+            println!("✅ DEBUG: deliver_emails_to_peer succeeded with {} delivered emails", emails.len());
+            emails
+        }
+        Err(e) => {
+            println!("❌ DEBUG: deliver_emails_to_peer failed: {}", e);
+            return Err(e);
+        }
+    };
 
     // Step 5: Mark all successfully delivered emails in database
     let mut delivered_count = 0;
@@ -470,26 +487,50 @@ async fn deliver_emails_to_peer(
     );
 
     // Get the account that owns our_alias and extract its secret key
-    let account = account_manager
-        .find_account_by_alias(our_alias)
-        .await
-        .map_err(|_e| fastn_rig::EmailDeliveryError::NoSenderAliasFound {
-            peer_id52: our_alias.id52(),
-        })?;
+    let account = match account_manager.find_account_by_alias(our_alias).await {
+        Ok(account) => {
+            println!("✅ DEBUG: Found account for alias {}", our_alias.id52());
+            account
+        }
+        Err(e) => {
+            println!("❌ DEBUG: Failed to find account for alias {}: {}", our_alias.id52(), e);
+            return Err(fastn_rig::EmailDeliveryError::NoSenderAliasFound {
+                peer_id52: our_alias.id52(),
+            });
+        }
+    };
 
     // Get the secret key for our_alias from the account
-    let our_secret_key = get_secret_key_for_alias(&account, our_alias).await?;
+    let our_secret_key = match get_secret_key_for_alias(&account, our_alias).await {
+        Ok(key) => {
+            println!("✅ DEBUG: Got secret key for alias {}", our_alias.id52());
+            key
+        }
+        Err(e) => {
+            println!("❌ DEBUG: Failed to get secret key for alias {}: {}", our_alias.id52(), e);
+            return Err(fastn_rig::EmailDeliveryError::NoSenderAliasFound {
+                peer_id52: our_alias.id52(),
+            });
+        }
+    };
 
     // Create endpoint using the real secret key for our_alias
-    let our_endpoint = fastn_net::get_endpoint(our_secret_key).await.map_err(|e| {
-        fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
-            source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
-                source: rusqlite::Error::InvalidColumnName(format!(
-                    "Failed to create endpoint: {e}"
-                )),
-            },
+    let our_endpoint = match fastn_net::get_endpoint(our_secret_key).await {
+        Ok(endpoint) => {
+            println!("✅ DEBUG: Created P2P endpoint for alias {}", our_alias.id52());
+            endpoint
         }
-    })?;
+        Err(e) => {
+            println!("❌ DEBUG: Failed to create P2P endpoint for alias {}: {}", our_alias.id52(), e);
+            return Err(fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
+                source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
+                    source: rusqlite::Error::InvalidColumnName(format!(
+                        "Failed to create endpoint: {e}"
+                    )),
+                },
+            });
+        }
+    };
 
     let mut delivered_email_ids = Vec::new();
     let total_bytes: usize = emails.iter().map(|e| e.size_bytes).sum();
@@ -502,22 +543,39 @@ async fn deliver_emails_to_peer(
         peer_id52
     );
 
-    // Establish P2P stream using fastn-net infrastructure
-    let (mut send, mut recv) = fastn_net::get_stream(
-        our_endpoint,
-        fastn_net::Protocol::AccountToAccount.into(),
-        peer_id52.id52(),
-        peer_stream_senders.clone(),
-        graceful.clone(),
-    )
-    .await
-    .map_err(
-        |e| fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
-            source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
-                source: rusqlite::Error::InvalidColumnName(format!("P2P connection failed: {e}")),
-            },
-        },
-    )?;
+    // Establish P2P stream using fastn-net infrastructure with timeout
+    println!("🔗 DEBUG: About to establish P2P stream to {}", peer_id52.id52());
+    let (mut send, mut recv) = match tokio::time::timeout(
+        std::time::Duration::from_secs(30), // 30 second timeout
+        fastn_net::get_stream(
+            our_endpoint,
+            fastn_net::Protocol::AccountToAccount.into(),
+            peer_id52.id52(),
+            peer_stream_senders.clone(),
+            graceful.clone(),
+        )
+    ).await {
+        Ok(Ok(stream)) => {
+            println!("✅ DEBUG: P2P stream established successfully");
+            stream
+        }
+        Ok(Err(e)) => {
+            println!("❌ DEBUG: P2P stream establishment failed: {}", e);
+            return Err(fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
+                source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
+                    source: rusqlite::Error::InvalidColumnName(format!("P2P connection failed: {e}")),
+                },
+            });
+        }
+        Err(_timeout) => {
+            println!("⏰ DEBUG: P2P stream establishment timed out after 30 seconds");
+            return Err(fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
+                source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
+                    source: rusqlite::Error::InvalidColumnName("P2P connection timeout".to_string()),
+                },
+            });
+        }
+    };
 
     tracing::info!(
         "🔗 P2P stream established from {} to {}",
@@ -527,6 +585,8 @@ async fn deliver_emails_to_peer(
 
     // Send each email over the established stream with request-response
     for email in emails {
+        println!("📧 DEBUG: Processing email {} for P2P delivery", email.email_id);
+        
         // Create AccountToAccountMessage for P2P delivery with envelope data
         let p2p_message = fastn_account::AccountToAccountMessage::new_email(
             email.raw_message.clone(),
@@ -534,6 +594,8 @@ async fn deliver_emails_to_peer(
             email.envelope_to.clone(),
         );
 
+        println!("📦 DEBUG: Created P2P message for email {} ({} bytes)", email.email_id, p2p_message.size());
+        
         tracing::debug!(
             "📦 Sending email {} ({} bytes) over P2P stream",
             email.email_id,
@@ -541,47 +603,72 @@ async fn deliver_emails_to_peer(
         );
 
         // Send email message as JSON
-        let message_json = serde_json::to_string(&p2p_message).map_err(|e| {
-            fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
-                source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
-                    source: rusqlite::Error::InvalidColumnName(format!(
-                        "Failed to serialize message: {e}"
-                    )),
-                },
+        println!("📤 DEBUG: About to serialize P2P message to JSON");
+        let message_json = match serde_json::to_string(&p2p_message) {
+            Ok(json) => {
+                println!("✅ DEBUG: P2P message serialized successfully ({} chars)", json.len());
+                json
             }
-        })?;
+            Err(e) => {
+                println!("❌ DEBUG: P2P message serialization failed: {}", e);
+                return Err(fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
+                    source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
+                        source: rusqlite::Error::InvalidColumnName(format!(
+                            "Failed to serialize message: {e}"
+                        )),
+                    },
+                });
+            }
+        };
 
-        send.write_all(message_json.as_bytes()).await.map_err(|e| {
-            fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
-                source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
-                    source: rusqlite::Error::InvalidColumnName(format!(
-                        "Failed to send message: {e}"
-                    )),
-                },
+        println!("📡 DEBUG: About to write message to P2P stream");
+        match send.write_all(message_json.as_bytes()).await {
+            Ok(_) => println!("✅ DEBUG: Message bytes written to stream"),
+            Err(e) => {
+                println!("❌ DEBUG: Failed to write message to stream: {}", e);
+                return Err(fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
+                    source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
+                        source: rusqlite::Error::InvalidColumnName(format!(
+                            "Failed to send message: {e}"
+                        )),
+                    },
+                });
             }
-        })?;
-        send.write_all(b"\n").await.map_err(|e| {
-            fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
-                source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
-                    source: rusqlite::Error::InvalidColumnName(format!(
-                        "Failed to send newline: {e}"
-                    )),
-                },
+        }
+        
+        println!("📡 DEBUG: About to write newline to P2P stream");
+        match send.write_all(b"\n").await {
+            Ok(_) => println!("✅ DEBUG: Newline written to stream"),
+            Err(e) => {
+                println!("❌ DEBUG: Failed to write newline to stream: {}", e);
+                return Err(fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
+                    source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
+                        source: rusqlite::Error::InvalidColumnName(format!(
+                            "Failed to send newline: {e}"
+                        )),
+                    },
+                });
             }
-        })?;
+        }
 
         // Wait for delivery response
-        let response = fastn_net::next_json::<EmailDeliveryResponse>(&mut recv)
-            .await
-            .map_err(
-                |e| fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
+        println!("⏳ DEBUG: Waiting for delivery response from peer");
+        let response = match fastn_net::next_json::<EmailDeliveryResponse>(&mut recv).await {
+            Ok(response) => {
+                println!("✅ DEBUG: Received response from peer: {:?}", response.status);
+                response
+            }
+            Err(e) => {
+                println!("❌ DEBUG: Failed to receive response from peer: {}", e);
+                return Err(fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
                     source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
                         source: rusqlite::Error::InvalidColumnName(format!(
                             "Failed to receive response: {e}"
                         )),
                     },
-                },
-            )?;
+                });
+            }
+        };
 
         // Handle individual email response
         match response.status {
