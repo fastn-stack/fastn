@@ -139,7 +139,14 @@ async fn check_and_deliver_emails(
     println!("🔄 Email delivery poller: checking all accounts for pending deliveries");
 
     // Step 1: Collect all pending deliveries across accounts with alias tracking
-    let delivery_tasks = collect_pending_deliveries(account_manager).await?;
+    let delivery_tasks = match collect_pending_deliveries(account_manager).await {
+        Ok(tasks) => tasks,
+        Err(e) => {
+            println!("❌ Failed to collect pending deliveries: {}", e);
+            tracing::error!("📬 Failed to collect pending deliveries: {}", e);
+            return Ok(()); // Continue polling despite error
+        }
+    };
 
     if delivery_tasks.is_empty() {
         println!("📭 No pending deliveries found across all accounts");
@@ -384,10 +391,17 @@ async fn attempt_delivery_to_peer(
         .map_err(|e| fastn_rig::EmailDeliveryError::MailStoreLoadFailed { source: e })?;
 
     // Step 2: Get all emails queued for this peer
-    let emails = mail_store
-        .get_emails_for_peer(&task.peer_id52)
-        .await
-        .map_err(|e| fastn_rig::EmailDeliveryError::EmailsForPeerQueryFailed { source: e })?;
+    println!("🔍 DEBUG: About to call get_emails_for_peer for {}", task.peer_id52);
+    let emails = match mail_store.get_emails_for_peer(&task.peer_id52).await {
+        Ok(emails) => {
+            println!("✅ DEBUG: get_emails_for_peer returned {} emails", emails.len());
+            emails
+        }
+        Err(e) => {
+            println!("❌ DEBUG: get_emails_for_peer failed: {}", e);
+            return Err(fastn_rig::EmailDeliveryError::EmailsForPeerQueryFailed { source: e });
+        }
+    };
 
     if emails.is_empty() {
         tracing::debug!(

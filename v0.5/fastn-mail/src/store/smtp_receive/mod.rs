@@ -68,6 +68,8 @@ impl crate::Store {
         self.queue_p2p_deliveries(&parsed_email).await?;
 
         println!("✅ Email stored and queued for delivery");
+        println!("📂 DEBUG: Email file path: {}", parsed_email.file_path);
+        println!("📂 DEBUG: Account path: {}", self.account_path().display());
         Ok(parsed_email.email_id)
     }
 
@@ -320,9 +322,7 @@ fn create_parsed_email_from_smtp(
 ) -> Result<crate::ParsedEmail, SmtpReceiveError> {
     // Reject non-UTF-8 emails early
     let message_text =
-        std::str::from_utf8(raw_message).map_err(|_| SmtpReceiveError::MessageParsingFailed {
-            message: "Email contains invalid UTF-8 encoding".to_string(),
-        })?;
+        std::str::from_utf8(raw_message).map_err(|_| SmtpReceiveError::InvalidUtf8Encoding)?;
 
     // Extract only essential headers we can't get from SMTP envelope
     let essential_headers = extract_essential_headers(message_text)?;
@@ -391,9 +391,12 @@ fn extract_essential_headers(message_text: &str) -> Result<EssentialHeaders, Smt
         Some((headers, _body)) => headers,
         None => {
             // No header/body separator found - malformed email
-            return Err(SmtpReceiveError::MessageParsingFailed {
-                message: "Email missing header/body separator (\\r\\n\\r\\n)".to_string(),
-            });
+            // Check if it uses \n\n instead of \r\n\r\n
+            if message_text.contains("\n\n") {
+                return Err(SmtpReceiveError::InvalidLineEndings);
+            } else {
+                return Err(SmtpReceiveError::MissingHeaderBodySeparator);
+            }
         }
     };
 

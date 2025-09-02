@@ -451,7 +451,8 @@ impl SmtpSession {
                 Ok("250 Message accepted for delivery".to_string())
             }
             Err(e) => {
-                tracing::error!("📧 Failed to store email: {}", e);
+                tracing::error!("📧 Failed to store email from {} to {:?}: {}", email.from, email.recipients, e);
+                println!("🐛 DEBUG: Email storage error details: {}", e);
                 Ok("450 Temporary failure - try again later".to_string())
             }
         }
