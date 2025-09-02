@@ -133,7 +133,7 @@ impl SmtpSession {
         debug!("📧 Starting SMTP session with {}", self.client_addr);
 
         // Send greeting
-        self.write_response("220 fastn-rig SMTP Server").await?;
+        self.write_response("220 fastn SMTP Server").await?;
 
         // Use a simple line-by-line reading approach to avoid borrowing conflicts
         let mut buffer = Vec::new();
@@ -192,11 +192,11 @@ impl SmtpSession {
 
                 let response = match self.process_command(line, &account_manager).await {
                     Ok(response) => response,
-                    Err(crate::SmtpError::InvalidCommandSyntax { command }) => {
+                    Err(fastn_rig::SmtpError::InvalidCommandSyntax { command }) => {
                         debug!("📧 Invalid command syntax: {}", command);
                         format!("500 Syntax error: {}", command)
                     }
-                    Err(crate::SmtpError::AuthenticationFailed) => {
+                    Err(fastn_rig::SmtpError::AuthenticationFailed) => {
                         "535 Authentication failed".to_string()
                     }
                     Err(e) => {
@@ -222,7 +222,7 @@ impl SmtpSession {
         &mut self,
         line: &str,
         account_manager: &AccountManager,
-    ) -> Result<String, crate::SmtpError> {
+    ) -> Result<String, fastn_rig::SmtpError> {
         let parts: Vec<&str> = line.splitn(2, ' ').collect();
         let command = parts[0].to_uppercase();
         let args = parts.get(1).unwrap_or(&"");
@@ -240,16 +240,16 @@ impl SmtpSession {
         }
     }
 
-    async fn handle_helo(&mut self, _args: &str) -> Result<String, crate::SmtpError> {
+    async fn handle_helo(&mut self, _args: &str) -> Result<String, fastn_rig::SmtpError> {
         self.state = SessionState::Ready;
-        Ok("250-fastn-rig SMTP Server\r\n250-AUTH PLAIN LOGIN\r\n250 HELP".to_string())
+        Ok("250-fastn SMTP Server\r\n250-AUTH PLAIN LOGIN\r\n250 HELP".to_string())
     }
 
     async fn handle_auth(
         &mut self,
         args: &str,
         account_manager: &AccountManager,
-    ) -> Result<String, crate::SmtpError> {
+    ) -> Result<String, fastn_rig::SmtpError> {
         let parts: Vec<&str> = args.split_whitespace().collect();
         if parts.len() < 2 {
             return Ok("500 AUTH requires mechanism and credentials".to_string());
@@ -267,7 +267,7 @@ impl SmtpSession {
         &mut self,
         credentials: &str,
         account_manager: &AccountManager,
-    ) -> Result<String, crate::SmtpError> {
+    ) -> Result<String, fastn_rig::SmtpError> {
         // Parse credentials using parser module
         let creds = match parser::AuthCredentials::parse_plain(credentials) {
             Ok(creds) => creds,
@@ -305,7 +305,7 @@ impl SmtpSession {
         account_id52: &fastn_id52::PublicKey,
         password: &str,
         account_manager: &AccountManager,
-    ) -> Result<bool, crate::SmtpError> {
+    ) -> Result<bool, fastn_rig::SmtpError> {
         debug!(
             "📧 Authenticating account {} with SMTP password",
             account_id52.id52()
@@ -315,7 +315,7 @@ impl SmtpSession {
         let account = account_manager
             .find_account_by_alias(account_id52)
             .await
-            .map_err(|e| crate::SmtpError::AccountLookupFailed { source: e })?;
+            .map_err(|e| fastn_rig::SmtpError::AccountLookupFailed { source: e })?;
 
         // Verify SMTP password using the account's stored hash
         match account.verify_smtp_password(password).await {
@@ -346,21 +346,22 @@ impl SmtpSession {
                     account_id52.id52(),
                     e
                 );
-                Err(crate::SmtpError::MailConfigError { source: e })
+                Err(fastn_rig::SmtpError::MailConfigError { source: e })
             }
         }
     }
 
-    async fn handle_mail_from(&mut self, args: &str) -> Result<String, crate::SmtpError> {
+    async fn handle_mail_from(&mut self, args: &str) -> Result<String, fastn_rig::SmtpError> {
         if self.authenticated_account.is_none() {
             return Ok("530 Authentication required".to_string());
         }
 
         // Parse MAIL FROM using parser module
-        let from_addr =
-            parser::parse_mail_from(args).map_err(|e| crate::SmtpError::InvalidCommandSyntax {
+        let from_addr = parser::parse_mail_from(args).map_err(|e| {
+            fastn_rig::SmtpError::InvalidCommandSyntax {
                 command: format!("MAIL FROM: {}", e),
-            })?;
+            }
+        })?;
 
         self.current_email = Some(EmailInProgress {
             from: from_addr,
@@ -371,16 +372,17 @@ impl SmtpSession {
         Ok("250 Sender OK".to_string())
     }
 
-    async fn handle_rcpt_to(&mut self, args: &str) -> Result<String, crate::SmtpError> {
+    async fn handle_rcpt_to(&mut self, args: &str) -> Result<String, fastn_rig::SmtpError> {
         if self.current_email.is_none() {
             return Ok("503 Need MAIL FROM first".to_string());
         }
 
         // Parse RCPT TO using parser module
-        let to_addr =
-            parser::parse_rcpt_to(args).map_err(|e| crate::SmtpError::InvalidCommandSyntax {
+        let to_addr = parser::parse_rcpt_to(args).map_err(|e| {
+            fastn_rig::SmtpError::InvalidCommandSyntax {
                 command: format!("RCPT TO: {}", e),
-            })?;
+            }
+        })?;
 
         if let Some(ref mut email) = self.current_email {
             email.recipients.push(to_addr);
@@ -389,7 +391,7 @@ impl SmtpSession {
         Ok("250 Recipient OK".to_string())
     }
 
-    async fn handle_data(&mut self) -> Result<String, crate::SmtpError> {
+    async fn handle_data(&mut self) -> Result<String, fastn_rig::SmtpError> {
         if self.current_email.is_none() {
             return Ok("503 Need MAIL FROM and RCPT TO first".to_string());
         }
@@ -398,13 +400,13 @@ impl SmtpSession {
         Ok("354 Start mail input; end with <CRLF>.<CRLF>".to_string())
     }
 
-    async fn handle_reset(&mut self) -> Result<String, crate::SmtpError> {
+    async fn handle_reset(&mut self) -> Result<String, fastn_rig::SmtpError> {
         self.current_email = None;
         self.state = SessionState::Ready;
         Ok("250 Reset OK".to_string())
     }
 
-    async fn handle_quit(&mut self) -> Result<String, crate::SmtpError> {
+    async fn handle_quit(&mut self) -> Result<String, fastn_rig::SmtpError> {
         self.state = SessionState::Quit;
         Ok("221 Goodbye".to_string())
     }
@@ -420,7 +422,7 @@ impl SmtpSession {
     async fn process_email_data(
         &mut self,
         account_manager: &AccountManager,
-    ) -> Result<String, crate::SmtpError> {
+    ) -> Result<String, fastn_rig::SmtpError> {
         let email = match self.current_email.take() {
             Some(email) => email,
             None => return Ok("503 No email in progress".to_string()),
@@ -462,24 +464,24 @@ impl SmtpSession {
         email: &EmailInProgress,
         account_id52: &fastn_id52::PublicKey,
         account_manager: &AccountManager,
-    ) -> Result<(), crate::SmtpError> {
+    ) -> Result<(), fastn_rig::SmtpError> {
         // Find the account that should receive this email
         let account = account_manager
             .find_account_by_alias(account_id52)
             .await
-            .map_err(|e| crate::SmtpError::AccountLookupFailed { source: e })?;
+            .map_err(|e| fastn_rig::SmtpError::AccountLookupFailed { source: e })?;
 
         // Get the account's mail store
         let account_path = account.path().await;
         let mail_store = fastn_mail::Store::load(&account_path)
             .await
-            .map_err(|e| crate::SmtpError::MailStoreLoadFailed { source: e })?;
+            .map_err(|e| fastn_rig::SmtpError::MailStoreLoadFailed { source: e })?;
 
         // Use fastn-mail's SMTP receive method with envelope data (much cleaner!)
         let email_id = mail_store
             .smtp_receive(&email.from, &email.recipients, email.data.clone())
             .await
-            .map_err(|e| crate::SmtpError::EmailStorageFailed { source: e })?;
+            .map_err(|e| fastn_rig::SmtpError::EmailStorageFailed { source: e })?;
 
         info!(
             "📧 Stored incoming email {} from {} in account {} INBOX",
