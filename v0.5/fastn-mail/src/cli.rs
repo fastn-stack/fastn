@@ -186,8 +186,20 @@ async fn send_mail_command(
     println!("\n📝 Generated RFC 5322 message:");
     println!("{message}");
 
-    // Call smtp_receive to test the SMTP processing
-    match store.smtp_receive(message.into_bytes()).await {
+    // Build recipient list for SMTP envelope
+    let mut recipients = vec![to.clone()];
+    if let Some(cc) = &cc {
+        recipients.push(cc.clone());
+    }
+    if let Some(bcc) = &bcc {
+        recipients.push(bcc.clone());
+    }
+
+    // Call smtp_receive to test the SMTP processing with envelope data
+    match store
+        .smtp_receive(&from_addr, &recipients, message.into_bytes())
+        .await
+    {
         Ok(email_id) => {
             println!("✅ Email processed with ID: {email_id}");
         }
@@ -339,8 +351,12 @@ async fn p2p_receive_email_command(
 
     println!("📖 Read {} bytes from {message_file}", raw_message.len());
 
-    // Process P2P email (store in INBOX)
-    let email_id = store.p2p_receive_email(raw_message, &sender_key).await?;
+    // Process P2P email with envelope data (store in INBOX)
+    let envelope_from = format!("sender@{}.fastn", sender_key.id52());
+    let envelope_to = "recipient@ourhost.local"; // Placeholder for CLI testing
+    let email_id = store
+        .p2p_receive_email(&envelope_from, envelope_to, raw_message)
+        .await?;
 
     println!("✅ P2P email accepted and stored in INBOX with ID: {email_id}");
     Ok(())
@@ -409,7 +425,11 @@ mod tests {
 
         // Step 1: Send email via SMTP
         let email_id = store
-            .smtp_receive(message.into_bytes())
+            .smtp_receive(
+                &format!("alice@{from_id52}.fastn"),
+                &[format!("bob@{to_id52}.local")],
+                message.into_bytes(),
+            )
             .await
             .expect("Email should be processed successfully");
 
@@ -460,7 +480,11 @@ mod tests {
         .unwrap();
 
         let email_id = store
-            .smtp_receive(message.into_bytes())
+            .smtp_receive(
+                &format!("sender@{from_id52}.fastn"),
+                &[format!("to@{to_id52}.local"), format!("cc@{cc_id52}.fastn")],
+                message.into_bytes(),
+            )
             .await
             .expect("Email should be processed");
 
@@ -505,7 +529,11 @@ mod tests {
         .unwrap();
 
         let email_id = sender_store
-            .smtp_receive(message.clone().into_bytes())
+            .smtp_receive(
+                &format!("alice@{from_id52}.fastn"),
+                &[format!("bob@{to_id52}.local")],
+                message.clone().into_bytes(),
+            )
             .await
             .expect("Sender should process email successfully");
 
@@ -519,7 +547,11 @@ mod tests {
 
         // Step 3: Instance 2 accepts P2P email (simulating P2P delivery)
         let p2p_email_id = recipient_store
-            .p2p_receive_email(emails[0].raw_message.clone(), &from_key.public_key())
+            .p2p_receive_email(
+                &emails[0].envelope_from,
+                &emails[0].envelope_to,
+                emails[0].raw_message.clone(),
+            )
             .await
             .expect("Recipient should accept P2P email");
 

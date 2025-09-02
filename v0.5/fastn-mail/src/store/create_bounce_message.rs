@@ -47,7 +47,11 @@ impl crate::Store {
         // This puts the bounce in INBOX where the sender will see it
         let system_sender = fastn_id52::SecretKey::generate().public_key(); // System identity
         let bounce_email_id = self
-            .p2p_receive_email(bounce_email.into_bytes(), &system_sender)
+            .p2p_receive_email(
+                &format!("mailer-daemon@{}.system", system_sender.id52()),
+                "original-sender@ourhost.local", // Placeholder
+                bounce_email.into_bytes(),
+            )
             .await?;
 
         tracing::info!(

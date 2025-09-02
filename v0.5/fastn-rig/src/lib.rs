@@ -36,6 +36,7 @@ mod http_routes;
 mod http_server;
 mod rig;
 mod run;
+mod smtp;
 mod template_context;
 
 pub use run::run;
@@ -60,7 +61,7 @@ pub fn resolve_fastn_home(
 // Re-export specific error types
 pub use errors::{
     CurrentEntityError, EmailDeliveryError, EndpointError, EntityStatusError,
-    MessageProcessingError, RigCreateError, RigHttpError, RigLoadError, RunError,
+    MessageProcessingError, RigCreateError, RigHttpError, RigLoadError, RunError, SmtpError,
 };
 
 /// Type of owner for an endpoint

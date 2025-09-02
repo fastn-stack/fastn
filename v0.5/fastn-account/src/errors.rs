@@ -14,6 +14,37 @@ pub enum VerifyPasswordError {
     HashParsingFailed { message: String },
 }
 
+/// Error type for mail configuration operations
+#[derive(Error, Debug)]
+pub enum MailConfigError {
+    #[error("Failed to access automerge database")]
+    DatabaseAccessFailed {
+        #[source]
+        source: Box<dyn std::error::Error + Send + Sync>,
+    },
+
+    #[error("Mail configuration document does not exist")]
+    ConfigNotFound,
+
+    #[error("Failed to generate initial password")]
+    PasswordGenerationFailed {
+        #[source]
+        source: HashPasswordError,
+    },
+
+    #[error("Failed to create mail configuration document")]
+    DocumentCreationFailed {
+        #[source]
+        source: Box<dyn std::error::Error + Send + Sync>,
+    },
+
+    #[error("Failed to update mail configuration document")]
+    DocumentUpdateFailed {
+        #[source]
+        source: Box<dyn std::error::Error + Send + Sync>,
+    },
+}
+
 /// Error type for Account::create function
 #[derive(Error, Debug)]
 pub enum AccountCreateError {

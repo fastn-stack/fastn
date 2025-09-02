@@ -1,5 +1,51 @@
 use thiserror::Error;
 
+/// Error type for SMTP server operations
+#[derive(Error, Debug)]
+pub enum SmtpError {
+    #[error("SMTP authentication failed")]
+    AuthenticationFailed,
+
+    #[error("Account not found: {account_id52}")]
+    AccountNotFound { account_id52: String },
+
+    #[error("Mail configuration not found for account: {account_id52}")]
+    MailConfigNotFound { account_id52: String },
+
+    #[error("Failed to load mail store")]
+    MailStoreLoadFailed {
+        #[source]
+        source: fastn_mail::StoreLoadError,
+    },
+
+    #[error("Failed to store email")]
+    EmailStorageFailed {
+        #[source]
+        source: fastn_mail::SmtpReceiveError,
+    },
+
+    #[error("Failed to find account by alias")]
+    AccountLookupFailed {
+        #[source]
+        source: fastn_account::FindAccountByAliasError,
+    },
+
+    #[error("Mail configuration error")]
+    MailConfigError {
+        #[source]
+        source: fastn_account::MailConfigError,
+    },
+
+    #[error("Invalid command syntax: {command}")]
+    InvalidCommandSyntax { command: String },
+
+    #[error("Network I/O error")]
+    NetworkError {
+        #[source]
+        source: std::io::Error,
+    },
+}
+
 /// Error type for Rig::create function
 #[derive(Error, Debug)]
 pub enum RigCreateError {

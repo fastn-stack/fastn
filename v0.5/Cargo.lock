@@ -1675,6 +1675,7 @@ version = "0.1.0"
 dependencies = [
  "automerge",
  "autosurgeon",
+ "base64",
  "chrono",
  "clap",
  "directories",
@@ -1699,6 +1700,7 @@ dependencies = [
  "tokio",
  "tracing",
  "tracing-subscriber",
+ "uuid",
 ]
 
 [[package]]
