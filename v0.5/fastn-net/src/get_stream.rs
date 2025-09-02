@@ -58,6 +58,7 @@ pub async fn get_stream(
     use eyre::WrapErr;
 
     tracing::trace!("get_stream: {header:?}");
+    println!("🔍 DEBUG get_stream: Starting stream request for {}", remote_node_id52);
     let stream_request_sender = get_stream_request_sender(
         self_endpoint,
         remote_node_id52,
@@ -65,17 +66,23 @@ pub async fn get_stream(
         graceful,
     )
     .await;
+    println!("✅ DEBUG get_stream: Got stream_request_sender");
     tracing::trace!("got stream_request_sender");
     let (reply_channel, receiver) = tokio::sync::oneshot::channel();
+    println!("🔗 DEBUG get_stream: Created oneshot channel");
 
+    println!("📤 DEBUG get_stream: About to send stream request");
     stream_request_sender
         .send((header, reply_channel))
         .await
         .wrap_err_with(|| "failed to send on stream_request_sender")?;
+    println!("✅ DEBUG get_stream: Stream request sent");
 
     tracing::trace!("sent stream request");
 
+    println!("⏳ DEBUG get_stream: Waiting for stream reply");
     let r = receiver.await?;
+    println!("✅ DEBUG get_stream: Received stream reply");
 
     tracing::trace!("got stream request reply");
     r
@@ -88,9 +95,12 @@ async fn get_stream_request_sender(
     peer_stream_senders: PeerStreamSenders,
     graceful: crate::Graceful,
 ) -> StreamRequestSender {
+    println!("🔍 DEBUG get_stream_request_sender: Starting for {}", remote_node_id52);
     // Convert iroh::PublicKey to ID52 string
     let self_id52 = data_encoding::BASE32_DNSSEC.encode(self_endpoint.node_id().as_bytes());
+    println!("🔍 DEBUG get_stream_request_sender: Self ID52: {}", self_id52);
     let mut senders = peer_stream_senders.lock().await;
+    println!("🔍 DEBUG get_stream_request_sender: Got peer_stream_senders lock");
 
     if let Some(sender) = senders.get(&(self_id52.clone(), remote_node_id52.clone())) {
         return sender.clone();
@@ -227,6 +237,7 @@ async fn connection_manager_(
                 idle_counter += 1;
             },
             Some((header, reply_channel)) = receiver.recv() => {
+                println!("📨 DEBUG connection_manager: Received stream request for {:?}, idle counter: {}", header, idle_counter);
                 tracing::info!("connection: {header:?}, idle counter: {idle_counter}");
                 idle_counter = 0;
                 // is this a good idea to serialize this part? if 10 concurrent requests come in, we will
@@ -289,6 +300,7 @@ async fn handle_request(
     use eyre::WrapErr;
 
     tracing::trace!("handling request: {header:?}");
+    println!("🔧 DEBUG handle_request: Handling stream request for protocol {:?}", header);
 
     let (mut send, mut recv) = match conn.open_bi().await {
         Ok(v) => {
@@ -332,9 +344,12 @@ async fn handle_request(
 
     tracing::trace!("received ack");
 
+    println!("📤 DEBUG handle_request: About to send stream reply");
     reply_channel.send(Ok((send, recv))).unwrap_or_else(|e| {
+        println!("❌ DEBUG handle_request: Failed to send stream reply: {:?}", e);
         tracing::error!("failed to send reply: {e:?}");
     });
+    println!("✅ DEBUG handle_request: Stream reply sent successfully");
 
     tracing::trace!("handle_request done");
 

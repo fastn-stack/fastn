@@ -193,6 +193,8 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         loop {
             tokio::select! {
                 Some(p2p_msg) = message_rx.recv() => {
+                    println!("📨 DEBUG: Received P2P message on endpoint {} from {} ({} bytes)", 
+                             p2p_msg.our_endpoint.id52(), p2p_msg.peer_id52.id52(), p2p_msg.message.len());
                     tracing::info!(
                         "Received message on endpoint {} from {} (type: {:?})",
                         p2p_msg.our_endpoint.id52(),

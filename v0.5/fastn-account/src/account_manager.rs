@@ -200,9 +200,15 @@ impl fastn_account::AccountManager {
                 envelope_from,
                 envelope_to,
             } => {
+                println!("📧 DEBUG: Received P2P email message: {} bytes", raw_message.len());
+                println!("📧 DEBUG: Envelope from: {}", envelope_from);
+                println!("📧 DEBUG: Envelope to: {}", envelope_to);
+                println!("📧 DEBUG: Our endpoint: {}", our_endpoint_id52);
+                println!("📧 DEBUG: Peer ID52: {}", peer_id52);
                 println!("📧 Processing email message: {} bytes", raw_message.len());
 
                 // 3. Store in INBOX (this is incoming P2P email from peer)
+                println!("📥 DEBUG: About to store P2P email in INBOX");
                 let email_result = account
                     .mail
                     .p2p_receive_email(&envelope_from, &envelope_to, raw_message)
@@ -211,6 +217,7 @@ impl fastn_account::AccountManager {
                 // 4. Create response based on email processing result
                 let response = match email_result {
                     Ok(email_id) => {
+                        println!("✅ DEBUG: P2P email stored successfully with ID: {}", email_id);
                         println!("✅ Email stored with ID: {}", email_id);
                         fastn_account::EmailDeliveryResponse {
                             email_id,
@@ -218,6 +225,7 @@ impl fastn_account::AccountManager {
                         }
                     }
                     Err(e) => {
+                        println!("❌ DEBUG: P2P email storage failed: {}", e);
                         println!("❌ Email rejected: {}", e);
                         fastn_account::EmailDeliveryResponse {
                             email_id: "unknown".to_string(),
