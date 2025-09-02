@@ -329,9 +329,9 @@ fn create_parsed_email_from_smtp(
 
     // Generate storage information
     let email_id = format!("email-{}", uuid::Uuid::new_v4());
-    let folder = "INBOX".to_string(); // SMTP incoming emails go to INBOX
+    let folder = "Sent".to_string(); // SMTP emails are outgoing from authenticated user
     let timestamp = chrono::Utc::now().format("%Y/%m/%d");
-    let file_path = format!("mails/default/INBOX/{timestamp}/{email_id}.eml");
+    let file_path = format!("mails/default/Sent/{timestamp}/{email_id}.eml");
     let date_received = chrono::Utc::now().timestamp();
     let size_bytes = raw_message.len();
 
