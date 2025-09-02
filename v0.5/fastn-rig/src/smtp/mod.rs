@@ -9,19 +9,13 @@
 //! - Message routing to account mail stores
 //! - P2P integration for cross-network delivery
 
-use fastn_account::AccountManager;
-use std::net::SocketAddr;
-use tokio::io::{AsyncReadExt, AsyncWriteExt};
-use tokio::net::{TcpListener, TcpStream};
-use tracing::{debug, error, info, warn};
-
 mod parser;
 
 pub struct SmtpServer {
     /// Account manager for authentication and storage
-    account_manager: std::sync::Arc<AccountManager>,
+    account_manager: std::sync::Arc<fastn_account::AccountManager>,
     /// Server bind address
-    bind_addr: SocketAddr,
+    bind_addr: std::net::SocketAddr,
     /// Graceful shutdown handler
     graceful: fastn_net::Graceful,
 }
@@ -29,7 +23,7 @@ pub struct SmtpServer {
 #[derive(Debug)]
 pub struct SmtpSession {
     /// Client connection
-    stream: TcpStream,
+    stream: tokio::net::TcpStream,
     /// Current session state
     state: SessionState,
     /// Authenticated account ID52 (if any)
@@ -37,7 +31,7 @@ pub struct SmtpSession {
     /// Email being composed
     current_email: Option<EmailInProgress>,
     /// Client IP address
-    client_addr: SocketAddr,
+    client_addr: std::net::SocketAddr,
 }
 
 #[derive(Debug, PartialEq)]
@@ -64,8 +58,8 @@ struct EmailInProgress {
 
 impl SmtpServer {
     pub fn new(
-        account_manager: std::sync::Arc<AccountManager>,
-        bind_addr: SocketAddr,
+        account_manager: std::sync::Arc<fastn_account::AccountManager>,
+        bind_addr: std::net::SocketAddr,
         graceful: fastn_net::Graceful,
     ) -> Self {
         Self {
@@ -76,14 +70,14 @@ impl SmtpServer {
     }
 
     pub async fn start(&self) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-        let listener = TcpListener::bind(self.bind_addr).await?;
-        info!("📧 SMTP server listening on {}", self.bind_addr);
+        let listener = tokio::net::TcpListener::bind(self.bind_addr).await?;
+        tracing::info!("📧 SMTP server listening on {}", self.bind_addr);
         println!("📧 SMTP server listening on {}", self.bind_addr);
 
         loop {
             tokio::select! {
                 _ = self.graceful.cancelled() => {
-                    info!("📧 SMTP server shutting down");
+                    tracing::info!("📧 SMTP server shutting down");
                     println!("📧 SMTP server shutting down");
                     break;
                 }
@@ -91,7 +85,7 @@ impl SmtpServer {
                 result = listener.accept() => {
                     match result {
                         Ok((stream, addr)) => {
-                            debug!("📧 New SMTP connection from {}", addr);
+                            tracing::debug!("📧 New SMTP connection from {}", addr);
                             let session = SmtpSession::new(stream, addr);
                             let account_manager = self.account_manager.clone();
                             let graceful = self.graceful.clone();
@@ -99,12 +93,12 @@ impl SmtpServer {
                             // Spawn session handler
                             graceful.spawn(async move {
                                 if let Err(e) = session.handle(account_manager).await {
-                                    error!("📧 SMTP session error from {addr}: {e}");
+                                    tracing::error!("📧 SMTP session error from {addr}: {e}");
                                 }
                             });
                         }
                         Err(e) => {
-                            error!("📧 Failed to accept SMTP connection: {e}");
+                            tracing::error!("📧 Failed to accept SMTP connection: {e}");
                         }
                     }
                 }
@@ -116,7 +110,7 @@ impl SmtpServer {
 }
 
 impl SmtpSession {
-    fn new(stream: TcpStream, client_addr: SocketAddr) -> Self {
+    fn new(stream: tokio::net::TcpStream, client_addr: std::net::SocketAddr) -> Self {
         Self {
             stream,
             state: SessionState::Initial,
@@ -128,9 +122,11 @@ impl SmtpSession {
 
     async fn handle(
         mut self,
-        account_manager: std::sync::Arc<AccountManager>,
+        account_manager: std::sync::Arc<fastn_account::AccountManager>,
     ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-        debug!("📧 Starting SMTP session with {}", self.client_addr);
+        use tokio::io::AsyncReadExt;
+
+        tracing::debug!("📧 Starting SMTP session with {}", self.client_addr);
 
         // Send greeting
         self.write_response("220 fastn SMTP Server").await?;
@@ -154,7 +150,7 @@ impl SmtpSession {
                 let line = String::from_utf8_lossy(&line_bytes[..line_bytes.len() - 2]);
                 let line = line.trim();
 
-                debug!("📧 Received: {}", line);
+                tracing::debug!("📧 Received: {}", line);
 
                 if line.is_empty() {
                     continue;
@@ -167,7 +163,7 @@ impl SmtpSession {
                         let response = match self.process_email_data(&account_manager).await {
                             Ok(response) => response,
                             Err(e) => {
-                                error!("📧 Email processing error: {}", e);
+                                tracing::error!("📧 Email processing error: {}", e);
                                 "450 Temporary failure - try again later".to_string()
                             }
                         };
@@ -193,14 +189,14 @@ impl SmtpSession {
                 let response = match self.process_command(line, &account_manager).await {
                     Ok(response) => response,
                     Err(fastn_rig::SmtpError::InvalidCommandSyntax { command }) => {
-                        debug!("📧 Invalid command syntax: {}", command);
+                        tracing::debug!("📧 Invalid command syntax: {}", command);
                         format!("500 Syntax error: {}", command)
                     }
                     Err(fastn_rig::SmtpError::AuthenticationFailed) => {
                         "535 Authentication failed".to_string()
                     }
                     Err(e) => {
-                        error!("📧 Command processing error: {}", e);
+                        tracing::error!("📧 Command processing error: {}", e);
                         "421 Service not available - try again later".to_string()
                     }
                 };
@@ -214,14 +210,14 @@ impl SmtpSession {
             }
         }
 
-        debug!("📧 SMTP session ended with {}", self.client_addr);
+        tracing::debug!("📧 SMTP session ended with {}", self.client_addr);
         Ok(())
     }
 
     async fn process_command(
         &mut self,
         line: &str,
-        account_manager: &AccountManager,
+        account_manager: &fastn_account::AccountManager,
     ) -> Result<String, fastn_rig::SmtpError> {
         let parts: Vec<&str> = line.splitn(2, ' ').collect();
         let command = parts[0].to_uppercase();
@@ -248,7 +244,7 @@ impl SmtpSession {
     async fn handle_auth(
         &mut self,
         args: &str,
-        account_manager: &AccountManager,
+        account_manager: &fastn_account::AccountManager,
     ) -> Result<String, fastn_rig::SmtpError> {
         let parts: Vec<&str> = args.split_whitespace().collect();
         if parts.len() < 2 {
@@ -266,13 +262,13 @@ impl SmtpSession {
     async fn handle_auth_plain(
         &mut self,
         credentials: &str,
-        account_manager: &AccountManager,
+        account_manager: &fastn_account::AccountManager,
     ) -> Result<String, fastn_rig::SmtpError> {
         // Parse credentials using parser module
         let creds = match parser::AuthCredentials::parse_plain(credentials) {
             Ok(creds) => creds,
             Err(e) => {
-                debug!("📧 Auth parsing error: {}", e);
+                tracing::debug!("📧 Auth parsing error: {}", e);
                 return Ok("535 Authentication failed: invalid format".to_string());
             }
         };
@@ -294,7 +290,7 @@ impl SmtpSession {
             }
             Ok(false) => Ok("535 Authentication failed".to_string()),
             Err(e) => {
-                warn!("📧 Authentication error for {}: {}", creds.username, e);
+                tracing::warn!("📧 Authentication error for {}: {}", creds.username, e);
                 Ok("535 Authentication failed".to_string())
             }
         }
@@ -304,9 +300,9 @@ impl SmtpSession {
         &self,
         account_id52: &fastn_id52::PublicKey,
         password: &str,
-        account_manager: &AccountManager,
+        account_manager: &fastn_account::AccountManager,
     ) -> Result<bool, fastn_rig::SmtpError> {
-        debug!(
+        tracing::debug!(
             "📧 Authenticating account {} with SMTP password",
             account_id52.id52()
         );
@@ -321,12 +317,12 @@ impl SmtpSession {
         match account.verify_smtp_password(password).await {
             Ok(is_valid) => {
                 if is_valid {
-                    info!(
+                    tracing::info!(
                         "📧 SMTP authentication successful for {}",
                         account_id52.id52()
                     );
                 } else {
-                    warn!(
+                    tracing::warn!(
                         "📧 SMTP authentication failed for {} - invalid password or SMTP disabled",
                         account_id52.id52()
                     );
@@ -334,14 +330,14 @@ impl SmtpSession {
                 Ok(is_valid)
             }
             Err(fastn_account::MailConfigError::ConfigNotFound) => {
-                warn!(
+                tracing::warn!(
                     "📧 SMTP authentication failed for {} - no mail configuration found",
                     account_id52.id52()
                 );
                 Ok(false)
             }
             Err(e) => {
-                error!(
+                tracing::error!(
                     "📧 SMTP authentication error for {}: {}",
                     account_id52.id52(),
                     e
@@ -412,7 +408,9 @@ impl SmtpSession {
     }
 
     async fn write_response(&mut self, response: &str) -> Result<(), std::io::Error> {
-        debug!("📧 Sending: {}", response);
+        use tokio::io::AsyncWriteExt;
+
+        tracing::debug!("📧 Sending: {}", response);
         self.stream.write_all(response.as_bytes()).await?;
         self.stream.write_all(b"\r\n").await?;
         self.stream.flush().await?;
@@ -421,7 +419,7 @@ impl SmtpSession {
 
     async fn process_email_data(
         &mut self,
-        account_manager: &AccountManager,
+        account_manager: &fastn_account::AccountManager,
     ) -> Result<String, fastn_rig::SmtpError> {
         let email = match self.current_email.take() {
             Some(email) => email,
@@ -433,7 +431,7 @@ impl SmtpSession {
             None => return Ok("530 Authentication required".to_string()),
         };
 
-        debug!(
+        tracing::debug!(
             "📧 Processing email from {} to {} recipients ({} bytes)",
             email.from,
             email.recipients.len(),
@@ -446,14 +444,14 @@ impl SmtpSession {
             .await
         {
             Ok(()) => {
-                info!(
+                tracing::info!(
                     "📧 Email stored successfully for account {}",
                     authenticated_account.id52()
                 );
                 Ok("250 Message accepted for delivery".to_string())
             }
             Err(e) => {
-                error!("📧 Failed to store email: {}", e);
+                tracing::error!("📧 Failed to store email: {}", e);
                 Ok("450 Temporary failure - try again later".to_string())
             }
         }
@@ -463,7 +461,7 @@ impl SmtpSession {
         &self,
         email: &EmailInProgress,
         account_id52: &fastn_id52::PublicKey,
-        account_manager: &AccountManager,
+        account_manager: &fastn_account::AccountManager,
     ) -> Result<(), fastn_rig::SmtpError> {
         // Find the account that should receive this email
         let account = account_manager
@@ -483,7 +481,7 @@ impl SmtpSession {
             .await
             .map_err(|e| fastn_rig::SmtpError::EmailStorageFailed { source: e })?;
 
-        info!(
+        tracing::info!(
             "📧 Stored incoming email {} from {} in account {} INBOX",
             email_id,
             email.from,
