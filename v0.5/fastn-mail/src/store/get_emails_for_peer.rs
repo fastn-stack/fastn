@@ -43,9 +43,12 @@ impl crate::Store {
 
             // Read the email file
             let full_path = self.account_path().join(&file_path);
+            println!("📂 DEBUG: P2P delivery reading email from: {}", full_path.display());
+            println!("📂 DEBUG: Account path: {}", self.account_path().display());
+            println!("📂 DEBUG: Relative file path: {}", file_path);
             let raw_message =
                 std::fs::read(&full_path).map_err(|e| GetEmailsForPeerError::FileReadFailed {
-                    path: full_path,
+                    path: full_path.clone(),
                     source: e,
                 })?;
 
