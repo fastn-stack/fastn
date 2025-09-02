@@ -513,9 +513,12 @@ async fn deliver_emails_to_peer(
 
     // Send each email over the established stream with request-response
     for email in emails {
-        // Create AccountToAccountMessage for P2P delivery
-        let p2p_message =
-            fastn_account::AccountToAccountMessage::new_email(email.raw_message.clone());
+        // Create AccountToAccountMessage for P2P delivery with envelope data
+        let p2p_message = fastn_account::AccountToAccountMessage::new_email(
+            email.raw_message.clone(),
+            email.envelope_from.clone(),
+            email.envelope_to.clone(),
+        );
 
         tracing::debug!(
             "📦 Sending email {} ({} bytes) over P2P stream",

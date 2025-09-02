@@ -131,7 +131,14 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     println!("\n📨 fastn is running. Press Ctrl+C to stop.");
     println!("   P2P: active on {total_endpoints} endpoints");
     println!("   Email Delivery: polling every 5 seconds");
-    println!("   SMTP: planned (port 2525)");
+
+    // SMTP server configuration
+    let smtp_port = std::env::var("FASTN_SMTP_PORT")
+        .ok()
+        .and_then(|p| p.parse().ok())
+        .unwrap_or(2525); // Default to 2525 for development
+    println!("   SMTP: listening on port {smtp_port}");
+
     println!("   IMAP: planned (port 1143)");
     let http_port = std::env::var("FASTN_HTTP_PORT")
         .ok()
@@ -156,6 +163,18 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     .map_err(|e| fastn_rig::RunError::ShutdownFailed {
         source: Box::new(e),
     })?;
+
+    // Start SMTP server for email reception
+    let smtp_server = crate::smtp::SmtpServer::new(
+        account_manager.clone(),
+        ([0, 0, 0, 0], smtp_port).into(),
+        graceful.clone(),
+    );
+    let _smtp_handle = graceful.spawn(async move {
+        if let Err(e) = smtp_server.start().await {
+            tracing::error!("SMTP server error: {}", e);
+        }
+    });
 
     // Start HTTP server for web interface
     crate::http_server::start_http_server(

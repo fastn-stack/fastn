@@ -53,7 +53,7 @@ pub use errors::{
     AccountCreateError, AccountHttpError, AccountLoadError, AccountManagerCreateError,
     AccountManagerLoadError, AuthorizeConnectionError, CreateInitialDocumentsError,
     FindAccountByAliasError, GetAllEndpointsError, HandleAccountMessageError, HashPasswordError,
-    MigrateUserDatabaseError, StoreCreateError, VerifyPasswordError,
+    MailConfigError, MigrateUserDatabaseError, StoreCreateError, VerifyPasswordError,
 };
 
 // Re-export message types

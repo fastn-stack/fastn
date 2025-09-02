@@ -21,190 +21,33 @@
 //! - Handle mixed fastn/external email addresses
 
 use crate::errors::SmtpReceiveError;
+use tracing::info;
 
 impl crate::Store {
     /// P2P receives an email from another peer and stores in INBOX
     ///
-    /// Flow: Peer P2P message → Check permissions → Store in INBOX
+    /// Flow: Peer P2P message → Use envelope data → Store efficiently
+    /// Note: sender_id52 is implicit from the authenticated P2P connection
     pub async fn p2p_receive_email(
         &self,
+        envelope_from: &str,
+        envelope_to: &str,
         raw_message: Vec<u8>,
-        sender_id52: &fastn_id52::PublicKey,
     ) -> Result<String, SmtpReceiveError> {
-        // Step 1: Parse email headers
-        let mut parsed_email = crate::store::smtp_receive::parse_email(&raw_message)?;
-
-        // Step 2: Override folder to INBOX (P2P emails are inbound)
-        parsed_email.folder = "INBOX".to_string();
-        let timestamp = chrono::Utc::now().format("%Y/%m/%d");
-        parsed_email.file_path = format!(
-            "mails/default/INBOX/{timestamp}/{}.eml",
-            parsed_email.email_id
-        );
-
-        // Step 3: Check sender permissions (allow_mail in AliasNotes)
-        // TODO: Need account's automerge database access for AliasNotes lookup
-        // For now, just log and allow (will implement when account context available)
-        tracing::info!(
-            "🔒 Checking permissions for {} (currently allowing all)",
-            sender_id52
-        );
-
-        // Step 4: Store email file in INBOX
-        self.store_email_file_inbox(&parsed_email.file_path, &raw_message)
+        // Use the same efficient processing as SMTP (no header parsing!)
+        let email_id = self
+            .smtp_receive(
+                envelope_from,
+                &[envelope_to.to_string()], // Single recipient (this peer)
+                raw_message,
+            )
             .await?;
 
-        // Step 5: Store email metadata in database
-        self.store_email_metadata_inbox(&parsed_email).await?;
-
-        println!(
-            "✅ P2P email from {sender_id52} stored in INBOX with ID: {}",
-            parsed_email.email_id
+        // smtp_receive already handled all storage and P2P queuing
+        info!(
+            "📧 P2P email from {} to {} stored with ID: {}",
+            envelope_from, envelope_to, email_id
         );
-        Ok(parsed_email.email_id)
-    }
-
-    /// Store P2P email file in INBOX
-    async fn store_email_file_inbox(
-        &self,
-        file_path: &str,
-        raw_message: &[u8],
-    ) -> Result<(), SmtpReceiveError> {
-        let full_path = self.account_path().join(file_path);
-
-        // Create directory structure if needed
-        if let Some(parent) = full_path.parent() {
-            std::fs::create_dir_all(parent).map_err(|e| {
-                SmtpReceiveError::MessageParsingFailed {
-                    message: format!("Failed to create INBOX directory {}: {e}", parent.display()),
-                }
-            })?;
-        }
-
-        // Check if file already exists
-        if full_path.exists() {
-            return Err(SmtpReceiveError::MessageParsingFailed {
-                message: format!("P2P email file already exists: {}", full_path.display()),
-            });
-        }
-
-        // Write email file
-        std::fs::write(&full_path, raw_message).map_err(|e| {
-            SmtpReceiveError::MessageParsingFailed {
-                message: format!(
-                    "Failed to write P2P email file {}: {e}",
-                    full_path.display()
-                ),
-            }
-        })?;
-
-        println!("📨 Stored P2P email file: {}", full_path.display());
-        Ok(())
-    }
-
-    /// Store P2P email metadata in database
-    async fn store_email_metadata_inbox(
-        &self,
-        parsed_email: &crate::ParsedEmail,
-    ) -> Result<(), SmtpReceiveError> {
-        let conn = self.connection().lock().await;
-
-        conn.execute(
-            "INSERT INTO fastn_emails (
-                email_id, folder, file_path, message_id, from_addr, to_addr, cc_addr, bcc_addr, subject,
-                our_alias_used, our_username, their_alias, their_username,
-                in_reply_to, email_references, date_sent, date_received,
-                content_type, content_encoding, has_attachments, size_bytes,
-                is_seen, is_flagged, is_draft, is_answered, is_deleted, custom_flags
-            ) VALUES (
-                ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9,
-                ?10, ?11, ?12, ?13,
-                ?14, ?15, ?16, ?17,
-                ?18, ?19, ?20, ?21,
-                ?22, ?23, ?24, ?25, ?26, ?27
-            )",
-            rusqlite::params![
-                parsed_email.email_id,
-                parsed_email.folder,
-                parsed_email.file_path,
-                parsed_email.message_id,
-                parsed_email.from_addr,
-                parsed_email.to_addr,
-                parsed_email.cc_addr,
-                parsed_email.bcc_addr,
-                parsed_email.subject,
-                parsed_email.our_alias_used,
-                parsed_email.our_username,
-                parsed_email.their_alias,
-                parsed_email.their_username,
-                parsed_email.in_reply_to,
-                parsed_email.email_references,
-                parsed_email.date_sent,
-                parsed_email.date_received,
-                parsed_email.content_type,
-                parsed_email.content_encoding,
-                parsed_email.has_attachments,
-                parsed_email.size_bytes,
-                parsed_email.is_seen,
-                parsed_email.is_flagged,
-                parsed_email.is_draft,
-                parsed_email.is_answered,
-                parsed_email.is_deleted,
-                parsed_email.custom_flags,
-            ],
-        ).map_err(|e| {
-            SmtpReceiveError::MessageParsingFailed {
-                message: format!("Failed to insert P2P email metadata: {e}"),
-            }
-        })?;
-
-        println!(
-            "📨 Stored P2P email metadata in INBOX: {}",
-            parsed_email.email_id
-        );
-        Ok(())
-    }
-}
-
-/// Check if sender is allowed to send mail using AliasNotes.allow_mail
-#[allow(dead_code)] // Framework ready for implementation
-async fn check_sender_permissions(
-    sender_id52: &fastn_id52::PublicKey,
-    our_alias_used: &Option<String>,
-) -> Result<(), SmtpReceiveError> {
-    // For permission checking, we need to load AliasNotes for the sender
-    // But we need access to an account's automerge database to do this
-
-    // TODO: This requires account context to access automerge database
-    // For now, we need to pass the account or automerge db to this function
-    // The check would be: load AliasNotes for sender_id52, check allow_mail field
-
-    // Temporary: Log the permission check and allow all senders
-    tracing::info!(
-        "🔒 Checking permissions for {} sending to {:?}",
-        sender_id52,
-        our_alias_used
-    );
-    tracing::debug!("📝 Would check AliasNotes.allow_mail for {}", sender_id52);
-
-    // For now, allow all senders (will implement real check when account context available)
-    Ok(())
-}
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn test_peer_permission_checking() {
-        // TODO: Test allow_mail = false blocks messages
-    }
-
-    #[test]
-    fn test_sender_validation() {
-        // TODO: Test sender ID52 matches From header
-    }
-
-    #[test]
-    fn test_inbox_storage() {
-        // TODO: Test proper INBOX file/db storage
+        Ok(email_id)
     }
 }

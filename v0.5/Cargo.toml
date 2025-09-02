@@ -54,6 +54,7 @@ arcstr = "1"
 argon2 = "0.5"
 async-lock = "3"
 async-trait = "0.1"
+base64 = "0.22"
 # Using automerge 0.6.1 to match autosurgeon 0.8's dependency version
 # TODO: Upgrade to automerge 1.0 once autosurgeon supports it
 automerge = "0.6.1"
@@ -117,6 +118,7 @@ tokio-util = "0.7"
 tracing = "0.1"
 tracing-subscriber = "0.3"
 trait-variant = "0.1"
+uuid = { version = "1", features = ["v4"] }
 wasmtime = "36"
 
 [workspace.dependencies.fastn-observer]

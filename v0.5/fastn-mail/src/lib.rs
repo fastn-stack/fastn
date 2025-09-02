@@ -20,9 +20,9 @@
 //!     // Load existing email storage
 //!     let store = Store::load(&account_path).await?;
 //!     
-//!     // SMTP operations
+//!     // SMTP operations with envelope data
 //!     let raw_message = vec![]; // RFC 5322 email bytes
-//!     let email_id = store.smtp_receive(raw_message).await?;
+//!     let email_id = store.smtp_receive("from@example.com", &["to@example.com".to_string()], raw_message).await?;
 //!     
 //!     // IMAP operations
 //!     let folder_info = store.imap_select_folder("INBOX").await?;

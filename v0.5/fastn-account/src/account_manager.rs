@@ -195,11 +195,18 @@ impl fastn_account::AccountManager {
 
         // 2. Process the message based on type
         match message {
-            crate::AccountToAccountMessage::Email { raw_message } => {
+            crate::AccountToAccountMessage::Email {
+                raw_message,
+                envelope_from,
+                envelope_to,
+            } => {
                 println!("📧 Processing email message: {} bytes", raw_message.len());
 
                 // 3. Store in INBOX (this is incoming P2P email from peer)
-                let email_result = account.mail.p2p_receive_email(raw_message, peer_id52).await;
+                let email_result = account
+                    .mail
+                    .p2p_receive_email(&envelope_from, &envelope_to, raw_message)
+                    .await;
 
                 // 4. Create response based on email processing result
                 let response = match email_result {
