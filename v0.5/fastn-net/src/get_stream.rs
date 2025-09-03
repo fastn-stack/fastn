@@ -115,14 +115,17 @@ async fn get_stream_request_sender(
     drop(senders);
 
     let graceful_for_connection_manager = graceful.clone();
+    println!("🚀 DEBUG get_stream_request_sender: Spawning connection_manager task for {}", remote_node_id52);
     graceful.spawn(async move {
-        connection_manager(
+        println!("📋 DEBUG connection_manager: Task started for {}", remote_node_id52);
+        let result = connection_manager(
             receiver,
             self_endpoint,
             remote_node_id52.clone(),
             graceful_for_connection_manager,
         )
         .await;
+        println!("📋 DEBUG connection_manager: Task ended for {} with result: {:?}", remote_node_id52, result);
 
         // cleanup the peer_stream_senders map, so no future tasks will try to use this.
         let mut senders = peer_stream_senders.lock().await;
@@ -138,6 +141,7 @@ async fn connection_manager(
     remote_node_id52: RemoteID52,
     graceful: crate::Graceful,
 ) {
+    println!("🔧 DEBUG connection_manager: Function started for {}", remote_node_id52);
     let e = match connection_manager_(
         &mut receiver,
         self_endpoint,
@@ -191,6 +195,7 @@ async fn connection_manager_(
     remote_node_id52: RemoteID52,
     graceful: crate::Graceful,
 ) -> eyre::Result<()> {
+    println!("🔧 DEBUG connection_manager_: Starting main loop for {}", remote_node_id52);
     let conn = match self_endpoint
         .connect(
             {
@@ -302,27 +307,41 @@ async fn handle_request(
     tracing::trace!("handling request: {header:?}");
     println!("🔧 DEBUG handle_request: Handling stream request for protocol {:?}", header);
 
-    let (mut send, mut recv) = match conn.open_bi().await {
-        Ok(v) => {
+    println!("🔗 DEBUG handle_request: About to open bi-directional stream");
+    let (mut send, mut recv) = match tokio::time::timeout(
+        std::time::Duration::from_secs(10), // 10 second timeout for stream opening
+        conn.open_bi()
+    ).await {
+        Ok(Ok(v)) => {
+            println!("✅ DEBUG handle_request: Successfully opened bi-directional stream");
             tracing::trace!("opened bi-stream");
             v
         }
-        Err(e) => {
+        Ok(Err(e)) => {
+            println!("❌ DEBUG handle_request: Failed to open bi-directional stream: {:?}", e);
             tracing::error!("failed to open_bi: {e:?}");
             return Err(eyre::anyhow!("failed to open_bi: {e:?}"));
         }
+        Err(_timeout) => {
+            println!("⏰ DEBUG handle_request: Timed out opening bi-directional stream after 10 seconds");
+            return Err(eyre::anyhow!("timed out opening bi-directional stream"));
+        }
     };
 
+    println!("📤 DEBUG handle_request: About to write protocol to stream");
     send.write_all(
         &serde_json::to_vec(&header.protocol)
             .wrap_err_with(|| format!("failed to serialize protocol: {:?}", header.protocol))?,
     )
     .await?;
+    println!("✅ DEBUG handle_request: Successfully wrote protocol to stream");
     tracing::trace!("wrote protocol");
 
+    println!("📤 DEBUG handle_request: About to write newline");
     send.write(b"\n")
         .await
         .wrap_err_with(|| "failed to write newline")?;
+    println!("✅ DEBUG handle_request: Successfully wrote newline");
 
     tracing::trace!("wrote newline");
 

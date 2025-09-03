@@ -1667,6 +1667,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "fastn-net-test"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "eyre",
+ "fastn-id52",
+ "fastn-net",
+ "iroh",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "fastn-observer"
 version = "0.1.0"
 source = "git+https://github.com/fastn-stack/fastn-observer?rev=5f64c7b#5f64c7b28b447ce76e24e9428a9c113fa11118fb"
