@@ -200,7 +200,10 @@ impl fastn_account::AccountManager {
                 envelope_from,
                 envelope_to,
             } => {
-                println!("📧 DEBUG: Received P2P email message: {} bytes", raw_message.len());
+                println!(
+                    "📧 DEBUG: Received P2P email message: {} bytes",
+                    raw_message.len()
+                );
                 println!("📧 DEBUG: Envelope from: {}", envelope_from);
                 println!("📧 DEBUG: Envelope to: {}", envelope_to);
                 println!("📧 DEBUG: Our endpoint: {}", our_endpoint_id52);
@@ -217,7 +220,10 @@ impl fastn_account::AccountManager {
                 // 4. Create response based on email processing result
                 let response = match email_result {
                     Ok(email_id) => {
-                        println!("✅ DEBUG: P2P email stored successfully with ID: {}", email_id);
+                        println!(
+                            "✅ DEBUG: P2P email stored successfully with ID: {}",
+                            email_id
+                        );
                         println!("✅ Email stored with ID: {}", email_id);
                         fastn_account::EmailDeliveryResponse {
                             email_id,

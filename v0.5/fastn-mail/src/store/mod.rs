@@ -41,7 +41,7 @@ impl Store {
     /// Create a test store in memory (for testing only)
     pub fn create_test() -> Self {
         let connection = rusqlite::Connection::open_in_memory().unwrap();
-        crate::database::create_schema(&connection).unwrap();
+        fastn_mail::database::create_schema(&connection).unwrap();
 
         // Use temp directory for test files
         let temp_dir = std::env::temp_dir().join(format!("fastn-mail-test-{}", std::process::id()));

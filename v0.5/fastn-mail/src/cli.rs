@@ -108,11 +108,11 @@ pub enum Commands {
 pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
     // Load email store for the specified account
     let account_path = std::path::Path::new(&cli.account_path);
-    let store = match crate::Store::load(account_path).await {
+    let store = match fastn_mail::Store::load(account_path).await {
         Ok(store) => store,
         Err(_) => {
             println!("⚠️  No email store found at path, using test store for CLI demo");
-            crate::Store::create_test()
+            fastn_mail::Store::create_test()
         }
     };
 
@@ -170,7 +170,7 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
     reason = "CLI function mirrors command line arguments"
 )]
 async fn send_mail_command(
-    store: &crate::Store,
+    store: &fastn_mail::Store,
     to: String,
     cc: Option<String>,
     bcc: Option<String>,
@@ -285,7 +285,7 @@ async fn send_mail_command(
 }
 
 async fn list_mails_command(
-    store: &crate::Store,
+    store: &fastn_mail::Store,
     folder: &str,
     limit: usize,
 ) -> Result<(), Box<dyn std::error::Error>> {
@@ -305,7 +305,7 @@ async fn list_mails_command(
     Ok(())
 }
 
-async fn list_folders_command(store: &crate::Store) -> Result<(), Box<dyn std::error::Error>> {
+async fn list_folders_command(store: &fastn_mail::Store) -> Result<(), Box<dyn std::error::Error>> {
     println!("📁 Available folders:");
 
     let folders = store.imap_list_folders().await?;
@@ -317,7 +317,7 @@ async fn list_folders_command(store: &crate::Store) -> Result<(), Box<dyn std::e
 }
 
 async fn show_mail_command(
-    _store: &crate::Store,
+    _store: &fastn_mail::Store,
     email_id: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("📧 Showing email: {email_id}");
@@ -328,7 +328,7 @@ async fn show_mail_command(
 }
 
 async fn pending_deliveries_command(
-    store: &crate::Store,
+    store: &fastn_mail::Store,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("⏳ Checking pending P2P deliveries...");
 
@@ -354,7 +354,7 @@ async fn pending_deliveries_command(
 }
 
 async fn get_emails_for_peer_command(
-    store: &crate::Store,
+    store: &fastn_mail::Store,
     peer_id52: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("📨 Getting emails for peer: {peer_id52}");
@@ -387,7 +387,7 @@ async fn get_emails_for_peer_command(
 }
 
 async fn mark_delivered_command(
-    store: &crate::Store,
+    store: &fastn_mail::Store,
     email_id: &str,
     peer_id52: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
@@ -406,7 +406,7 @@ async fn mark_delivered_command(
 }
 
 async fn p2p_receive_email_command(
-    store: &crate::Store,
+    store: &fastn_mail::Store,
     message_file: &str,
     sender_id52: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
@@ -476,7 +476,7 @@ mod tests {
     #[tokio::test]
     async fn test_send_email_and_check_pending_deliveries() {
         // Create test store
-        let store = crate::Store::create_test();
+        let store = fastn_mail::Store::create_test();
 
         // Generate valid ID52s for testing
         let from_key = fastn_id52::SecretKey::generate();
@@ -531,7 +531,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_multiple_recipients_pending_deliveries() {
-        let store = crate::Store::create_test();
+        let store = fastn_mail::Store::create_test();
 
         let from_key = fastn_id52::SecretKey::generate();
         let to_key = fastn_id52::SecretKey::generate();
@@ -580,8 +580,8 @@ mod tests {
     #[tokio::test]
     async fn test_two_instance_p2p_workflow() {
         // Create two separate store instances
-        let sender_store = crate::Store::create_test();
-        let recipient_store = crate::Store::create_test();
+        let sender_store = fastn_mail::Store::create_test();
+        let recipient_store = fastn_mail::Store::create_test();
 
         // Generate valid ID52s
         let from_key = fastn_id52::SecretKey::generate();
@@ -677,7 +677,7 @@ async fn send_via_smtp_client(
     let email = email_builder.body(body.to_string())?;
 
     // Extract account ID52 from from address for authentication
-    let (_, account_id52) = crate::store::smtp_receive::parse_id52_address(from)?;
+    let (_, account_id52) = fastn_mail::store::smtp_receive::parse_id52_address(from)?;
     let _account_id52 =
         account_id52.ok_or("From address must be a valid fastn address with ID52")?;
 

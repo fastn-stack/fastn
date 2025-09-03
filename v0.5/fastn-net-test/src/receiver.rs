@@ -1,5 +1,5 @@
 //! Minimal fastn-net P2P receiver test
-//! 
+//!
 //! Tests basic connection handling and stream acceptance
 
 #[tokio::main]
@@ -8,21 +8,21 @@ async fn main() -> eyre::Result<()> {
     tracing_subscriber::fmt()
         .with_env_filter("fastn_net=trace,fastn_net_test=info")
         .init();
-    
-    // Generate keys for receiver  
+
+    // Generate keys for receiver
     let receiver_key = fastn_id52::SecretKey::generate();
     let receiver_id52 = receiver_key.public_key().id52();
     println!("🔑 Receiver ID52: {}", receiver_id52);
     println!("📋 Use this ID52 as argument for sender");
-    
+
     // Create endpoint using fastn-net (same as other code)
     let endpoint = fastn_net::get_endpoint(receiver_key).await?;
-    
+
     println!("📡 Receiver endpoint listening");
     println!("🎯 Waiting for connections...");
-    
+
     let graceful = fastn_net::Graceful::new();
-    
+
     // Handle incoming connections (minimal version)
     loop {
         tokio::select! {
@@ -30,7 +30,7 @@ async fn main() -> eyre::Result<()> {
                 println!("🛑 Receiver shutting down");
                 break;
             }
-            
+
             Some(incoming) = endpoint.accept() => {
                 // Spawn immediately without blocking main loop
                 tokio::spawn(async move {
@@ -40,7 +40,7 @@ async fn main() -> eyre::Result<()> {
                                 Ok(peer_key) => {
                                     println!("🔗 Accepted connection from {}", peer_key.id52());
                                     println!("⚠️ Authorization disabled - accepting all connections");
-                                    
+
                                     if let Err(e) = handle_connection(conn).await {
                                         eprintln!("❌ Connection handler error: {}", e);
                                     }
@@ -58,34 +58,32 @@ async fn main() -> eyre::Result<()> {
             }
         }
     }
-    
+
     Ok(())
 }
 
 async fn handle_connection(conn: iroh::endpoint::Connection) -> eyre::Result<()> {
     println!("🔄 Starting connection handler");
-    
+
     let conn = std::sync::Arc::new(conn);
-    
+
     // Accept AccountToAccount streams concurrently
     loop {
         println!("⏳ Waiting for bidirectional stream...");
-        
-        let conn_clone = conn.clone();
-        match fastn_net::accept_bi(&*conn, &[fastn_net::Protocol::AccountToAccount]).await {
+
+        match fastn_net::accept_bi(&conn, &[fastn_net::Protocol::AccountToAccount]).await {
             Ok((protocol, send, recv)) => {
                 println!("✅ Accepted {:?} stream via fastn_net::accept_bi", protocol);
-                
+
                 // Spawn concurrent handler for this stream
                 tokio::spawn(async move {
                     if let Err(e) = handle_stream(protocol, send, recv).await {
                         println!("❌ Stream handler error: {}", e);
                     }
                 });
-                
+
                 // Continue accepting more streams immediately (concurrent)
                 println!("🔄 Continuing to accept more streams concurrently");
-                
             }
             Err(e) => {
                 println!("❌ Failed to accept stream: {}", e);
@@ -101,22 +99,23 @@ async fn handle_stream(
     mut recv: iroh::endpoint::RecvStream,
 ) -> eyre::Result<()> {
     println!("🧵 Stream handler started for {:?} protocol", protocol);
-    
+
     // fastn_net::accept_bi already handled protocol negotiation and sent ACK
-    
+
     // Read actual message
     let message = fastn_net::next_string(&mut recv).await?;
     println!("📨 Stream received message: {}", message);
-    
+
     // Send response
     let response = "Message received successfully!";
     send.write_all(response.as_bytes()).await?;
     send.write_all(b"\n").await?;
     println!("📤 Stream sent response: {}", response);
-    
+
     // Properly close the stream
-    send.finish().map_err(|e| eyre::anyhow!("Failed to finish send stream: {e}"))?;
+    send.finish()
+        .map_err(|e| eyre::anyhow!("Failed to finish send stream: {e}"))?;
     println!("🔚 Stream finished properly");
-    
+
     Ok(())
 }

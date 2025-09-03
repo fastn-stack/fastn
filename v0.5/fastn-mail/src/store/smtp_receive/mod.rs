@@ -19,9 +19,9 @@ mod validate_email_for_smtp;
 
 pub use validate_email_for_smtp::validate_email_for_smtp;
 
-use crate::errors::SmtpReceiveError;
+use fastn_mail::errors::SmtpReceiveError;
 
-impl crate::Store {
+impl fastn_mail::Store {
     /// SMTP server receives an email and handles delivery (local storage or P2P queuing)
     ///
     /// Flow: External SMTP → Store in Sent → Queue for P2P delivery to peers
@@ -111,7 +111,7 @@ impl crate::Store {
     /// Store email metadata in database
     async fn store_email_metadata(
         &self,
-        parsed_email: &crate::ParsedEmail,
+        parsed_email: &fastn_mail::ParsedEmail,
     ) -> Result<(), SmtpReceiveError> {
         let conn = self.connection().lock().await;
 
@@ -171,7 +171,7 @@ impl crate::Store {
     /// Queue P2P deliveries for fastn recipients
     async fn queue_p2p_deliveries(
         &self,
-        parsed_email: &crate::ParsedEmail,
+        parsed_email: &fastn_mail::ParsedEmail,
     ) -> Result<(), SmtpReceiveError> {
         let conn = self.connection().lock().await;
         let mut queued_count = 0;
@@ -235,7 +235,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_smtp_receive_basic() {
-        let store = crate::Store::create_test();
+        let store = fastn_mail::Store::create_test();
 
         // Generate valid ID52s for testing
         let from_key = fastn_id52::SecretKey::generate();
@@ -269,7 +269,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_smtp_receive_validation_failure() {
-        let store = crate::Store::create_test();
+        let store = fastn_mail::Store::create_test();
 
         let email = test_email! {"
             From: external@gmail.com
@@ -293,7 +293,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_smtp_receive_missing_headers() {
-        let store = crate::Store::create_test();
+        let store = fastn_mail::Store::create_test();
 
         let email = test_email! {"
             Subject: No From Header
@@ -315,11 +315,11 @@ mod tests {
 }
 
 /// Create ParsedEmail from SMTP envelope data with minimal parsing
-fn create_parsed_email_from_smtp(
+pub fn create_parsed_email_from_smtp(
     smtp_from: &str,
     smtp_recipients: &[String],
     raw_message: &[u8],
-) -> Result<crate::ParsedEmail, SmtpReceiveError> {
+) -> Result<fastn_mail::ParsedEmail, SmtpReceiveError> {
     // Reject non-UTF-8 emails early
     let message_text =
         std::str::from_utf8(raw_message).map_err(|_| SmtpReceiveError::InvalidUtf8Encoding)?;
@@ -341,7 +341,7 @@ fn create_parsed_email_from_smtp(
     // Extract P2P routing information from SMTP envelope
     let (our_username, our_alias_used) = parse_id52_address(smtp_from).unwrap_or((None, None));
 
-    Ok(crate::ParsedEmail {
+    Ok(fastn_mail::ParsedEmail {
         email_id,
         folder,
         file_path,
@@ -471,5 +471,59 @@ pub fn parse_id52_address(
     match potential_id52.parse::<fastn_id52::PublicKey>() {
         Ok(_) => Ok((Some(username.to_string()), Some(potential_id52.to_string()))),
         Err(_) => Ok((None, None)), // Invalid ID52 - external email
+    }
+}
+
+impl fastn_mail::Store {
+    /// INBOX receives an email from P2P delivery (incoming from peer)  
+    ///
+    /// Flow: P2P message → Store in INBOX → No further queuing needed
+    pub async fn inbox_receive(
+        &self,
+        envelope_from: &str,
+        smtp_recipients: &[String],
+        raw_message: Vec<u8>,
+    ) -> Result<String, SmtpReceiveError> {
+        // Reuse SMTP parsing but override folder to INBOX
+        let mut parsed_email =
+            create_parsed_email_from_smtp(envelope_from, smtp_recipients, &raw_message)?;
+
+        // Override folder for INBOX storage
+        parsed_email.folder = "INBOX".to_string();
+
+        // Update file path for INBOX
+        let timestamp = chrono::Utc::now().format("%Y/%m/%d");
+        parsed_email.file_path = format!(
+            "mails/default/INBOX/{timestamp}/{}.eml",
+            parsed_email.email_id
+        );
+
+        // Store email file in INBOX
+        let full_path = self.account_path.join(&parsed_email.file_path);
+        if let Some(parent) = full_path.parent() {
+            std::fs::create_dir_all(parent).map_err(|e| SmtpReceiveError::FileStoreFailed {
+                path: parent.to_path_buf(),
+                source: e,
+            })?;
+        }
+
+        std::fs::write(&full_path, &raw_message).map_err(|e| {
+            SmtpReceiveError::FileStoreFailed {
+                path: full_path,
+                source: e,
+            }
+        })?;
+
+        // Store metadata in database
+        self.store_email_metadata(&parsed_email).await?;
+
+        // No P2P delivery queuing needed for received emails
+        tracing::info!(
+            "📥 P2P email from {} stored in INBOX with ID: {}",
+            envelope_from,
+            parsed_email.email_id
+        );
+
+        Ok(parsed_email.email_id)
     }
 }

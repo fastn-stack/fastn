@@ -212,7 +212,7 @@ async fn handle_connection(
     our_endpoint: fastn_id52::PublicKey,
     owner_type: fastn_rig::OwnerType,
     conn: iroh::endpoint::Connection,
-    message_tx: tokio::sync::mpsc::Sender<fastn_rig::P2PMessage>,
+    _message_tx: tokio::sync::mpsc::Sender<fastn_rig::P2PMessage>,
     graceful: fastn_net::Graceful,
     account_manager: std::sync::Arc<fastn_account::AccountManager>,
 ) -> Result<(), fastn_rig::EndpointError> {
@@ -230,8 +230,10 @@ async fn handle_connection(
     // Perform connection authorization directly
     tracing::debug!("Authorizing connection from {peer_key} to {our_endpoint}");
 
-    // Authorization disabled for first release - accept all connections  
-    tracing::info!("✅ Connection accepted for peer {peer_key} to endpoint {our_endpoint} (no authorization)");
+    // Authorization disabled for first release - accept all connections
+    tracing::info!(
+        "✅ Connection accepted for peer {peer_key} to endpoint {our_endpoint} (no authorization)"
+    );
 
     // Determine expected protocols based on owner type
     let expected_protocols: Vec<fastn_net::Protocol> = match owner_type {
@@ -259,7 +261,7 @@ async fn handle_connection(
                 tracing::debug!("Connection handler cancelled");
                 break;
             }
-            
+
             // Accept a bidirectional stream with protocol negotiation
             result = fastn_net::accept_bi(&conn, &expected_protocols) => {
                 match result {
@@ -294,8 +296,8 @@ async fn handle_connection(
                                                 tracing::error!("Failed to deserialize account message: {}", e);
                                                 let error_response = fastn_account::EmailDeliveryResponse {
                                                     email_id: "unknown".to_string(),
-                                                    status: fastn_account::DeliveryStatus::Rejected { 
-                                                        reason: format!("Message deserialization failed: {}", e) 
+                                                    status: fastn_account::DeliveryStatus::Rejected {
+                                                        reason: format!("Message deserialization failed: {}", e)
                                                     },
                                                 };
                                                 let json = serde_json::to_string(&error_response).unwrap_or_else(|_| "{}".to_string());
@@ -332,8 +334,8 @@ async fn handle_connection(
                                                 tracing::error!("Failed to handle account message: {}", e);
                                                 fastn_account::EmailDeliveryResponse {
                                                     email_id: email_id.clone(),
-                                                    status: fastn_account::DeliveryStatus::Rejected { 
-                                                        reason: format!("Message handling failed: {}", e) 
+                                                    status: fastn_account::DeliveryStatus::Rejected {
+                                                        reason: format!("Message handling failed: {}", e)
                                                     },
                                                 }
                                             }

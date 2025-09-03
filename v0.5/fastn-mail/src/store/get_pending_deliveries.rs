@@ -1,9 +1,9 @@
 //! # Get Pending Deliveries
 
-use crate::PendingDelivery;
-use crate::errors::*;
+use fastn_mail::PendingDelivery;
+use fastn_mail::errors::*;
 
-impl crate::Store {
+impl fastn_mail::Store {
     /// Called by periodic task to check outbound queue
     pub async fn get_pending_deliveries(
         &self,

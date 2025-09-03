@@ -1,8 +1,8 @@
 //! # IMAP Search
 
-use crate::errors::*;
+use fastn_mail::errors::*;
 
-impl crate::Store {
+impl fastn_mail::Store {
     /// Search for emails matching criteria
     pub async fn imap_search(
         &self,

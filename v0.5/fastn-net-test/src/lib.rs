@@ -5,8 +5,8 @@
 //! complex email delivery system.
 
 // Re-export dependencies for convenience
-pub use fastn_net;
-pub use fastn_id52;
-pub use tokio;
 pub use eyre;
+pub use fastn_id52;
+pub use fastn_net;
 pub use serde_json;
+pub use tokio;

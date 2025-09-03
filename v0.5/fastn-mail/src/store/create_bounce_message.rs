@@ -1,8 +1,8 @@
 //! # Create Bounce Message
 
-use crate::errors::*;
+use fastn_mail::errors::*;
 
-impl crate::Store {
+impl fastn_mail::Store {
     /// Create bounce message for rejected email delivery
     pub async fn create_bounce_message(
         &self,
