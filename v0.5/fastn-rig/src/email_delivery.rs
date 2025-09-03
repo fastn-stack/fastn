@@ -543,8 +543,9 @@ async fn deliver_emails_to_peer(
         peer_id52
     );
 
-    // Establish P2P stream using fastn-net infrastructure with timeout
-    println!("🔗 DEBUG: About to establish P2P stream to {}", peer_id52.id52());
+    // Use proper fastn-net get_stream (same as working test and http_proxy.rs)
+    println!("🔗 DEBUG: About to establish P2P stream via fastn-net to {}", peer_id52.id52());
+    
     let (mut send, mut recv) = match tokio::time::timeout(
         std::time::Duration::from_secs(30), // 30 second timeout
         fastn_net::get_stream(
@@ -556,11 +557,11 @@ async fn deliver_emails_to_peer(
         )
     ).await {
         Ok(Ok(stream)) => {
-            println!("✅ DEBUG: P2P stream established successfully");
+            println!("✅ DEBUG: fastn-net P2P stream established successfully");
             stream
         }
         Ok(Err(e)) => {
-            println!("❌ DEBUG: P2P stream establishment failed: {}", e);
+            println!("❌ DEBUG: fastn-net P2P stream establishment failed: {}", e);
             return Err(fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
                 source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
                     source: rusqlite::Error::InvalidColumnName(format!("P2P connection failed: {e}")),
@@ -568,7 +569,7 @@ async fn deliver_emails_to_peer(
             });
         }
         Err(_timeout) => {
-            println!("⏰ DEBUG: P2P stream establishment timed out after 30 seconds");
+            println!("⏰ DEBUG: fastn-net P2P stream establishment timed out after 30 seconds");
             return Err(fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
                 source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
                     source: rusqlite::Error::InvalidColumnName("P2P connection timeout".to_string()),
@@ -621,15 +622,15 @@ async fn deliver_emails_to_peer(
             }
         };
 
-        println!("📡 DEBUG: About to write message to P2P stream");
+        println!("📡 DEBUG: About to write email message to P2P stream");
         match send.write_all(message_json.as_bytes()).await {
-            Ok(_) => println!("✅ DEBUG: Message bytes written to stream"),
+            Ok(_) => println!("✅ DEBUG: Email message written to stream"),
             Err(e) => {
-                println!("❌ DEBUG: Failed to write message to stream: {}", e);
+                println!("❌ DEBUG: Failed to write email message to stream: {}", e);
                 return Err(fastn_rig::EmailDeliveryError::PendingDeliveriesQueryFailed {
                     source: fastn_mail::GetPendingDeliveriesError::DatabaseQueryFailed {
                         source: rusqlite::Error::InvalidColumnName(format!(
-                            "Failed to send message: {e}"
+                            "Failed to send email: {e}"
                         )),
                     },
                 });
@@ -651,9 +652,10 @@ async fn deliver_emails_to_peer(
             }
         }
 
-        // Wait for delivery response
-        println!("⏳ DEBUG: Waiting for delivery response from peer");
-        let response = match fastn_net::next_json::<EmailDeliveryResponse>(&mut recv).await {
+        println!("⏳ DEBUG: Waiting for delivery response from peer (proper confirmation)");
+        
+        // Wait for actual response from peer (proper delivery confirmation)
+        let response = match fastn_net::next_json::<fastn_account::EmailDeliveryResponse>(&mut recv).await {
             Ok(response) => {
                 println!("✅ DEBUG: Received response from peer: {:?}", response.status);
                 response
@@ -670,37 +672,17 @@ async fn deliver_emails_to_peer(
             }
         };
 
-        // Handle individual email response
+        // Handle delivery response properly
         match response.status {
-            DeliveryStatus::Accepted => {
+            fastn_account::DeliveryStatus::Accepted => {
                 delivered_email_ids.push(email.email_id.clone());
-                tracing::debug!("✅ Email {} accepted by {}", email.email_id, peer_id52);
+                println!("✅ Email {} delivered successfully (confirmed by peer)", email.email_id);
+                tracing::info!("📧 Email {} delivered to {} (confirmed)", email.email_id, peer_id52);
             }
-            DeliveryStatus::Rejected { reason } => {
-                tracing::warn!(
-                    "❌ Email {} rejected by {}: {}",
-                    email.email_id,
-                    peer_id52,
-                    reason
-                );
-
-                // Create bounce message for rejected email
-                let mail_store = fastn_mail::Store::load(account_path).await.map_err(|e| {
-                    fastn_rig::EmailDeliveryError::MailStoreLoadFailed { source: e }
-                })?;
-
-                if let Err(e) = mail_store
-                    .create_bounce_message(&email.email_id, &reason)
-                    .await
-                {
-                    tracing::error!(
-                        "Failed to create bounce message for {}: {}",
-                        email.email_id,
-                        e
-                    );
-                }
-
-                // Don't add to delivered list (it wasn't delivered)
+            fastn_account::DeliveryStatus::Rejected { reason } => {
+                println!("❌ Email {} rejected by peer: {}", email.email_id, reason);
+                tracing::warn!("📧 Email {} rejected by {}: {}", email.email_id, peer_id52, reason);
+                // Don't add to delivered_email_ids - will remain queued for retry
             }
         }
     }
