@@ -20,10 +20,10 @@
 //! - Parse To/CC/BCC for proper routing validation
 //! - Handle mixed fastn/external email addresses
 
-use crate::errors::SmtpReceiveError;
+use fastn_mail::errors::SmtpReceiveError;
 use tracing::info;
 
-impl crate::Store {
+impl fastn_mail::Store {
     /// P2P receives an email from another peer and stores in INBOX
     ///
     /// Flow: Peer P2P message → Use envelope data → Store efficiently
@@ -34,9 +34,9 @@ impl crate::Store {
         envelope_to: &str,
         raw_message: Vec<u8>,
     ) -> Result<String, SmtpReceiveError> {
-        // Use the same efficient processing as SMTP (no header parsing!)
+        // P2P receives store in INBOX (incoming email from peer)
         let email_id = self
-            .smtp_receive(
+            .inbox_receive(
                 envelope_from,
                 &[envelope_to.to_string()], // Single recipient (this peer)
                 raw_message,

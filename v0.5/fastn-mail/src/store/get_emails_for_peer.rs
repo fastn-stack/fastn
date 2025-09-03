@@ -1,9 +1,9 @@
 //! # Get Emails for Peer
 
-use crate::EmailForDelivery;
-use crate::errors::*;
+use fastn_mail::EmailForDelivery;
+use fastn_mail::errors::*;
 
-impl crate::Store {
+impl fastn_mail::Store {
     /// Called when peer contacts us requesting their emails
     pub async fn get_emails_for_peer(
         &self,
@@ -43,7 +43,10 @@ impl crate::Store {
 
             // Read the email file
             let full_path = self.account_path().join(&file_path);
-            println!("📂 DEBUG: P2P delivery reading email from: {}", full_path.display());
+            println!(
+                "📂 DEBUG: P2P delivery reading email from: {}",
+                full_path.display()
+            );
             println!("📂 DEBUG: Account path: {}", self.account_path().display());
             println!("📂 DEBUG: Relative file path: {}", file_path);
             let raw_message =

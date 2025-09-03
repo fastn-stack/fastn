@@ -1,8 +1,8 @@
 //! # IMAP List Folders
 
-use crate::errors::*;
+use fastn_mail::errors::*;
 
-impl crate::Store {
+impl fastn_mail::Store {
     /// List available folders
     pub async fn imap_list_folders(&self) -> Result<Vec<String>, ImapListFoldersError> {
         let mails_path = self.account_path().join("mails/default");

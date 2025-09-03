@@ -1,9 +1,9 @@
 //! # IMAP Store Flags
 
-use crate::Flag;
-use crate::errors::*;
+use fastn_mail::Flag;
+use fastn_mail::errors::*;
 
-impl crate::Store {
+impl fastn_mail::Store {
     /// Store flags for email messages
     pub async fn imap_store_flags(
         &self,

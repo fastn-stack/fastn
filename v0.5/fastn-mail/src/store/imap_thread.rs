@@ -1,9 +1,9 @@
 //! # IMAP Thread
 
-use crate::ThreadTree;
-use crate::errors::*;
+use fastn_mail::ThreadTree;
+use fastn_mail::errors::*;
 
-impl crate::Store {
+impl fastn_mail::Store {
     /// Get thread tree for folder (IMAP THREAD extension)
     pub async fn imap_thread(
         &self,
