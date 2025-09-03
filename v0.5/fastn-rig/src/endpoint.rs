@@ -230,62 +230,39 @@ async fn handle_connection(
     // Perform connection authorization directly
     tracing::debug!("Authorizing connection from {peer_key} to {our_endpoint}");
 
-    // Find the account that owns this endpoint
-    let account = match account_manager.find_account_by_alias(&our_endpoint).await {
-        Ok(account) => account,
-        Err(e) => {
-            tracing::warn!("No account found for endpoint {our_endpoint}: {e}");
-            return Ok(()); // Close connection silently
+    // Authorization disabled for first release - accept all connections  
+    tracing::info!("✅ Connection accepted for peer {peer_key} to endpoint {our_endpoint} (no authorization)");
+
+    // Determine expected protocols based on owner type
+    let expected_protocols: Vec<fastn_net::Protocol> = match owner_type {
+        fastn_rig::OwnerType::Account => {
+            // Accounts can receive from Devices or other Accounts
+            vec![
+                fastn_net::Protocol::DeviceToAccount,
+                fastn_net::Protocol::AccountToAccount,
+            ]
+        }
+        fastn_rig::OwnerType::Device => {
+            // Devices receive from Accounts
+            vec![fastn_net::Protocol::AccountToDevice]
+        }
+        fastn_rig::OwnerType::Rig => {
+            // Rig receives control messages
+            vec![fastn_net::Protocol::RigControl]
         }
     };
 
-    // Authorize the connection
-    let authorized = match account.authorize_connection(&peer_key, &our_endpoint).await {
-        Ok(auth) => auth,
-        Err(e) => {
-            tracing::error!("Authorization failed for peer {peer_key}: {e}");
-            return Ok(()); // Close connection
-        }
-    };
-
-    if !authorized {
-        tracing::warn!("Connection rejected for peer {peer_key} to endpoint {our_endpoint}");
-        return Ok(()); // Close connection immediately
-    }
-
-    tracing::info!("✅ Connection authorized for peer {peer_key} to endpoint {our_endpoint}");
-
-    // Handle multiple streams on this connection
+    // Handle multiple streams on this connection (following receiver.rs pattern)
     loop {
         tokio::select! {
-            // Accept bidirectional streams with protocol negotiation
             _ = graceful.cancelled() => {
                 tracing::debug!("Connection handler cancelled");
                 break;
             }
-
-            else => {
-                // Determine expected protocols based on owner type
-                let expected_protocols: Vec<fastn_net::Protocol> = match owner_type {
-                    fastn_rig::OwnerType::Account => {
-                        // Accounts can receive from Devices or other Accounts
-                        vec![
-                            fastn_net::Protocol::DeviceToAccount,
-                            fastn_net::Protocol::AccountToAccount,
-                        ]
-                    }
-                    fastn_rig::OwnerType::Device => {
-                        // Devices receive from Accounts
-                        vec![fastn_net::Protocol::AccountToDevice]
-                    }
-                    fastn_rig::OwnerType::Rig => {
-                        // Rig receives control messages
-                        vec![fastn_net::Protocol::RigControl]
-                    }
-                };
-
-                // Accept a bidirectional stream with protocol negotiation
-                match fastn_net::accept_bi(&conn, &expected_protocols).await {
+            
+            // Accept a bidirectional stream with protocol negotiation
+            result = fastn_net::accept_bi(&conn, &expected_protocols) => {
+                match result {
                     Ok((protocol, mut send, mut recv)) => {
                         tracing::info!("Accepted {protocol:?} stream from {peer_key} to {our_endpoint}");
 
@@ -302,7 +279,7 @@ async fn handle_connection(
                                 }
                             }
                             fastn_net::Protocol::AccountToAccount => {
-                                // Handle email messages
+                                // Handle email messages directly (synchronous processing for proper response)
                                 match fastn_net::next_string(&mut recv).await {
                                     Ok(message_str) => {
                                         tracing::info!(
@@ -310,22 +287,61 @@ async fn handle_connection(
                                             message_str.len()
                                         );
 
-                                        // Send the message through the channel for processing
-                                        if let Err(e) = message_tx
-                                            .send(fastn_rig::P2PMessage {
-                                                our_endpoint,
-                                                owner_type: owner_type.clone(),
-                                                peer_id52: peer_key,
-                                                message: message_str.into_bytes(),
-                                            })
-                                            .await
-                                        {
-                                            tracing::error!("Failed to send message to channel: {}", e);
-                                        }
+                                        // Process the message directly instead of through channel
+                                        let account_message = match serde_json::from_slice::<fastn_account::AccountToAccountMessage>(message_str.as_bytes()) {
+                                            Ok(msg) => msg,
+                                            Err(e) => {
+                                                tracing::error!("Failed to deserialize account message: {}", e);
+                                                let error_response = fastn_account::EmailDeliveryResponse {
+                                                    email_id: "unknown".to_string(),
+                                                    status: fastn_account::DeliveryStatus::Rejected { 
+                                                        reason: format!("Message deserialization failed: {}", e) 
+                                                    },
+                                                };
+                                                let json = serde_json::to_string(&error_response).unwrap_or_else(|_| "{}".to_string());
+                                                if let Err(e) = send.write_all(format!("{}\n", json).as_bytes()).await {
+                                                    tracing::error!("Failed to send error response: {}", e);
+                                                }
+                                                break;
+                                            }
+                                        };
 
-                                        // Send acknowledgment
-                                        if let Err(e) = send.write_all(format!("{}\n", fastn_net::ACK).as_bytes()).await {
-                                            tracing::error!("Failed to send ACK: {}", e);
+                                        // Handle the message via AccountManager
+                                        let result = account_manager
+                                            .handle_account_message(&peer_key, &our_endpoint, account_message.clone())
+                                            .await;
+
+                                        // Get email ID from the message
+                                        let email_id = match &account_message {
+                                            fastn_account::AccountToAccountMessage::Email { envelope_from, .. } => {
+                                                // Use envelope_from as identifier for now
+                                                envelope_from.clone()
+                                            }
+                                        };
+
+                                        // Send proper JSON response
+                                        let response = match result {
+                                            Ok(_) => {
+                                                println!("✅ Account message handled successfully");
+                                                fastn_account::EmailDeliveryResponse {
+                                                    email_id: email_id.clone(),
+                                                    status: fastn_account::DeliveryStatus::Accepted,
+                                                }
+                                            }
+                                            Err(e) => {
+                                                tracing::error!("Failed to handle account message: {}", e);
+                                                fastn_account::EmailDeliveryResponse {
+                                                    email_id: email_id.clone(),
+                                                    status: fastn_account::DeliveryStatus::Rejected { 
+                                                        reason: format!("Message handling failed: {}", e) 
+                                                    },
+                                                }
+                                            }
+                                        };
+
+                                        let json = serde_json::to_string(&response).unwrap_or_else(|_| "{}".to_string());
+                                        if let Err(e) = send.write_all(format!("{}\n", json).as_bytes()).await {
+                                            tracing::error!("Failed to send delivery response: {}", e);
                                         }
                                     }
                                     Err(e) => {
