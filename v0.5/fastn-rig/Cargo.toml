@@ -43,11 +43,11 @@ clap.workspace = true
 tracing-subscriber.workspace = true
 base64.workspace = true
 uuid.workspace = true
+walkdir = "2"
 
 [dev-dependencies]
 tempfile = "3"
 dirs = "5"
 lettre = "0.11"
-walkdir = "2"
 
 # Future: fastn-device when created
