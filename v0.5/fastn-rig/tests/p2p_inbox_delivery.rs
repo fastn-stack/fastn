@@ -156,7 +156,7 @@ async fn test_p2p_email_goes_to_inbox() {
         .await
         .expect("Peer2 init should succeed");
 
-    // Extract account credentials
+    // Extract account credentials with debugging
     let account1_id =
         extract_account_id(&init1_output).expect("Failed to extract peer1 account ID");
     let account1_password =
@@ -166,8 +166,12 @@ async fn test_p2p_email_goes_to_inbox() {
     let _account2_password =
         extract_password(&init2_output).expect("Failed to extract peer2 password");
 
-    println!("✅ Peer 1: {}", account1_id);
-    println!("✅ Peer 2: {}", account2_id);
+    println!("✅ Peer 1: {} (length: {})", account1_id, account1_id.len());
+    println!("✅ Peer 2: {} (length: {})", account2_id, account2_id.len());
+    
+    // Verify ID52 lengths are correct
+    assert_eq!(account1_id.len(), 52, "Account1 ID52 should be 52 characters");
+    assert_eq!(account2_id.len(), 52, "Account2 ID52 should be 52 characters");
 
     // Start both peers with cleanup guard
     println!("🚀 Starting peers...");
@@ -207,31 +211,72 @@ async fn test_p2p_email_goes_to_inbox() {
 
     println!("✅ Email sent via SMTP");
 
-    // Wait for P2P delivery to complete
-    tokio::time::sleep(Duration::from_secs(8)).await;
-    println!("⏳ Waited for P2P delivery");
+    // Debug: Check if email was queued for P2P delivery first
+    println!("🔍 Debug: Checking if email was queued for P2P delivery...");
+    
+    // Wait and check delivery status incrementally  
+    for attempt in 1..=6 {
+        tokio::time::sleep(Duration::from_secs(5)).await;
+        println!("⏳ P2P delivery check #{}/6", attempt);
+        
+        // Check peer 1's Sent folder
+        let peer1_sent_emails = find_emails_in_folder(&peer1_path, &account1_id, "Sent").await;
+        println!("📊 Peer 1 Sent: {} emails", peer1_sent_emails.len());
+        
+        // Check peer 2's INBOX folder
+        let peer2_inbox_emails = find_emails_in_folder(&peer2_path, &account2_id, "INBOX").await;
+        println!("📊 Peer 2 INBOX: {} emails", peer2_inbox_emails.len());
+        
+        // Check peer 2's Sent folder (the bug we fixed)
+        let peer2_sent_emails = find_emails_in_folder(&peer2_path, &account2_id, "Sent").await;
+        println!("📊 Peer 2 Sent: {} emails (should be 0 for received emails)", peer2_sent_emails.len());
+        
+        if !peer2_inbox_emails.is_empty() {
+            println!("✅ P2P delivery successful on attempt {}", attempt);
+            break;
+        }
+        
+        if attempt == 6 {
+            // Final attempt - gather detailed debug info
+            println!("🐛 Debug: P2P delivery failed after {} attempts", attempt);
+            println!("🐛 Debug: Checking database for pending deliveries...");
+            
+            // Check if there are pending deliveries in the database
+            if let Ok(db_path) = std::fs::read_dir(peer1_path.join("accounts").join(&account1_id)) {
+                for entry in db_path.flatten() {
+                    if entry.path().extension().and_then(|s| s.to_str()) == Some("sqlite") {
+                        println!("🐛 Debug: Found database: {:?}", entry.path());
+                    }
+                }
+            }
+        }
+    }
 
-    // Verify email in peer 1's Sent folder
+    // Final verification
     let peer1_sent_emails = find_emails_in_folder(&peer1_path, &account1_id, "Sent").await;
     assert!(
         !peer1_sent_emails.is_empty(),
         "Email should be in peer 1's Sent folder"
     );
-    println!(
-        "✅ Found {} emails in peer 1 Sent folder",
-        peer1_sent_emails.len()
-    );
+    println!("✅ Found {} emails in peer 1 Sent folder", peer1_sent_emails.len());
 
-    // Verify email delivered to peer 2's INBOX folder
     let peer2_inbox_emails = find_emails_in_folder(&peer2_path, &account2_id, "INBOX").await;
-    assert!(
-        !peer2_inbox_emails.is_empty(),
-        "Email should be delivered to peer 2's INBOX"
-    );
-    println!(
-        "✅ Found {} emails in peer 2 INBOX folder",
-        peer2_inbox_emails.len()
-    );
+    if peer2_inbox_emails.is_empty() {
+        // Print debug info before failing
+        println!("🐛 Debug: No emails found in peer 2 INBOX");
+        println!("🐛 Debug: Peer 1 account: {}", account1_id);
+        println!("🐛 Debug: Peer 2 account: {}", account2_id); 
+        println!("🐛 Debug: From email: {}", from_email);
+        println!("🐛 Debug: To email: {}", to_email);
+        
+        // Check if peer 2 accounts directory exists
+        let peer2_account_dir = peer2_path.join("accounts").join(&account2_id);
+        println!("🐛 Debug: Peer 2 account dir exists: {}", peer2_account_dir.exists());
+        
+        panic!("Email should be delivered to peer 2's INBOX after 30 seconds");
+    }
+    
+    println!("✅ Found {} emails in peer 2 INBOX folder", peer2_inbox_emails.len());
 
     // Verify email content matches
     let sent_content = tokio::fs::read_to_string(&peer1_sent_emails[0])
@@ -258,6 +303,16 @@ async fn test_p2p_email_goes_to_inbox() {
 
 /// Extract account ID from fastn-rig init output
 fn extract_account_id(output: &str) -> Option<String> {
+    // Look for "Primary account:" line which has the actual account ID
+    for line in output.lines() {
+        if line.contains("Primary account:") {
+            if let Some(id_part) = line.split("Primary account:").nth(1) {
+                return Some(id_part.trim().to_string());
+            }
+        }
+    }
+    
+    // Fallback: look for first ID52 that's not a Rig ID52
     for line in output.lines() {
         if line.contains("ID52:")
             && !line.contains("Rig ID52:")
