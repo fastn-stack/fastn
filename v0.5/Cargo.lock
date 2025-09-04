@@ -1734,6 +1734,7 @@ dependencies = [
  "hyper",
  "hyper-util",
  "iroh",
+ "lettre",
  "rusqlite",
  "serde",
  "serde_json",
@@ -1744,6 +1745,7 @@ dependencies = [
  "tracing",
  "tracing-subscriber",
  "uuid",
+ "walkdir",
 ]
 
 [[package]]
