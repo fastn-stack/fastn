@@ -56,30 +56,31 @@ impl fastn_account::Account {
 
         // Store keys based on SKIP_KEYRING environment variable
         let key_path = account_path.join("aliases").join(&id52);
-        
+
         let skip_keyring = match std::env::var("SKIP_KEYRING") {
-            Ok(value) => {
-                match value.to_lowercase().as_str() {
-                    "true" | "yes" | "1" | "on" => {
-                        tracing::info!("SKIP_KEYRING={} interpreted as true", value);
-                        true
-                    }
-                    "false" | "no" | "0" | "off" => {
-                        tracing::info!("SKIP_KEYRING={} interpreted as false", value);
-                        false
-                    }
-                    _ => {
-                        tracing::warn!("SKIP_KEYRING={} is not a recognized value. Expected: true/false/yes/no/1/0/on/off. Defaulting to true.", value);
-                        true
-                    }
+            Ok(value) => match value.to_lowercase().as_str() {
+                "true" | "yes" | "1" | "on" => {
+                    tracing::info!("SKIP_KEYRING={} interpreted as true", value);
+                    true
                 }
-            }
+                "false" | "no" | "0" | "off" => {
+                    tracing::info!("SKIP_KEYRING={} interpreted as false", value);
+                    false
+                }
+                _ => {
+                    tracing::warn!(
+                        "SKIP_KEYRING={} is not a recognized value. Expected: true/false/yes/no/1/0/on/off. Defaulting to true.",
+                        value
+                    );
+                    true
+                }
+            },
             Err(_) => {
                 tracing::info!("SKIP_KEYRING not set, defaulting to true (keyring not working)");
-                true  // Default to true since keyring is not working
+                true // Default to true since keyring is not working
             }
         };
-        
+
         if skip_keyring {
             // Save private key to file
             tracing::info!("SKIP_KEYRING set, saving private key to file");
