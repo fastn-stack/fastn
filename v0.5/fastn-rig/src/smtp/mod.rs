@@ -152,7 +152,8 @@ impl SmtpSession {
 
                 tracing::debug!("📧 Received: {}", line);
 
-                if line.is_empty() {
+                // Don't skip empty lines during DATA state - they're part of email content
+                if line.is_empty() && self.state != SessionState::Data {
                     continue;
                 }
 
@@ -458,6 +459,11 @@ impl SmtpSession {
                     e
                 );
                 println!("🐛 DEBUG: Email storage error details: {}", e);
+                if let Some(source) = std::error::Error::source(&e) {
+                    println!("🐛 DEBUG: Root cause: {:?}", source);
+                } else {
+                    println!("🐛 DEBUG: No additional error details");
+                }
                 Ok("450 Temporary failure - try again later".to_string())
             }
         }
