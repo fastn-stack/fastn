@@ -47,5 +47,7 @@ uuid.workspace = true
 [dev-dependencies]
 tempfile = "3"
 dirs = "5"
+lettre = "0.11"
+walkdir = "2"
 
 # Future: fastn-device when created
