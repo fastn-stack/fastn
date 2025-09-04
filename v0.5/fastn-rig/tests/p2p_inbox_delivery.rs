@@ -13,16 +13,36 @@ use std::time::Duration;
 use tempfile::TempDir;
 use tokio::process::Command;
 
+/// RAII guard to ensure background processes are killed even on test failure/panic
+struct ProcessCleanup<'a> {
+    processes: Vec<&'a mut tokio::process::Child>,
+}
+
+impl<'a> ProcessCleanup<'a> {
+    fn new(peer1: &'a mut tokio::process::Child, peer2: &'a mut tokio::process::Child) -> Self {
+        Self {
+            processes: vec![peer1, peer2],
+        }
+    }
+}
+
+impl<'a> Drop for ProcessCleanup<'a> {
+    fn drop(&mut self) {
+        for process in &mut self.processes {
+            let _ = process.start_kill();
+        }
+        println!("🧹 Process cleanup completed");
+    }
+}
+
 /// Helper for running fastn-rig commands
 struct FastnRigHelper {
-    project_path: PathBuf,
     skip_keyring: String,
 }
 
 impl FastnRigHelper {
     fn new() -> Self {
         Self {
-            project_path: PathBuf::from("/Users/amitu/Projects/fastn-me/v0.5"),
             skip_keyring: std::env::var("SKIP_KEYRING").unwrap_or_else(|_| "true".to_string()),
         }
     }
@@ -33,7 +53,6 @@ impl FastnRigHelper {
             .args(["run", "--bin", "fastn-rig", "--", "init"])
             .env("SKIP_KEYRING", &self.skip_keyring)
             .env("FASTN_HOME", fastn_home)
-            .current_dir(&self.project_path)
             .output()
             .await?;
         
@@ -51,13 +70,12 @@ impl FastnRigHelper {
             .env("SKIP_KEYRING", &self.skip_keyring)
             .env("FASTN_HOME", fastn_home)
             .env("FASTN_SMTP_PORT", smtp_port.to_string())
-            .current_dir(&self.project_path)
             .spawn()?;
         
         Ok(process)
     }
 
-    /// Send email via SMTP
+    /// Send email via SMTP (uses hardcoded default@ username for now)
     async fn send_email_smtp(
         &self, 
         fastn_home: &PathBuf,
@@ -67,7 +85,7 @@ impl FastnRigHelper {
         to: &str,
         subject: &str,
         body: &str
-    ) -> Result<String, Box<dyn std::error::Error + Send + Sync>> {
+    ) -> Result<String, Box<dyn std::error::Error + Send + Sync>> {        
         let output = Command::new("cargo")
             .args([
                 "run", "--bin", "fastn-mail", "--features", "net", "--",
@@ -79,12 +97,12 @@ impl FastnRigHelper {
                 "--body", body
             ])
             .env("FASTN_HOME", fastn_home)
-            .current_dir(&self.project_path)
             .output()
             .await?;
 
         if !output.status.success() {
-            return Err(format!("SMTP send failed: {}", String::from_utf8_lossy(&output.stderr)).into());
+            let stderr = String::from_utf8_lossy(&output.stderr);
+            return Err(format!("SMTP send failed: {}", stderr).into());
         }
 
         Ok(String::from_utf8_lossy(&output.stdout).to_string())
@@ -115,18 +133,21 @@ async fn test_p2p_email_goes_to_inbox() {
     println!("✅ Peer 1: {}", account1_id);
     println!("✅ Peer 2: {}", account2_id);
 
-    // Start both peers
+    // Start both peers with cleanup guard
     println!("🚀 Starting peers...");
     let mut peer1_process = helper.start_run(&peer1_path, 2525).await.expect("Failed to start peer1");
     let mut peer2_process = helper.start_run(&peer2_path, 2526).await.expect("Failed to start peer2");
+
+    // Ensure cleanup happens even on panic/failure
+    let _cleanup = ProcessCleanup::new(&mut peer1_process, &mut peer2_process);
 
     // Wait for peers to start
     tokio::time::sleep(Duration::from_secs(5)).await;
     println!("✅ Both peers started");
 
-    // Send email via SMTP
-    let from_email = format!("test@{}.com", account1_id);
-    let to_email = format!("inbox@{}.com", account2_id);
+    // Send email via SMTP (use default@ format for authentication)
+    let from_email = format!("default@{}.com", account1_id);
+    let to_email = format!("default@{}.com", account2_id);
     
     println!("📧 Sending email via SMTP...");
     let _send_result = helper.send_email_smtp(
@@ -172,7 +193,7 @@ async fn test_p2p_email_goes_to_inbox() {
     assert!(peer2_inbox_emails[0].to_string_lossy().contains("/INBOX/"));
     println!("✅ Email folder placement verified: Sent -> INBOX");
 
-    // Cleanup
+    // Explicit cleanup (also handled by ProcessCleanup guard)
     let _ = peer1_process.kill().await;
     let _ = peer2_process.kill().await;
     
@@ -237,7 +258,7 @@ async fn find_emails_in_folder(peer_home: &PathBuf, account_id: &str, folder: &s
 
 /// Simple test of inbox_receive vs smtp_receive methods
 #[tokio::test] 
-async fn test_inbox_receive_stores_in_inbox_folder() {
+async fn test_p2p_inbox_delivery() {
     // Test the core storage methods work correctly
     let store = fastn_mail::Store::create_test();
     
