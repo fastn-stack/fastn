@@ -11,16 +11,38 @@ async fn main() -> eyre::Result<()> {
         .with_env_filter("fastn_net=trace,fastn_net_test=info")
         .init();
 
-    // Generate keys for sender
-    let sender_key = fastn_id52::SecretKey::generate();
+    // Parse command line arguments: sender <sender_secret_key> <receiver_id52>
+    let args: Vec<String> = std::env::args().collect();
+    
+    let (sender_key, receiver_id52) = if args.len() >= 3 {
+        // Use provided sender secret key and receiver ID52
+        let sender_secret_str = &args[1];
+        let receiver_id52 = args[2].clone();
+        
+        let sender_key = match sender_secret_str.parse::<fastn_id52::SecretKey>() {
+            Ok(key) => key,
+            Err(e) => {
+                eprintln!("❌ Invalid sender secret key: {}", e);
+                std::process::exit(1);
+            }
+        };
+        
+        println!("🔑 Using provided sender secret key");
+        (sender_key, receiver_id52)
+    } else if args.len() == 2 {
+        // Legacy mode: generate sender key, use provided receiver ID52
+        let sender_key = fastn_id52::SecretKey::generate();
+        let receiver_id52 = args[1].clone();
+        
+        println!("🔑 Generated new sender key (legacy mode)");
+        (sender_key, receiver_id52)
+    } else {
+        eprintln!("Usage: sender <receiver_id52> OR sender <sender_secret_key> <receiver_id52>");
+        std::process::exit(1);
+    };
+
     let sender_id52 = sender_key.public_key().id52();
     println!("🔑 Sender ID52: {}", sender_id52);
-
-    // Target receiver ID52 (will be provided as argument)
-    let receiver_id52 = std::env::args().nth(1).unwrap_or_else(|| {
-        eprintln!("Usage: sender <receiver_id52>");
-        std::process::exit(1);
-    });
 
     println!("🎯 Target receiver: {}", receiver_id52);
 
@@ -68,6 +90,15 @@ async fn main() -> eyre::Result<()> {
     let response = fastn_net::next_string(&mut recv).await?;
     println!("✅ Received response: {}", response);
 
+    // Output JSON result for easy parsing in tests
+    let result = serde_json::json!({
+        "status": "success",
+        "message": "P2P communication completed",
+        "response_received": response,
+        "timestamp": chrono::Utc::now().to_rfc3339()
+    });
+    
+    println!("📋 RESULT: {}", serde_json::to_string(&result)?);
     println!("🎉 fastn-net P2P communication successful!");
 
     Ok(())

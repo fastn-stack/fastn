@@ -9,11 +9,38 @@ async fn main() -> eyre::Result<()> {
         .with_env_filter("fastn_net=trace,fastn_net_test=info")
         .init();
 
-    // Generate keys for receiver
-    let receiver_key = fastn_id52::SecretKey::generate();
+    // Get secret key from command line args or generate one
+    let args: Vec<String> = std::env::args().collect();
+    let receiver_key = if args.len() > 1 {
+        // Use provided secret key
+        let secret_key_str = &args[1];
+        match secret_key_str.parse::<fastn_id52::SecretKey>() {
+            Ok(key) => {
+                println!("🔑 Using provided secret key");
+                key
+            }
+            Err(e) => {
+                eprintln!("❌ Invalid secret key provided: {}", e);
+                return Err(eyre::eyre!("Invalid secret key: {}", e));
+            }
+        }
+    } else {
+        // Generate new key
+        println!("🔑 Generating new receiver key");
+        fastn_id52::SecretKey::generate()
+    };
+
     let receiver_id52 = receiver_key.public_key().id52();
     println!("🔑 Receiver ID52: {}", receiver_id52);
-    println!("📋 Use this ID52 as argument for sender");
+    
+    // Output JSON for easy parsing in tests
+    let startup_info = serde_json::json!({
+        "status": "started",
+        "receiver_id52": receiver_id52,
+        "secret_key": receiver_key.to_string(),
+        "timestamp": chrono::Utc::now().to_rfc3339()
+    });
+    println!("📋 STARTUP: {}", serde_json::to_string(&startup_info).unwrap_or_default());
 
     // Create endpoint using fastn-net (same as other code)
     let endpoint = fastn_net::get_endpoint(receiver_key).await?;
