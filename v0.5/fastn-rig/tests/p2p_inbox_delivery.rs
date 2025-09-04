@@ -167,13 +167,12 @@ impl FastnRigHelper {
     }
 }
 
-// DISABLED: This test has timing issues in Rust async test environment
-// Even with pre-compiled binaries, tokio::test context interferes with P2P networking
-// Use bash_integration_test() below instead, or run ./test_complete_integration.sh directly
-// TODO: Debug why Rust async test environment breaks P2P networking
+// DISABLED: This test times out due to P2P delivery issues in test environment
+// The bash script test_complete_integration.sh works more reliably
+// Use bash_integration_test() below instead
 #[tokio::test]
 #[ignore]
-async fn test_p2p_email_goes_to_inbox_DISABLED_FOR_FUTURE_DEBUG() {
+async fn test_p2p_email_goes_to_inbox() {
     let helper = FastnRigHelper::new();
     println!("🔧 Using SKIP_KEYRING={}", helper.skip_keyring);
 
@@ -589,73 +588,34 @@ async fn test_email_delivery_response_format() {
     println!("✅ Rejection response format verified");
 }
 
-/// Integration test using working bash script approach
+/// Integration test that calls the working bash script
 #[test]
 fn bash_integration_test() {
-    println!("🧪 Running SMTP to P2P to INBOX integration test via bash script");
+    println!("🧪 SMTP to P2P to INBOX integration test via bash script");
 
-    // Run the working bash script (find it relative to project root)
-    let script_path = if std::path::Path::new("./test_complete_integration.sh").exists() {
-        "./test_complete_integration.sh"
-    } else if std::path::Path::new("../test_complete_integration.sh").exists() {
-        "../test_complete_integration.sh"
-    } else {
-        panic!("Could not find test_complete_integration.sh script");
-    };
-
-    let output = std::process::Command::new(script_path)
-        .current_dir(std::env::current_dir().expect("Failed to get current directory"))
+    let output = std::process::Command::new("./test_complete_integration.sh")
         .output()
-        .expect("Failed to run bash integration test script");
+        .expect("Failed to run integration test script - make sure test_complete_integration.sh exists");
 
     let stdout = String::from_utf8_lossy(&output.stdout);
     let stderr = String::from_utf8_lossy(&output.stderr);
 
-    // Print output for debugging
-    if !stdout.trim().is_empty() {
-        println!("📋 Bash script output:");
-        for line in stdout.lines() {
-            println!("  {}", line);
-        }
-    }
-
     if !stderr.trim().is_empty() {
-        println!("📋 Bash script stderr:");
-        for line in stderr.lines() {
-            println!("  {}", line);
-        }
+        println!("Script stderr: {}", stderr.trim());
     }
 
-    // Check if script succeeded
     if output.status.success() {
-        println!("✅ Bash integration test PASSED!");
-        
-        // Look for success indicators in output
+        println!("✅ Integration test PASSED");
         if stdout.contains("COMPLETE SUCCESS") {
-            println!("✅ SMTP→P2P→INBOX delivery confirmed working");
-        }
-        
-        if stdout.contains("folder fix") {
-            println!("✅ Email folder fix confirmed working");
+            println!("✅ SMTP→P2P→INBOX delivery working");
         }
     } else {
-        // Script failed - show details but don't panic immediately
-        println!("❌ Bash integration test FAILED with exit code: {}", output.status);
-        
-        if stdout.contains("P2P delivery failed") || stdout.contains("timed out") {
-            println!("🔍 P2P delivery timeout detected in bash test");
-            println!("🔍 This indicates a genuine P2P networking issue, not test framework problems");
+        println!("❌ Integration test FAILED");
+        println!("Last 10 lines of output:");
+        for line in stdout.lines().rev().take(10).collect::<Vec<_>>().into_iter().rev() {
+            println!("  {}", line);
         }
-        
-        if stdout.contains("Authentication failed") {
-            println!("🔍 SMTP authentication issue detected");
-        }
-
-        // For now, just report the failure rather than failing the test
-        // This allows us to run other tests while debugging P2P issues
-        println!("⚠️  Integration test detected P2P delivery issues");
-        println!("⚠️  Core SMTP and folder functionality should still be working");
+        panic!("Integration test failed - check ./test_complete_integration.sh");
     }
-
-    println!("🎯 Bash integration test execution completed");
 }
+
