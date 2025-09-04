@@ -87,6 +87,7 @@ impl FastnRigHelper {
     }
 
     /// Send email via SMTP (uses hardcoded default@ username for now)
+    #[expect(clippy::too_many_arguments)]
     async fn send_email_smtp(
         &self,
         fastn_home: &PathBuf,
@@ -186,9 +187,9 @@ async fn test_p2p_email_goes_to_inbox() {
     tokio::time::sleep(Duration::from_secs(5)).await;
     println!("✅ Both peers started");
 
-    // Send email via SMTP (use default@ format for authentication)
-    let from_email = format!("default@{}.com", account1_id);
-    let to_email = format!("default@{}.com", account2_id);
+    // Send email via SMTP (use format that worked in manual testing)  
+    let from_email = format!("test@{}.com", account1_id);
+    let to_email = format!("inbox@{}.com", account2_id);
 
     println!("📧 Sending email via SMTP...");
     let _send_result = helper
@@ -340,7 +341,7 @@ async fn test_p2p_inbox_delivery() {
     let inbox_email_id = store
         .inbox_receive(
             &from_email,
-            &[to_email.clone()],
+            std::slice::from_ref(&to_email),
             inbox_email.as_bytes().to_vec(),
         )
         .await
