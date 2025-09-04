@@ -58,7 +58,7 @@ impl fastn_account::Account {
         let key_path = account_path.join("aliases").join(&id52);
         if std::env::var("SKIP_KEYRING")
             .map(|v| v == "true")
-            .unwrap_or(false)
+            .unwrap_or(true)  // Default to true since keyring is not working
         {
             // Save private key to file
             tracing::info!("SKIP_KEYRING set, saving private key to file");
