@@ -31,26 +31,40 @@ impl AuthCredentials {
         })
     }
 
-    /// Extract account ID52 from username (format: anything@<id52>.domain)
-    /// The ID52 is the first part of the domain name before any dots
+    /// Extract account ID52 from username (robust parsing for various SMTP client formats)
+    /// 
+    /// Supports multiple formats that real SMTP clients might send:
+    /// - user@<id52>.domain or user@<id52>  (domain-based)
+    /// - <full-email-as-username> where email contains ID52
+    /// - default@<id52> (our standard format)
     pub fn extract_account_id52(&self) -> Option<fastn_id52::PublicKey> {
-        let at_pos = self.username.find('@')?;
-        let domain = &self.username[at_pos + 1..];
-
-        // Split domain by dots and take the first part as potential ID52
-        let domain_parts: Vec<&str> = domain.split('.').collect();
-        if domain_parts.is_empty() {
-            return None;
+        // Strategy 1: Extract from domain part (user@<id52>.domain)
+        if let Some(at_pos) = self.username.find('@') {
+            let domain = &self.username[at_pos + 1..];
+            let domain_parts: Vec<&str> = domain.split('.').collect();
+            if !domain_parts.is_empty() {
+                let potential_id52 = domain_parts[0];
+                if potential_id52.len() == 52 {
+                    if let Ok(id52) = potential_id52.parse::<fastn_id52::PublicKey>() {
+                        return Some(id52);
+                    }
+                }
+            }
         }
-
-        let id52_part = domain_parts[0];
-
-        // Parse ID52 - it should be exactly 52 characters
-        if id52_part.len() == 52 {
-            id52_part.parse().ok()
-        } else {
-            None
+        
+        // Strategy 2: Look for any 52-char sequence in the entire username
+        // This handles various unusual formats SMTP clients might send
+        let separators = ['@', '.', '_', '-', '+', '='];
+        let parts: Vec<&str> = self.username.split(&separators[..]).collect();
+        for part in parts {
+            if part.len() == 52 {
+                if let Ok(id52) = part.parse::<fastn_id52::PublicKey>() {
+                    return Some(id52);
+                }
+            }
         }
+        
+        None
     }
 }
 
