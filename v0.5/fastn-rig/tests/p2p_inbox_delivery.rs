@@ -589,13 +589,21 @@ async fn test_email_delivery_response_format() {
 }
 
 /// Integration test that calls the working bash script
-#[test]
+#[test]  
 fn bash_integration_test() {
     println!("🧪 SMTP to P2P to INBOX integration test via bash script");
 
-    let output = std::process::Command::new("./test_complete_integration.sh")
+    // Find the script in the tests directory (relative to fastn-rig root)
+    let script_path = "tests/test_complete_integration.sh";
+    if !std::path::Path::new(script_path).exists() {
+        panic!("Integration test script not found at: {}\nCurrent dir: {:?}", 
+               script_path, std::env::current_dir().unwrap());
+    }
+
+    let output = std::process::Command::new("bash")
+        .arg(script_path)
         .output()
-        .expect("Failed to run integration test script - make sure test_complete_integration.sh exists");
+        .expect("Failed to execute bash script");
 
     let stdout = String::from_utf8_lossy(&output.stdout);
     let stderr = String::from_utf8_lossy(&output.stderr);
