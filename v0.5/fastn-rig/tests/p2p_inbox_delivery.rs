@@ -48,53 +48,78 @@ impl FastnRigHelper {
     }
 
     /// Run fastn-rig init
-    async fn init(&self, fastn_home: &PathBuf) -> Result<String, Box<dyn std::error::Error + Send + Sync>> {
+    async fn init(
+        &self,
+        fastn_home: &PathBuf,
+    ) -> Result<String, Box<dyn std::error::Error + Send + Sync>> {
         let output = Command::new("cargo")
             .args(["run", "--bin", "fastn-rig", "--", "init"])
             .env("SKIP_KEYRING", &self.skip_keyring)
             .env("FASTN_HOME", fastn_home)
             .output()
             .await?;
-        
+
         if !output.status.success() {
-            return Err(format!("fastn-rig init failed: {}", String::from_utf8_lossy(&output.stderr)).into());
+            return Err(format!(
+                "fastn-rig init failed: {}",
+                String::from_utf8_lossy(&output.stderr)
+            )
+            .into());
         }
-        
+
         Ok(String::from_utf8_lossy(&output.stdout).to_string())
     }
 
     /// Start fastn-rig run process
-    async fn start_run(&self, fastn_home: &PathBuf, smtp_port: u16) -> Result<tokio::process::Child, Box<dyn std::error::Error + Send + Sync>> {
+    async fn start_run(
+        &self,
+        fastn_home: &PathBuf,
+        smtp_port: u16,
+    ) -> Result<tokio::process::Child, Box<dyn std::error::Error + Send + Sync>> {
         let process = Command::new("cargo")
             .args(["run", "--bin", "fastn-rig", "--", "run"])
             .env("SKIP_KEYRING", &self.skip_keyring)
             .env("FASTN_HOME", fastn_home)
             .env("FASTN_SMTP_PORT", smtp_port.to_string())
             .spawn()?;
-        
+
         Ok(process)
     }
 
     /// Send email via SMTP (uses hardcoded default@ username for now)
     async fn send_email_smtp(
-        &self, 
+        &self,
         fastn_home: &PathBuf,
         smtp_port: u16,
         password: &str,
         from: &str,
         to: &str,
         subject: &str,
-        body: &str
-    ) -> Result<String, Box<dyn std::error::Error + Send + Sync>> {        
+        body: &str,
+    ) -> Result<String, Box<dyn std::error::Error + Send + Sync>> {
         let output = Command::new("cargo")
             .args([
-                "run", "--bin", "fastn-mail", "--features", "net", "--",
-                "send-mail", "--smtp", &smtp_port.to_string(),
-                "--password", password,
-                "--from", from,
-                "--to", to,
-                "--subject", subject,
-                "--body", body
+                "run",
+                "--package",
+                "fastn-mail",
+                "--features",
+                "net",
+                "--bin",
+                "fastn-mail",
+                "--",
+                "send-mail",
+                "--smtp",
+                &smtp_port.to_string(),
+                "--password",
+                password,
+                "--from",
+                from,
+                "--to",
+                to,
+                "--subject",
+                subject,
+                "--body",
+                body,
             ])
             .env("FASTN_HOME", fastn_home)
             .output()
@@ -116,27 +141,43 @@ async fn test_p2p_email_goes_to_inbox() {
 
     // Create temporary directories for both peers
     let test_dir = TempDir::new().expect("Failed to create temp dir");
-    let peer1_path = test_dir.path().join("peer1");  
+    let peer1_path = test_dir.path().join("peer1");
     let peer2_path = test_dir.path().join("peer2");
 
     // Initialize both peers
     println!("🔧 Initializing peers...");
-    let init1_output = helper.init(&peer1_path).await.expect("Peer1 init should succeed");
-    let init2_output = helper.init(&peer2_path).await.expect("Peer2 init should succeed");
+    let init1_output = helper
+        .init(&peer1_path)
+        .await
+        .expect("Peer1 init should succeed");
+    let init2_output = helper
+        .init(&peer2_path)
+        .await
+        .expect("Peer2 init should succeed");
 
     // Extract account credentials
-    let account1_id = extract_account_id(&init1_output).expect("Failed to extract peer1 account ID");
-    let account1_password = extract_password(&init1_output).expect("Failed to extract peer1 password");
-    let account2_id = extract_account_id(&init2_output).expect("Failed to extract peer2 account ID");
-    let _account2_password = extract_password(&init2_output).expect("Failed to extract peer2 password");
-    
+    let account1_id =
+        extract_account_id(&init1_output).expect("Failed to extract peer1 account ID");
+    let account1_password =
+        extract_password(&init1_output).expect("Failed to extract peer1 password");
+    let account2_id =
+        extract_account_id(&init2_output).expect("Failed to extract peer2 account ID");
+    let _account2_password =
+        extract_password(&init2_output).expect("Failed to extract peer2 password");
+
     println!("✅ Peer 1: {}", account1_id);
     println!("✅ Peer 2: {}", account2_id);
 
     // Start both peers with cleanup guard
     println!("🚀 Starting peers...");
-    let mut peer1_process = helper.start_run(&peer1_path, 2525).await.expect("Failed to start peer1");
-    let mut peer2_process = helper.start_run(&peer2_path, 2526).await.expect("Failed to start peer2");
+    let mut peer1_process = helper
+        .start_run(&peer1_path, 2525)
+        .await
+        .expect("Failed to start peer1");
+    let mut peer2_process = helper
+        .start_run(&peer2_path, 2526)
+        .await
+        .expect("Failed to start peer2");
 
     // Ensure cleanup happens even on panic/failure
     let _cleanup = ProcessCleanup::new(&mut peer1_process, &mut peer2_process);
@@ -148,18 +189,21 @@ async fn test_p2p_email_goes_to_inbox() {
     // Send email via SMTP (use default@ format for authentication)
     let from_email = format!("default@{}.com", account1_id);
     let to_email = format!("default@{}.com", account2_id);
-    
+
     println!("📧 Sending email via SMTP...");
-    let _send_result = helper.send_email_smtp(
-        &peer1_path,
-        2525,
-        &account1_password,
-        &from_email,
-        &to_email,
-        "Integration Test Email",
-        "End-to-end SMTP to P2P to INBOX test"
-    ).await.expect("SMTP email send should succeed");
-    
+    let _send_result = helper
+        .send_email_smtp(
+            &peer1_path,
+            2525,
+            &account1_password,
+            &from_email,
+            &to_email,
+            "Integration Test Email",
+            "End-to-end SMTP to P2P to INBOX test",
+        )
+        .await
+        .expect("SMTP email send should succeed");
+
     println!("✅ Email sent via SMTP");
 
     // Wait for P2P delivery to complete
@@ -168,18 +212,32 @@ async fn test_p2p_email_goes_to_inbox() {
 
     // Verify email in peer 1's Sent folder
     let peer1_sent_emails = find_emails_in_folder(&peer1_path, &account1_id, "Sent").await;
-    assert!(!peer1_sent_emails.is_empty(), "Email should be in peer 1's Sent folder");
-    println!("✅ Found {} emails in peer 1 Sent folder", peer1_sent_emails.len());
+    assert!(
+        !peer1_sent_emails.is_empty(),
+        "Email should be in peer 1's Sent folder"
+    );
+    println!(
+        "✅ Found {} emails in peer 1 Sent folder",
+        peer1_sent_emails.len()
+    );
 
-    // Verify email delivered to peer 2's INBOX folder  
+    // Verify email delivered to peer 2's INBOX folder
     let peer2_inbox_emails = find_emails_in_folder(&peer2_path, &account2_id, "INBOX").await;
-    assert!(!peer2_inbox_emails.is_empty(), "Email should be delivered to peer 2's INBOX");
-    println!("✅ Found {} emails in peer 2 INBOX folder", peer2_inbox_emails.len());
+    assert!(
+        !peer2_inbox_emails.is_empty(),
+        "Email should be delivered to peer 2's INBOX"
+    );
+    println!(
+        "✅ Found {} emails in peer 2 INBOX folder",
+        peer2_inbox_emails.len()
+    );
 
     // Verify email content matches
-    let sent_content = tokio::fs::read_to_string(&peer1_sent_emails[0]).await
+    let sent_content = tokio::fs::read_to_string(&peer1_sent_emails[0])
+        .await
         .expect("Failed to read sent email");
-    let inbox_content = tokio::fs::read_to_string(&peer2_inbox_emails[0]).await
+    let inbox_content = tokio::fs::read_to_string(&peer2_inbox_emails[0])
+        .await
         .expect("Failed to read inbox email");
 
     assert!(sent_content.contains("Integration Test Email"));
@@ -193,20 +251,18 @@ async fn test_p2p_email_goes_to_inbox() {
     assert!(peer2_inbox_emails[0].to_string_lossy().contains("/INBOX/"));
     println!("✅ Email folder placement verified: Sent -> INBOX");
 
-    // Explicit cleanup (also handled by ProcessCleanup guard)
-    let _ = peer1_process.kill().await;
-    let _ = peer2_process.kill().await;
-    
     println!("🎉 Complete end-to-end SMTP to P2P to INBOX test passed!");
+    // Note: ProcessCleanup guard will handle process termination automatically
 }
 
 /// Extract account ID from fastn-rig init output
 fn extract_account_id(output: &str) -> Option<String> {
     for line in output.lines() {
-        if line.contains("ID52:") && !line.contains("Rig ID52:") {
-            if let Some(id_part) = line.split("ID52:").nth(1) {
-                return Some(id_part.trim().to_string());
-            }
+        if line.contains("ID52:")
+            && !line.contains("Rig ID52:")
+            && let Some(id_part) = line.split("ID52:").nth(1)
+        {
+            return Some(id_part.trim().to_string());
         }
     }
     None
@@ -215,17 +271,21 @@ fn extract_account_id(output: &str) -> Option<String> {
 /// Extract password from fastn-rig init output  
 fn extract_password(output: &str) -> Option<String> {
     for line in output.lines() {
-        if line.contains("Password:") {
-            if let Some(pwd_part) = line.split("Password:").nth(1) {
-                return Some(pwd_part.trim().to_string());
-            }
+        if line.contains("Password:")
+            && let Some(pwd_part) = line.split("Password:").nth(1)
+        {
+            return Some(pwd_part.trim().to_string());
         }
     }
     None
 }
 
 /// Find .eml files in a specific mail folder
-async fn find_emails_in_folder(peer_home: &PathBuf, account_id: &str, folder: &str) -> Vec<PathBuf> {
+async fn find_emails_in_folder(
+    peer_home: &std::path::Path,
+    account_id: &str,
+    folder: &str,
+) -> Vec<PathBuf> {
     let folder_path = peer_home
         .join("accounts")
         .join(account_id)
@@ -235,13 +295,13 @@ async fn find_emails_in_folder(peer_home: &PathBuf, account_id: &str, folder: &s
 
     let mut emails = Vec::new();
     for entry in walkdir::WalkDir::new(folder_path) {
-        if let Ok(entry) = entry {
-            if entry.path().extension().and_then(|s| s.to_str()) == Some("eml") {
-                emails.push(entry.path().to_path_buf());
-            }
+        if let Ok(entry) = entry
+            && entry.path().extension().and_then(|s| s.to_str()) == Some("eml")
+        {
+            emails.push(entry.path().to_path_buf());
         }
     }
-    
+
     // Sort by modification time (most recent first)
     emails.sort_by(|a, b| {
         let a_modified = std::fs::metadata(a)
@@ -252,16 +312,16 @@ async fn find_emails_in_folder(peer_home: &PathBuf, account_id: &str, folder: &s
             .unwrap_or(std::time::SystemTime::UNIX_EPOCH);
         b_modified.cmp(&a_modified)
     });
-    
+
     emails
 }
 
 /// Simple test of inbox_receive vs smtp_receive methods
-#[tokio::test] 
+#[tokio::test]
 async fn test_p2p_inbox_delivery() {
     // Test the core storage methods work correctly
     let store = fastn_mail::Store::create_test();
-    
+
     // Generate proper ID52s for testing
     let sender_key = fastn_id52::SecretKey::generate();
     let recipient_key = fastn_id52::SecretKey::generate();
@@ -277,28 +337,36 @@ async fn test_p2p_inbox_delivery() {
         from_email, to_email
     );
 
-    let inbox_email_id = store.inbox_receive(
-        &from_email,
-        &[to_email.clone()],
-        inbox_email.as_bytes().to_vec(),
-    ).await.expect("inbox_receive should succeed");
+    let inbox_email_id = store
+        .inbox_receive(
+            &from_email,
+            &[to_email.clone()],
+            inbox_email.as_bytes().to_vec(),
+        )
+        .await
+        .expect("inbox_receive should succeed");
 
-    assert!(inbox_email_id.starts_with("email-"), "Email ID should have proper format");
+    assert!(
+        inbox_email_id.starts_with("email-"),
+        "Email ID should have proper format"
+    );
     println!("✅ inbox_receive method works: {}", inbox_email_id);
 
-    // Test smtp_receive method stores successfully  
+    // Test smtp_receive method stores successfully
     let smtp_email = format!(
-        "From: {}\r\nTo: {}\r\nSubject: SMTP Test\r\nMessage-ID: <test2@localhost>\r\n\r\nTest smtp_receive method", 
+        "From: {}\r\nTo: {}\r\nSubject: SMTP Test\r\nMessage-ID: <test2@localhost>\r\n\r\nTest smtp_receive method",
         from_email, to_email
     );
 
-    let smtp_email_id = store.smtp_receive(
-        &from_email,
-        &[to_email],
-        smtp_email.as_bytes().to_vec(),
-    ).await.expect("smtp_receive should succeed");
+    let smtp_email_id = store
+        .smtp_receive(&from_email, &[to_email], smtp_email.as_bytes().to_vec())
+        .await
+        .expect("smtp_receive should succeed");
 
-    assert!(smtp_email_id.starts_with("email-"), "Email ID should have proper format");
+    assert!(
+        smtp_email_id.starts_with("email-"),
+        "Email ID should have proper format"
+    );
     println!("✅ smtp_receive method works: {}", smtp_email_id);
 
     println!("🎉 Both storage methods functional!");
@@ -313,11 +381,14 @@ async fn test_email_delivery_response_format() {
     };
 
     let json = serde_json::to_string(&response).expect("Response should serialize");
-    let parsed: fastn_account::EmailDeliveryResponse = serde_json::from_str(&json)
-        .expect("Response should deserialize");
+    let parsed: fastn_account::EmailDeliveryResponse =
+        serde_json::from_str(&json).expect("Response should deserialize");
 
     assert_eq!(parsed.email_id, "test-email-123");
-    assert!(matches!(parsed.status, fastn_account::DeliveryStatus::Accepted));
+    assert!(matches!(
+        parsed.status,
+        fastn_account::DeliveryStatus::Accepted
+    ));
     println!("✅ EmailDeliveryResponse JSON format verified");
 
     // Test rejection response
@@ -329,8 +400,8 @@ async fn test_email_delivery_response_format() {
     };
 
     let json = serde_json::to_string(&rejection).expect("Rejection should serialize");
-    let parsed: fastn_account::EmailDeliveryResponse = serde_json::from_str(&json)
-        .expect("Rejection should deserialize");
+    let parsed: fastn_account::EmailDeliveryResponse =
+        serde_json::from_str(&json).expect("Rejection should deserialize");
 
     assert_eq!(parsed.email_id, "failed-email-456");
     if let fastn_account::DeliveryStatus::Rejected { reason } = parsed.status {
