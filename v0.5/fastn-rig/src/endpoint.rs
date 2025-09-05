@@ -256,14 +256,17 @@ async fn handle_connection(
 
     // Handle multiple streams on this connection (following receiver.rs pattern)
     loop {
+        println!("🔍 DEBUG: P2P connection handler loop iteration");
         tokio::select! {
             _ = graceful.cancelled() => {
                 tracing::debug!("Connection handler cancelled");
+                println!("🔍 DEBUG: Connection handler cancelled, breaking loop");
                 break;
             }
 
             // Accept a bidirectional stream with protocol negotiation
             result = fastn_net::accept_bi(&conn, &expected_protocols) => {
+                println!("🔍 DEBUG: accept_bi returned: {:?}", result.is_ok());
                 match result {
                     Ok((protocol, mut send, mut recv)) => {
                         tracing::info!("Accepted {protocol:?} stream from {peer_key} to {our_endpoint}");
@@ -325,6 +328,7 @@ async fn handle_connection(
                                         let response = match result {
                                             Ok(_) => {
                                                 println!("✅ Account message handled successfully");
+                                                println!("🔍 DEBUG: P2P message processing completed, about to send response");
                                                 fastn_account::EmailDeliveryResponse {
                                                     email_id: email_id.clone(),
                                                     status: fastn_account::DeliveryStatus::Accepted,
@@ -342,8 +346,12 @@ async fn handle_connection(
                                         };
 
                                         let json = serde_json::to_string(&response).unwrap_or_else(|_| "{}".to_string());
+                                        println!("🔍 DEBUG: Sending P2P response: {}", json);
                                         if let Err(e) = send.write_all(format!("{}\n", json).as_bytes()).await {
                                             tracing::error!("Failed to send delivery response: {}", e);
+                                            println!("🔍 DEBUG: P2P response send failed: {}", e);
+                                        } else {
+                                            println!("🔍 DEBUG: P2P response sent successfully, stream should close");
                                         }
                                     }
                                     Err(e) => {
@@ -375,12 +383,21 @@ async fn handle_connection(
                         }
                     }
                     Err(e) => {
-                        // This might happen if the protocol doesn't match
-                        // Try to accept as a different protocol or handle ping
-                        tracing::debug!("Protocol mismatch or error: {}", e);
-                        // The accept_bi function already handles Ping internally
-                        // For now, we'll continue to the next iteration
-                        continue;
+                        // Connection is no longer valid when accept_bi fails
+                        tracing::debug!("accept_bi failed, connection invalid: {}", e);
+                        println!("🔍 DEBUG: accept_bi failed, connection no longer valid: {}", e);
+                        
+                        // Check if this is a normal connection closure vs abnormal error
+                        let error_str = e.to_string();
+                        if error_str.contains("connection closed") || error_str.contains("stream closed") {
+                            println!("🔍 DEBUG: Normal connection closure, returning Ok");
+                            return Ok(());
+                        } else {
+                            println!("🔍 DEBUG: Abnormal connection error, returning Err");
+                            return Err(fastn_rig::EndpointError::ConnectionHandlingFailed {
+                                source: Box::new(e),
+                            });
+                        }
                     }
                 }
             }
