@@ -48,6 +48,7 @@ mod secret;
 mod tcp;
 mod utils;
 mod utils_iroh;
+pub mod errors;
 
 pub use get_endpoint::get_endpoint;
 pub use get_stream::{PeerStreamSenders, get_stream};
