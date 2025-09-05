@@ -93,7 +93,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         envelope_to: to_email.clone(),
     };
 
-    // Attempt delivery using the same approach as working fastn-net-test
+    // Attempt delivery using the original working CLI approach
     match attempt_direct_delivery(sender_secret_key, &target_key, p2p_message).await {
         Ok(_) => {
             let elapsed = start_time.elapsed();
