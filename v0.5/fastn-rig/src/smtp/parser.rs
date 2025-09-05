@@ -32,7 +32,7 @@ impl AuthCredentials {
     }
 
     /// Extract account ID52 from username (robust parsing for various SMTP client formats)
-    /// 
+    ///
     /// Supports multiple formats that real SMTP clients might send:
     /// - user@<id52>.domain or user@<id52>  (domain-based)
     /// - <full-email-as-username> where email contains ID52
@@ -44,26 +44,26 @@ impl AuthCredentials {
             let domain_parts: Vec<&str> = domain.split('.').collect();
             if !domain_parts.is_empty() {
                 let potential_id52 = domain_parts[0];
-                if potential_id52.len() == 52 {
-                    if let Ok(id52) = potential_id52.parse::<fastn_id52::PublicKey>() {
-                        return Some(id52);
-                    }
+                if potential_id52.len() == 52
+                    && let Ok(id52) = potential_id52.parse::<fastn_id52::PublicKey>()
+                {
+                    return Some(id52);
                 }
             }
         }
-        
+
         // Strategy 2: Look for any 52-char sequence in the entire username
         // This handles various unusual formats SMTP clients might send
         let separators = ['@', '.', '_', '-', '+', '='];
         let parts: Vec<&str> = self.username.split(&separators[..]).collect();
         for part in parts {
-            if part.len() == 52 {
-                if let Ok(id52) = part.parse::<fastn_id52::PublicKey>() {
-                    return Some(id52);
-                }
+            if part.len() == 52
+                && let Ok(id52) = part.parse::<fastn_id52::PublicKey>()
+            {
+                return Some(id52);
             }
         }
-        
+
         None
     }
 }

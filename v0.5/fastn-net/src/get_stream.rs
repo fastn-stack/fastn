@@ -236,7 +236,9 @@ async fn connection_manager_(
         Ok(v) => v,
         Err(e) => {
             tracing::error!("🔍 DEBUG: Connection establishment failed: {e:?}");
-            println!("🔍 DEBUG: Connection establishment failed, this could trigger CPU issues: {e:?}");
+            println!(
+                "🔍 DEBUG: Connection establishment failed, this could trigger CPU issues: {e:?}"
+            );
             return Err(eyre::anyhow!("failed to create connection: {e:?}"));
         }
     };
@@ -248,7 +250,10 @@ async fn connection_manager_(
         tracing::trace!("connection manager loop");
 
         if idle_counter > 4 {
-            tracing::info!("🔍 DEBUG: Connection idle timeout after {} cycles (60s total)", idle_counter);
+            tracing::info!(
+                "🔍 DEBUG: Connection idle timeout after {} cycles (60s total)",
+                idle_counter
+            );
             println!("🔍 DEBUG: Connection manager hitting 60s idle timeout, breaking loop");
             // this ensures we keep a connection open only for 12 * 5 seconds = 1 min
             break;

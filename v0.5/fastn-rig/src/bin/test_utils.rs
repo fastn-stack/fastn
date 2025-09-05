@@ -55,8 +55,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             let account_id = extract_account_id(&content)
                 .ok_or("Failed to extract account ID from init output")?;
-            let password = extract_password(&content)
-                .ok_or("Failed to extract password from init output")?;
+            let password =
+                extract_password(&content).ok_or("Failed to extract password from init output")?;
 
             match format.as_str() {
                 "json" => {
@@ -74,11 +74,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 _ => return Err(format!("Unknown format: {}", format).into()),
             }
         }
-        
-        Command::CountEmails { account_dir, folder } => {
+
+        Command::CountEmails {
+            account_dir,
+            folder,
+        } => {
             let folder_path = account_dir.join("mails").join("default").join(&folder);
             let count = count_emails_in_folder(&folder_path).await?;
-            
+
             let result = serde_json::json!({
                 "folder": folder,
                 "count": count,
@@ -87,15 +90,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             });
             println!("{}", serde_json::to_string(&result)?);
         }
-        
-        Command::CheckDelivery { sender_dir, receiver_dir } => {
-            let sender_sent = count_emails_in_folder(&sender_dir.join("mails/default/Sent")).await?;
-            let receiver_inbox = count_emails_in_folder(&receiver_dir.join("mails/default/INBOX")).await?;
-            let receiver_sent = count_emails_in_folder(&receiver_dir.join("mails/default/Sent")).await?;
-            
+
+        Command::CheckDelivery {
+            sender_dir,
+            receiver_dir,
+        } => {
+            let sender_sent =
+                count_emails_in_folder(&sender_dir.join("mails/default/Sent")).await?;
+            let receiver_inbox =
+                count_emails_in_folder(&receiver_dir.join("mails/default/INBOX")).await?;
+            let receiver_sent =
+                count_emails_in_folder(&receiver_dir.join("mails/default/Sent")).await?;
+
             let delivery_complete = sender_sent > 0 && receiver_inbox > 0;
             let folder_fix_working = receiver_sent == 0; // Received emails shouldn't be in Sent
-            
+
             let result = serde_json::json!({
                 "delivery_complete": delivery_complete,
                 "folder_fix_working": folder_fix_working,
@@ -115,19 +124,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 fn extract_account_id(output: &str) -> Option<String> {
     // Look for "Primary account:" line which has the actual account ID
     for line in output.lines() {
-        if line.contains("Primary account:") {
-            if let Some(id_part) = line.split("Primary account:").nth(1) {
-                return Some(id_part.trim().to_string());
-            }
+        if line.contains("Primary account:")
+            && let Some(id_part) = line.split("Primary account:").nth(1)
+        {
+            return Some(id_part.trim().to_string());
         }
     }
-    
+
     // Fallback: look for first ID52 that's not a Rig ID52
     for line in output.lines() {
-        if line.contains("ID52:") && !line.contains("Rig ID52:") {
-            if let Some(id_part) = line.split("ID52:").nth(1) {
-                return Some(id_part.trim().to_string());
-            }
+        if line.contains("ID52:")
+            && !line.contains("Rig ID52:")
+            && let Some(id_part) = line.split("ID52:").nth(1)
+        {
+            return Some(id_part.trim().to_string());
         }
     }
     None
@@ -136,25 +146,27 @@ fn extract_account_id(output: &str) -> Option<String> {
 /// Extract password from fastn-rig init output
 fn extract_password(output: &str) -> Option<String> {
     for line in output.lines() {
-        if line.contains("Password:") {
-            if let Some(pwd_part) = line.split("Password:").nth(1) {
-                return Some(pwd_part.trim().to_string());
-            }
+        if line.contains("Password:")
+            && let Some(pwd_part) = line.split("Password:").nth(1)
+        {
+            return Some(pwd_part.trim().to_string());
         }
     }
     None
 }
 
 /// Count .eml files in a folder recursively
-async fn count_emails_in_folder(folder_path: &std::path::Path) -> Result<usize, Box<dyn std::error::Error>> {
+async fn count_emails_in_folder(
+    folder_path: &std::path::Path,
+) -> Result<usize, Box<dyn std::error::Error>> {
     if !folder_path.exists() {
         return Ok(0);
     }
-    
+
     let mut count = 0;
-    let mut walker = walkdir::WalkDir::new(folder_path).into_iter();
-    
-    while let Some(entry) = walker.next() {
+    let walker = walkdir::WalkDir::new(folder_path).into_iter();
+
+    for entry in walker {
         match entry {
             Ok(entry) => {
                 if entry.path().extension().and_then(|s| s.to_str()) == Some("eml") {
@@ -164,6 +176,6 @@ async fn count_emails_in_folder(folder_path: &std::path::Path) -> Result<usize, 
             Err(_) => continue, // Skip errors (permissions, etc.)
         }
     }
-    
+
     Ok(count)
 }

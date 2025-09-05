@@ -35,6 +35,7 @@
 extern crate self as fastn_net;
 
 pub mod dot_fastn;
+pub mod errors;
 pub mod get_endpoint;
 mod get_stream;
 mod graceful;
@@ -48,7 +49,6 @@ mod secret;
 mod tcp;
 mod utils;
 mod utils_iroh;
-pub mod errors;
 
 pub use get_endpoint::get_endpoint;
 pub use get_stream::{PeerStreamSenders, get_stream};

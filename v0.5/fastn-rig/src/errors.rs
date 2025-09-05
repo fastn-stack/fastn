@@ -164,6 +164,12 @@ pub enum EndpointError {
         #[source]
         source: Box<dyn std::error::Error + Send + Sync>,
     },
+
+    #[error("P2P stream accept failed")]
+    StreamAcceptFailed {
+        #[source]
+        source: eyre::Report,
+    },
 }
 
 /// Error type for run function
