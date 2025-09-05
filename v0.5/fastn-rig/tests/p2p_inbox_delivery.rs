@@ -176,11 +176,8 @@ impl FastnRigHelper {
     }
 }
 
-// DISABLED: This test times out due to P2P delivery issues in test environment
-// The bash script test_complete_integration.sh works more reliably
-// Use bash_integration_test() below instead
+// Re-enabled after CPU spinning bug fix - testing if more reliable now
 #[tokio::test]
-#[ignore]
 async fn test_p2p_email_goes_to_inbox() {
     let helper = FastnRigHelper::new();
     println!("🔧 Using SKIP_KEYRING={}", helper.skip_keyring);

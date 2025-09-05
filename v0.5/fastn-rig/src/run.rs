@@ -153,20 +153,16 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     // Get connection pool before endpoint_manager is moved
     let _connection_pool = endpoint_manager.peer_stream_senders().clone();
 
-    // DISABLED: Email delivery poller causing 100% CPU usage with retry loops
-    // Use test-p2p-delivery CLI tool for manual P2P testing until reliability is fixed
-    println!("📭 Email delivery poller disabled - use test-p2p-delivery CLI for P2P testing");
-
-    // TODO: Re-enable after fixing CPU usage in retry logic
-    // crate::email_delivery::start_email_delivery_poller(
-    //     account_manager.clone(),
-    //     graceful.clone(),
-    //     connection_pool,
-    // )
-    // .await
-    // .map_err(|e| fastn_rig::RunError::ShutdownFailed {
-    //     source: Box::new(e),
-    // })?;
+    // Start email delivery poller (CPU spinning bug fixed)
+    crate::email_delivery::start_email_delivery_poller(
+        account_manager.clone(),
+        graceful.clone(),
+        _connection_pool,
+    )
+    .await
+    .map_err(|e| fastn_rig::RunError::ShutdownFailed {
+        source: Box::new(e),
+    })?;
 
     // Start SMTP server for email reception
     let smtp_server = crate::smtp::SmtpServer::new(
