@@ -235,7 +235,8 @@ async fn connection_manager_(
     {
         Ok(v) => v,
         Err(e) => {
-            tracing::error!("failed to create connection: {e:?}");
+            tracing::error!("🔍 DEBUG: Connection establishment failed: {e:?}");
+            println!("🔍 DEBUG: Connection establishment failed, this could trigger CPU issues: {e:?}");
             return Err(eyre::anyhow!("failed to create connection: {e:?}"));
         }
     };
@@ -247,7 +248,8 @@ async fn connection_manager_(
         tracing::trace!("connection manager loop");
 
         if idle_counter > 4 {
-            tracing::info!("connection idle timeout, returning");
+            tracing::info!("🔍 DEBUG: Connection idle timeout after {} cycles (60s total)", idle_counter);
+            println!("🔍 DEBUG: Connection manager hitting 60s idle timeout, breaking loop");
             // this ensures we keep a connection open only for 12 * 5 seconds = 1 min
             break;
         }
@@ -258,12 +260,15 @@ async fn connection_manager_(
                 break;
             },
             _ = tokio::time::sleep(timeout) => {
-                tracing::info!("woken up");
+                tracing::info!("🔍 DEBUG: Connection manager woken up after 12s (idle_counter: {})", idle_counter);
+                println!("🔍 DEBUG: Connection manager 12s timeout, idle_counter: {}", idle_counter);
                 if let Err(e) = crate::ping(&conn).await {
-                    tracing::error!("pinging failed: {e:?}");
+                    tracing::error!("🔍 DEBUG: Pinging failed: {e:?}");
+                    println!("🔍 DEBUG: Pinging failed, breaking connection loop");
                     break;
                 }
                 idle_counter += 1;
+                println!("🔍 DEBUG: Ping successful, idle_counter now: {}", idle_counter);
             },
             Some((header, reply_channel)) = receiver.recv() => {
                 println!("📨 DEBUG connection_manager: Received stream request for {:?}, idle counter: {}", header, idle_counter);
