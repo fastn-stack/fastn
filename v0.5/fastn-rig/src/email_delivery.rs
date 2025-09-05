@@ -35,6 +35,7 @@ pub enum DeliveryStatus {
 /// 2. Attempts to deliver emails to each peer
 /// 3. Updates delivery status (delivered/failed)
 /// 4. Handles retry logic for failed deliveries
+#[allow(dead_code)]
 pub async fn start_email_delivery_poller(
     account_manager: std::sync::Arc<AccountManager>,
     graceful: fastn_net::Graceful,
@@ -71,6 +72,7 @@ pub async fn start_email_delivery_poller(
 }
 
 /// Main email delivery poller loop
+#[allow(dead_code)]
 async fn email_delivery_poller_loop(
     account_manager: std::sync::Arc<AccountManager>,
     graceful: fastn_net::Graceful,
@@ -118,6 +120,7 @@ async fn email_delivery_poller_loop(
 
 /// Delivery task for a specific peer with correct alias pairing
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 struct DeliveryTask {
     /// Peer ID52 to deliver to
     peer_id52: fastn_id52::PublicKey,
@@ -130,6 +133,7 @@ struct DeliveryTask {
 }
 
 /// Check all accounts for pending email deliveries and process them  
+#[allow(dead_code)]
 async fn check_and_deliver_emails(
     account_manager: &AccountManager,
     peer_stream_senders: &fastn_net::PeerStreamSenders,
@@ -201,6 +205,7 @@ async fn check_and_deliver_emails(
 }
 
 /// Collect all pending deliveries across accounts into unified task list
+#[allow(dead_code)]
 async fn collect_pending_deliveries(
     account_manager: &AccountManager,
 ) -> Result<Vec<DeliveryTask>, fastn_rig::EmailDeliveryError> {
@@ -267,6 +272,7 @@ async fn collect_pending_deliveries(
 }
 
 /// Collect delivery tasks from a specific account with correct alias pairing
+#[allow(dead_code)]
 async fn collect_account_deliveries(
     account_path: &std::path::Path,
     _account_alias: &str,
@@ -346,6 +352,7 @@ async fn collect_account_deliveries(
 /// This queries the fastn_emails table to find which of our aliases was used
 /// in the From address for emails destined to this peer. This ensures we use
 /// the correct alias pair for P2P connection authentication.
+#[allow(dead_code)]
 async fn get_sender_alias_for_peer(
     mail_store: &fastn_mail::Store,
     peer_id52: &fastn_id52::PublicKey,
@@ -387,6 +394,7 @@ async fn get_sender_alias_for_peer(
 }
 
 /// Attempt to deliver all pending emails to a specific peer
+#[allow(dead_code)]
 async fn attempt_delivery_to_peer(
     task: &DeliveryTask,
     peer_stream_senders: &fastn_net::PeerStreamSenders,
@@ -487,6 +495,7 @@ async fn attempt_delivery_to_peer(
 }
 
 /// Deliver multiple emails to a peer via single P2P connection
+#[allow(dead_code)]
 async fn deliver_emails_to_peer(
     emails: &[fastn_mail::EmailForDelivery],
     our_alias: &fastn_id52::PublicKey,
@@ -783,6 +792,7 @@ async fn deliver_emails_to_peer(
 }
 
 /// Get secret key for a specific alias from an account
+#[allow(dead_code)]
 async fn get_secret_key_for_alias(
     account: &fastn_account::Account,
     alias_key: &fastn_id52::PublicKey,

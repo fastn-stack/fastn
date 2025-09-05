@@ -43,7 +43,8 @@ clap.workspace = true
 tracing-subscriber.workspace = true
 base64.workspace = true
 uuid.workspace = true
-walkdir = "2"
+walkdir = "2" 
+eyre.workspace = true
 
 [dev-dependencies]
 tempfile = "3"

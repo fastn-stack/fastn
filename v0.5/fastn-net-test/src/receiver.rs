@@ -32,7 +32,7 @@ async fn main() -> eyre::Result<()> {
 
     let receiver_id52 = receiver_key.public_key().id52();
     println!("🔑 Receiver ID52: {}", receiver_id52);
-    
+
     // Output JSON for easy parsing in tests
     let startup_info = serde_json::json!({
         "status": "started",
@@ -40,7 +40,10 @@ async fn main() -> eyre::Result<()> {
         "secret_key": receiver_key.to_string(),
         "timestamp": chrono::Utc::now().to_rfc3339()
     });
-    println!("📋 STARTUP: {}", serde_json::to_string(&startup_info).unwrap_or_default());
+    println!(
+        "📋 STARTUP: {}",
+        serde_json::to_string(&startup_info).unwrap_or_default()
+    );
 
     // Create endpoint using fastn-net (same as other code)
     let endpoint = fastn_net::get_endpoint(receiver_key).await?;

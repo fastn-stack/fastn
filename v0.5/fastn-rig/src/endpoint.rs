@@ -386,34 +386,34 @@ async fn handle_connection(
                         // Connection is no longer valid when accept_bi fails
                         tracing::debug!("accept_bi failed, connection invalid: {}", e);
                         println!("🔍 DEBUG: accept_bi failed, connection no longer valid: {}", e);
-                        
+
                         // Check if this is a normal connection closure vs abnormal error
                         // Use error source chain to detect iroh connection errors
                         let mut is_connection_closed = false;
                         let mut current_error: &dyn std::error::Error = &*e;
                         loop {
                             let error_debug = format!("{:?}", current_error);
-                            if error_debug.contains("ConnectionLost") || 
+                            if error_debug.contains("ConnectionLost") ||
                                error_debug.contains("TimedOut") ||
                                error_debug.contains("connection closed") {
                                 is_connection_closed = true;
                                 break;
                             }
-                            
+
                             if let Some(source) = std::error::Error::source(current_error) {
                                 current_error = source;
                             } else {
                                 break;
                             }
                         }
-                        
+
                         if is_connection_closed {
                             println!("🔍 DEBUG: Normal connection closure detected, returning Ok");
                             return Ok(());
                         } else {
                             println!("🔍 DEBUG: Abnormal connection error, returning Err: {}", e);
-                            return Err(fastn_rig::EndpointError::ConnectionHandlingFailed {
-                                source: Box::new(e),
+                            return Err(fastn_rig::EndpointError::StreamAcceptFailed {
+                                source: e,
                             });
                         }
                     }

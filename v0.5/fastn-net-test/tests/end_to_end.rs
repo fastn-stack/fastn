@@ -10,10 +10,10 @@ async fn test_fastn_net_sender_receiver_cli() {
     // Create deterministic keys for reproducible testing
     let receiver_key = fastn_id52::SecretKey::from_bytes(&[1u8; 32]);
     let sender_key = fastn_id52::SecretKey::from_bytes(&[2u8; 32]);
-    
+
     let receiver_id52 = receiver_key.public_key().id52();
     let sender_id52 = sender_key.public_key().id52();
-    
+
     println!("🔑 Receiver ID52: {}", receiver_id52);
     println!("🔑 Sender ID52: {}", sender_id52);
 
@@ -29,13 +29,15 @@ async fn test_fastn_net_sender_receiver_cli() {
     // Wait for receiver to start
     tokio::time::sleep(Duration::from_secs(5)).await;
 
-    // Run sender with specific keys  
+    // Run sender with specific keys
     println!("📤 Running sender with deterministic keys...");
     let sender_output = Command::new("cargo")
         .args([
-            "run", "--bin", "sender", 
+            "run",
+            "--bin",
+            "sender",
             &sender_key.to_string(),
-            &receiver_id52
+            &receiver_id52,
         ])
         .output()
         .await
@@ -43,7 +45,7 @@ async fn test_fastn_net_sender_receiver_cli() {
 
     let stdout = String::from_utf8_lossy(&sender_output.stdout);
     let stderr = String::from_utf8_lossy(&sender_output.stderr);
-    
+
     println!("📝 Sender stdout: {}", stdout.trim());
     if !stderr.trim().is_empty() {
         println!("📝 Sender stderr: {}", stderr.trim());
@@ -51,7 +53,7 @@ async fn test_fastn_net_sender_receiver_cli() {
 
     if sender_output.status.success() {
         println!("✅ Sender completed successfully");
-        
+
         // Look for JSON result
         if stdout.contains("📋 RESULT:") && stdout.contains("\"status\": \"success\"") {
             println!("✅ Found JSON success result");
