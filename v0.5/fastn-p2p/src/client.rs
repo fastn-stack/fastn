@@ -1,4 +1,3 @@
-
 /// Error type for p2p_call function
 #[derive(Debug, thiserror::Error)]
 pub enum P2PCallError {
@@ -29,8 +28,9 @@ pub enum P2PCallError {
 ///
 /// # Type Parameters
 ///
-/// * `T1` - The request type (must implement Serialize)
-/// * `T2` - The response type (must implement DeserializeOwned)
+/// * `INPUT` - The request type (must implement Serialize)
+/// * `OUTPUT` - The response type (must implement DeserializeOwned)
+/// * `ERROR` - The error type (must implement DeserializeOwned)
 ///
 /// # Arguments
 ///
@@ -69,7 +69,7 @@ pub enum P2PCallError {
 ///         message: "Hello!".to_string(),
 ///     };
 ///
-///     let result: Result<PingResponse, String> = fastn_net::p2p_call(
+///     let result: Result<PingResponse, String> = fastn_p2p::call(
 ///         sender_secret_key,
 ///         &target_public_key,
 ///         fastn_net::Protocol::Ping,

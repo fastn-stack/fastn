@@ -9,6 +9,7 @@ members = [
     "fastn-id52",
     "fastn-mail",
     "fastn-net",
+    "fastn-p2p",
     "fastn-package",
     "fastn-rig",
     "fastn-router",
