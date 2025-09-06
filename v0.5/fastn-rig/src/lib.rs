@@ -31,7 +31,6 @@ extern crate self as fastn_rig;
 pub mod automerge;
 pub mod email_delivery_p2p;
 pub mod email_poller_p2p;
-pub mod p2p_delivery_shared;
 pub mod p2p_server;
 pub mod protocols;
 pub mod errors;
@@ -96,8 +95,7 @@ pub struct EndpointManager {
     pub(crate) message_tx: tokio::sync::mpsc::Sender<P2PMessage>,
     /// Graceful handler for spawning tasks
     pub(crate) graceful: fastn_p2p::Graceful,
-    /// Connection pool for P2P stream reuse
-    pub(crate) peer_stream_senders: fastn_p2p::PeerStreamSenders,
+    // No more connection pool needed - fastn-p2p handles everything!
 }
 
 /// P2P message received on an endpoint

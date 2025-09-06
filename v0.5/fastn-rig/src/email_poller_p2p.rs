@@ -2,10 +2,12 @@
 
 /// Start email delivery poller using fastn-p2p
 pub async fn start_email_delivery_poller(
-    account_manager: std::sync::Arc<fastn_account::AccountManager>,
-    graceful: fastn_p2p::Graceful,
+    _account_manager: std::sync::Arc<fastn_account::AccountManager>,
 ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     println!("📬 Starting email delivery poller with fastn-p2p...");
+    
+    // Use global graceful singleton
+    let graceful = fastn_p2p::graceful();
     
     // TODO: Implement email scanning and delivery using fastn_p2p::call
     // This will replace the old complex email_delivery.rs
