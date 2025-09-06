@@ -35,7 +35,6 @@
 extern crate self as fastn_net;
 
 pub mod dot_fastn;
-mod endpoint;
 pub mod errors;
 pub mod get_endpoint;
 mod get_stream;
@@ -43,7 +42,6 @@ mod graceful;
 pub mod http;
 mod http_connection_manager;
 mod http_to_peer;
-mod p2p_call;
 mod peer_to_http;
 mod ping;
 pub mod protocol;
@@ -52,17 +50,12 @@ mod tcp;
 mod utils;
 mod utils_iroh;
 
-pub use endpoint::{
-    GetInputError, HandleRequestError, ListenerAlreadyActiveError, ListenerNotFoundError, 
-    P2PResponseHandle, P2PSendError, PeerRequest, is_p2p_listening, p2p_listen, p2p_stop_listening,
-};
 pub use get_endpoint::get_endpoint;
 pub use get_stream::{PeerStreamSenders, get_stream};
 pub use graceful::Graceful;
 pub use http::ProxyResult;
 pub use http_connection_manager::{HttpConnectionManager, HttpConnectionPool, HttpConnectionPools};
 pub use http_to_peer::{http_to_peer, http_to_peer_non_streaming};
-pub use p2p_call::{P2PCallError, p2p_call};
 pub use peer_to_http::peer_to_http;
 pub use ping::{PONG, ping};
 pub use protocol::{APNS_IDENTITY, Protocol, ProtocolHeader};
