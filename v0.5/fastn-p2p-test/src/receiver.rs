@@ -88,11 +88,14 @@ async fn main() -> eyre::Result<()> {
     
     println!("🔧 DEBUG: About to call stream.next().await");
 
-    // Handle exactly one connection (like fastn-net-test)
-    if let Some(request_result) = stream.next().await {
+    // Handle multiple connections
+    let mut message_count = 0;
+    
+    while let Some(request_result) = stream.next().await {
         let request = request_result?;
+        message_count += 1;
         
-        println!("🔗 Accepted connection from {}", request.peer().id52());
+        println!("🔗 Accepted connection #{} from {}", message_count, request.peer().id52());
         println!("📨 Received {} protocol request", request.protocol);
         
         // Handle the echo request
@@ -107,8 +110,14 @@ async fn main() -> eyre::Result<()> {
         }).await;
         
         match result {
-            Ok(_) => println!("✅ Request handled successfully"),
-            Err(e) => eprintln!("❌ Request handling failed: {}", e),
+            Ok(_) => println!("✅ Request #{} handled successfully", message_count),
+            Err(e) => eprintln!("❌ Request #{} handling failed: {}", message_count, e),
+        }
+        
+        // Stop after handling 10 messages for this test
+        if message_count >= 10 {
+            println!("🎯 Handled {} messages, shutting down receiver", message_count);
+            break;
         }
     }
 
