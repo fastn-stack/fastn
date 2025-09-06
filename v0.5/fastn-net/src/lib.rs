@@ -53,16 +53,16 @@ mod utils;
 mod utils_iroh;
 
 pub use endpoint::{
-    p2p_listen, p2p_stop_listening, is_p2p_listening, 
-    PeerConnection, ListenerAlreadyActiveError, ListenerNotFoundError
+    ListenerAlreadyActiveError, ListenerNotFoundError, PeerConnection, is_p2p_listening,
+    p2p_listen, p2p_stop_listening,
 };
-pub use p2p_call::{p2p_call, P2PCallError};
 pub use get_endpoint::get_endpoint;
 pub use get_stream::{PeerStreamSenders, get_stream};
 pub use graceful::Graceful;
 pub use http::ProxyResult;
 pub use http_connection_manager::{HttpConnectionManager, HttpConnectionPool, HttpConnectionPools};
 pub use http_to_peer::{http_to_peer, http_to_peer_non_streaming};
+pub use p2p_call::{P2PCallError, p2p_call};
 pub use peer_to_http::peer_to_http;
 pub use ping::{PONG, ping};
 pub use protocol::{APNS_IDENTITY, Protocol, ProtocolHeader};

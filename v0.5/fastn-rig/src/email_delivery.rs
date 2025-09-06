@@ -592,7 +592,7 @@ async fn deliver_emails_to_peer(
         fastn_net::get_stream(
             our_endpoint,
             fastn_net::Protocol::AccountToAccount.into(),
-            peer_id52.id52(),
+            peer_id52,
             peer_stream_senders.clone(),
             graceful.clone(),
         ),

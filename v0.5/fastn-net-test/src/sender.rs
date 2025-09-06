@@ -66,11 +66,15 @@ async fn main() -> eyre::Result<()> {
 
     println!("📤 About to send test message via fastn-net get_stream");
 
+    // Convert receiver_id52 string to PublicKey
+    let receiver_public_key = receiver_id52.parse::<fastn_id52::PublicKey>()
+        .map_err(|e| eyre::anyhow!("Invalid receiver_id52: {}", e))?;
+    
     // Use get_stream exactly like http_proxy.rs does
     let (mut send, mut recv) = fastn_net::get_stream(
         endpoint,
         fastn_net::Protocol::AccountToAccount.into(),
-        receiver_id52.clone(),
+        &receiver_public_key,
         peer_stream_senders.clone(),
         graceful.clone(),
     )
