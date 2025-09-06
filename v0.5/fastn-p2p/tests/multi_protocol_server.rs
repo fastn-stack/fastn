@@ -71,88 +71,38 @@ async fn run_multi_protocol_server() -> Result<(), Box<dyn std::error::Error + S
     
     let mut request_count = 0;
     
-    while let Some(peer_request) = stream.next().await {
-        let peer_request = peer_request?;
+    while let Some(request) = stream.next().await {
+        let peer_request = request?;
         request_count += 1;
         
-        println!("📨 Request #{}: {:?} from {}", 
-                request_count, 
-                peer_request.protocol(), 
-                peer_request.peer().id52());
+        println!("📨 Request #{request_count}: {} from {}",
+                peer_request.protocol(),
+                peer_request.peer()
+        );
         
         // Route based on protocol
         let result = match peer_request.protocol {
             fastn_p2p::Protocol::Ping => {
-                // Handle Echo protocol using the high-level API
-                peer_request.handle(|request: EchoRequest| async move {
-                    println!("🔄 Processing echo: '{}'", request.message);
-                    
-                    // Simple echo logic with validation
-                    if request.message.is_empty() {
-                        return Err(EchoError {
-                            code: 400,
-                            message: "Empty message not allowed".to_string(),
-                        });
-                    }
-                    
-                    if request.message.len() > 1000 {
-                        return Err(EchoError {
-                            code: 413, 
-                            message: "Message too long".to_string(),
-                        });
-                    }
-                    
-                    // Successful response
-                    Ok(EchoResponse {
-                        echo: format!("Echo: {}", request.message),
-                        length: request.message.len(),
-                    })
-                }).await
+                // Handle Echo protocol using clean function reference
+                peer_request.handle(echo_handler).await
             }
             fastn_p2p::Protocol::Http => {
-                // Handle Math protocol using the high-level API  
-                peer_request.handle(|request: MathRequest| async move {
-                    println!("🧮 Processing math: {} {} {}", request.a, request.operation, request.b);
-                    
-                    // Math operation logic
-                    let result = match request.operation.as_str() {
-                        "add" => request.a + request.b,
-                        "multiply" => request.a * request.b,
-                        "divide" => {
-                            if request.b == 0.0 {
-                                return Err(MathError {
-                                    error_type: "division_by_zero".to_string(),
-                                    details: "Cannot divide by zero".to_string(),
-                                });
-                            }
-                            request.a / request.b
-                        }
-                        unknown => {
-                            return Err(MathError {
-                                error_type: "invalid_operation".to_string(),
-                                details: format!("Unknown operation: {}", unknown),
-                            });
-                        }
-                    };
-                    
-                    // Successful response
-                    Ok(MathResponse { result })
-                }).await
+                // Handle Math protocol using clean function reference  
+                peer_request.handle(math_handler).await
             }
             other => {
-                eprintln!("❓ Unexpected protocol: {:?}", other);
-                // Could send an error response here if needed
+                eprintln!("❓ Unexpected protocol: {other}");
                 Ok(())
             }
         };
         
         if let Err(e) = result {
-            eprintln!("❌ Request failed: {}", e);
+            eprintln!("❌ Request failed: {e}");
         }
         
         // Stop after handling some requests for this demo
         if request_count >= 10 {
-            println!("✅ Handled {} requests, shutting down", request_count);
+            println!("✅ Handled {request_count} requests, shutting down");
             break;
         }
     }
@@ -160,17 +110,70 @@ async fn run_multi_protocol_server() -> Result<(), Box<dyn std::error::Error + S
     Ok(())
 }
 
+/// Echo request handler - returns the result directly
+async fn echo_handler(request: EchoRequest) -> Result<EchoResponse, EchoError> {
+    println!("🔄 Processing echo: '{}'", request.message);
+    
+    // Simple echo logic with validation
+    if request.message.is_empty() {
+        return Err(EchoError {
+            code: 400,
+            message: "Empty message not allowed".to_string(),
+        });
+    }
+    
+    if request.message.len() > 1000 {
+        return Err(EchoError {
+            code: 413, 
+            message: "Message too long".to_string(),
+        });
+    }
+    
+    // Successful response
+    Ok(EchoResponse {
+        echo: format!("Echo: {}", request.message),
+        length: request.message.len(),
+    })
+}
+
+/// Math request handler - returns the result directly  
+async fn math_handler(request: MathRequest) -> Result<MathResponse, MathError> {
+    println!("🧮 Processing math: {} {} {}", request.a, request.operation, request.b);
+    
+    // Math operation logic
+    let result = match request.operation.as_str() {
+        "add" => request.a + request.b,
+        "multiply" => request.a * request.b,
+        "divide" => {
+            if request.b == 0.0 {
+                return Err(MathError {
+                    error_type: "division_by_zero".to_string(),
+                    details: "Cannot divide by zero".to_string(),
+                });
+            }
+            request.a / request.b
+        }
+        unknown => {
+            return Err(MathError {
+                error_type: "invalid_operation".to_string(),
+                details: format!("Unknown operation: {}", unknown),
+            });
+        }
+    };
+    
+    // Successful response
+    Ok(MathResponse { result })
+}
 
 // ============================================================================
 // CLIENT IMPLEMENTATION  
 // ============================================================================
 
 /// Client that makes requests to both protocols
-async fn run_test_client() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+async fn run_test_client(server_public_key: &fastn_id52::PublicKey) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     println!("📞 Starting test client");
     
     let client_secret = fastn_id52::SecretKey::generate();
-    let server_public = fastn_id52::SecretKey::generate().public_key(); // Mock server key
     
     // Test Echo protocol
     println!("🔄 Testing Echo protocol...");
@@ -180,7 +183,7 @@ async fn run_test_client() -> Result<(), Box<dyn std::error::Error + Send + Sync
     
     let echo_result: EchoResult = fastn_p2p::call(
         client_secret.clone(),
-        &server_public,
+        server_public_key,
         fastn_p2p::Protocol::Ping,
         echo_request,
     ).await?;
@@ -205,7 +208,7 @@ async fn run_test_client() -> Result<(), Box<dyn std::error::Error + Send + Sync
     
     let math_result: MathResult = fastn_p2p::call(
         client_secret.clone(),
-        &server_public,
+        server_public_key,
         fastn_p2p::Protocol::Http,
         math_request,
     ).await?;
@@ -230,7 +233,7 @@ async fn run_test_client() -> Result<(), Box<dyn std::error::Error + Send + Sync
     
     let error_result: MathResult = fastn_p2p::call(
         client_secret,
-        &server_public,
+        server_public_key,
         fastn_p2p::Protocol::Http,
         error_request,
     ).await?;
@@ -255,7 +258,13 @@ async fn run_test_client() -> Result<(), Box<dyn std::error::Error + Send + Sync
 /// Example of how a real application might structure P2P communication
 /// This shows the clean API patterns we've achieved
 async fn example_main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-    // Server setup
+    // Generate server key that client will connect to
+    let server_secret = fastn_id52::SecretKey::generate();
+    let server_public = server_secret.public_key();
+    
+    println!("🔑 Server key: {}", server_public.id52());
+    
+    // Server setup (in real app, server would use its own secret key)
     let server_task = tokio::spawn(async {
         run_multi_protocol_server().await
     });
@@ -263,9 +272,9 @@ async fn example_main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> 
     // Give server time to start
     tokio::time::sleep(std::time::Duration::from_millis(100)).await;
     
-    // Client interactions
-    let client_task = tokio::spawn(async {
-        run_test_client().await
+    // Client interactions - pass server's public key
+    let client_task = tokio::spawn(async move {
+        run_test_client(&server_public).await
     });
     
     // Wait for completion
@@ -283,11 +292,10 @@ async fn example_main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> 
 // ============================================================================
 
 /// High-load test: alternates between protocols for 100 requests
-async fn load_test_100_requests() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+async fn load_test_100_requests(server_public_key: &fastn_id52::PublicKey) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     println!("🚀 Starting 100-request load test");
     
-    let client_secret = fastn_id52::SecretKey::generate(); 
-    let server_public = fastn_id52::SecretKey::generate().public_key();
+    let client_secret = fastn_id52::SecretKey::generate();
     
     for i in 1..=100 {
         if i % 2 == 0 {
@@ -298,7 +306,7 @@ async fn load_test_100_requests() -> Result<(), Box<dyn std::error::Error + Send
             
             let result: EchoResult = fastn_p2p::call(
                 client_secret.clone(),
-                &server_public,
+                server_public_key,
                 fastn_p2p::Protocol::Ping,
                 request,
             ).await?;
@@ -317,7 +325,7 @@ async fn load_test_100_requests() -> Result<(), Box<dyn std::error::Error + Send
             
             let result: MathResult = fastn_p2p::call(
                 client_secret.clone(),
-                &server_public,
+                server_public_key,
                 fastn_p2p::Protocol::Http,
                 request,
             ).await?;
