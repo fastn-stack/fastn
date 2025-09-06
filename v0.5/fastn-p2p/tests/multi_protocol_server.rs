@@ -4,10 +4,16 @@ use futures_util::stream::StreamExt;
 use serde::{Deserialize, Serialize};
 
 /// Application-specific protocols - meaningful names instead of Ping/Http lies!
-#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq, enum_display_derive::Display)]
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq)]
 pub enum AppProtocol {
     Echo,
     Math,
+}
+
+impl std::fmt::Display for AppProtocol {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{self:?}")
+    }
 }
 
 // Echo Protocol (simple text echo)

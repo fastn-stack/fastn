@@ -20,6 +20,7 @@ members = [
     "fastn-utils",
     "fastn-wasm",
     "fastn-net-test",
+    "fastn-p2p-test",
 ]
 exclude = []
 resolver = "2"
