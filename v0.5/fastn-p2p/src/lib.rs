@@ -38,19 +38,19 @@ pub mod server;
 pub use fastn_net::{Graceful, PeerStreamSenders, Protocol};
 
 // Client API - clean, simple naming
-pub use client::{p2p_call as call, P2PCallError as CallError};
+pub use client::{call, CallError};
 
 // Server API - clean, simple naming  
 pub use server::{
-    p2p_listen as listen,
-    p2p_stop_listening as stop_listening,
-    is_p2p_listening as is_listening,
+    listen,
+    stop_listening,
+    is_listening,
     active_listener_count,
     active_listeners,
-    PeerRequest as Request,
-    P2PResponseHandle as ResponseHandle,
+    Request,
+    ResponseHandle,
     GetInputError,
-    P2PSendError as SendError,
+    SendError,
     HandleRequestError,
     ListenerAlreadyActiveError,
     ListenerNotFoundError,

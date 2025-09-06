@@ -1,6 +1,6 @@
-/// Error type for p2p_call function
+/// Error type for call function
 #[derive(Debug, thiserror::Error)]
-pub enum P2PCallError {
+pub enum CallError {
     #[error("Failed to establish P2P stream: {source}")]
     EndpointError { source: eyre::Error },
 
@@ -85,14 +85,14 @@ pub enum P2PCallError {
 ///     Ok(())
 /// }
 /// ```
-pub async fn p2p_call<INPUT, OUTPUT, ERROR>(
+pub async fn call<INPUT, OUTPUT, ERROR>(
     sender: fastn_id52::SecretKey,
     target: &fastn_id52::PublicKey,
     protocol: fastn_net::Protocol,
     peer_stream_senders: fastn_net::PeerStreamSenders,
     graceful: fastn_net::Graceful,
     input: INPUT,
-) -> Result<Result<OUTPUT, ERROR>, P2PCallError>
+) -> Result<Result<OUTPUT, ERROR>, CallError>
 where
     INPUT: serde::Serialize,
     OUTPUT: for<'de> serde::Deserialize<'de>,
@@ -101,7 +101,7 @@ where
     // Get endpoint for the sender
     let endpoint = fastn_net::get_endpoint(sender)
         .await
-        .map_err(|source| P2PCallError::EndpointError { source })?;
+        .map_err(|source| CallError::EndpointError { source })?;
 
     // Establish P2P stream
     let (mut send_stream, mut recv_stream) = fastn_net::get_stream(
@@ -112,30 +112,30 @@ where
         graceful,
     )
     .await
-    .map_err(|source| P2PCallError::StreamError { source })?;
+    .map_err(|source| CallError::StreamError { source })?;
 
     // Serialize and send request
     let request_json = serde_json::to_string(&input)
-        .map_err(|source| P2PCallError::SerializationError { source })?;
+        .map_err(|source| CallError::SerializationError { source })?;
 
     // Send JSON followed by newline
     send_stream
         .write_all(request_json.as_bytes())
         .await
-        .map_err(|e| P2PCallError::SendError {
+        .map_err(|e| CallError::SendError {
             source: eyre::Error::from(e),
         })?;
     send_stream
         .write_all(b"\n")
         .await
-        .map_err(|e| P2PCallError::SendError {
+        .map_err(|e| CallError::SendError {
             source: eyre::Error::from(e),
         })?;
 
     // Receive and deserialize response
     let response_json = fastn_net::next_string(&mut recv_stream)
         .await
-        .map_err(|source| P2PCallError::ReceiveError { source })?;
+        .map_err(|source| CallError::ReceiveError { source })?;
 
     // Try to deserialize as success response first
     if let Ok(success_response) = serde_json::from_str::<OUTPUT>(&response_json) {
@@ -148,7 +148,7 @@ where
     }
 
     // If both fail, it's a deserialization error
-    Err(P2PCallError::DeserializationError {
+    Err(CallError::DeserializationError {
         source: serde_json::Error::io(std::io::Error::other(
             format!("Response doesn't match expected OUTPUT or ERROR types: {}", response_json)
         )),
@@ -176,7 +176,7 @@ mod tests {
     async fn test_p2p_call_error_types() {
         // Test that error types are properly defined and can be created
         let io_error = std::io::Error::other("test");
-        let serialization_err = P2PCallError::SerializationError {
+        let serialization_err = CallError::SerializationError {
             source: serde_json::Error::io(io_error),
         };
 
@@ -187,7 +187,7 @@ mod tests {
         );
 
         let io_error2 = std::io::Error::other("test");
-        let deserialization_err = P2PCallError::DeserializationError {
+        let deserialization_err = CallError::DeserializationError {
             source: serde_json::Error::io(io_error2),
         };
 

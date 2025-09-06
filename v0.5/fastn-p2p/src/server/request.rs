@@ -1,12 +1,34 @@
 
-pub struct PeerRequest {
-    pub peer: fastn_id52::PublicKey,
-    pub protocol: fastn_net::Protocol,
-    pub send: iroh::endpoint::SendStream,
-    pub recv: iroh::endpoint::RecvStream,
+pub struct Request {
+    peer: fastn_id52::PublicKey,
+    pub protocol: fastn_net::Protocol,  // Keep public for protocol-based routing
+    send: iroh::endpoint::SendStream,
+    recv: iroh::endpoint::RecvStream,
 }
 
-/// Error when trying to get input from a PeerRequest
+impl Request {
+    /// Create a new Request (internal use only)
+    pub(crate) fn new(
+        peer: fastn_id52::PublicKey,
+        protocol: fastn_net::Protocol,
+        send: iroh::endpoint::SendStream,
+        recv: iroh::endpoint::RecvStream,
+    ) -> Self {
+        Self { peer, protocol, send, recv }
+    }
+
+    /// Get the public key of the peer that sent this request
+    pub fn peer(&self) -> &fastn_id52::PublicKey {
+        &self.peer
+    }
+
+    /// Get the protocol used for this request
+    pub fn protocol(&self) -> fastn_net::Protocol {
+        self.protocol
+    }
+}
+
+/// Error when trying to get input from a Request
 #[derive(Debug, thiserror::Error)]
 pub enum GetInputError {
     #[error("Failed to receive request: {source}")]
@@ -26,7 +48,7 @@ pub enum HandleRequestError {
     SendResponseFailed { source: fastn_p2p::SendError },
 }
 
-impl PeerRequest {
+impl Request {
     /// Read and deserialize a JSON request from the peer connection
     /// 
     /// Returns the deserialized input and a response handle that must be used
@@ -72,7 +94,7 @@ impl PeerRequest {
             .map_err(|source| GetInputError::DeserializationError { source })?;
 
         // Create response handle
-        let response_handle = fastn_p2p::server::handle::P2PResponseHandle::new(self.send);
+        let response_handle = fastn_p2p::server::handle::ResponseHandle::new(self.send);
 
         Ok((input, response_handle))
     }
