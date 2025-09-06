@@ -1,31 +1,13 @@
-//! Multi-protocol P2P server test
-//! 
-//! This test demonstrates how to build a P2P server that handles multiple protocols
-//! with type-safe request-response patterns.
+//! Minimal end-to-end P2P networking test
 
 use futures_util::stream::StreamExt;
 use serde::{Deserialize, Serialize};
 
-// ============================================================================
-// CLEAN USER-DEFINED PROTOCOLS - Shared between client and server
-// ============================================================================
-
 /// Application-specific protocols - meaningful names instead of Ping/Http lies!
-#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq)]
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq, enum_display_derive::Display)]
 pub enum AppProtocol {
     Echo,
     Math,
-    FileTransfer, // For future use
-}
-
-impl std::fmt::Display for AppProtocol {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            AppProtocol::Echo => write!(f, "Echo"),
-            AppProtocol::Math => write!(f, "Math"), 
-            AppProtocol::FileTransfer => write!(f, "FileTransfer"),
-        }
-    }
 }
 
 // Echo Protocol (simple text echo)
@@ -107,10 +89,6 @@ async fn run_multi_protocol_server() -> Result<(), Box<dyn std::error::Error + S
             AppProtocol::Math => {
                 // Handle Math protocol using clean function reference  
                 peer_request.handle(math_handler).await
-            }
-            AppProtocol::FileTransfer => {
-                eprintln!("📁 FileTransfer not implemented yet");
-                Ok(())
             }
         };
         
@@ -398,5 +376,149 @@ mod tests {
         let parsed: EchoError = serde_json::from_str(&json).unwrap(); 
         assert_eq!(echo_error.code, parsed.code);
         assert_eq!(echo_error.message, parsed.message);
+    }
+
+    #[tokio::test]
+    async fn test_end_to_end_generic_protocols() {
+        // Test that generic protocols work correctly with meaningful names
+        
+        // 1. Test protocol definitions work with clean names  
+        let echo_proto = AppProtocol::Echo;
+        let math_proto = AppProtocol::Math;
+        
+        assert_eq!(format!("{echo_proto}"), "Echo");
+        assert_eq!(format!("{math_proto}"), "Math");
+        
+        // 2. Test JSON serialization/deserialization of protocols
+        let echo_json = serde_json::to_string(&echo_proto).unwrap();
+        let echo_parsed: AppProtocol = serde_json::from_str(&echo_json).unwrap();
+        assert_eq!(echo_proto, echo_parsed);
+        
+        // 3. Test message type serialization  
+        let echo_msg = EchoRequest { message: "test".to_string() };
+        let echo_json = serde_json::to_string(&echo_msg).unwrap();
+        let echo_parsed: EchoRequest = serde_json::from_str(&echo_json).unwrap();
+        assert_eq!(echo_msg.message, echo_parsed.message);
+        
+        // 4. Test handler functions work correctly
+        let echo_result = echo_handler(EchoRequest { message: "hello".to_string() }).await;
+        match echo_result {
+            Ok(reply) => assert_eq!(reply.echo, "Echo: hello"),
+            Err(e) => panic!("Echo handler failed: {}", e.message),
+        }
+        
+        let calc_result = math_handler(MathRequest { 
+            operation: "add".to_string(), 
+            a: 5.0, 
+            b: 3.0 
+        }).await;
+        match calc_result {
+            Ok(reply) => assert_eq!(reply.result, 8.0),
+            Err(e) => panic!("Calc handler failed: {}", e.details),
+        }
+        
+        println!("✅ Generic protocol system end-to-end test passed!");
+    }
+
+    #[tokio::test] 
+    async fn test_protocol_conversion() {
+        // Test that protocols convert to/from fastn_net::Protocol::Generic correctly
+        let test_proto = AppProtocol::Echo;
+        
+        // Convert to JSON (what fastn-p2p does internally)
+        let json_value = serde_json::to_value(&test_proto).unwrap();
+        let net_protocol = fastn_net::Protocol::Generic(json_value.clone());
+        
+        // Convert back (what fastn-p2p does when receiving)
+        match net_protocol {
+            fastn_net::Protocol::Generic(value) => {
+                let back_to_user: AppProtocol = serde_json::from_value(value).unwrap();
+                assert_eq!(back_to_user, test_proto);
+            }
+            _ => panic!("Expected Generic variant"),
+        }
+        
+        println!("✅ Protocol conversion test passed!");
+    }
+
+    #[tokio::test]
+    async fn test_end_to_end_p2p_networking() {
+        // Test actual P2P networking: one server, one client, one message
+        println!("🚀 Starting end-to-end P2P networking test");
+        
+        let server_secret = fastn_id52::SecretKey::generate();
+        let server_public = server_secret.public_key();
+        let client_secret = fastn_id52::SecretKey::generate();
+        
+        println!("📡 Server: {}", server_public.id52());
+        println!("📞 Client: {}", client_secret.public_key().id52());
+        
+        // Start server task
+        let server_task = {
+            let server_secret_clone = server_secret.clone();
+            tokio::spawn(async move {
+                let protocols = vec![AppProtocol::Echo];
+                let mut stream = fastn_p2p::listen!(server_secret_clone, &protocols);
+                
+                println!("🎧 Server listening for Echo protocol...");
+                
+                // Handle exactly one request
+                if let Some(request) = stream.next().await {
+                    let request = request?;
+                    println!("📨 Server received {} request from {}", 
+                            request.protocol, 
+                            request.peer().id52());
+                    
+                    // Handle the echo request
+                    request.handle(echo_handler).await?;
+                    println!("✅ Server handled request successfully");
+                }
+                
+                Result::<(), Box<dyn std::error::Error + Send + Sync>>::Ok(())
+            })
+        };
+        
+        // Give server time to start listening
+        tokio::time::sleep(std::time::Duration::from_millis(100)).await;
+        
+        // Send one message from client to server
+        let client_task = {
+            let server_public_clone = server_public.clone();
+            tokio::spawn(async move {
+                println!("📤 Client sending echo request...");
+                
+                let request = EchoRequest {
+                    message: "Hello P2P world!".to_string(),
+                };
+                
+                let result: EchoResult = fastn_p2p::call(
+                    client_secret,
+                    &server_public_clone,
+                    AppProtocol::Echo,
+                    request,
+                ).await?;
+                
+                match result {
+                    Ok(response) => {
+                        println!("✅ Client received response: '{}'", response.echo);
+                        assert_eq!(response.echo, "Echo: Hello P2P world!");
+                        assert_eq!(response.length, 17);
+                    }
+                    Err(error) => {
+                        panic!("❌ Client received error: {} (code: {})", error.message, error.code);
+                    }
+                }
+                
+                Result::<(), Box<dyn std::error::Error + Send + Sync>>::Ok(())
+            })
+        };
+        
+        // Wait for both tasks to complete
+        let (server_result, client_result) = tokio::join!(server_task, client_task);
+        
+        server_result.unwrap().unwrap();
+        client_result.unwrap().unwrap();
+        
+        println!("🎉 End-to-end P2P networking test completed successfully!");
     }
 }

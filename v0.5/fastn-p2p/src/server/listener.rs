@@ -111,9 +111,8 @@ where
         let endpoint = fastn_net::get_endpoint(secret_key.clone()).await?;
 
         // Channel to receive PeerRequests from spawned connection handlers
-        // Using 0-capacity channel to ensure backpressure - each connection blocks
-        // until the stream consumer is ready to receive it
-        let (tx, mut rx) = tokio::sync::mpsc::channel(0);
+        // Using 1-capacity channel for minimal buffering with backpressure
+        let (tx, mut rx) = tokio::sync::mpsc::channel(1);
 
         // Spawn connection acceptor task
         let acceptor_tx = tx.clone();
