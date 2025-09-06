@@ -30,8 +30,10 @@ extern crate self as fastn_rig;
 
 pub mod automerge;
 mod email_delivery;
+mod email_delivery_p2p;
 pub mod endpoint;
 pub mod p2p_delivery_shared;
+pub mod protocols;
 pub mod errors;
 mod http_routes;
 mod http_server;

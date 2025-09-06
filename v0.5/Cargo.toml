@@ -81,6 +81,7 @@ fastn-fbr = { path = "fastn-fbr" }
 fastn-id52 = { path = "fastn-id52" }
 fastn-mail = { path = "fastn-mail" }
 fastn-net = { path = "fastn-net" }
+fastn-p2p = { path = "fastn-p2p" }
 fastn-package = { path = "fastn-package" }
 fastn-resolved = { path = "../fastn-resolved" }
 fastn-rig = { path = "fastn-rig" }
