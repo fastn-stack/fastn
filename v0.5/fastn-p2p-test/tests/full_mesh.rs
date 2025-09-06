@@ -68,7 +68,7 @@ async fn test_full_mesh() {
 
                     if sender_output.status.success() {
                         let stdout = String::from_utf8_lossy(&sender_output.stdout);
-                        if stdout.contains("\"status\": \"success\"") {
+                        if stdout.contains("\"status\":\"success\"") {
                             sender_success_count += 1;
                             println!("✅ Sender #{} → Receiver #{} SUCCESS", sender_id, recv_idx + 1);
                         } else {
