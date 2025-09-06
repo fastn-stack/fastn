@@ -41,3 +41,10 @@ indoc.workspace = true
 
 # UUID generation
 uuid = { version = "1", features = ["v4"] }
+
+# Networking clients (optional)
+lettre = { workspace = true, optional = true }
+
+[features]
+default = []
+net = ["lettre"]

@@ -81,7 +81,7 @@
 //! protocols (RTP/RTCP for audio/video) might benefit from dedicated connections
 //! to avoid head-of-line blocking. This design decision will be re-evaluated
 //! based on performance requirements.
-#[derive(Debug, Clone, Copy, serde::Serialize, serde::Deserialize, PartialEq)]
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize, PartialEq)]
 pub enum Protocol {
     /// client can send this message to check if the connection is open / healthy.
     Ping,
@@ -109,6 +109,49 @@ pub enum Protocol {
     AccountToDevice,
     /// Control messages for Rig management (bring online/offline, set current, etc.)
     RigControl,
+    
+    /// Generic protocol for user-defined types
+    /// This allows users to define their own protocol types while maintaining
+    /// compatibility with the existing fastn-net infrastructure.
+    Generic(serde_json::Value),
+}
+
+impl std::fmt::Display for Protocol {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Protocol::Ping => write!(f, "Ping"),
+            Protocol::WhatTimeIsIt => write!(f, "WhatTimeIsIt"),
+            Protocol::Http => write!(f, "Http"),
+            Protocol::HttpProxy => write!(f, "HttpProxy"),
+            Protocol::Socks5 => write!(f, "Socks5"),
+            Protocol::Tcp => write!(f, "Tcp"),
+            Protocol::DeviceToAccount => write!(f, "DeviceToAccount"),
+            Protocol::AccountToAccount => write!(f, "AccountToAccount"),
+            Protocol::AccountToDevice => write!(f, "AccountToDevice"),
+            Protocol::RigControl => write!(f, "RigControl"),
+            Protocol::Generic(value) => write!(f, "Generic({})", value),
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_protocol_generic() {
+        // Test Generic variant serialization
+        let generic_value = serde_json::json!({"type": "custom", "version": 1});
+        let protocol = Protocol::Generic(generic_value.clone());
+        
+        let serialized = serde_json::to_string(&protocol).unwrap();
+        let deserialized: Protocol = serde_json::from_str(&serialized).unwrap();
+        
+        match deserialized {
+            Protocol::Generic(value) => assert_eq!(value, generic_value),
+            _ => panic!("Expected Generic variant"),
+        }
+    }
 }
 
 /// Single ALPN protocol identifier for all fastn entity connections.

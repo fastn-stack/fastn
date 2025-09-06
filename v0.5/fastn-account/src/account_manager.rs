@@ -75,10 +75,10 @@ impl fastn_account::AccountManager {
     }
 
     /// Get all endpoints from all accounts
-    /// Returns a tuple of (endpoint_id52, secret_key_bytes, account_path)
+    /// Returns a tuple of (endpoint_id52, secret_key, account_path)
     pub async fn get_all_endpoints(
         &self,
-    ) -> Result<Vec<(String, Vec<u8>, std::path::PathBuf)>, fastn_account::GetAllEndpointsError>
+    ) -> Result<Vec<(String, fastn_id52::SecretKey, std::path::PathBuf)>, fastn_account::GetAllEndpointsError>
     {
         let accounts_dir = self.path.join("accounts");
         let mut all_endpoints = Vec::new();
@@ -110,7 +110,7 @@ impl fastn_account::AccountManager {
                             for alias in account.aliases().await {
                                 all_endpoints.push((
                                     alias.id52(),
-                                    alias.secret_key().to_bytes().to_vec(),
+                                    alias.secret_key().clone(),
                                     path.clone(),
                                 ));
                             }
@@ -195,15 +195,35 @@ impl fastn_account::AccountManager {
 
         // 2. Process the message based on type
         match message {
-            crate::AccountToAccountMessage::Email { raw_message } => {
+            crate::AccountToAccountMessage::Email {
+                raw_message,
+                envelope_from,
+                envelope_to,
+            } => {
+                println!(
+                    "📧 DEBUG: Received P2P email message: {} bytes",
+                    raw_message.len()
+                );
+                println!("📧 DEBUG: Envelope from: {}", envelope_from);
+                println!("📧 DEBUG: Envelope to: {}", envelope_to);
+                println!("📧 DEBUG: Our endpoint: {}", our_endpoint_id52);
+                println!("📧 DEBUG: Peer ID52: {}", peer_id52);
                 println!("📧 Processing email message: {} bytes", raw_message.len());
 
                 // 3. Store in INBOX (this is incoming P2P email from peer)
-                let email_result = account.mail.p2p_receive_email(raw_message, peer_id52).await;
+                println!("📥 DEBUG: About to store P2P email in INBOX");
+                let email_result = account
+                    .mail
+                    .p2p_receive_email(&envelope_from, &envelope_to, raw_message)
+                    .await;
 
                 // 4. Create response based on email processing result
                 let response = match email_result {
                     Ok(email_id) => {
+                        println!(
+                            "✅ DEBUG: P2P email stored successfully with ID: {}",
+                            email_id
+                        );
                         println!("✅ Email stored with ID: {}", email_id);
                         fastn_account::EmailDeliveryResponse {
                             email_id,
@@ -211,6 +231,7 @@ impl fastn_account::AccountManager {
                         }
                     }
                     Err(e) => {
+                        println!("❌ DEBUG: P2P email storage failed: {}", e);
                         println!("❌ Email rejected: {}", e);
                         fastn_account::EmailDeliveryResponse {
                             email_id: "unknown".to_string(),

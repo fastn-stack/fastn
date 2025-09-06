@@ -114,7 +114,7 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         endpoint_manager
             .bring_online(
                 rig_id52,
-                rig.secret_key().to_bytes().to_vec(),
+                rig.secret_key().clone(),
                 fastn_rig::OwnerType::Rig,
                 fastn_home.clone(),
                 account_manager.clone(),
@@ -131,7 +131,14 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     println!("\n📨 fastn is running. Press Ctrl+C to stop.");
     println!("   P2P: active on {total_endpoints} endpoints");
     println!("   Email Delivery: polling every 5 seconds");
-    println!("   SMTP: planned (port 2525)");
+
+    // SMTP server configuration
+    let smtp_port = std::env::var("FASTN_SMTP_PORT")
+        .ok()
+        .and_then(|p| p.parse().ok())
+        .unwrap_or(2525); // Default to 2525 for development
+    println!("   SMTP: listening on port {smtp_port}");
+
     println!("   IMAP: planned (port 1143)");
     let http_port = std::env::var("FASTN_HTTP_PORT")
         .ok()
@@ -144,18 +151,41 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     }
 
     // Get connection pool before endpoint_manager is moved
-    let connection_pool = endpoint_manager.peer_stream_senders().clone();
+    let _connection_pool = endpoint_manager.peer_stream_senders().clone();
 
-    // Start email delivery poller
-    crate::email_delivery::start_email_delivery_poller(
+    // Start email delivery poller (configurable via ENABLE_EMAIL_POLLER)
+    let enable_poller = std::env::var("ENABLE_EMAIL_POLLER")
+        .unwrap_or_else(|_| "true".to_string())
+        .parse::<bool>()
+        .unwrap_or(true);
+    
+    if enable_poller {
+        println!("📬 Email poller is enabled, starting email delivery poller...");
+        crate::email_delivery::start_email_delivery_poller(
+            account_manager.clone(),
+            graceful.clone(),
+            _connection_pool,
+        )
+        .await
+        .map_err(|e| fastn_rig::RunError::ShutdownFailed {
+            source: Box::new(e),
+        })?;
+    } else {
+        println!("📭 Email delivery poller disabled via ENABLE_EMAIL_POLLER=false");
+        println!("💡 Use test-p2p-delivery CLI for manual P2P testing");
+    }
+
+    // Start SMTP server for email reception
+    let smtp_server = crate::smtp::SmtpServer::new(
         account_manager.clone(),
+        ([0, 0, 0, 0], smtp_port).into(),
         graceful.clone(),
-        connection_pool,
-    )
-    .await
-    .map_err(|e| fastn_rig::RunError::ShutdownFailed {
-        source: Box::new(e),
-    })?;
+    );
+    let _smtp_handle = graceful.spawn(async move {
+        if let Err(e) = smtp_server.start().await {
+            tracing::error!("SMTP server error: {}", e);
+        }
+    });
 
     // Start HTTP server for web interface
     crate::http_server::start_http_server(
@@ -174,6 +204,8 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         loop {
             tokio::select! {
                 Some(p2p_msg) = message_rx.recv() => {
+                    println!("📨 DEBUG: Received P2P message on endpoint {} from {} ({} bytes)", 
+                             p2p_msg.our_endpoint.id52(), p2p_msg.peer_id52.id52(), p2p_msg.message.len());
                     tracing::info!(
                         "Received message on endpoint {} from {} (type: {:?})",
                         p2p_msg.our_endpoint.id52(),

@@ -136,6 +136,10 @@ pub struct EmailForDelivery {
     pub size_bytes: usize,
     /// When queued for delivery
     pub date_queued: i64,
+    /// SMTP envelope FROM (for efficient P2P processing)
+    pub envelope_from: String,
+    /// SMTP envelope TO (this specific peer)
+    pub envelope_to: String,
 }
 
 /// Mail configuration document stored in automerge

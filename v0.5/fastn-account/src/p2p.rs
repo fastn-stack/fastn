@@ -12,8 +12,8 @@
 pub enum AccountToAccountMessage {
     /// Peer-to-peer email delivery
     ///
-    /// Contains a complete RFC 5322 email message that can be stored directly
-    /// in the recipient's mailbox and served to any IMAP/email client.
+    /// Contains a complete RFC 5322 email message plus envelope data for efficient processing.
+    /// The envelope data allows the recipient to process the email without header parsing.
     Email {
         /// Complete RFC 5322 message as bytes
         ///
@@ -21,6 +21,12 @@ pub enum AccountToAccountMessage {
         /// It's the exact message that would be sent over SMTP or stored in
         /// an IMAP mailbox, ensuring full compatibility with email clients.
         raw_message: Vec<u8>,
+
+        /// SMTP envelope FROM (original sender)
+        envelope_from: String,
+
+        /// SMTP envelope TO (specific recipient - this peer)
+        envelope_to: String,
     },
 }
 
@@ -43,22 +49,37 @@ pub enum DeliveryStatus {
 }
 
 impl AccountToAccountMessage {
-    /// Create a new email message from raw RFC 5322 bytes
-    pub fn new_email(raw_message: Vec<u8>) -> Self {
-        Self::Email { raw_message }
+    /// Create a new email message with envelope data
+    pub fn new_email(raw_message: Vec<u8>, envelope_from: String, envelope_to: String) -> Self {
+        Self::Email {
+            raw_message,
+            envelope_from,
+            envelope_to,
+        }
     }
 
     /// Get the size of the message for network planning
     pub fn size(&self) -> usize {
         match self {
-            Self::Email { raw_message } => raw_message.len(),
+            Self::Email { raw_message, .. } => raw_message.len(),
         }
     }
 
     /// Get the raw message bytes for storage or transmission
     pub fn raw_bytes(&self) -> &[u8] {
         match self {
-            Self::Email { raw_message } => raw_message,
+            Self::Email { raw_message, .. } => raw_message,
+        }
+    }
+
+    /// Get envelope data for efficient processing
+    pub fn envelope_data(&self) -> Option<(&str, &str)> {
+        match self {
+            Self::Email {
+                envelope_from,
+                envelope_to,
+                ..
+            } => Some((envelope_from, envelope_to)),
         }
     }
 }
@@ -71,7 +92,11 @@ mod tests {
         let raw_email =
             b"From: alice@example.com\r\nTo: bob@example.com\r\nSubject: Test\r\n\r\nHello World!"
                 .to_vec();
-        let msg = crate::AccountToAccountMessage::new_email(raw_email.clone());
+        let msg = crate::AccountToAccountMessage::new_email(
+            raw_email.clone(),
+            "alice@test.com".to_string(),
+            "bob@test.com".to_string(),
+        );
 
         assert_eq!(msg.size(), raw_email.len());
         assert_eq!(msg.raw_bytes(), raw_email.as_slice());
@@ -82,7 +107,11 @@ mod tests {
         let raw_email =
             b"From: alice@example.com\r\nTo: bob@example.com\r\nSubject: Test\r\n\r\nHello World!"
                 .to_vec();
-        let msg = crate::AccountToAccountMessage::new_email(raw_email);
+        let msg = crate::AccountToAccountMessage::new_email(
+            raw_email,
+            "alice@test.com".to_string(),
+            "bob@test.com".to_string(),
+        );
 
         // Should be serializable for P2P transmission
         let serialized = serde_json::to_string(&msg).unwrap();
@@ -113,7 +142,11 @@ Content-Disposition: attachment; filename=\"document.pdf\"\r\n\
 --boundary123--\r\n"
             .to_vec();
 
-        let msg = crate::AccountToAccountMessage::new_email(multipart_email.clone());
+        let msg = crate::AccountToAccountMessage::new_email(
+            multipart_email.clone(),
+            "alice@test.com".to_string(),
+            "bob@test.com".to_string(),
+        );
 
         // Should handle any RFC 5322 compliant email
         assert_eq!(msg.size(), multipart_email.len());

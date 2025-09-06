@@ -15,15 +15,13 @@
 //! - `validate_email_for_smtp`: P2P-only address validation and security checks
 //! - `store_email`: File system and database storage operations
 
-mod parse_email;
 mod validate_email_for_smtp;
 
-pub use parse_email::{parse_email, parse_id52_address};
 pub use validate_email_for_smtp::validate_email_for_smtp;
 
-use crate::errors::SmtpReceiveError;
+use fastn_mail::errors::SmtpReceiveError;
 
-impl crate::Store {
+impl fastn_mail::Store {
     /// SMTP server receives an email and handles delivery (local storage or P2P queuing)
     ///
     /// Flow: External SMTP → Store in Sent → Queue for P2P delivery to peers
@@ -45,56 +43,19 @@ impl crate::Store {
     /// - **SMTP Auth**: Sender must authenticate as From address owner
     /// - **Alias Ownership**: From address must belong to our account
     /// - **DefaultMail Access**: Required for authentication and routing decisions
-    pub async fn smtp_receive(&self, raw_message: Vec<u8>) -> Result<String, SmtpReceiveError> {
-        // TODO: Load DefaultMail from automerge database for validation
-        // For now, create a placeholder for validation testing
-        // Step 1: Parse email message headers
-        let parsed_email = parse_email(&raw_message)?;
+    ///
+    /// SMTP server receives an email with envelope data from SMTP protocol
+    pub async fn smtp_receive(
+        &self,
+        smtp_from: &str,
+        smtp_recipients: &[String],
+        raw_message: Vec<u8>,
+    ) -> Result<String, SmtpReceiveError> {
+        // Step 1: Create ParsedEmail using SMTP envelope data (no header parsing needed)
+        let parsed_email = create_parsed_email_from_smtp(smtp_from, smtp_recipients, &raw_message)?;
 
         // Step 2: Validate email for SMTP acceptance
         validate_email_for_smtp(&parsed_email)?;
-
-        // Display parsed information
-        println!("📧 Successfully parsed email!");
-        println!("  From: {}", parsed_email.from_addr);
-        println!("  To: {}", parsed_email.to_addr);
-        println!(
-            "  CC: {}",
-            parsed_email.cc_addr.as_deref().unwrap_or("(none)")
-        );
-        println!(
-            "  BCC: {}",
-            parsed_email.bcc_addr.as_deref().unwrap_or("(none)")
-        );
-        println!("  Subject: {}", parsed_email.subject);
-        println!("  Message-ID: {}", parsed_email.message_id);
-        println!("  File: {}", parsed_email.file_path);
-        println!("  Size: {} bytes", parsed_email.size_bytes);
-
-        // Display P2P routing information
-        println!("🔗 P2P Routing:");
-        println!(
-            "  Our alias: {}",
-            parsed_email
-                .our_alias_used
-                .as_deref()
-                .unwrap_or("(external)")
-        );
-        println!(
-            "  Our username: {}",
-            parsed_email.our_username.as_deref().unwrap_or("(external)")
-        );
-        println!(
-            "  Their alias: {}",
-            parsed_email.their_alias.as_deref().unwrap_or("(external)")
-        );
-        println!(
-            "  Their username: {}",
-            parsed_email
-                .their_username
-                .as_deref()
-                .unwrap_or("(external)")
-        );
 
         // Step 3: Store email file to disk
         self.store_email_file(&parsed_email.file_path, &raw_message)
@@ -107,6 +68,8 @@ impl crate::Store {
         self.queue_p2p_deliveries(&parsed_email).await?;
 
         println!("✅ Email stored and queued for delivery");
+        println!("📂 DEBUG: Email file path: {}", parsed_email.file_path);
+        println!("📂 DEBUG: Account path: {}", self.account_path().display());
         Ok(parsed_email.email_id)
     }
 
@@ -148,7 +111,7 @@ impl crate::Store {
     /// Store email metadata in database
     async fn store_email_metadata(
         &self,
-        parsed_email: &crate::ParsedEmail,
+        parsed_email: &fastn_mail::ParsedEmail,
     ) -> Result<(), SmtpReceiveError> {
         let conn = self.connection().lock().await;
 
@@ -208,7 +171,7 @@ impl crate::Store {
     /// Queue P2P deliveries for fastn recipients
     async fn queue_p2p_deliveries(
         &self,
-        parsed_email: &crate::ParsedEmail,
+        parsed_email: &fastn_mail::ParsedEmail,
     ) -> Result<(), SmtpReceiveError> {
         let conn = self.connection().lock().await;
         let mut queued_count = 0;
@@ -261,7 +224,6 @@ impl crate::Store {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
 
     /// Helper macro for creating RFC 5322 test emails with proper CRLF endings
     /// Supports both static text and variable interpolation
@@ -273,7 +235,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_smtp_receive_basic() {
-        let store = crate::Store::create_test();
+        let store = fastn_mail::Store::create_test();
 
         // Generate valid ID52s for testing
         let from_key = fastn_id52::SecretKey::generate();
@@ -290,7 +252,13 @@ mod tests {
             Hello World!
         "};
 
-        let result = store.smtp_receive(email.into_bytes()).await;
+        let result = store
+            .smtp_receive(
+                &format!("alice@{from_id52}.fastn"),
+                &[format!("bob@{to_id52}.local")],
+                email.into_bytes(),
+            )
+            .await;
 
         // Should succeed with valid P2P addresses
         assert!(result.is_ok());
@@ -301,7 +269,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_smtp_receive_validation_failure() {
-        let store = crate::Store::create_test();
+        let store = fastn_mail::Store::create_test();
 
         let email = test_email! {"
             From: external@gmail.com
@@ -311,7 +279,13 @@ mod tests {
             Body content
         "};
 
-        let result = store.smtp_receive(email.into_bytes()).await;
+        let result = store
+            .smtp_receive(
+                "external@gmail.com",
+                &["bob@example.com".to_string()],
+                email.into_bytes(),
+            )
+            .await;
 
         // Should fail validation for external From address
         assert!(result.is_err());
@@ -319,7 +293,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_smtp_receive_missing_headers() {
-        let store = crate::Store::create_test();
+        let store = fastn_mail::Store::create_test();
 
         let email = test_email! {"
             Subject: No From Header
@@ -327,45 +301,229 @@ mod tests {
             Body content
         "};
 
-        let result = store.smtp_receive(email.into_bytes()).await;
+        let result = store
+            .smtp_receive(
+                "", // Empty from - should fail validation
+                &["test@example.com".to_string()],
+                email.into_bytes(),
+            )
+            .await;
 
         // Should fail with missing From header
         assert!(result.is_err());
     }
+}
 
-    #[test]
-    fn test_parse_email_integration() {
-        // Generate actual valid ID52s for testing
-        let from_key = fastn_id52::SecretKey::generate();
-        let to_key = fastn_id52::SecretKey::generate();
-        let cc_key = fastn_id52::SecretKey::generate();
+/// Create ParsedEmail from SMTP envelope data with minimal parsing
+pub fn create_parsed_email_from_smtp(
+    smtp_from: &str,
+    smtp_recipients: &[String],
+    raw_message: &[u8],
+) -> Result<fastn_mail::ParsedEmail, SmtpReceiveError> {
+    // Reject non-UTF-8 emails early
+    let message_text =
+        std::str::from_utf8(raw_message).map_err(|_| SmtpReceiveError::InvalidUtf8Encoding)?;
 
-        let from_id52 = from_key.public_key().id52();
-        let to_id52 = to_key.public_key().id52();
-        let cc_id52 = cc_key.public_key().id52();
+    // Extract only essential headers we can't get from SMTP envelope
+    let essential_headers = extract_essential_headers(message_text)?;
 
-        let email = test_email! {"
-            From: alice@{from_id52}.fastn
-            To: bob@{to_id52}.local
-            CC: charlie@{cc_id52}.fastn
-            Subject: Integration Test
-            Message-ID: <integration-test@localhost>
-            
-            Test body content
-        "};
+    // Generate storage information
+    let email_id = format!("email-{}", uuid::Uuid::new_v4());
+    let folder = "Sent".to_string(); // SMTP emails are outgoing from authenticated user
+    let timestamp = chrono::Utc::now().format("%Y/%m/%d");
+    let file_path = format!("mails/default/Sent/{timestamp}/{email_id}.eml");
+    let date_received = chrono::Utc::now().timestamp();
+    let size_bytes = raw_message.len();
 
-        let result = parse_email(email.as_bytes()).unwrap();
+    // Use SMTP envelope data directly - no header parsing for addresses!
+    let to_addr = smtp_recipients.join(", ");
 
-        assert_eq!(result.from_addr, format!("alice@{from_id52}.fastn"));
-        assert_eq!(result.to_addr, format!("bob@{to_id52}.local"));
-        assert_eq!(result.cc_addr, Some(format!("charlie@{cc_id52}.fastn")));
-        assert_eq!(result.subject, "Integration Test");
+    // Extract P2P routing information from SMTP envelope
+    let (our_username, our_alias_used) = parse_id52_address(smtp_from).unwrap_or((None, None));
 
-        // P2P routing should be extracted correctly (we are sender)
-        assert_eq!(result.our_username, Some("alice".to_string()));
-        assert_eq!(result.our_alias_used, Some(from_id52));
-        // Recipients info not stored in single fields (multiple possible)
-        assert_eq!(result.their_username, None);
-        assert_eq!(result.their_alias, None);
+    Ok(fastn_mail::ParsedEmail {
+        email_id,
+        folder,
+        file_path,
+        message_id: essential_headers.message_id,
+        from_addr: smtp_from.to_string(), // Use SMTP envelope FROM
+        to_addr,                          // Use SMTP envelope recipients
+        cc_addr: None,                    // SMTP doesn't distinguish CC from TO
+        bcc_addr: None,                   // SMTP doesn't expose BCC to us
+        subject: essential_headers.subject,
+        our_alias_used,
+        our_username,
+        their_alias: None,    // Multiple recipients possible
+        their_username: None, // Multiple recipients possible
+        in_reply_to: essential_headers.in_reply_to,
+        email_references: essential_headers.references,
+        date_sent: essential_headers.date_sent,
+        date_received,
+        content_type: essential_headers.content_type.clone(),
+        has_attachments: essential_headers.content_type.contains("multipart"),
+        content_encoding: essential_headers.content_encoding,
+        size_bytes,
+        is_seen: false,
+        is_flagged: false,
+        is_draft: false,
+        is_answered: false,
+        is_deleted: false,
+        custom_flags: None,
+    })
+}
+
+/// Essential headers we need from email body (not available in SMTP envelope)
+#[derive(Debug)]
+struct EssentialHeaders {
+    message_id: String,
+    subject: String,
+    date_sent: Option<i64>,
+    in_reply_to: Option<String>,
+    references: Option<String>,
+    content_type: String,
+    content_encoding: Option<String>,
+}
+
+/// Extract only essential headers we can't get from SMTP envelope
+fn extract_essential_headers(message_text: &str) -> Result<EssentialHeaders, SmtpReceiveError> {
+    // Find header/body separator
+    let header_section = match message_text.split_once("\r\n\r\n") {
+        Some((headers, _body)) => headers,
+        None => {
+            // No header/body separator found - malformed email
+            // Check if it uses \n\n instead of \r\n\r\n
+            if message_text.contains("\n\n") {
+                return Err(SmtpReceiveError::InvalidLineEndings);
+            } else {
+                return Err(SmtpReceiveError::MissingHeaderBodySeparator);
+            }
+        }
+    };
+
+    let mut message_id = None;
+    let mut subject = None;
+    let date_sent = None;
+    let mut in_reply_to = None;
+    let mut references = None;
+    let mut content_type = None;
+    let mut content_encoding = None;
+
+    // Parse only the headers we actually need
+    for line in header_section.lines() {
+        if let Some((key, value)) = line.split_once(':') {
+            let key = key.trim();
+            let value = value.trim();
+
+            match key.to_ascii_lowercase().as_str() {
+                "message-id" => message_id = Some(value.to_string()),
+                "subject" => subject = Some(value.to_string()),
+                "date" => {
+                    // TODO: Parse RFC 5322 date format to Unix timestamp
+                    // For now, leave as None
+                }
+                "in-reply-to" => in_reply_to = Some(value.to_string()),
+                "references" => references = Some(value.to_string()),
+                "content-type" => content_type = Some(value.to_string()),
+                "content-transfer-encoding" => content_encoding = Some(value.to_string()),
+                _ => {} // Ignore all other headers
+            }
+        }
+    }
+
+    Ok(EssentialHeaders {
+        message_id: message_id.unwrap_or_else(|| format!("generated-{}", uuid::Uuid::new_v4())),
+        subject: subject.unwrap_or_else(|| "(no subject)".to_string()),
+        date_sent,
+        in_reply_to,
+        references,
+        content_type: content_type.unwrap_or_else(|| "text/plain".to_string()),
+        content_encoding,
+    })
+}
+
+/// Parse email address to extract username and ID52 components for P2P routing
+/// Returns: (Some(username), Some(id52)) if valid fastn format, (None, None) if external email
+pub fn parse_id52_address(
+    email: &str,
+) -> Result<(Option<String>, Option<String>), SmtpReceiveError> {
+    let parts: Vec<&str> = email.split('@').collect();
+    if parts.len() != 2 {
+        return Ok((None, None)); // Invalid format - treat as external email
+    }
+
+    let username = parts[0];
+    let domain_part = parts[1];
+
+    // Parse domain to extract potential ID52: id52.domain
+    let domain_parts: Vec<&str> = domain_part.split('.').collect();
+    if domain_parts.is_empty() {
+        return Ok((None, None)); // No domain parts
+    }
+
+    let potential_id52 = domain_parts[0];
+
+    // Check if it's a valid 52-character ID52
+    if potential_id52.len() != 52 {
+        return Ok((None, None)); // Not ID52 format - external email
+    }
+
+    // Verify it's a valid fastn_id52::PublicKey
+    match potential_id52.parse::<fastn_id52::PublicKey>() {
+        Ok(_) => Ok((Some(username.to_string()), Some(potential_id52.to_string()))),
+        Err(_) => Ok((None, None)), // Invalid ID52 - external email
+    }
+}
+
+impl fastn_mail::Store {
+    /// INBOX receives an email from P2P delivery (incoming from peer)  
+    ///
+    /// Flow: P2P message → Store in INBOX → No further queuing needed
+    pub async fn inbox_receive(
+        &self,
+        envelope_from: &str,
+        smtp_recipients: &[String],
+        raw_message: Vec<u8>,
+    ) -> Result<String, SmtpReceiveError> {
+        // Reuse SMTP parsing but override folder to INBOX
+        let mut parsed_email =
+            create_parsed_email_from_smtp(envelope_from, smtp_recipients, &raw_message)?;
+
+        // Override folder for INBOX storage
+        parsed_email.folder = "INBOX".to_string();
+
+        // Update file path for INBOX
+        let timestamp = chrono::Utc::now().format("%Y/%m/%d");
+        parsed_email.file_path = format!(
+            "mails/default/INBOX/{timestamp}/{}.eml",
+            parsed_email.email_id
+        );
+
+        // Store email file in INBOX
+        let full_path = self.account_path.join(&parsed_email.file_path);
+        if let Some(parent) = full_path.parent() {
+            std::fs::create_dir_all(parent).map_err(|e| SmtpReceiveError::FileStoreFailed {
+                path: parent.to_path_buf(),
+                source: e,
+            })?;
+        }
+
+        std::fs::write(&full_path, &raw_message).map_err(|e| {
+            SmtpReceiveError::FileStoreFailed {
+                path: full_path,
+                source: e,
+            }
+        })?;
+
+        // Store metadata in database
+        self.store_email_metadata(&parsed_email).await?;
+
+        // No P2P delivery queuing needed for received emails
+        tracing::info!(
+            "📥 P2P email from {} stored in INBOX with ID: {}",
+            envelope_from,
+            parsed_email.email_id
+        );
+
+        Ok(parsed_email.email_id)
     }
 }

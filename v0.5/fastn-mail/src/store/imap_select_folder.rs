@@ -1,9 +1,9 @@
 //! # IMAP Select Folder
 
-use crate::errors::*;
-use crate::{Flag, FolderInfo};
+use fastn_mail::errors::*;
+use fastn_mail::{Flag, FolderInfo};
 
-impl crate::Store {
+impl fastn_mail::Store {
     /// Select folder and return folder information
     pub async fn imap_select_folder(
         &self,

@@ -1,8 +1,8 @@
 //! # IMAP Fetch
 
-use crate::errors::*;
+use fastn_mail::errors::*;
 
-impl crate::Store {
+impl fastn_mail::Store {
     /// Fetch email message by UID
     pub async fn imap_fetch(&self, folder: &str, uid: u32) -> Result<Vec<u8>, ImapFetchError> {
         let conn = self.connection().lock().await;

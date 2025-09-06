@@ -35,6 +35,7 @@
 extern crate self as fastn_net;
 
 pub mod dot_fastn;
+pub mod errors;
 pub mod get_endpoint;
 mod get_stream;
 mod graceful;

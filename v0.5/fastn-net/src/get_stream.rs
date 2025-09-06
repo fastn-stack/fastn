@@ -1,20 +1,23 @@
 /// Connection pool for P2P stream management.
 ///
-/// Maintains a map of active peer connections indexed by (self ID52, remote ID52) pairs.
+/// Maintains a map of active peer connections indexed by (self PublicKey, remote PublicKey) pairs.
 /// Each entry contains a channel for requesting new streams on that connection.
 /// Connections are automatically removed when they break or become unhealthy.
 ///
 /// This type is used to reuse existing P2P connections instead of creating new ones
 /// for each request, improving performance and reducing connection overhead.
 pub type PeerStreamSenders = std::sync::Arc<
-    tokio::sync::Mutex<std::collections::HashMap<(SelfID52, RemoteID52), StreamRequestSender>>,
+    tokio::sync::Mutex<
+        std::collections::HashMap<
+            (fastn_id52::PublicKey, fastn_id52::PublicKey),
+            StreamRequestSender,
+        >,
+    >,
 >;
 
 type Stream = (iroh::endpoint::SendStream, iroh::endpoint::RecvStream);
 type StreamResult = eyre::Result<Stream>;
 type ReplyChannel = tokio::sync::oneshot::Sender<StreamResult>;
-type RemoteID52 = String;
-type SelfID52 = String;
 
 type StreamRequest = (crate::ProtocolHeader, ReplyChannel);
 
@@ -51,31 +54,41 @@ type StreamRequestReceiver = tokio::sync::mpsc::Receiver<StreamRequest>;
 pub async fn get_stream(
     self_endpoint: iroh::Endpoint,
     header: crate::ProtocolHeader,
-    remote_node_id52: RemoteID52,
+    remote_public_key: &fastn_id52::PublicKey,
     peer_stream_senders: PeerStreamSenders,
     graceful: crate::Graceful,
 ) -> eyre::Result<(iroh::endpoint::SendStream, iroh::endpoint::RecvStream)> {
     use eyre::WrapErr;
 
     tracing::trace!("get_stream: {header:?}");
+    println!(
+        "🔍 DEBUG get_stream: Starting stream request for {}",
+        remote_public_key.id52()
+    );
     let stream_request_sender = get_stream_request_sender(
         self_endpoint,
-        remote_node_id52,
+        remote_public_key,
         peer_stream_senders,
         graceful,
     )
-    .await;
+    .await?;
+    println!("✅ DEBUG get_stream: Got stream_request_sender");
     tracing::trace!("got stream_request_sender");
     let (reply_channel, receiver) = tokio::sync::oneshot::channel();
+    println!("🔗 DEBUG get_stream: Created oneshot channel");
 
+    println!("📤 DEBUG get_stream: About to send stream request");
     stream_request_sender
         .send((header, reply_channel))
         .await
         .wrap_err_with(|| "failed to send on stream_request_sender")?;
+    println!("✅ DEBUG get_stream: Stream request sent");
 
     tracing::trace!("sent stream request");
 
+    println!("⏳ DEBUG get_stream: Waiting for stream reply");
     let r = receiver.await?;
+    println!("✅ DEBUG get_stream: Received stream reply");
 
     tracing::trace!("got stream request reply");
     r
@@ -84,57 +97,77 @@ pub async fn get_stream(
 #[tracing::instrument(skip_all)]
 async fn get_stream_request_sender(
     self_endpoint: iroh::Endpoint,
-    remote_node_id52: RemoteID52,
+    remote_public_key: &fastn_id52::PublicKey,
     peer_stream_senders: PeerStreamSenders,
     graceful: crate::Graceful,
-) -> StreamRequestSender {
-    // Convert iroh::PublicKey to ID52 string
-    let self_id52 = data_encoding::BASE32_DNSSEC.encode(self_endpoint.node_id().as_bytes());
+) -> eyre::Result<StreamRequestSender> {
+    println!(
+        "🔍 DEBUG get_stream_request_sender: Starting for {}",
+        remote_public_key.id52()
+    );
+    // Convert iroh node_id to fastn_id52::PublicKey
+    let self_public_key = fastn_id52::PublicKey::from_bytes(self_endpoint.node_id().as_bytes())
+        .map_err(|e| eyre::anyhow!("Invalid self endpoint node_id: {}", e))?;
+    println!(
+        "🔍 DEBUG get_stream_request_sender: Self PublicKey: {}",
+        self_public_key.id52()
+    );
     let mut senders = peer_stream_senders.lock().await;
+    println!("🔍 DEBUG get_stream_request_sender: Got peer_stream_senders lock");
 
-    if let Some(sender) = senders.get(&(self_id52.clone(), remote_node_id52.clone())) {
-        return sender.clone();
+    if let Some(sender) = senders.get(&(self_public_key, *remote_public_key)) {
+        return Ok(sender.clone());
     }
 
     // TODO: figure out if the mpsc::channel is the right size
     let (sender, receiver) = tokio::sync::mpsc::channel(1);
-    senders.insert(
-        (self_id52.clone(), remote_node_id52.clone()),
-        sender.clone(),
-    );
+    senders.insert((self_public_key, *remote_public_key), sender.clone());
     drop(senders);
 
     let graceful_for_connection_manager = graceful.clone();
+    let remote_public_key_for_task = *remote_public_key;
+    println!(
+        "🚀 DEBUG get_stream_request_sender: Spawning connection_manager task for {}",
+        remote_public_key.id52()
+    );
     graceful.spawn(async move {
-        connection_manager(
+        println!(
+            "📋 DEBUG connection_manager: Task started for {}",
+            remote_public_key_for_task.id52()
+        );
+        let result = connection_manager(
             receiver,
             self_endpoint,
-            remote_node_id52.clone(),
+            remote_public_key_for_task,
             graceful_for_connection_manager,
         )
         .await;
+        println!(
+            "📋 DEBUG connection_manager: Task ended for {} with result: {:?}",
+            remote_public_key_for_task.id52(),
+            result
+        );
 
         // cleanup the peer_stream_senders map, so no future tasks will try to use this.
         let mut senders = peer_stream_senders.lock().await;
-        senders.remove(&(self_id52.clone(), remote_node_id52));
+        senders.remove(&(self_public_key, remote_public_key_for_task));
     });
 
-    sender
+    Ok(sender)
 }
 
 async fn connection_manager(
     mut receiver: StreamRequestReceiver,
     self_endpoint: iroh::Endpoint,
-    remote_node_id52: RemoteID52,
+    remote_public_key: fastn_id52::PublicKey,
     graceful: crate::Graceful,
 ) {
-    let e = match connection_manager_(
-        &mut receiver,
-        self_endpoint,
-        remote_node_id52.clone(),
-        graceful,
-    )
-    .await
+    println!(
+        "🔧 DEBUG connection_manager: Function started for {}",
+        remote_public_key.id52()
+    );
+    let e = match connection_manager_(&mut receiver, self_endpoint, remote_public_key, graceful)
+        .await
     {
         Ok(()) => {
             tracing::info!("connection manager closed");
@@ -178,17 +211,18 @@ async fn connection_manager(
 async fn connection_manager_(
     receiver: &mut StreamRequestReceiver,
     self_endpoint: iroh::Endpoint,
-    remote_node_id52: RemoteID52,
+    remote_public_key: fastn_id52::PublicKey,
     graceful: crate::Graceful,
 ) -> eyre::Result<()> {
+    println!(
+        "🔧 DEBUG connection_manager_: Starting main loop for {}",
+        remote_public_key.id52()
+    );
     let conn = match self_endpoint
         .connect(
             {
-                // Convert ID52 to iroh::NodeId
-                use std::str::FromStr;
-                let public_key = fastn_id52::PublicKey::from_str(&remote_node_id52)
-                    .map_err(|e| eyre::anyhow!("{}", e))?;
-                iroh::NodeId::from(iroh::PublicKey::from_bytes(&public_key.to_bytes())?)
+                // Convert PublicKey to iroh::NodeId
+                iroh::NodeId::from(iroh::PublicKey::from_bytes(&remote_public_key.to_bytes())?)
             },
             crate::APNS_IDENTITY,
         )
@@ -227,6 +261,7 @@ async fn connection_manager_(
                 idle_counter += 1;
             },
             Some((header, reply_channel)) = receiver.recv() => {
+                println!("📨 DEBUG connection_manager: Received stream request for {:?}, idle counter: {}", header, idle_counter);
                 tracing::info!("connection: {header:?}, idle counter: {idle_counter}");
                 idle_counter = 0;
                 // is this a good idea to serialize this part? if 10 concurrent requests come in, we will
@@ -289,28 +324,53 @@ async fn handle_request(
     use eyre::WrapErr;
 
     tracing::trace!("handling request: {header:?}");
+    println!(
+        "🔧 DEBUG handle_request: Handling stream request for protocol {:?}",
+        header
+    );
 
-    let (mut send, mut recv) = match conn.open_bi().await {
-        Ok(v) => {
+    println!("🔗 DEBUG handle_request: About to open bi-directional stream");
+    let (mut send, mut recv) = match tokio::time::timeout(
+        std::time::Duration::from_secs(10), // 10 second timeout for stream opening
+        conn.open_bi(),
+    )
+    .await
+    {
+        Ok(Ok(v)) => {
+            println!("✅ DEBUG handle_request: Successfully opened bi-directional stream");
             tracing::trace!("opened bi-stream");
             v
         }
-        Err(e) => {
+        Ok(Err(e)) => {
+            println!(
+                "❌ DEBUG handle_request: Failed to open bi-directional stream: {:?}",
+                e
+            );
             tracing::error!("failed to open_bi: {e:?}");
             return Err(eyre::anyhow!("failed to open_bi: {e:?}"));
         }
+        Err(_timeout) => {
+            println!(
+                "⏰ DEBUG handle_request: Timed out opening bi-directional stream after 10 seconds"
+            );
+            return Err(eyre::anyhow!("timed out opening bi-directional stream"));
+        }
     };
 
+    println!("📤 DEBUG handle_request: About to write protocol to stream");
     send.write_all(
         &serde_json::to_vec(&header.protocol)
             .wrap_err_with(|| format!("failed to serialize protocol: {:?}", header.protocol))?,
     )
     .await?;
+    println!("✅ DEBUG handle_request: Successfully wrote protocol to stream");
     tracing::trace!("wrote protocol");
 
+    println!("📤 DEBUG handle_request: About to write newline");
     send.write(b"\n")
         .await
         .wrap_err_with(|| "failed to write newline")?;
+    println!("✅ DEBUG handle_request: Successfully wrote newline");
 
     tracing::trace!("wrote newline");
 
@@ -332,9 +392,15 @@ async fn handle_request(
 
     tracing::trace!("received ack");
 
+    println!("📤 DEBUG handle_request: About to send stream reply");
     reply_channel.send(Ok((send, recv))).unwrap_or_else(|e| {
+        println!(
+            "❌ DEBUG handle_request: Failed to send stream reply: {:?}",
+            e
+        );
         tracing::error!("failed to send reply: {e:?}");
     });
+    println!("✅ DEBUG handle_request: Stream reply sent successfully");
 
     tracing::trace!("handle_request done");
 

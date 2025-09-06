@@ -1,14 +1,14 @@
 //! # Store Creation and Loading
 
-use crate::errors::*;
+use fastn_mail::errors::*;
 
-impl crate::Store {
+impl fastn_mail::Store {
     /// Create new email storage for an account
     pub async fn create(account_path: &std::path::Path) -> Result<Self, StoreCreateError> {
         let mail_db_path = account_path.join("mail.sqlite");
 
         // Create mail directory structure
-        crate::database::create_directories(account_path).map_err(|e| {
+        fastn_mail::database::create_directories(account_path).map_err(|e| {
             StoreCreateError::DirectoryCreationFailed {
                 path: account_path.join("mails"),
                 source: e,
@@ -24,7 +24,7 @@ impl crate::Store {
         })?;
 
         // Create schema
-        crate::database::create_schema(&connection)
+        fastn_mail::database::create_schema(&connection)
             .map_err(|e| StoreCreateError::MigrationFailed { source: e })?;
 
         Ok(Self {
@@ -51,7 +51,7 @@ impl crate::Store {
         })?;
 
         // Run migrations (idempotent)
-        crate::database::create_schema(&connection)
+        fastn_mail::database::create_schema(&connection)
             .map_err(|e| StoreLoadError::MigrationFailed { source: e })?;
 
         Ok(Self {

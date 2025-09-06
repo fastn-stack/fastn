@@ -2,10 +2,12 @@
 //!
 //! Validates parsed email messages for SMTP acceptance with P2P-only constraints.
 
-use crate::errors::SmtpReceiveError;
+use fastn_mail::errors::SmtpReceiveError;
 
 /// Validate email message for SMTP acceptance (P2P only, no external email)
-pub fn validate_email_for_smtp(parsed_email: &crate::ParsedEmail) -> Result<(), SmtpReceiveError> {
+pub fn validate_email_for_smtp(
+    parsed_email: &fastn_mail::ParsedEmail,
+) -> Result<(), SmtpReceiveError> {
     // 1. Validate From address format and ownership
     validate_from_address_ownership(&parsed_email.from_addr)?;
 
@@ -36,7 +38,7 @@ fn validate_from_address_ownership(from_addr: &str) -> Result<(), SmtpReceiveErr
 
 /// Validate all recipients are valid P2P addresses (no external email allowed)
 fn validate_all_recipients_are_p2p(
-    parsed_email: &crate::ParsedEmail,
+    parsed_email: &fastn_mail::ParsedEmail,
 ) -> Result<(), SmtpReceiveError> {
     // Validate To addresses
     for addr in parsed_email.to_addr.split(',') {
@@ -132,7 +134,9 @@ fn validate_message_size(size_bytes: usize) -> Result<(), SmtpReceiveError> {
 }
 
 /// Validate required headers are present
-fn validate_required_headers(parsed_email: &crate::ParsedEmail) -> Result<(), SmtpReceiveError> {
+fn validate_required_headers(
+    parsed_email: &fastn_mail::ParsedEmail,
+) -> Result<(), SmtpReceiveError> {
     if parsed_email.from_addr.is_empty() {
         return Err(SmtpReceiveError::MessageParsingFailed {
             message: "Missing required From header".to_string(),
@@ -159,14 +163,14 @@ fn validate_required_headers(parsed_email: &crate::ParsedEmail) -> Result<(), Sm
 mod tests {
     use super::*;
 
-    fn create_test_parsed_email() -> crate::ParsedEmail {
+    fn create_test_parsed_email() -> fastn_mail::ParsedEmail {
         // Generate valid ID52s for testing
         let from_key = fastn_id52::SecretKey::generate();
         let to_key = fastn_id52::SecretKey::generate();
         let from_id52 = from_key.public_key().id52();
         let to_id52 = to_key.public_key().id52();
 
-        crate::ParsedEmail {
+        fastn_mail::ParsedEmail {
             email_id: "test-email-id".to_string(),
             folder: "Sent".to_string(),
             file_path: "test.eml".to_string(),

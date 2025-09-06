@@ -25,7 +25,7 @@ impl fastn_rig::EndpointManager {
     pub async fn bring_online(
         &mut self,
         id52: String,
-        secret_key: Vec<u8>,
+        secret_key: fastn_id52::SecretKey,
         owner_type: fastn_rig::OwnerType,
         owner_path: std::path::PathBuf,
         account_manager: std::sync::Arc<fastn_account::AccountManager>,
@@ -36,11 +36,8 @@ impl fastn_rig::EndpointManager {
 
         tracing::info!("Bringing endpoint {} online", id52);
 
-        // Convert secret key bytes to Iroh SecretKey
-        let secret_key_array: [u8; 32] = secret_key
-            .as_slice()
-            .try_into()
-            .map_err(|_| fastn_rig::EndpointError::InvalidSecretKeyLength)?;
+        // Convert secret key to Iroh SecretKey
+        let secret_key_array = secret_key.to_bytes();
         let iroh_secret_key = iroh::SecretKey::from_bytes(&secret_key_array);
 
         // Create Iroh endpoint with this identity using proper ALPN
@@ -212,7 +209,7 @@ async fn handle_connection(
     our_endpoint: fastn_id52::PublicKey,
     owner_type: fastn_rig::OwnerType,
     conn: iroh::endpoint::Connection,
-    message_tx: tokio::sync::mpsc::Sender<fastn_rig::P2PMessage>,
+    _message_tx: tokio::sync::mpsc::Sender<fastn_rig::P2PMessage>,
     graceful: fastn_net::Graceful,
     account_manager: std::sync::Arc<fastn_account::AccountManager>,
 ) -> Result<(), fastn_rig::EndpointError> {
@@ -230,62 +227,44 @@ async fn handle_connection(
     // Perform connection authorization directly
     tracing::debug!("Authorizing connection from {peer_key} to {our_endpoint}");
 
-    // Find the account that owns this endpoint
-    let account = match account_manager.find_account_by_alias(&our_endpoint).await {
-        Ok(account) => account,
-        Err(e) => {
-            tracing::warn!("No account found for endpoint {our_endpoint}: {e}");
-            return Ok(()); // Close connection silently
+    // Authorization disabled for first release - accept all connections
+    tracing::info!(
+        "✅ Connection accepted for peer {peer_key} to endpoint {our_endpoint} (no authorization)"
+    );
+
+    // Determine expected protocols based on owner type
+    let expected_protocols: Vec<fastn_net::Protocol> = match owner_type {
+        fastn_rig::OwnerType::Account => {
+            // Accounts can receive from Devices or other Accounts
+            vec![
+                fastn_net::Protocol::DeviceToAccount,
+                fastn_net::Protocol::AccountToAccount,
+            ]
+        }
+        fastn_rig::OwnerType::Device => {
+            // Devices receive from Accounts
+            vec![fastn_net::Protocol::AccountToDevice]
+        }
+        fastn_rig::OwnerType::Rig => {
+            // Rig receives control messages
+            vec![fastn_net::Protocol::RigControl]
         }
     };
 
-    // Authorize the connection
-    let authorized = match account.authorize_connection(&peer_key, &our_endpoint).await {
-        Ok(auth) => auth,
-        Err(e) => {
-            tracing::error!("Authorization failed for peer {peer_key}: {e}");
-            return Ok(()); // Close connection
-        }
-    };
-
-    if !authorized {
-        tracing::warn!("Connection rejected for peer {peer_key} to endpoint {our_endpoint}");
-        return Ok(()); // Close connection immediately
-    }
-
-    tracing::info!("✅ Connection authorized for peer {peer_key} to endpoint {our_endpoint}");
-
-    // Handle multiple streams on this connection
+    // Handle multiple streams on this connection (following receiver.rs pattern)
     loop {
+        println!("🔍 DEBUG: P2P connection handler loop iteration");
         tokio::select! {
-            // Accept bidirectional streams with protocol negotiation
             _ = graceful.cancelled() => {
                 tracing::debug!("Connection handler cancelled");
+                println!("🔍 DEBUG: Connection handler cancelled, breaking loop");
                 break;
             }
 
-            else => {
-                // Determine expected protocols based on owner type
-                let expected_protocols: Vec<fastn_net::Protocol> = match owner_type {
-                    fastn_rig::OwnerType::Account => {
-                        // Accounts can receive from Devices or other Accounts
-                        vec![
-                            fastn_net::Protocol::DeviceToAccount,
-                            fastn_net::Protocol::AccountToAccount,
-                        ]
-                    }
-                    fastn_rig::OwnerType::Device => {
-                        // Devices receive from Accounts
-                        vec![fastn_net::Protocol::AccountToDevice]
-                    }
-                    fastn_rig::OwnerType::Rig => {
-                        // Rig receives control messages
-                        vec![fastn_net::Protocol::RigControl]
-                    }
-                };
-
-                // Accept a bidirectional stream with protocol negotiation
-                match fastn_net::accept_bi(&conn, &expected_protocols).await {
+            // Accept a bidirectional stream with protocol negotiation
+            result = fastn_net::accept_bi(&conn, &expected_protocols) => {
+                println!("🔍 DEBUG: accept_bi returned: {:?}", result.is_ok());
+                match result {
                     Ok((protocol, mut send, mut recv)) => {
                         tracing::info!("Accepted {protocol:?} stream from {peer_key} to {our_endpoint}");
 
@@ -302,7 +281,7 @@ async fn handle_connection(
                                 }
                             }
                             fastn_net::Protocol::AccountToAccount => {
-                                // Handle email messages
+                                // Handle email messages directly (synchronous processing for proper response)
                                 match fastn_net::next_string(&mut recv).await {
                                     Ok(message_str) => {
                                         tracing::info!(
@@ -310,22 +289,66 @@ async fn handle_connection(
                                             message_str.len()
                                         );
 
-                                        // Send the message through the channel for processing
-                                        if let Err(e) = message_tx
-                                            .send(fastn_rig::P2PMessage {
-                                                our_endpoint,
-                                                owner_type: owner_type.clone(),
-                                                peer_id52: peer_key,
-                                                message: message_str.into_bytes(),
-                                            })
-                                            .await
-                                        {
-                                            tracing::error!("Failed to send message to channel: {}", e);
-                                        }
+                                        // Process the message directly instead of through channel
+                                        let account_message = match serde_json::from_slice::<fastn_account::AccountToAccountMessage>(message_str.as_bytes()) {
+                                            Ok(msg) => msg,
+                                            Err(e) => {
+                                                tracing::error!("Failed to deserialize account message: {}", e);
+                                                let error_response = fastn_account::EmailDeliveryResponse {
+                                                    email_id: "unknown".to_string(),
+                                                    status: fastn_account::DeliveryStatus::Rejected {
+                                                        reason: format!("Message deserialization failed: {}", e)
+                                                    },
+                                                };
+                                                let json = serde_json::to_string(&error_response).unwrap_or_else(|_| "{}".to_string());
+                                                if let Err(e) = send.write_all(format!("{}\n", json).as_bytes()).await {
+                                                    tracing::error!("Failed to send error response: {}", e);
+                                                }
+                                                break;
+                                            }
+                                        };
 
-                                        // Send acknowledgment
-                                        if let Err(e) = send.write_all(format!("{}\n", fastn_net::ACK).as_bytes()).await {
-                                            tracing::error!("Failed to send ACK: {}", e);
+                                        // Handle the message via AccountManager
+                                        let result = account_manager
+                                            .handle_account_message(&peer_key, &our_endpoint, account_message.clone())
+                                            .await;
+
+                                        // Get email ID from the message
+                                        let email_id = match &account_message {
+                                            fastn_account::AccountToAccountMessage::Email { envelope_from, .. } => {
+                                                // Use envelope_from as identifier for now
+                                                envelope_from.clone()
+                                            }
+                                        };
+
+                                        // Send proper JSON response
+                                        let response = match result {
+                                            Ok(_) => {
+                                                println!("✅ Account message handled successfully");
+                                                println!("🔍 DEBUG: P2P message processing completed, about to send response");
+                                                fastn_account::EmailDeliveryResponse {
+                                                    email_id: email_id.clone(),
+                                                    status: fastn_account::DeliveryStatus::Accepted,
+                                                }
+                                            }
+                                            Err(e) => {
+                                                tracing::error!("Failed to handle account message: {}", e);
+                                                fastn_account::EmailDeliveryResponse {
+                                                    email_id: email_id.clone(),
+                                                    status: fastn_account::DeliveryStatus::Rejected {
+                                                        reason: format!("Message handling failed: {}", e)
+                                                    },
+                                                }
+                                            }
+                                        };
+
+                                        let json = serde_json::to_string(&response).unwrap_or_else(|_| "{}".to_string());
+                                        println!("🔍 DEBUG: Sending P2P response: {}", json);
+                                        if let Err(e) = send.write_all(format!("{}\n", json).as_bytes()).await {
+                                            tracing::error!("Failed to send delivery response: {}", e);
+                                            println!("🔍 DEBUG: P2P response send failed: {}", e);
+                                        } else {
+                                            println!("🔍 DEBUG: P2P response sent successfully, stream should close");
                                         }
                                     }
                                     Err(e) => {
@@ -357,12 +380,39 @@ async fn handle_connection(
                         }
                     }
                     Err(e) => {
-                        // This might happen if the protocol doesn't match
-                        // Try to accept as a different protocol or handle ping
-                        tracing::debug!("Protocol mismatch or error: {}", e);
-                        // The accept_bi function already handles Ping internally
-                        // For now, we'll continue to the next iteration
-                        continue;
+                        // Connection is no longer valid when accept_bi fails
+                        tracing::debug!("accept_bi failed, connection invalid: {}", e);
+                        println!("🔍 DEBUG: accept_bi failed, connection no longer valid: {}", e);
+
+                        // Check if this is a normal connection closure vs abnormal error
+                        // Use error source chain to detect iroh connection errors
+                        let mut is_connection_closed = false;
+                        let mut current_error: &dyn std::error::Error = &*e;
+                        loop {
+                            let error_debug = format!("{:?}", current_error);
+                            if error_debug.contains("ConnectionLost") ||
+                               error_debug.contains("TimedOut") ||
+                               error_debug.contains("connection closed") {
+                                is_connection_closed = true;
+                                break;
+                            }
+
+                            if let Some(source) = std::error::Error::source(current_error) {
+                                current_error = source;
+                            } else {
+                                break;
+                            }
+                        }
+
+                        if is_connection_closed {
+                            println!("🔍 DEBUG: Normal connection closure detected, returning Ok");
+                            return Ok(());
+                        } else {
+                            println!("🔍 DEBUG: Abnormal connection error, returning Err: {}", e);
+                            return Err(fastn_rig::EndpointError::StreamAcceptFailed {
+                                source: e,
+                            });
+                        }
                     }
                 }
             }

@@ -30,12 +30,17 @@ extern crate self as fastn_rig;
 
 pub mod automerge;
 mod email_delivery;
+pub mod email_delivery_p2p;
 pub mod endpoint;
+pub mod p2p_delivery_shared;
+pub mod p2p_server;
+pub mod protocols;
 pub mod errors;
 mod http_routes;
 mod http_server;
 mod rig;
 mod run;
+mod smtp;
 mod template_context;
 
 pub use run::run;
@@ -60,7 +65,7 @@ pub fn resolve_fastn_home(
 // Re-export specific error types
 pub use errors::{
     CurrentEntityError, EmailDeliveryError, EndpointError, EntityStatusError,
-    MessageProcessingError, RigCreateError, RigHttpError, RigLoadError, RunError,
+    MessageProcessingError, RigCreateError, RigHttpError, RigLoadError, RunError, SmtpError,
 };
 
 /// Type of owner for an endpoint
@@ -113,7 +118,7 @@ pub struct P2PMessage {
 pub(crate) struct EndpointHandle {
     /// The secret key for this endpoint
     #[expect(unused)]
-    pub(crate) secret_key: Vec<u8>,
+    pub(crate) secret_key: fastn_id52::SecretKey,
     /// Type of owner (Account, Device, Rig)
     #[expect(unused)]
     pub(crate) owner_type: OwnerType,

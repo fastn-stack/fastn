@@ -1,8 +1,8 @@
 //! # Mark Delivered to Peer
 
-use crate::errors::*;
+use fastn_mail::errors::*;
 
-impl crate::Store {
+impl fastn_mail::Store {
     /// Mark email as delivered to peer
     pub async fn mark_delivered_to_peer(
         &self,

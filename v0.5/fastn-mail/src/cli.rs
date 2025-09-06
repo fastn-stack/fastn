@@ -43,6 +43,18 @@ pub enum Commands {
         /// From address (defaults to first alias in account)
         #[arg(long)]
         from: Option<String>,
+
+        /// SMTP server port (defaults to FASTN_SMTP_PORT or 2525)
+        #[arg(long)]
+        smtp: Option<u16>,
+
+        /// Use direct mail store access instead of SMTP client
+        #[arg(long)]
+        direct: bool,
+
+        /// SMTP password for authentication (required when using SMTP client)
+        #[arg(long)]
+        password: Option<String>,
     },
 
     /// List emails in a folder
@@ -96,11 +108,11 @@ pub enum Commands {
 pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
     // Load email store for the specified account
     let account_path = std::path::Path::new(&cli.account_path);
-    let store = match crate::Store::load(account_path).await {
+    let store = match fastn_mail::Store::load(account_path).await {
         Ok(store) => store,
         Err(_) => {
             println!("⚠️  No email store found at path, using test store for CLI demo");
-            crate::Store::create_test()
+            fastn_mail::Store::create_test()
         }
     };
 
@@ -112,8 +124,14 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             subject,
             body,
             from,
+            smtp,
+            direct,
+            password,
         } => {
-            send_mail_command(&store, to, cc, bcc, subject, body, from).await?;
+            send_mail_command(
+                &store, to, cc, bcc, subject, body, from, smtp, direct, password,
+            )
+            .await?;
         }
         Commands::ListMails { folder, limit } => {
             list_mails_command(&store, &folder, limit).await?;
@@ -147,14 +165,21 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
+#[expect(
+    clippy::too_many_arguments,
+    reason = "CLI function mirrors command line arguments"
+)]
 async fn send_mail_command(
-    store: &crate::Store,
+    store: &fastn_mail::Store,
     to: String,
     cc: Option<String>,
     bcc: Option<String>,
     subject: String,
     body: String,
     from: Option<String>,
+    #[cfg_attr(not(feature = "net"), allow(unused_variables))] smtp_port: Option<u16>,
+    direct: bool,
+    #[cfg_attr(not(feature = "net"), allow(unused_variables))] password: Option<String>,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("📧 Composing email...");
 
@@ -186,14 +211,73 @@ async fn send_mail_command(
     println!("\n📝 Generated RFC 5322 message:");
     println!("{message}");
 
-    // Call smtp_receive to test the SMTP processing
-    match store.smtp_receive(message.into_bytes()).await {
-        Ok(email_id) => {
-            println!("✅ Email processed with ID: {email_id}");
+    if direct {
+        // Direct mail store access (original behavior)
+        println!("📦 Using direct mail store access...");
+
+        // Build recipient list for SMTP envelope
+        let mut recipients = vec![to.clone()];
+        if let Some(cc) = &cc {
+            recipients.push(cc.clone());
         }
-        Err(e) => {
-            println!("❌ SMTP processing failed: {e}");
-            // Don't hide actual errors during development
+        if let Some(bcc) = &bcc {
+            recipients.push(bcc.clone());
+        }
+
+        // Call smtp_receive directly for testing
+        match store
+            .smtp_receive(&from_addr, &recipients, message.into_bytes())
+            .await
+        {
+            Ok(email_id) => {
+                println!("✅ Email processed with ID: {email_id}");
+            }
+            Err(e) => {
+                println!("❌ Direct processing failed: {e}");
+                return Err(Box::new(e));
+            }
+        }
+    } else {
+        // SMTP client mode (default)
+        #[cfg(feature = "net")]
+        {
+            let port = smtp_port.unwrap_or_else(|| {
+                std::env::var("FASTN_SMTP_PORT")
+                    .ok()
+                    .and_then(|p| p.parse().ok())
+                    .unwrap_or(2525)
+            });
+
+            let smtp_password = password.ok_or("Password required for SMTP authentication. Use --password <password> or --direct for testing")?;
+            println!("🔗 Connecting to SMTP server on port {port}...");
+            match send_via_smtp_client(
+                &from_addr,
+                &to,
+                cc.as_deref(),
+                bcc.as_deref(),
+                &subject,
+                &body,
+                port,
+                &smtp_password,
+            )
+            .await
+            {
+                Ok(()) => {
+                    println!("✅ Email sent successfully via SMTP");
+                }
+                Err(e) => {
+                    println!("❌ SMTP sending failed: {e}");
+                    return Err(e);
+                }
+            }
+        }
+
+        #[cfg(not(feature = "net"))]
+        {
+            println!(
+                "❌ Net feature not enabled. Use --direct flag or compile with --features net"
+            );
+            return Err("Net feature not available".into());
         }
     }
 
@@ -201,7 +285,7 @@ async fn send_mail_command(
 }
 
 async fn list_mails_command(
-    store: &crate::Store,
+    store: &fastn_mail::Store,
     folder: &str,
     limit: usize,
 ) -> Result<(), Box<dyn std::error::Error>> {
@@ -221,7 +305,7 @@ async fn list_mails_command(
     Ok(())
 }
 
-async fn list_folders_command(store: &crate::Store) -> Result<(), Box<dyn std::error::Error>> {
+async fn list_folders_command(store: &fastn_mail::Store) -> Result<(), Box<dyn std::error::Error>> {
     println!("📁 Available folders:");
 
     let folders = store.imap_list_folders().await?;
@@ -233,7 +317,7 @@ async fn list_folders_command(store: &crate::Store) -> Result<(), Box<dyn std::e
 }
 
 async fn show_mail_command(
-    _store: &crate::Store,
+    _store: &fastn_mail::Store,
     email_id: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("📧 Showing email: {email_id}");
@@ -244,7 +328,7 @@ async fn show_mail_command(
 }
 
 async fn pending_deliveries_command(
-    store: &crate::Store,
+    store: &fastn_mail::Store,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("⏳ Checking pending P2P deliveries...");
 
@@ -270,7 +354,7 @@ async fn pending_deliveries_command(
 }
 
 async fn get_emails_for_peer_command(
-    store: &crate::Store,
+    store: &fastn_mail::Store,
     peer_id52: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("📨 Getting emails for peer: {peer_id52}");
@@ -303,7 +387,7 @@ async fn get_emails_for_peer_command(
 }
 
 async fn mark_delivered_command(
-    store: &crate::Store,
+    store: &fastn_mail::Store,
     email_id: &str,
     peer_id52: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
@@ -322,7 +406,7 @@ async fn mark_delivered_command(
 }
 
 async fn p2p_receive_email_command(
-    store: &crate::Store,
+    store: &fastn_mail::Store,
     message_file: &str,
     sender_id52: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
@@ -339,8 +423,12 @@ async fn p2p_receive_email_command(
 
     println!("📖 Read {} bytes from {message_file}", raw_message.len());
 
-    // Process P2P email (store in INBOX)
-    let email_id = store.p2p_receive_email(raw_message, &sender_key).await?;
+    // Process P2P email with envelope data (store in INBOX)
+    let envelope_from = format!("sender@{}.fastn", sender_key.id52());
+    let envelope_to = "recipient@ourhost.local"; // Placeholder for CLI testing
+    let email_id = store
+        .p2p_receive_email(&envelope_from, envelope_to, raw_message)
+        .await?;
 
     println!("✅ P2P email accepted and stored in INBOX with ID: {email_id}");
     Ok(())
@@ -388,7 +476,7 @@ mod tests {
     #[tokio::test]
     async fn test_send_email_and_check_pending_deliveries() {
         // Create test store
-        let store = crate::Store::create_test();
+        let store = fastn_mail::Store::create_test();
 
         // Generate valid ID52s for testing
         let from_key = fastn_id52::SecretKey::generate();
@@ -409,7 +497,11 @@ mod tests {
 
         // Step 1: Send email via SMTP
         let email_id = store
-            .smtp_receive(message.into_bytes())
+            .smtp_receive(
+                &format!("alice@{from_id52}.fastn"),
+                &[format!("bob@{to_id52}.local")],
+                message.into_bytes(),
+            )
             .await
             .expect("Email should be processed successfully");
 
@@ -439,7 +531,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_multiple_recipients_pending_deliveries() {
-        let store = crate::Store::create_test();
+        let store = fastn_mail::Store::create_test();
 
         let from_key = fastn_id52::SecretKey::generate();
         let to_key = fastn_id52::SecretKey::generate();
@@ -460,7 +552,11 @@ mod tests {
         .unwrap();
 
         let email_id = store
-            .smtp_receive(message.into_bytes())
+            .smtp_receive(
+                &format!("sender@{from_id52}.fastn"),
+                &[format!("to@{to_id52}.local"), format!("cc@{cc_id52}.fastn")],
+                message.into_bytes(),
+            )
             .await
             .expect("Email should be processed");
 
@@ -484,8 +580,8 @@ mod tests {
     #[tokio::test]
     async fn test_two_instance_p2p_workflow() {
         // Create two separate store instances
-        let sender_store = crate::Store::create_test();
-        let recipient_store = crate::Store::create_test();
+        let sender_store = fastn_mail::Store::create_test();
+        let recipient_store = fastn_mail::Store::create_test();
 
         // Generate valid ID52s
         let from_key = fastn_id52::SecretKey::generate();
@@ -505,7 +601,11 @@ mod tests {
         .unwrap();
 
         let email_id = sender_store
-            .smtp_receive(message.clone().into_bytes())
+            .smtp_receive(
+                &format!("alice@{from_id52}.fastn"),
+                &[format!("bob@{to_id52}.local")],
+                message.clone().into_bytes(),
+            )
             .await
             .expect("Sender should process email successfully");
 
@@ -519,7 +619,11 @@ mod tests {
 
         // Step 3: Instance 2 accepts P2P email (simulating P2P delivery)
         let p2p_email_id = recipient_store
-            .p2p_receive_email(emails[0].raw_message.clone(), &from_key.public_key())
+            .p2p_receive_email(
+                &emails[0].envelope_from,
+                &emails[0].envelope_to,
+                emails[0].raw_message.clone(),
+            )
             .await
             .expect("Recipient should accept P2P email");
 
@@ -535,4 +639,62 @@ mod tests {
         // Note: Email IDs might be same if processing same raw message bytes
         // This is actually correct behavior - same message content = same content hash
     }
+}
+
+#[cfg(feature = "net")]
+async fn send_via_smtp_client(
+    from: &str,
+    to: &str,
+    cc: Option<&str>,
+    bcc: Option<&str>,
+    subject: &str,
+    body: &str,
+    port: u16,
+    password: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
+    // Parse email addresses
+    let from_mailbox: lettre::message::Mailbox = from.parse()?;
+    let to_mailbox: lettre::message::Mailbox = to.parse()?;
+
+    // Build email message
+    let mut email_builder = lettre::message::Message::builder()
+        .from(from_mailbox.clone())
+        .to(to_mailbox)
+        .subject(subject);
+
+    // Add CC if provided
+    if let Some(cc_addr) = cc {
+        let cc_mailbox: lettre::message::Mailbox = cc_addr.parse()?;
+        email_builder = email_builder.cc(cc_mailbox);
+    }
+
+    // Add BCC if provided
+    if let Some(bcc_addr) = bcc {
+        let bcc_mailbox: lettre::message::Mailbox = bcc_addr.parse()?;
+        email_builder = email_builder.bcc(bcc_mailbox);
+    }
+
+    let email = email_builder.body(body.to_string())?;
+
+    // Extract account ID52 from from address for authentication
+    let (_, account_id52) = fastn_mail::store::smtp_receive::parse_id52_address(from)?;
+    let _account_id52 =
+        account_id52.ok_or("From address must be a valid fastn address with ID52")?;
+
+    // Use provided password for SMTP authentication
+    let credentials = lettre::transport::smtp::authentication::Credentials::new(
+        from.to_string(),
+        password.to_string(),
+    );
+
+    // Connect to local fastn-rig SMTP server
+    let mailer = lettre::SmtpTransport::builder_dangerous("localhost")
+        .port(port)
+        .credentials(credentials)
+        .build();
+
+    // Send the email
+    lettre::Transport::send(&mailer, &email)?;
+
+    Ok(())
 }

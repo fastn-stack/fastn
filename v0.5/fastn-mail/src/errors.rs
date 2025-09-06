@@ -47,8 +47,20 @@ pub enum StoreLoadError {
 /// Error type for smtp_receive function
 #[derive(Error, Debug)]
 pub enum SmtpReceiveError {
-    #[error("Failed to parse message")]
-    MessageParsingFailed { message: String },
+    #[error("Email contains invalid UTF-8 encoding")]
+    InvalidUtf8Encoding,
+
+    #[error("Email missing required header/body separator (\\r\\n\\r\\n)")]
+    MissingHeaderBodySeparator,
+
+    #[error("Email uses invalid line ending format (found \\n\\n, expected \\r\\n\\r\\n)")]
+    InvalidLineEndings,
+
+    #[error("Invalid domain format in address: {address}")]
+    InvalidDomainFormat { address: String },
+
+    #[error("Email validation failed: {reason}")]
+    ValidationFailed { reason: String },
 
     #[error("Failed to store message file: {path}")]
     FileStoreFailed {
@@ -63,8 +75,11 @@ pub enum SmtpReceiveError {
         source: rusqlite::Error,
     },
 
-    #[error("Invalid email address format")]
+    #[error("Invalid email address format: {address}")]
     InvalidEmailAddress { address: String },
+
+    #[error("Message parsing failed: {message}")]
+    MessageParsingFailed { message: String },
 }
 
 /// Error type for get_pending_deliveries function
