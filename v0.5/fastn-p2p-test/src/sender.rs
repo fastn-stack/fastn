@@ -2,7 +2,37 @@
 //!
 //! Tests the generic protocol system by sending meaningful protocol requests
 
-use fastn_p2p_test::{TestProtocol, EchoRequest, EchoResponse, EchoError};
+use serde::{Deserialize, Serialize};
+
+/// Test protocol - meaningful names!
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq)]
+pub enum TestProtocol {
+    Echo,
+}
+
+impl std::fmt::Display for TestProtocol {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{self:?}")
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct EchoRequest {
+    pub from: String,
+    pub to: String,
+    pub message: String,
+    pub timestamp: i64,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct EchoResponse {
+    pub response: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct EchoError {
+    pub error: String,
+}
 
 #[tokio::main]
 async fn main() -> eyre::Result<()> {

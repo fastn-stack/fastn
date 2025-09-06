@@ -3,7 +3,37 @@
 //! Tests the generic protocol system with meaningful protocol names
 
 use futures_util::stream::StreamExt;
-use fastn_p2p_test::{TestProtocol, EchoRequest, EchoResponse, EchoError};
+use serde::{Deserialize, Serialize};
+
+/// Test protocol - meaningful names instead of Ping/Http!
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq)]
+pub enum TestProtocol {
+    Echo,
+}
+
+impl std::fmt::Display for TestProtocol {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{self:?}")
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct EchoRequest {
+    pub from: String,
+    pub to: String,
+    pub message: String,
+    pub timestamp: i64,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct EchoResponse {
+    pub response: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]  
+pub struct EchoError {
+    pub error: String,
+}
 
 #[tokio::main]
 async fn main() -> eyre::Result<()> {
@@ -47,11 +77,16 @@ async fn main() -> eyre::Result<()> {
     );
 
     // Start listening using fastn-p2p
+    println!("🔧 DEBUG: About to create protocols vec");
     let protocols = vec![TestProtocol::Echo];
+    println!("🔧 DEBUG: About to call fastn_p2p::listen!");
     let mut stream = fastn_p2p::listen!(receiver_key, &protocols);
+    println!("🔧 DEBUG: listen! returned successfully");
 
     println!("📡 fastn-p2p receiver listening on Echo protocol");
     println!("🎯 Waiting for connections...");
+    
+    println!("🔧 DEBUG: About to call stream.next().await");
 
     // Handle exactly one connection (like fastn-net-test)
     if let Some(request_result) = stream.next().await {

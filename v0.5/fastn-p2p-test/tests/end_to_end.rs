@@ -7,9 +7,9 @@ use tokio::process::Command;
 async fn test_fastn_p2p_sender_receiver_cli() {
     println!("🔧 Testing fastn-p2p CLI with deterministic keys...");
 
-    // Create deterministic keys for reproducible testing (same as fastn-net-test)
-    let receiver_key = fastn_id52::SecretKey::from_bytes(&[1u8; 32]);
-    let sender_key = fastn_id52::SecretKey::from_bytes(&[2u8; 32]);
+    // Create fresh random keys to avoid conflicts with other tests/processes
+    let receiver_key = fastn_id52::SecretKey::generate();
+    let sender_key = fastn_id52::SecretKey::generate();
 
     let receiver_id52 = receiver_key.public_key().id52();
     let sender_id52 = sender_key.public_key().id52();
