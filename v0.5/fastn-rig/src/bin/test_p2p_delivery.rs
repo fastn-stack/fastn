@@ -143,7 +143,7 @@ async fn attempt_direct_delivery(
     let (mut send, mut recv) = fastn_net::get_stream(
         endpoint,
         fastn_net::Protocol::AccountToAccount.into(),
-        target_key.id52(),
+        target_key,
         peer_stream_senders,
         graceful,
     )

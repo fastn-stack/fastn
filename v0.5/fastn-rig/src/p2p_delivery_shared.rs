@@ -19,7 +19,7 @@ pub async fn deliver_p2p_message(
     let (mut send, mut recv) = fastn_net::get_stream(
         endpoint,
         fastn_net::Protocol::AccountToAccount.into(),
-        target_peer.id52(),
+        target_peer,
         peer_stream_senders,
         graceful,
     ).await?;

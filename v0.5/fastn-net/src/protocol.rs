@@ -135,7 +135,10 @@ mod tests {
     #[test]
     fn test_protocol_display() {
         assert_eq!(format!("{}", Protocol::Ping), "Ping");
-        assert_eq!(format!("{}", Protocol::AccountToAccount), "AccountToAccount");
+        assert_eq!(
+            format!("{}", Protocol::AccountToAccount),
+            "AccountToAccount"
+        );
         assert_eq!(format!("{}", Protocol::HttpProxy), "HttpProxy");
     }
 }

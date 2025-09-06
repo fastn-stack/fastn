@@ -68,9 +68,10 @@ pub async fn tcp_to_peer(
     tracing::info!("tcp_to_peer: {remote_node_id52}");
 
     // Convert ID52 string to PublicKey
-    let remote_public_key = remote_node_id52.parse::<fastn_id52::PublicKey>()
+    let remote_public_key = remote_node_id52
+        .parse::<fastn_id52::PublicKey>()
         .map_err(|e| eyre::anyhow!("Invalid remote_node_id52: {}", e))?;
-    
+
     let (send, recv) = crate::get_stream(
         self_endpoint,
         header,

@@ -7,7 +7,12 @@
 /// This type is used to reuse existing P2P connections instead of creating new ones
 /// for each request, improving performance and reducing connection overhead.
 pub type PeerStreamSenders = std::sync::Arc<
-    tokio::sync::Mutex<std::collections::HashMap<(fastn_id52::PublicKey, fastn_id52::PublicKey), StreamRequestSender>>,
+    tokio::sync::Mutex<
+        std::collections::HashMap<
+            (fastn_id52::PublicKey, fastn_id52::PublicKey),
+            StreamRequestSender,
+        >,
+    >,
 >;
 
 type Stream = (iroh::endpoint::SendStream, iroh::endpoint::RecvStream);
@@ -116,10 +121,7 @@ async fn get_stream_request_sender(
 
     // TODO: figure out if the mpsc::channel is the right size
     let (sender, receiver) = tokio::sync::mpsc::channel(1);
-    senders.insert(
-        (self_public_key, *remote_public_key),
-        sender.clone(),
-    );
+    senders.insert((self_public_key, *remote_public_key), sender.clone());
     drop(senders);
 
     let graceful_for_connection_manager = graceful.clone();
@@ -142,7 +144,8 @@ async fn get_stream_request_sender(
         .await;
         println!(
             "📋 DEBUG connection_manager: Task ended for {} with result: {:?}",
-            remote_public_key_for_task.id52(), result
+            remote_public_key_for_task.id52(),
+            result
         );
 
         // cleanup the peer_stream_senders map, so no future tasks will try to use this.
@@ -163,13 +166,8 @@ async fn connection_manager(
         "🔧 DEBUG connection_manager: Function started for {}",
         remote_public_key.id52()
     );
-    let e = match connection_manager_(
-        &mut receiver,
-        self_endpoint,
-        remote_public_key,
-        graceful,
-    )
-    .await
+    let e = match connection_manager_(&mut receiver, self_endpoint, remote_public_key, graceful)
+        .await
     {
         Ok(()) => {
             tracing::info!("connection manager closed");
