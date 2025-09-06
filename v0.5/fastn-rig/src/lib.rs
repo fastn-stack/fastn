@@ -62,7 +62,7 @@ pub fn resolve_fastn_home(
 
 // Re-export specific error types
 pub use errors::{
-    CurrentEntityError, EmailDeliveryError, EndpointError, EntityStatusError,
+    CurrentEntityError, EmailDeliveryError, EntityStatusError,
     MessageProcessingError, RigCreateError, RigHttpError, RigLoadError, RunError, SmtpError,
 };
 
@@ -87,43 +87,4 @@ pub struct Rig {
     pub(crate) automerge: std::sync::Arc<tokio::sync::Mutex<fastn_automerge::Db>>,
 }
 
-/// Manages all network endpoints
-pub struct EndpointManager {
-    /// Active endpoints only
-    pub(crate) active: std::collections::HashMap<String, fastn_rig::EndpointHandle>,
-    /// Channel to send all incoming P2P messages
-    pub(crate) message_tx: tokio::sync::mpsc::Sender<P2PMessage>,
-    /// Graceful handler for spawning tasks
-    pub(crate) graceful: fastn_p2p::Graceful,
-    // No more connection pool needed - fastn-p2p handles everything!
-}
-
-/// P2P message received on an endpoint
-#[derive(Debug, Clone)]
-pub struct P2PMessage {
-    /// Our endpoint that received the message
-    pub our_endpoint: fastn_id52::PublicKey,
-    /// Type of endpoint owner (Account, Device, Rig)
-    pub owner_type: OwnerType,
-    /// Peer who sent the message
-    pub peer_id52: fastn_id52::PublicKey,
-    /// Raw message content
-    pub message: Vec<u8>,
-}
-
-/// Handle for an active endpoint
-pub(crate) struct EndpointHandle {
-    /// The secret key for this endpoint
-    #[expect(unused)]
-    pub(crate) secret_key: fastn_id52::SecretKey,
-    /// Type of owner (Account, Device, Rig)
-    #[expect(unused)]
-    pub(crate) owner_type: OwnerType,
-    /// Path to the owner's storage directory
-    #[expect(unused)]
-    pub(crate) owner_path: std::path::PathBuf,
-    /// The Iroh endpoint
-    pub(crate) endpoint: iroh::Endpoint,
-    /// Task handle
-    pub(crate) handle: tokio::task::JoinHandle<()>,
-}
+// Old EndpointManager, P2PMessage, and EndpointHandle removed - fastn-p2p handles everything!

@@ -666,7 +666,6 @@ async fn test_email_delivery_response_format() {
 
 /// Integration test that calls the working bash script
 #[test]
-#[ignore]
 fn bash_integration_test() {
     println!("🧪 SMTP to P2P to INBOX integration test via bash script");
 
