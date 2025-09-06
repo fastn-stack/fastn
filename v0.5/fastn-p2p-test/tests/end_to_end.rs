@@ -20,7 +20,7 @@ async fn test_fastn_p2p_sender_receiver_cli() {
     // Start receiver with specific secret key (same pattern as fastn-net-test)
     println!("📡 Starting fastn-p2p receiver...");
     let mut receiver = Command::new("cargo")
-        .args(["run", "--bin", "receiver", &receiver_key.to_string()])
+        .args(["run", "--bin", "p2p_receiver", &receiver_key.to_string()])
         .spawn()
         .expect("Failed to start fastn-p2p receiver");
 
@@ -35,7 +35,7 @@ async fn test_fastn_p2p_sender_receiver_cli() {
         .args([
             "run",
             "--bin",
-            "sender",
+            "p2p_sender",
             &sender_key.to_string(),
             &receiver_id52,
         ])
