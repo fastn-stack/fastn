@@ -51,6 +51,7 @@ mod tcp;
 mod utils;
 mod utils_iroh;
 
+pub use endpoint::{p2p_listen, PeerConnection};
 pub use get_endpoint::get_endpoint;
 pub use get_stream::{PeerStreamSenders, get_stream};
 pub use graceful::Graceful;
@@ -68,7 +69,6 @@ pub use utils::mkdir;
 pub use utils_iroh::{
     accept_bi, accept_bi_with, get_remote_id52, global_iroh_endpoint, next_json, next_string,
 };
-// pub use endpoint::listen;
 
 // Deprecated helper functions - use fastn_id52 directly
 pub use utils::{id52_to_public_key, public_key_to_id52};
