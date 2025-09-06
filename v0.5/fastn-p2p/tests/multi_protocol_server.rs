@@ -67,8 +67,7 @@ async fn run_multi_protocol_server() -> Result<(), Box<dyn std::error::Error + S
     // Listen on both Echo and Math protocols
     let protocols = vec![fastn_p2p::Protocol::Ping, fastn_p2p::Protocol::Http];
     
-    let stream = fastn_p2p::listen(secret_key, &protocols)?;
-    let mut stream = std::pin::pin!(stream);
+    let mut stream = fastn_p2p::listen!(secret_key, &protocols);
     
     let mut request_count = 0;
     
@@ -82,23 +81,73 @@ async fn run_multi_protocol_server() -> Result<(), Box<dyn std::error::Error + S
                 peer_request.peer().id52());
         
         // Route based on protocol
-        match peer_request.protocol {
+        let result = match peer_request.protocol {
             fastn_p2p::Protocol::Ping => {
                 // Handle Echo protocol using the high-level API
-                if let Err(e) = handle_echo_request(peer_request).await {
-                    eprintln!("❌ Echo request failed: {}", e);
-                }
+                peer_request.handle(|request: EchoRequest| async move {
+                    println!("🔄 Processing echo: '{}'", request.message);
+                    
+                    // Simple echo logic with validation
+                    if request.message.is_empty() {
+                        return Err(EchoError {
+                            code: 400,
+                            message: "Empty message not allowed".to_string(),
+                        });
+                    }
+                    
+                    if request.message.len() > 1000 {
+                        return Err(EchoError {
+                            code: 413, 
+                            message: "Message too long".to_string(),
+                        });
+                    }
+                    
+                    // Successful response
+                    Ok(EchoResponse {
+                        echo: format!("Echo: {}", request.message),
+                        length: request.message.len(),
+                    })
+                }).await
             }
             fastn_p2p::Protocol::Http => {
                 // Handle Math protocol using the high-level API  
-                if let Err(e) = handle_math_request(peer_request).await {
-                    eprintln!("❌ Math request failed: {}", e);
-                }
+                peer_request.handle(|request: MathRequest| async move {
+                    println!("🧮 Processing math: {} {} {}", request.a, request.operation, request.b);
+                    
+                    // Math operation logic
+                    let result = match request.operation.as_str() {
+                        "add" => request.a + request.b,
+                        "multiply" => request.a * request.b,
+                        "divide" => {
+                            if request.b == 0.0 {
+                                return Err(MathError {
+                                    error_type: "division_by_zero".to_string(),
+                                    details: "Cannot divide by zero".to_string(),
+                                });
+                            }
+                            request.a / request.b
+                        }
+                        unknown => {
+                            return Err(MathError {
+                                error_type: "invalid_operation".to_string(),
+                                details: format!("Unknown operation: {}", unknown),
+                            });
+                        }
+                    };
+                    
+                    // Successful response
+                    Ok(MathResponse { result })
+                }).await
             }
             other => {
                 eprintln!("❓ Unexpected protocol: {:?}", other);
                 // Could send an error response here if needed
+                Ok(())
             }
+        };
+        
+        if let Err(e) = result {
+            eprintln!("❌ Request failed: {}", e);
         }
         
         // Stop after handling some requests for this demo
@@ -111,64 +160,6 @@ async fn run_multi_protocol_server() -> Result<(), Box<dyn std::error::Error + S
     Ok(())
 }
 
-/// Handle Echo protocol requests
-async fn handle_echo_request(peer_request: fastn_p2p::Request) -> Result<(), fastn_p2p::HandleRequestError> {
-    peer_request.handle(|request: EchoRequest| async move {
-        println!("🔄 Processing echo: '{}'", request.message);
-        
-        // Simple echo logic with validation
-        if request.message.is_empty() {
-            return Err(EchoError {
-                code: 400,
-                message: "Empty message not allowed".to_string(),
-            });
-        }
-        
-        if request.message.len() > 1000 {
-            return Err(EchoError {
-                code: 413, 
-                message: "Message too long".to_string(),
-            });
-        }
-        
-        // Successful response
-        Ok(EchoResponse {
-            echo: format!("Echo: {}", request.message),
-            length: request.message.len(),
-        })
-    }).await
-}
-
-/// Handle Math protocol requests  
-async fn handle_math_request(peer_request: fastn_p2p::Request) -> Result<(), fastn_p2p::HandleRequestError> {
-    peer_request.handle(|request: MathRequest| async move {
-        println!("🧮 Processing math: {} {} {}", request.a, request.operation, request.b);
-        
-        // Math operation logic
-        let result = match request.operation.as_str() {
-            "add" => request.a + request.b,
-            "multiply" => request.a * request.b,
-            "divide" => {
-                if request.b == 0.0 {
-                    return Err(MathError {
-                        error_type: "division_by_zero".to_string(),
-                        details: "Cannot divide by zero".to_string(),
-                    });
-                }
-                request.a / request.b
-            }
-            unknown => {
-                return Err(MathError {
-                    error_type: "invalid_operation".to_string(),
-                    details: format!("Unknown operation: {}", unknown),
-                });
-            }
-        };
-        
-        // Successful response
-        Ok(MathResponse { result })
-    }).await
-}
 
 // ============================================================================
 // CLIENT IMPLEMENTATION  
