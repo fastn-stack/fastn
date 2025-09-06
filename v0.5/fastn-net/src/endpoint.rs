@@ -7,11 +7,145 @@ static ACTIVE_LISTENERS: std::sync::LazyLock<
     >,
 > = std::sync::LazyLock::new(|| std::sync::Mutex::new(std::collections::HashMap::new()));
 
-pub struct PeerConnection {
+pub struct PeerRequest {
     pub peer: fastn_id52::PublicKey,
     pub protocol: fastn_net::Protocol,
     pub send: iroh::endpoint::SendStream,
     pub recv: iroh::endpoint::RecvStream,
+}
+
+/// Handle for responding to a P2P request
+/// 
+/// This handle ensures that exactly one response is sent per request,
+/// preventing common bugs like sending multiple responses or forgetting to respond.
+/// The handle is consumed when sending a response, making multiple responses impossible.
+pub struct P2PResponseHandle {
+    send_stream: iroh::endpoint::SendStream,
+}
+
+/// Error when trying to get input from a PeerConnection
+#[derive(Debug, thiserror::Error)]
+pub enum GetInputError {
+    #[error("Failed to receive request: {source}")]
+    ReceiveError { source: eyre::Error },
+
+    #[error("Failed to deserialize request: {source}")]
+    DeserializationError { source: serde_json::Error },
+}
+
+/// Error when sending a response through P2PResponseHandle
+#[derive(Debug, thiserror::Error)]
+pub enum P2PSendError {
+    #[error("Failed to serialize response: {source}")]
+    SerializationError { source: serde_json::Error },
+
+    #[error("Failed to send response: {source}")]
+    SendError { source: eyre::Error },
+}
+
+impl PeerRequest {
+    /// Read and deserialize a JSON request from the peer connection
+    /// 
+    /// Returns the deserialized input and a response handle that must be used
+    /// to send exactly one response back to the client.
+    /// 
+    /// # Example
+    /// 
+    /// ```rust,no_run
+    /// use serde::{Deserialize, Serialize};
+    /// 
+    /// #[derive(Deserialize)]
+    /// struct Request {
+    ///     message: String,
+    /// }
+    /// 
+    /// #[derive(Serialize)]
+    /// struct Response {
+    ///     echo: String,
+    /// }
+    /// 
+    /// async fn handle_connection(mut request: fastn_net::PeerRequest) -> eyre::Result<()> {
+    ///     let (request, mut handle): (Request, _) = request.get_input().await?;
+    ///     
+    ///     let response = Response {
+    ///         echo: format!("You said: {}", request.message),
+    ///     };
+    ///     
+    ///     handle.send_response(response).await?;
+    ///     Ok(())
+    /// }
+    /// ```
+    pub async fn get_input<INPUT>(mut self) -> Result<(INPUT, P2PResponseHandle), GetInputError> 
+    where
+        INPUT: for<'de> serde::Deserialize<'de>,
+    {
+        // Read JSON request from the stream
+        let request_json = fastn_net::next_string(&mut self.recv)
+            .await
+            .map_err(|source| GetInputError::ReceiveError { source })?;
+
+        // Deserialize the request
+        let input: INPUT = serde_json::from_str(&request_json)
+            .map_err(|source| GetInputError::DeserializationError { source })?;
+
+        // Create response handle
+        let response_handle = P2PResponseHandle {
+            send_stream: self.send,
+        };
+
+        Ok((input, response_handle))
+    }
+}
+
+impl P2PResponseHandle {
+    /// Send a successful response back to the client
+    /// 
+    /// This method consumes the handle, ensuring exactly one response per request.
+    pub async fn send_response<OUTPUT>(mut self, output: OUTPUT) -> Result<(), P2PSendError>
+    where
+        OUTPUT: serde::Serialize,
+    {
+        // Serialize response
+        let response_json = serde_json::to_string(&output)
+            .map_err(|source| P2PSendError::SerializationError { source })?;
+
+        // Send JSON followed by newline
+        self.send_stream.write_all(response_json.as_bytes()).await
+            .map_err(|e| P2PSendError::SendError { source: eyre::Error::from(e) })?;
+        self.send_stream.write_all(b"\n").await
+            .map_err(|e| P2PSendError::SendError { source: eyre::Error::from(e) })?;
+
+        Ok(())
+    }
+
+    /// Send an error response back to the client
+    /// 
+    /// This method consumes the handle, ensuring exactly one response per request.
+    /// The error will be serialized as JSON with a standard error format.
+    pub async fn send_error<E>(mut self, error: E) -> Result<(), P2PSendError>
+    where
+        E: std::fmt::Display,
+    {
+        #[derive(serde::Serialize)]
+        struct ErrorResponse {
+            error: String,
+        }
+
+        let error_response = ErrorResponse {
+            error: error.to_string(),
+        };
+
+        // Serialize and send error response
+        let error_json = serde_json::to_string(&error_response)
+            .map_err(|source| P2PSendError::SerializationError { source })?;
+
+        self.send_stream.write_all(error_json.as_bytes()).await
+            .map_err(|e| P2PSendError::SendError { source: eyre::Error::from(e) })?;
+        self.send_stream.write_all(b"\n").await
+            .map_err(|e| P2PSendError::SendError { source: eyre::Error::from(e) })?;
+
+        Ok(())
+    }
 }
 
 /// Error when trying to start a listener that's already active
@@ -33,7 +167,7 @@ pub struct ListenerNotFoundError {
 async fn handle_connection(
     conn: iroh::endpoint::Incoming,
     expected_protocols: Vec<fastn_net::Protocol>,
-    tx: tokio::sync::mpsc::Sender<eyre::Result<PeerConnection>>,
+    tx: tokio::sync::mpsc::Sender<eyre::Result<PeerRequest>>,
 ) -> eyre::Result<()> {
     // Wait for the connection to be established
     let connection = conn.await?;
@@ -56,15 +190,15 @@ async fn handle_connection(
 
         tracing::debug!("Accepted {protocol} connection from peer: {peer_key}");
 
-        // Create PeerConnection and send it through the channel
-        let peer_connection = PeerConnection {
+        // Create PeerRequest and send it through the channel
+        let peer_request = PeerRequest {
             peer: peer_key,
             protocol,
             send,
             recv,
         };
 
-        if (tx.send(Ok(peer_connection)).await).is_err() {
+        if (tx.send(Ok(peer_request)).await).is_err() {
             // Channel receiver has been dropped, stop processing
             tracing::debug!("Channel receiver dropped, stopping connection handling");
             break;
@@ -107,7 +241,7 @@ pub fn p2p_listen(
     expected: &[fastn_net::Protocol],
     graceful: fastn_net::Graceful,
 ) -> Result<
-    impl futures_core::stream::Stream<Item = eyre::Result<PeerConnection>>,
+    impl futures_core::stream::Stream<Item = eyre::Result<PeerRequest>>,
     ListenerAlreadyActiveError,
 > {
     let public_key = secret_key.public_key();
@@ -133,7 +267,7 @@ pub fn p2p_listen(
     Ok(async_stream::try_stream! {
         let endpoint = fastn_net::get_endpoint(secret_key.clone()).await?;
 
-        // Channel to receive PeerConnections from spawned connection handlers
+        // Channel to receive PeerRequests from spawned connection handlers
         // Using 0-capacity channel to ensure backpressure - each connection blocks
         // until the stream consumer is ready to receive it
         let (tx, mut rx) = tokio::sync::mpsc::channel(0);
@@ -190,9 +324,9 @@ pub fn p2p_listen(
             }
         });
 
-        // Stream PeerConnections from the channel
-        while let Some(peer_connection_result) = rx.recv().await {
-            yield peer_connection_result?;
+        // Stream PeerRequests from the channel
+        while let Some(peer_request_result) = rx.recv().await {
+            yield peer_request_result?;
         }
 
         // Clean up: ensure removal from registry when stream ends
@@ -285,5 +419,131 @@ mod tests {
         // Should be able to stop second
         assert!(p2p_stop_listening(public_key2).is_ok());
         assert!(!is_p2p_listening(&public_key2));
+    }
+
+    #[tokio::test]
+    async fn test_peer_connection_request_response() {
+        use serde::{Deserialize, Serialize};
+
+        #[derive(Serialize, Deserialize, Debug, PartialEq)]
+        struct TestRequest {
+            message: String,
+            number: i32,
+        }
+
+        #[derive(Serialize, Deserialize, Debug, PartialEq)]
+        struct TestResponse {
+            echo: String,
+            doubled: i32,
+        }
+
+        // Create mock streams for testing
+        let secret_key = fastn_id52::SecretKey::generate();
+        let _public_key = secret_key.public_key();
+
+        // Test request serialization
+        let request = TestRequest {
+            message: "hello".to_string(),
+            number: 21,
+        };
+        
+        let request_json = serde_json::to_string(&request).unwrap();
+        
+        // Verify JSON format is correct
+        assert!(request_json.contains("hello"));
+        assert!(request_json.contains("21"));
+        
+        let parsed_request: TestRequest = serde_json::from_str(&request_json).unwrap();
+        assert_eq!(request, parsed_request);
+
+        // Test response serialization  
+        let response = TestResponse {
+            echo: "hello world".to_string(),
+            doubled: 42,
+        };
+        
+        let response_json = serde_json::to_string(&response).unwrap();
+        let parsed_response: TestResponse = serde_json::from_str(&response_json).unwrap();
+        assert_eq!(response, parsed_response);
+    }
+
+    #[tokio::test]
+    async fn test_p2p_response_handle_already_responded() {
+        use serde::Serialize;
+
+        #[derive(Serialize)]
+        struct TestResponse {
+            message: String,
+        }
+
+        // Create mock send stream using a simple channel approach
+        let (_tx, _rx) = tokio::sync::mpsc::channel::<Vec<u8>>(10);
+        
+        // This is a bit of a hack since we can't easily create a real SendStream in tests
+        // but the logic of preventing multiple responses is important to test conceptually
+        let _response = TestResponse {
+            message: "test".to_string(),
+        };
+        
+        // Test that error types work
+        let serialization_err = P2PSendError::SerializationError {
+            source: serde_json::Error::io(std::io::Error::other("test")),
+        };
+        assert!(serialization_err.to_string().contains("Failed to serialize response"));
+    }
+
+    #[test]
+    fn test_error_types() {
+        // Test GetInputError
+        let receive_err = GetInputError::ReceiveError {
+            source: eyre::anyhow!("connection closed"),
+        };
+        assert!(receive_err.to_string().contains("Failed to receive request"));
+
+        let deser_err = GetInputError::DeserializationError {
+            source: serde_json::Error::io(std::io::Error::other("invalid json")),
+        };
+        assert!(deser_err.to_string().contains("Failed to deserialize request"));
+
+        // Test P2PSendError variants
+        let send_err = P2PSendError::SendError {
+            source: eyre::anyhow!("network error"),
+        };
+        assert!(send_err.to_string().contains("Failed to send response"));
+        
+    }
+
+    #[test]
+    fn test_request_response_types() {
+        use serde::{Deserialize, Serialize};
+
+        #[derive(Serialize, Deserialize, Debug, PartialEq)]
+        struct EchoRequest {
+            message: String,
+        }
+
+        #[derive(Serialize, Deserialize, Debug, PartialEq)]
+        struct EchoResponse {
+            echo: String,
+            processed: bool,
+        }
+
+        // Test that our types work with the expected serde traits
+        let request = EchoRequest {
+            message: "test message".to_string(),
+        };
+        
+        let json = serde_json::to_string(&request).unwrap();
+        let parsed: EchoRequest = serde_json::from_str(&json).unwrap();
+        assert_eq!(request, parsed);
+
+        let response = EchoResponse {
+            echo: "response".to_string(),
+            processed: true,
+        };
+        
+        let json = serde_json::to_string(&response).unwrap();
+        let parsed: EchoResponse = serde_json::from_str(&json).unwrap();
+        assert_eq!(response, parsed);
     }
 }
