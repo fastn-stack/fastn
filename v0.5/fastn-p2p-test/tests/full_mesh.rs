@@ -26,7 +26,7 @@ async fn test_full_mesh_communication() {
             .spawn()
             .expect("Failed to start receiver");
             
-        receiver_processes.push(ProcessCleanup::new(&mut receiver));
+        receiver_processes.push(ProcessCleanup::new(receiver));
         receiver_ids.push(receiver_id52);
         
         tokio::time::sleep(Duration::from_millis(500)).await;
@@ -116,19 +116,18 @@ async fn test_full_mesh_communication() {
             total_success, expected_total);
 }
 
-/// Process cleanup guard  
-struct ProcessCleanup<'a> {
-    #[allow(dead_code)]
-    process: &'a mut tokio::process::Child,
+/// Process cleanup guard
+struct ProcessCleanup {
+    process: tokio::process::Child,
 }
 
-impl<'a> ProcessCleanup<'a> {
-    fn new(process: &'a mut tokio::process::Child) -> Self {
+impl ProcessCleanup {
+    fn new(process: tokio::process::Child) -> Self {
         Self { process }
     }
 }
 
-impl<'a> Drop for ProcessCleanup<'a> {
+impl Drop for ProcessCleanup {
     fn drop(&mut self) {
         let _ = self.process.start_kill();
         println!("🧹 Process cleanup completed");

@@ -18,12 +18,12 @@ async fn test_single_sender_multiple_receivers() {
         
         println!("📡 Starting receiver #{}: {}", receiver_id, receiver_id52);
         
-        let mut receiver = Command::new("cargo")
+        let receiver = Command::new("cargo")
             .args(["run", "--bin", "receiver", "-p", "fastn-p2p-test", &receiver_key.to_string()])
             .spawn()
             .expect("Failed to start receiver");
             
-        receiver_processes.push(ProcessCleanup::new(&mut receiver));
+        receiver_processes.push(ProcessCleanup::new(receiver));
         receiver_ids.push(receiver_id52);
         
         // Small delay between starting receivers
@@ -81,20 +81,19 @@ async fn test_single_sender_multiple_receivers() {
 }
 
 /// Process cleanup guard
-struct ProcessCleanup<'a> {
-    #[allow(dead_code)]
-    process: &'a mut tokio::process::Child,
+struct ProcessCleanup {
+    process: tokio::process::Child,
 }
 
-impl<'a> ProcessCleanup<'a> {
-    fn new(process: &'a mut tokio::process::Child) -> Self {
+impl ProcessCleanup {
+    fn new(process: tokio::process::Child) -> Self {
         Self { process }
     }
 }
 
-impl<'a> Drop for ProcessCleanup<'a> {
+impl Drop for ProcessCleanup {
     fn drop(&mut self) {
         let _ = self.process.start_kill();
-        println!("🧹 Receiver cleanup completed");
+        println!("🧹 Receiver process cleaned up");
     }
 }
