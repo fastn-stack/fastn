@@ -9,7 +9,6 @@ use crate::errors::P2PServerError;
 pub async fn start_p2p_listener(
     secret_key: fastn_id52::SecretKey,
     account_manager: std::sync::Arc<fastn_account::AccountManager>,
-    message_tx: tokio::sync::mpsc::Sender<fastn_rig::P2PMessage>,
 ) -> Result<(), P2PServerError> {
     let public_key = secret_key.public_key();
     println!("🎧 Starting P2P listener for endpoint: {}", public_key.id52());
@@ -40,21 +39,15 @@ pub async fn start_p2p_listener(
         // Route based on protocol using clean matching
         match request.protocol {
             RigProtocol::EmailDelivery => {
-                // Handle email delivery requests
+                // Handle email delivery directly using account manager
                 let account_manager_clone = account_manager.clone();
-                let message_tx_clone = message_tx.clone();
-                let peer_id = request.peer().clone();
-
-                tokio::spawn(async move {
-                    if let Err(e) = handle_email_delivery_request(
-                        request, 
-                        account_manager_clone, 
-                        message_tx_clone,
-                        peer_id
-                    ).await {
-                        eprintln!("❌ Email delivery request failed: {}", e);
-                    }
-                });
+                let our_endpoint = public_key.clone();
+                
+                if let Err(e) = request.handle(|msg| handle_email_message_direct(
+                    msg, account_manager_clone, our_endpoint
+                )).await {
+                    eprintln!("❌ Email delivery request failed: {}", e);
+                }
             }
             RigProtocol::AccountMessage => {
                 // Handle account messages
@@ -78,42 +71,32 @@ pub async fn start_p2p_listener(
     Ok(())
 }
 
-/// Handle email delivery requests using the existing account message infrastructure
-async fn handle_email_delivery_request(
-    request: fastn_p2p::Request<RigProtocol>,
-    _account_manager: std::sync::Arc<fastn_account::AccountManager>,
-    message_tx: tokio::sync::mpsc::Sender<fastn_rig::P2PMessage>,
-    peer_id: fastn_id52::PublicKey,
-) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-    // Use the existing message processing infrastructure
-    request.handle(|msg: fastn_account::AccountToAccountMessage| async move {
-        println!("📧 Processing email delivery message");
-        
-        // Convert to P2PMessage for existing infrastructure
-        let p2p_msg = fastn_rig::P2PMessage {
-            peer_id52: peer_id,
-            our_endpoint: fastn_id52::SecretKey::generate().public_key(), // TODO: Get correct endpoint
-            owner_type: fastn_rig::OwnerType::Account, // TODO: Get correct owner type
-            message: serde_json::to_vec(&msg)
-                .map_err(|e| crate::email_delivery_p2p::EmailDeliveryError {
-                    message: format!("Serialization failed: {}", e),
-                    code: "SERIALIZATION_ERROR".to_string(),
-                })?,
-        };
-
-        // Send to existing message processing pipeline
-        if let Err(_) = message_tx.send(p2p_msg).await {
-            return Err(crate::email_delivery_p2p::EmailDeliveryError {
-                message: "Message channel closed".to_string(),
-                code: "CHANNEL_CLOSED".to_string(),
-            });
+/// Handle email message directly using account manager (no more channel complexity)
+async fn handle_email_message_direct(
+    msg: fastn_account::AccountToAccountMessage,
+    account_manager: std::sync::Arc<fastn_account::AccountManager>,
+    our_endpoint: fastn_id52::PublicKey,
+) -> Result<crate::email_delivery_p2p::EmailDeliveryResponse, crate::email_delivery_p2p::EmailDeliveryError> {
+    println!("📧 Processing email delivery directly");
+    
+    // Generate a peer ID for now (TODO: get from actual request context)
+    let peer_id = fastn_id52::SecretKey::generate().public_key();
+    
+    // Process email directly using account manager
+    match account_manager.handle_account_message(&peer_id, &our_endpoint, msg).await {
+        Ok(_) => {
+            println!("✅ Email processed successfully via fastn-p2p");
+            Ok(crate::email_delivery_p2p::EmailDeliveryResponse {
+                email_id: "processed".to_string(),
+                status: "accepted".to_string(),
+            })
         }
-
-        // Return success response
-        Ok(crate::email_delivery_p2p::EmailDeliveryResponse {
-            email_id: "processed".to_string(), // TODO: Get actual email ID
-            status: "accepted".to_string(),
-        })
-    }).await
-    .map_err(|e| Box::new(e) as Box<dyn std::error::Error + Send + Sync>)
+        Err(e) => {
+            println!("❌ Email processing failed: {}", e);
+            Err(crate::email_delivery_p2p::EmailDeliveryError {
+                message: format!("Processing failed: {}", e),
+                code: "PROCESSING_ERROR".to_string(),
+            })
+        }
+    }
 }

@@ -72,8 +72,8 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     // Create graceful shutdown handler
     let graceful = fastn_net::Graceful::new();
 
-    // Create EndpointManager with graceful
-    let (mut endpoint_manager, mut message_rx) = fastn_rig::EndpointManager::new(graceful.clone());
+    // Use fastn-p2p global singletons instead of EndpointManager
+    let graceful = fastn_p2p::graceful(); // Replace with global singleton
 
     // Get all endpoints from all accounts
     let all_endpoints = account_manager
@@ -90,16 +90,17 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
             .await
             .map_err(|e| fastn_rig::RunError::EntityOnlineStatusFailed { source: e })?
         {
-            endpoint_manager
-                .bring_online(
-                    id52,
+            // Start fastn-p2p listener for this account endpoint
+            let account_manager_clone = account_manager.clone();
+            
+            tokio::spawn(async move {
+                if let Err(e) = crate::p2p_server::start_p2p_listener(
                     secret_key,
-                    fastn_rig::OwnerType::Account,
-                    account_path,
-                    account_manager.clone(),
-                )
-                .await
-                .map_err(|e| fastn_rig::RunError::EndpointOnlineFailed { source: e })?;
+                    account_manager_clone,
+                ).await {
+                    eprintln!("❌ P2P listener failed for {}: {}", id52, e);
+                }
+            });
             total_endpoints += 1;
         }
     }
@@ -111,16 +112,18 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         .await
         .map_err(|e| fastn_rig::RunError::EntityOnlineStatusFailed { source: e })?
     {
-        endpoint_manager
-            .bring_online(
-                rig_id52,
-                rig.secret_key().clone(),
-                fastn_rig::OwnerType::Rig,
-                fastn_home.clone(),
-                account_manager.clone(),
-            )
-            .await
-            .map_err(|e| fastn_rig::RunError::EndpointOnlineFailed { source: e })?;
+        // Start fastn-p2p listener for rig endpoint
+        let account_manager_clone = account_manager.clone();
+        let rig_secret = rig.secret_key().clone();
+        
+        tokio::spawn(async move {
+            if let Err(e) = crate::p2p_server::start_p2p_listener(
+                rig_secret,
+                account_manager_clone,
+            ).await {
+                eprintln!("❌ Rig P2P listener failed for {}: {}", rig_id52, e);
+            }
+        });
         total_endpoints += 1;
         println!("✅ Rig endpoint online");
     } else {
@@ -150,30 +153,8 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         println!("   HTTP: listening on port {http_port}");
     }
 
-    // Get connection pool before endpoint_manager is moved
-    let _connection_pool = endpoint_manager.peer_stream_senders().clone();
-
-    // Start email delivery poller (configurable via ENABLE_EMAIL_POLLER)
-    let enable_poller = std::env::var("ENABLE_EMAIL_POLLER")
-        .unwrap_or_else(|_| "true".to_string())
-        .parse::<bool>()
-        .unwrap_or(true);
-    
-    if enable_poller {
-        println!("📬 Email poller is enabled, starting email delivery poller...");
-        crate::email_delivery::start_email_delivery_poller(
-            account_manager.clone(),
-            graceful.clone(),
-            _connection_pool,
-        )
-        .await
-        .map_err(|e| fastn_rig::RunError::ShutdownFailed {
-            source: Box::new(e),
-        })?;
-    } else {
-        println!("📭 Email delivery poller disabled via ENABLE_EMAIL_POLLER=false");
-        println!("💡 Use test-p2p-delivery CLI for manual P2P testing");
-    }
+    // Email delivery now uses fastn-p2p::call directly - no more complex polling needed!
+    println!("📬 Email delivery will use clean fastn-p2p::call when needed");
 
     // Start SMTP server for email reception
     let smtp_server = crate::smtp::SmtpServer::new(
@@ -196,14 +177,8 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     )
     .await?;
 
-    // Spawn P2P message handler as a background task
-    let p2p_endpoint_manager = std::sync::Arc::new(tokio::sync::Mutex::new(endpoint_manager));
-    let p2p_graceful = graceful.clone();
-    let _p2p_handle = graceful.spawn(async move {
-        println!("\n📬 P2P handler started...");
-        loop {
-            tokio::select! {
-                Some(p2p_msg) = message_rx.recv() => {
+    // P2P messages now handled directly in fastn-p2p listeners - no more complex loop needed!
+    println!("📡 P2P architecture simplified - using direct request handling");
                     println!("📨 DEBUG: Received P2P message on endpoint {} from {} ({} bytes)", 
                              p2p_msg.our_endpoint.id52(), p2p_msg.peer_id52.id52(), p2p_msg.message.len());
                     tracing::info!(
