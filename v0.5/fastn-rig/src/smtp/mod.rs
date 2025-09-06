@@ -17,7 +17,7 @@ pub struct SmtpServer {
     /// Server bind address
     bind_addr: std::net::SocketAddr,
     /// Graceful shutdown handler
-    graceful: fastn_net::Graceful,
+    graceful: fastn_p2p::Graceful,
 }
 
 #[derive(Debug)]
@@ -60,7 +60,7 @@ impl SmtpServer {
     pub fn new(
         account_manager: std::sync::Arc<fastn_account::AccountManager>,
         bind_addr: std::net::SocketAddr,
-        graceful: fastn_net::Graceful,
+        graceful: fastn_p2p::Graceful,
     ) -> Self {
         Self {
             account_manager,

@@ -16,7 +16,7 @@
 pub async fn start_http_server(
     account_manager: std::sync::Arc<fastn_account::AccountManager>,
     rig: fastn_rig::Rig,
-    graceful: fastn_net::Graceful,
+    graceful: fastn_p2p::Graceful,
     port: Option<u16>,
 ) -> Result<(), fastn_rig::RunError> {
     // Create HTTP service state
@@ -262,7 +262,7 @@ async fn proxy_to_remote_peer(
         This request would be proxied to remote peer {target_id52} via P2P.\n\n\
         Implementation needed:\n\
         - Get our iroh endpoint for P2P connection\n\
-        - Use fastn_net::get_stream() with Protocol::HttpProxy\n\
+        - Use fastn_p2p::get_stream() with Protocol::HttpProxy\n\
         - Send HTTP request over P2P to remote peer\n\
         - Receive and return HTTP response from remote peer\n\n\
         Infrastructure ready:\n\
