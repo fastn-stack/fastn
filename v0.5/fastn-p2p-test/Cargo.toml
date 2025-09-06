@@ -1,0 +1,27 @@
+[package]
+name = "fastn-p2p-test"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+fastn-p2p = { path = "../fastn-p2p" }
+fastn-id52 = { path = "../fastn-id52" }
+tokio = { version = "1", features = ["full"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+eyre = "0.6"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+futures-util = "0.3"
+chrono = { version = "0.4", features = ["serde"] }
+
+[dev-dependencies]
+tempfile = "3"
+
+[[bin]]
+name = "sender"
+path = "src/sender.rs"
+
+[[bin]]
+name = "receiver"
+path = "src/receiver.rs"

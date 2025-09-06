@@ -1752,6 +1752,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "fastn-p2p-test"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "eyre",
+ "fastn-id52",
+ "fastn-p2p",
+ "futures-util",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "fastn-package"
 version = "0.1.0"
 dependencies = [
