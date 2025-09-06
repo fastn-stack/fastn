@@ -16,7 +16,6 @@
 pub async fn start_http_server(
     account_manager: std::sync::Arc<fastn_account::AccountManager>,
     rig: fastn_rig::Rig,
-    graceful: fastn_p2p::Graceful,
     port: Option<u16>,
 ) -> Result<(), fastn_rig::RunError> {
     // Create HTTP service state
@@ -62,7 +61,7 @@ pub async fn start_http_server(
     };
 
     // Spawn HTTP server task following fastn/serve.rs pattern
-    graceful.spawn(async move {
+    fastn_p2p::spawn(async move {
         println!("🚀 HTTP server task started");
 
         loop {

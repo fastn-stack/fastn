@@ -32,6 +32,7 @@
 extern crate self as fastn_p2p;
 
 pub mod client;
+pub mod coordination;
 pub mod globals;
 pub mod macros;
 pub mod server;
@@ -40,27 +41,9 @@ pub mod server;
 pub use fastn_net::{Graceful, Protocol};
 // Note: PeerStreamSenders is intentionally NOT exported - users should use global singletons
 
-// Global singleton access - graceful is private, use spawn() and cancelled() instead
+// Global singleton access - graceful is completely encapsulated in coordination module
 pub use globals::pool;
-use globals::graceful; // Private - only accessible via spawn() and cancelled()
-
-/// Convenience function for spawning tasks with global graceful coordination
-/// 
-/// This ensures all spawned tasks are properly tracked for graceful shutdown.
-pub fn spawn<F>(task: F) -> tokio::task::JoinHandle<F::Output>
-where
-    F: std::future::Future + Send + 'static,
-    F::Output: Send + 'static,
-{
-    graceful().spawn(task)
-}
-
-/// Convenience function for graceful cancellation checking
-/// 
-/// Returns a future that resolves when graceful shutdown is initiated.
-pub async fn cancelled() {
-    graceful().cancelled().await
-}
+pub use coordination::{spawn, cancelled};
 
 // Client API - clean, simple naming (only expose simple version)
 pub use client::{call, CallError};
