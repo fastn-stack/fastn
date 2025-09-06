@@ -111,6 +111,35 @@ pub enum Protocol {
     RigControl,
 }
 
+impl std::fmt::Display for Protocol {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Protocol::Ping => write!(f, "Ping"),
+            Protocol::WhatTimeIsIt => write!(f, "WhatTimeIsIt"),
+            Protocol::Http => write!(f, "Http"),
+            Protocol::HttpProxy => write!(f, "HttpProxy"),
+            Protocol::Socks5 => write!(f, "Socks5"),
+            Protocol::Tcp => write!(f, "Tcp"),
+            Protocol::DeviceToAccount => write!(f, "DeviceToAccount"),
+            Protocol::AccountToAccount => write!(f, "AccountToAccount"),
+            Protocol::AccountToDevice => write!(f, "AccountToDevice"),
+            Protocol::RigControl => write!(f, "RigControl"),
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_protocol_display() {
+        assert_eq!(format!("{}", Protocol::Ping), "Ping");
+        assert_eq!(format!("{}", Protocol::AccountToAccount), "AccountToAccount");
+        assert_eq!(format!("{}", Protocol::HttpProxy), "HttpProxy");
+    }
+}
+
 /// Single ALPN protocol identifier for all fastn entity connections.
 ///
 /// Each fastn instance is called an "entity" in the P2P network. Unlike Iroh's
