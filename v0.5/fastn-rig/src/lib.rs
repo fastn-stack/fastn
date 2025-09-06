@@ -33,6 +33,7 @@ mod email_delivery;
 pub mod email_delivery_p2p;
 pub mod endpoint;
 pub mod p2p_delivery_shared;
+pub mod p2p_server;
 pub mod protocols;
 pub mod errors;
 mod http_routes;
