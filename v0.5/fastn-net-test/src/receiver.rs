@@ -136,11 +136,12 @@ async fn handle_stream(
     let message = fastn_net::next_string(&mut recv).await?;
     println!("📨 Stream received message: {}", message);
 
-    // Send response
-    let response = "Message received successfully!";
-    send.write_all(response.as_bytes()).await?;
+    // Send response in same format as fastn-p2p-test expects
+    let response = serde_json::json!({"response": "Echo: Hello from fastn-net test!"});
+    let response_str = serde_json::to_string(&response)?;
+    send.write_all(response_str.as_bytes()).await?;
     send.write_all(b"\n").await?;
-    println!("📤 Stream sent response: {}", response);
+    println!("📤 Stream sent response: {}", response_str);
 
     // Properly close the stream
     send.finish()
