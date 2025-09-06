@@ -57,9 +57,10 @@ async fn main() -> eyre::Result<()> {
     let graceful = fastn_net::Graceful::new();
 
     // Test message
+    // Use same format as fastn-p2p-test for compatibility
     let test_message = serde_json::json!({
         "from": sender_id52,
-        "to": receiver_id52,
+        "to": receiver_id52, 
         "message": "Hello from fastn-net test!",
         "timestamp": chrono::Utc::now().timestamp()
     });
