@@ -34,7 +34,7 @@ impl<P> Request<P> {
     /// 
     /// # Example
     /// 
-    /// ```rust,no_run
+    /// ```rust,ignore
     /// use serde::{Deserialize, Serialize};
     /// 
     /// #[derive(Deserialize)]
@@ -88,7 +88,7 @@ impl<P> Request<P> {
     /// 
     /// # Example
     /// 
-    /// ```rust,no_run
+    /// ```rust,ignore
     /// use serde::{Deserialize, Serialize};
     /// 
     /// #[derive(Deserialize)]

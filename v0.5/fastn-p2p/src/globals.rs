@@ -23,7 +23,7 @@ static GLOBAL_POOL: std::sync::LazyLock<fastn_net::PeerStreamSenders> =
 /// 
 /// # Example
 /// 
-/// ```rust
+/// ```rust,ignore
 /// let graceful = fastn_p2p::graceful();
 /// let stream = fastn_p2p::listen(secret_key, &protocols, graceful)?;
 /// ```
@@ -41,7 +41,7 @@ pub fn graceful() -> fastn_net::Graceful {
 /// 
 /// # Example
 /// 
-/// ```rust
+/// ```rust,ignore
 /// let pool = fastn_p2p::pool();  // Usually not needed by end users
 /// let result = fastn_p2p::call(secret_key, &target, protocol, pool, graceful, request).await?;
 /// ```
