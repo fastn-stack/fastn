@@ -43,7 +43,7 @@ async fn handle_connection(
 }
 
 
-pub fn listen(
+fn listen_generic(
     secret_key: fastn_id52::SecretKey,
     expected: &[fastn_net::Protocol],
     graceful: fastn_net::Graceful,
@@ -121,4 +121,40 @@ pub fn listen(
         // Clean up: ensure removal from registry when stream ends
         fastn_p2p::server::management::unregister_listener(&public_key);
     })
+}
+
+/// Start listening for P2P requests using global graceful shutdown
+/// 
+/// This is the main function end users should use. It automatically uses
+/// the global graceful shutdown coordinator.
+/// 
+/// # Example
+/// 
+/// ```rust,no_run
+/// use futures_util::stream::StreamExt;
+/// 
+/// async fn server_example() -> Result<(), Box<dyn std::error::Error>> {
+///     let mut stream = fastn_p2p::listen!(secret_key, &protocols)?;
+///     let mut stream = std::pin::pin!(stream);
+///     
+///     while let Some(request) = stream.next().await {
+///         let request = request?;
+///         match request.protocol {
+///             fastn_p2p::Protocol::Ping => {
+///                 // Handle ping requests...
+///             }
+///             _ => { /* other protocols */ }
+///         }
+///     }
+///     Ok(())
+/// }
+/// ```
+pub fn listen(
+    secret_key: fastn_id52::SecretKey,
+    expected: &[fastn_net::Protocol],
+) -> Result<
+    impl futures_core::stream::Stream<Item = eyre::Result<fastn_p2p::Request>>,
+    fastn_p2p::ListenerAlreadyActiveError,
+> {
+    listen_generic(secret_key, expected, crate::graceful())
 }

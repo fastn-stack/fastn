@@ -32,12 +32,16 @@
 extern crate self as fastn_p2p;
 
 pub mod client;
+pub mod globals;
 pub mod server;
 
 // Re-export essential types from fastn-net that users need
 pub use fastn_net::{Graceful, PeerStreamSenders, Protocol};
 
-// Client API - clean, simple naming
+// Global singleton access
+pub use globals::{graceful, pool};
+
+// Client API - clean, simple naming (only expose simple version)
 pub use client::{call, CallError};
 
 // Server API - clean, simple naming  
@@ -55,3 +59,4 @@ pub use server::{
     ListenerAlreadyActiveError,
     ListenerNotFoundError,
 };
+
