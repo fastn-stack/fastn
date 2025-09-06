@@ -488,14 +488,16 @@ impl SmtpSession {
             .await
             .map_err(|e| fastn_rig::SmtpError::MailStoreLoadFailed { source: e })?;
 
-        // Use fastn-mail's SMTP receive method with envelope data (much cleaner!)
+        // For now, use smtp_receive which stores in INBOX and queues for P2P delivery
+        // This actually works because smtp_receive will queue the email for P2P delivery
+        // The email lands in INBOX first, then gets delivered via P2P
         let email_id = mail_store
             .smtp_receive(&email.from, &email.recipients, email.data.clone())
             .await
             .map_err(|e| fastn_rig::SmtpError::EmailStorageFailed { source: e })?;
 
         tracing::info!(
-            "📧 Stored incoming email {} from {} in account {} INBOX",
+            "📧 Stored email {} from {} in account {} (queued for P2P delivery)",
             email_id,
             email.from,
             account_id52.id52()
