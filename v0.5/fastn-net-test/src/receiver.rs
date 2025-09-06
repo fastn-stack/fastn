@@ -101,7 +101,7 @@ async fn handle_connection(conn: iroh::endpoint::Connection) -> eyre::Result<()>
     loop {
         println!("⏳ Waiting for bidirectional stream...");
 
-        match fastn_net::accept_bi(&conn, &[fastn_net::Protocol::AccountToAccount]).await {
+        match fastn_net::accept_bi(&conn, &[fastn_net::Protocol::Generic(serde_json::json!("Echo"))]).await {
             Ok((protocol, send, recv)) => {
                 println!("✅ Accepted {:?} stream via fastn_net::accept_bi", protocol);
 

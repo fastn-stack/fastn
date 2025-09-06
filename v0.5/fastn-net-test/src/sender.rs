@@ -73,7 +73,7 @@ async fn main() -> eyre::Result<()> {
     // Use get_stream exactly like http_proxy.rs does
     let (mut send, mut recv) = fastn_net::get_stream(
         endpoint,
-        fastn_net::Protocol::AccountToAccount.into(),
+        fastn_net::Protocol::Generic(serde_json::json!("Echo")).into(),
         &receiver_public_key,
         peer_stream_senders.clone(),
         graceful.clone(),
