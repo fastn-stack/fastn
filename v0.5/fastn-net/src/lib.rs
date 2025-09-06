@@ -35,6 +35,7 @@
 extern crate self as fastn_net;
 
 pub mod dot_fastn;
+mod endpoint;
 pub mod errors;
 pub mod get_endpoint;
 mod get_stream;
@@ -67,6 +68,7 @@ pub use utils::mkdir;
 pub use utils_iroh::{
     accept_bi, accept_bi_with, get_remote_id52, global_iroh_endpoint, next_json, next_string,
 };
+// pub use endpoint::listen;
 
 // Deprecated helper functions - use fastn_id52 directly
 pub use utils::{id52_to_public_key, public_key_to_id52};

@@ -25,7 +25,7 @@ impl fastn_rig::EndpointManager {
     pub async fn bring_online(
         &mut self,
         id52: String,
-        secret_key: Vec<u8>,
+        secret_key: fastn_id52::SecretKey,
         owner_type: fastn_rig::OwnerType,
         owner_path: std::path::PathBuf,
         account_manager: std::sync::Arc<fastn_account::AccountManager>,
@@ -36,11 +36,8 @@ impl fastn_rig::EndpointManager {
 
         tracing::info!("Bringing endpoint {} online", id52);
 
-        // Convert secret key bytes to Iroh SecretKey
-        let secret_key_array: [u8; 32] = secret_key
-            .as_slice()
-            .try_into()
-            .map_err(|_| fastn_rig::EndpointError::InvalidSecretKeyLength)?;
+        // Convert secret key to Iroh SecretKey
+        let secret_key_array = secret_key.to_bytes();
         let iroh_secret_key = iroh::SecretKey::from_bytes(&secret_key_array);
 
         // Create Iroh endpoint with this identity using proper ALPN

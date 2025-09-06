@@ -54,6 +54,7 @@ rust-version = "1.89"
 arcstr = "1"
 argon2 = "0.5"
 async-lock = "3"
+async-stream = "0.3.6"
 async-trait = "0.1"
 base64 = "0.22"
 # Using automerge 0.6.1 to match autosurgeon 0.8's dependency version
@@ -91,6 +92,7 @@ data-encoding = "2"
 eyre = "0.6"
 ft-sys-shared = { version = "0.2.1", features = ["rusqlite", "host-only"] }
 futures-util = { version = "0.3", default-features = false, features = ["std"] }
+futures-core = "0.3.31"
 http = "1"
 http-body-util = "0.1"
 hyper = { version = "1.5.1", features = ["server", "http1"] }

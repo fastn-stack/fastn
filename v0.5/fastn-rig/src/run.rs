@@ -114,7 +114,7 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         endpoint_manager
             .bring_online(
                 rig_id52,
-                rig.secret_key().to_bytes().to_vec(),
+                rig.secret_key().clone(),
                 fastn_rig::OwnerType::Rig,
                 fastn_home.clone(),
                 account_manager.clone(),
@@ -153,16 +153,27 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     // Get connection pool before endpoint_manager is moved
     let _connection_pool = endpoint_manager.peer_stream_senders().clone();
 
-    // Start email delivery poller (CPU spinning bug fixed)
-    crate::email_delivery::start_email_delivery_poller(
-        account_manager.clone(),
-        graceful.clone(),
-        _connection_pool,
-    )
-    .await
-    .map_err(|e| fastn_rig::RunError::ShutdownFailed {
-        source: Box::new(e),
-    })?;
+    // Start email delivery poller (configurable via ENABLE_EMAIL_POLLER)
+    let enable_poller = std::env::var("ENABLE_EMAIL_POLLER")
+        .unwrap_or_else(|_| "true".to_string())
+        .parse::<bool>()
+        .unwrap_or(true);
+    
+    if enable_poller {
+        println!("📬 Email poller is enabled, starting email delivery poller...");
+        crate::email_delivery::start_email_delivery_poller(
+            account_manager.clone(),
+            graceful.clone(),
+            _connection_pool,
+        )
+        .await
+        .map_err(|e| fastn_rig::RunError::ShutdownFailed {
+            source: Box::new(e),
+        })?;
+    } else {
+        println!("📭 Email delivery poller disabled via ENABLE_EMAIL_POLLER=false");
+        println!("💡 Use test-p2p-delivery CLI for manual P2P testing");
+    }
 
     // Start SMTP server for email reception
     let smtp_server = crate::smtp::SmtpServer::new(

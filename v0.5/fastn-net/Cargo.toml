@@ -8,26 +8,24 @@ homepage.workspace = true
 license.workspace = true
 
 [dependencies]
-fastn-id52 = { path = "../fastn-id52", version = "0.1.1" }
+async-stream.workspace = true
 bb8.workspace = true
 bytes.workspace = true
 colored.workspace = true
 data-encoding.workspace = true
 eyre.workspace = true
+fastn-id52.workspace = true
 futures-util.workspace = true
+futures-core.workspace = true
 http-body-util.workspace = true
 hyper-util.workspace = true
 hyper.workspace = true
 iroh.workspace = true
 keyring.workspace = true
-rand.workspace = true
 serde.workspace = true
 serde_json.workspace = true
+thiserror.workspace = true
 tokio-stream.workspace = true
 tokio-util.workspace = true
 tokio.workspace = true
 tracing.workspace = true
-thiserror.workspace = true
-
-[dev-dependencies]
-hex = "0.4"
