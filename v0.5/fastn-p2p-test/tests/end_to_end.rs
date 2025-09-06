@@ -55,7 +55,7 @@ async fn test_fastn_p2p_sender_receiver_cli() {
         println!("✅ fastn-p2p Sender completed successfully");
 
         // Look for JSON result (same pattern as fastn-net-test)
-        if stdout.contains("📋 RESULT:") && stdout.contains("\"status\": \"success\"") {
+        if stdout.contains("📋 RESULT:") && stdout.contains("\"status\":\"success\"") {
             println!("✅ Found JSON success result - fastn-p2p working!");
         } else {
             println!("⚠️ Sender succeeded but no JSON result found");
