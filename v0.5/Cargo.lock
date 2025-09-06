@@ -1804,7 +1804,6 @@ dependencies = [
  "fastn-fbr",
  "fastn-id52",
  "fastn-mail",
- "fastn-net",
  "fastn-p2p",
  "fastn-router",
  "futures-util",

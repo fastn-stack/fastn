@@ -37,7 +37,8 @@ pub mod macros;
 pub mod server;
 
 // Re-export essential types from fastn-net that users need
-pub use fastn_net::{Graceful, PeerStreamSenders, Protocol};
+pub use fastn_net::{Graceful, Protocol};
+// Note: PeerStreamSenders is intentionally NOT exported - users should use global singletons
 
 // Global singleton access
 pub use globals::{graceful, pool};
