@@ -4,7 +4,7 @@ use std::time::Duration;
 use tokio::process::Command;
 
 #[tokio::test]
-async fn test_high_concurrency_stress() {
+async fn test_stress_test() {
     println!("🔧 Testing high concurrency stress (rapid connections)...");
 
     // Create one robust receiver

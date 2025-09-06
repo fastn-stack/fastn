@@ -4,7 +4,7 @@ use std::time::Duration;
 use tokio::process::Command;
 
 #[tokio::test]
-async fn test_multiple_senders_single_receiver() {
+async fn test_multi_sender() {
     println!("🔧 Testing multiple senders → single receiver...");
 
     // Create receiver key
