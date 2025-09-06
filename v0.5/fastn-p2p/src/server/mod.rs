@@ -8,10 +8,10 @@ pub mod management;
 pub mod request;
 
 // Public API exports - no use statements, direct qualification
-pub use handle::{P2PResponseHandle, P2PSendError};
-pub use listener::p2p_listen;
+pub use handle::{ResponseHandle, SendError};
+pub use listener::listen;
 pub use management::{
-    active_listener_count, active_listeners, is_listening as is_p2p_listening, 
-    stop_listening as p2p_stop_listening, ListenerAlreadyActiveError, ListenerNotFoundError,
+    active_listener_count, active_listeners, is_listening, 
+    stop_listening, ListenerAlreadyActiveError, ListenerNotFoundError,
 };
-pub use request::{GetInputError, HandleRequestError, PeerRequest};
+pub use request::{GetInputError, HandleRequestError, Request};

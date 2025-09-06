@@ -25,12 +25,12 @@ async fn handle_connection(
         tracing::debug!("Accepted {protocol} connection from peer: {peer_key}");
 
         // Create PeerRequest and send it through the channel
-        let peer_request = fastn_p2p::Request {
-            peer: peer_key,
+        let peer_request = fastn_p2p::server::request::Request::new(
+            peer_key,
             protocol,
             send,
             recv,
-        };
+        );
 
         if (tx.send(Ok(peer_request)).await).is_err() {
             // Channel receiver has been dropped, stop processing
@@ -43,7 +43,7 @@ async fn handle_connection(
 }
 
 
-pub fn p2p_listen(
+pub fn listen(
     secret_key: fastn_id52::SecretKey,
     expected: &[fastn_net::Protocol],
     graceful: fastn_net::Graceful,
