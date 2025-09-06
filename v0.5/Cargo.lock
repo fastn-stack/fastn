@@ -1406,6 +1406,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "enum-display-derive"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f16ef37b2a9b242295d61a154ee91ae884afff6b8b933b486b12481cc58310ca"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 1.0.109",
+]
+
+[[package]]
 name = "enumflags2"
 version = "0.7.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1724,6 +1735,7 @@ name = "fastn-p2p"
 version = "0.1.0"
 dependencies = [
  "async-stream",
+ "enum-display-derive",
  "eyre",
  "fastn-id52",
  "fastn-net",
