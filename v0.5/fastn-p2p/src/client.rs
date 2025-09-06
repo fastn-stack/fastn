@@ -85,19 +85,33 @@ pub enum CallError {
 ///     Ok(())
 /// }
 /// ```
-async fn call_generic<INPUT, OUTPUT, ERROR>(
+async fn call_generic<P, INPUT, OUTPUT, ERROR>(
     sender: fastn_id52::SecretKey,
     target: &fastn_id52::PublicKey,
-    protocol: fastn_net::Protocol,
+    protocol: P,
     peer_stream_senders: fastn_net::PeerStreamSenders,
     graceful: fastn_net::Graceful,
     input: INPUT,
 ) -> Result<Result<OUTPUT, ERROR>, CallError>
 where
+    P: serde::Serialize + 
+       for<'de> serde::Deserialize<'de> + 
+       Clone + 
+       PartialEq + 
+       std::fmt::Display +
+       std::fmt::Debug +
+       Send + 
+       Sync + 
+       'static,
     INPUT: serde::Serialize,
     OUTPUT: for<'de> serde::Deserialize<'de>,
     ERROR: for<'de> serde::Deserialize<'de>,
 {
+    // Convert user protocol to fastn_net::Protocol::Generic
+    let json_value = serde_json::to_value(&protocol)
+        .map_err(|e| CallError::SerializationError { source: e })?;
+    let net_protocol = fastn_net::Protocol::Generic(json_value);
+    
     // Get endpoint for the sender
     let endpoint = fastn_net::get_endpoint(sender)
         .await
@@ -106,7 +120,7 @@ where
     // Establish P2P stream
     let (mut send_stream, mut recv_stream) = fastn_net::get_stream(
         endpoint,
-        protocol.into(),
+        net_protocol.into(),
         target,
         peer_stream_senders,
         graceful,
@@ -186,13 +200,22 @@ where
 ///     Ok(())
 /// }
 /// ```
-pub async fn call<INPUT, OUTPUT, ERROR>(
+pub async fn call<P, INPUT, OUTPUT, ERROR>(
     sender: fastn_id52::SecretKey,
     target: &fastn_id52::PublicKey, 
-    protocol: fastn_net::Protocol,
+    protocol: P,
     input: INPUT,
 ) -> Result<Result<OUTPUT, ERROR>, CallError>
 where
+    P: serde::Serialize + 
+       for<'de> serde::Deserialize<'de> + 
+       Clone + 
+       PartialEq + 
+       std::fmt::Display +
+       std::fmt::Debug +
+       Send + 
+       Sync + 
+       'static,
     INPUT: serde::Serialize,
     OUTPUT: for<'de> serde::Deserialize<'de>,
     ERROR: for<'de> serde::Deserialize<'de>,

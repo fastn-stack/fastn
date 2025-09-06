@@ -1,8 +1,19 @@
-async fn handle_connection(
+async fn handle_connection<P>(
     conn: iroh::endpoint::Incoming,
-    expected_protocols: Vec<fastn_net::Protocol>,
-    tx: tokio::sync::mpsc::Sender<eyre::Result<fastn_p2p::Request>>,
-) -> eyre::Result<()> {
+    expected_protocols: Vec<P>,
+    tx: tokio::sync::mpsc::Sender<eyre::Result<fastn_p2p::Request<P>>>,
+) -> eyre::Result<()> 
+where
+    P: serde::Serialize + 
+       for<'de> serde::Deserialize<'de> + 
+       Clone + 
+       PartialEq + 
+       std::fmt::Display +
+       std::fmt::Debug +
+       Send + 
+       Sync + 
+       'static,
+{
     // Wait for the connection to be established
     let connection = conn.await?;
 
@@ -11,10 +22,20 @@ async fn handle_connection(
 
     tracing::debug!("Connection established with peer: {}", peer_key.id52());
 
+    // Convert user protocols to fastn_net::Protocol::Generic for network transmission
+    let net_protocols: Vec<fastn_net::Protocol> = expected_protocols
+        .iter()
+        .map(|p| {
+            let json_value = serde_json::to_value(p)
+                .expect("Protocol should be serializable");
+            fastn_net::Protocol::Generic(json_value)
+        })
+        .collect();
+
     // Accept bi-directional streams on this connection using fastn_net utilities
     loop {
-        let (protocol, send, recv) =
-            match fastn_net::accept_bi(&connection, &expected_protocols).await {
+        let (net_protocol, send, recv) =
+            match fastn_net::accept_bi(&connection, &net_protocols).await {
                 Ok(result) => result,
                 Err(e) => {
                     tracing::warn!("Failed to accept bi-directional stream: {e}");
@@ -22,12 +43,29 @@ async fn handle_connection(
                 }
             };
 
-        tracing::debug!("Accepted {protocol} connection from peer: {peer_key}");
+        // Convert back from fastn_net::Protocol::Generic to user protocol
+        let user_protocol = match net_protocol {
+            fastn_net::Protocol::Generic(json_value) => {
+                match serde_json::from_value::<P>(json_value) {
+                    Ok(p) => p,
+                    Err(e) => {
+                        tracing::warn!("Failed to deserialize user protocol: {e}");
+                        continue;
+                    }
+                }
+            }
+            other => {
+                tracing::warn!("Expected Generic protocol, got: {:?}", other);
+                continue;
+            }
+        };
+
+        tracing::debug!("Accepted {user_protocol} connection from peer: {peer_key}");
 
         // Create PeerRequest and send it through the channel
         let peer_request = fastn_p2p::server::request::Request::new(
             peer_key,
-            protocol,
+            user_protocol,
             send,
             recv,
         );
@@ -43,14 +81,25 @@ async fn handle_connection(
 }
 
 
-fn listen_generic(
+fn listen_generic<P>(
     secret_key: fastn_id52::SecretKey,
-    expected: &[fastn_net::Protocol],
+    expected: &[P],
     graceful: fastn_net::Graceful,
 ) -> Result<
-    impl futures_core::stream::Stream<Item = eyre::Result<fastn_p2p::Request>>,
+    impl futures_core::stream::Stream<Item = eyre::Result<fastn_p2p::Request<P>>>,
     fastn_p2p::ListenerAlreadyActiveError,
-> {
+>
+where
+    P: serde::Serialize + 
+       for<'de> serde::Deserialize<'de> + 
+       Clone + 
+       PartialEq + 
+       std::fmt::Display +
+       std::fmt::Debug +
+       Send + 
+       Sync + 
+       'static,
+{
     let public_key = secret_key.public_key();
 
     // Check if already listening and register this endpoint
@@ -89,7 +138,7 @@ fn listen_generic(
                         let handler_tx = acceptor_tx.clone();
                         let handler_expected = acceptor_expected.clone();
                         tokio::spawn(async move {
-                            if let Err(e) = handle_connection(conn, handler_expected, handler_tx).await {
+                            if let Err(e) = handle_connection::<P>(conn, handler_expected, handler_tx).await {
                                 tracing::warn!("Connection handling failed: {e}");
                             }
                         });
@@ -149,12 +198,23 @@ fn listen_generic(
 ///     Ok(())
 /// }
 /// ```
-pub fn listen(
+pub fn listen<P>(
     secret_key: fastn_id52::SecretKey,
-    expected: &[fastn_net::Protocol],
+    expected: &[P],
 ) -> Result<
-    impl futures_core::stream::Stream<Item = eyre::Result<fastn_p2p::Request>>,
+    impl futures_core::stream::Stream<Item = eyre::Result<fastn_p2p::Request<P>>>,
     fastn_p2p::ListenerAlreadyActiveError,
-> {
+>
+where
+    P: serde::Serialize + 
+       for<'de> serde::Deserialize<'de> + 
+       Clone + 
+       PartialEq + 
+       std::fmt::Display +
+       std::fmt::Debug +
+       Send + 
+       Sync + 
+       'static,
+{
     listen_generic(secret_key, expected, crate::graceful())
 }

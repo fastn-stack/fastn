@@ -1,16 +1,16 @@
 
-pub struct Request {
+pub struct Request<P> {
     peer: fastn_id52::PublicKey,
-    pub protocol: fastn_net::Protocol,  // Keep public for protocol-based routing
+    pub protocol: P,  // Keep public for protocol-based routing
     send: iroh::endpoint::SendStream,
     recv: iroh::endpoint::RecvStream,
 }
 
-impl Request {
+impl<P> Request<P> {
     /// Create a new Request (internal use only)
     pub(crate) fn new(
         peer: fastn_id52::PublicKey,
-        protocol: fastn_net::Protocol,
+        protocol: P,
         send: iroh::endpoint::SendStream,
         recv: iroh::endpoint::RecvStream,
     ) -> Self {
@@ -22,33 +22,11 @@ impl Request {
         &self.peer
     }
 
-    /// Get the protocol used for this request
-    pub fn protocol(&self) -> fastn_net::Protocol {
-        self.protocol
+    /// Get the protocol used for this request  
+    pub fn protocol(&self) -> &P {
+        &self.protocol
     }
-}
 
-/// Error when trying to get input from a Request
-#[derive(Debug, thiserror::Error)]
-pub enum GetInputError {
-    #[error("Failed to receive request: {source}")]
-    ReceiveError { source: eyre::Error },
-
-    #[error("Failed to deserialize request: {source}")]
-    DeserializationError { source: serde_json::Error },
-}
-
-/// Error when handling a request through the convenient handler API
-#[derive(Debug, thiserror::Error)]
-pub enum HandleRequestError {
-    #[error("Failed to get input: {source}")]
-    GetInputFailed { source: GetInputError },
-
-    #[error("Failed to send response: {source}")]
-    SendResponseFailed { source: fastn_p2p::SendError },
-}
-
-impl Request {
     /// Read and deserialize a JSON request from the peer connection
     /// 
     /// Returns the deserialized input and a response handle that must be used
@@ -69,7 +47,7 @@ impl Request {
     ///     echo: String,
     /// }
     /// 
-    /// async fn handle_connection(mut request: fastn_p2p::Request) -> eyre::Result<()> {
+    /// async fn handle_connection(mut request: fastn_p2p::Request<MyProtocol>) -> eyre::Result<()> {
     ///     let (request, handle): (Request, _) = request.get_input().await?;
     ///     
     ///     let result = Ok::<Response, String>(Response {
@@ -123,7 +101,7 @@ impl Request {
     ///     echo: String,
     /// }
     /// 
-    /// async fn handle_request(peer_request: fastn_p2p::Request) -> Result<(), fastn_p2p::HandleRequestError> {
+    /// async fn handle_request(peer_request: fastn_p2p::Request<MyProtocol>) -> Result<(), fastn_p2p::HandleRequestError> {
     ///     peer_request.handle(|request: EchoRequest| async move {
     ///         // Handler returns Result<OUTPUT, ERROR> - framework handles rest automatically
     ///         Ok::<EchoResponse, String>(EchoResponse {
@@ -156,4 +134,24 @@ impl Request {
 
         Ok(())
     }
+}
+
+/// Error when trying to get input from a Request
+#[derive(Debug, thiserror::Error)]
+pub enum GetInputError {
+    #[error("Failed to receive request: {source}")]
+    ReceiveError { source: eyre::Error },
+
+    #[error("Failed to deserialize request: {source}")]
+    DeserializationError { source: serde_json::Error },
+}
+
+/// Error when handling a request through the convenient handler API
+#[derive(Debug, thiserror::Error)]
+pub enum HandleRequestError {
+    #[error("Failed to get input: {source}")]
+    GetInputFailed { source: GetInputError },
+
+    #[error("Failed to send response: {source}")]
+    SendResponseFailed { source: fastn_p2p::SendError },
 }
