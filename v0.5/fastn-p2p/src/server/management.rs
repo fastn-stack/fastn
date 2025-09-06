@@ -10,23 +10,20 @@ static ACTIVE_LISTENERS: std::sync::LazyLock<
 /// Error when trying to start a listener that's already active
 #[derive(Debug, thiserror::Error)]
 #[error("Listener already active for endpoint {public_key}")]
-#[allow(clippy::result_large_err)]  // PublicKey usage is intentional for type safety
 pub struct ListenerAlreadyActiveError {
-    pub public_key: fastn_id52::PublicKey,
+    pub public_key: Box<fastn_id52::PublicKey>,
 }
 
 /// Error when trying to stop a listener that's not active
 #[derive(Debug, thiserror::Error)]
 #[error("No active listener found for endpoint {public_key}")]
-#[allow(clippy::result_large_err)]  // PublicKey usage is intentional for type safety
 pub struct ListenerNotFoundError {
-    pub public_key: fastn_id52::PublicKey,
+    pub public_key: Box<fastn_id52::PublicKey>,
 }
 
 /// Register a new listener in the global registry
 /// 
 /// Returns a cancellation token for the listener, or an error if already active.
-#[allow(clippy::result_large_err)]  // PublicKey usage is intentional for type safety
 pub(super) fn register_listener(
     public_key: fastn_id52::PublicKey,
 ) -> Result<tokio_util::sync::CancellationToken, ListenerAlreadyActiveError> {
@@ -35,7 +32,9 @@ pub(super) fn register_listener(
         .expect("Failed to acquire lock on ACTIVE_LISTENERS");
 
     if listeners.contains_key(&public_key) {
-        return Err(ListenerAlreadyActiveError { public_key });
+        return Err(ListenerAlreadyActiveError { 
+            public_key: Box::new(public_key) 
+        });
     }
 
     let token = tokio_util::sync::CancellationToken::new();
@@ -60,7 +59,6 @@ pub(super) fn unregister_listener(public_key: &fastn_id52::PublicKey) {
 ///
 /// This cancels the P2P listener for the given public key and removes it from
 /// the global registry. Returns an error if no listener is active for this endpoint.
-#[allow(clippy::result_large_err)]  // PublicKey usage is intentional for type safety
 pub fn stop_listening(public_key: fastn_id52::PublicKey) -> Result<(), ListenerNotFoundError> {
     let mut listeners = ACTIVE_LISTENERS
         .lock()
@@ -71,7 +69,9 @@ pub fn stop_listening(public_key: fastn_id52::PublicKey) -> Result<(), ListenerN
         cancellation_token.cancel();
         Ok(())
     } else {
-        Err(ListenerNotFoundError { public_key })
+        Err(ListenerNotFoundError { 
+            public_key: Box::new(public_key) 
+        })
     }
 }
 

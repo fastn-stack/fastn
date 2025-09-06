@@ -43,7 +43,6 @@ async fn handle_connection(
 }
 
 
-#[allow(clippy::result_large_err)]  // PublicKey usage is intentional for type safety
 pub fn p2p_listen(
     secret_key: fastn_id52::SecretKey,
     expected: &[fastn_net::Protocol],
