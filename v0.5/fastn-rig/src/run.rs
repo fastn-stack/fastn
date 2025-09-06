@@ -52,8 +52,7 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     println!("🔑 Rig ID52: {}", rig.id52());
     println!("👤 Owner: {}", rig.owner());
 
-    // Use fastn-p2p global graceful
-    let graceful = fastn_p2p::graceful();
+    // Use fastn-p2p global singletons - no more graceful variables needed!
 
     // Get all endpoints from all accounts
     let all_endpoints = account_manager
@@ -133,7 +132,6 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     let smtp_server = crate::smtp::SmtpServer::new(
         account_manager.clone(),
         ([0, 0, 0, 0], smtp_port).into(),
-        graceful.clone(),
     );
     let _smtp_handle = fastn_p2p::spawn(async move {
         if let Err(e) = smtp_server.start().await {
@@ -151,7 +149,6 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     crate::http_server::start_http_server(
         account_manager.clone(),
         rig.clone(), 
-        graceful.clone(),
         Some(http_port),
     )
     .await?;
@@ -159,7 +156,7 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     println!("\n📨 fastn is running with fastn-p2p. Press Ctrl+C to stop.");
     
     // Wait for graceful shutdown
-    graceful.shutdown().await.map_err(|e| fastn_rig::RunError::ShutdownFailed {
+    fastn_p2p::globals::graceful().shutdown().await.map_err(|e| fastn_rig::RunError::ShutdownFailed {
         source: Box::new(std::io::Error::other(format!("Shutdown failed: {e}")))
     })?;
 

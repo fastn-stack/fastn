@@ -16,8 +16,7 @@ pub struct SmtpServer {
     account_manager: std::sync::Arc<fastn_account::AccountManager>,
     /// Server bind address
     bind_addr: std::net::SocketAddr,
-    /// Graceful shutdown handler
-    graceful: fastn_p2p::Graceful,
+    // No graceful parameter - use fastn_p2p::spawn() and fastn_p2p::cancelled() directly
 }
 
 #[derive(Debug)]
@@ -60,12 +59,10 @@ impl SmtpServer {
     pub fn new(
         account_manager: std::sync::Arc<fastn_account::AccountManager>,
         bind_addr: std::net::SocketAddr,
-        graceful: fastn_p2p::Graceful,
     ) -> Self {
         Self {
             account_manager,
             bind_addr,
-            graceful,
         }
     }
 
@@ -76,7 +73,7 @@ impl SmtpServer {
 
         loop {
             tokio::select! {
-                _ = self.graceful.cancelled() => {
+                _ = fastn_p2p::cancelled() => {
                     tracing::info!("📧 SMTP server shutting down");
                     println!("📧 SMTP server shutting down");
                     break;
@@ -88,10 +85,8 @@ impl SmtpServer {
                             tracing::debug!("📧 New SMTP connection from {}", addr);
                             let session = SmtpSession::new(stream, addr);
                             let account_manager = self.account_manager.clone();
-                            let graceful = self.graceful.clone();
-
-                            // Spawn session handler
-                            graceful.spawn(async move {
+                            // Spawn session handler using global coordination
+                            fastn_p2p::spawn(async move {
                                 if let Err(e) = session.handle(account_manager).await {
                                     tracing::error!("📧 SMTP session error from {addr}: {e}");
                                 }
