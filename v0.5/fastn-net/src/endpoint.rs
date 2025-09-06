@@ -95,6 +95,88 @@ impl PeerRequest {
 
         Ok((input, response_handle))
     }
+
+    /// Handle a request with an async closure
+    /// 
+    /// This method provides the most convenient way to handle P2P requests.
+    /// It automatically:
+    /// - Deserializes the incoming request
+    /// - Calls your handler function
+    /// - Sends the response or error automatically
+    /// - Handles all JSON serialization and error conversion
+    /// 
+    /// # Example
+    /// 
+    /// ```rust,no_run
+    /// use serde::{Deserialize, Serialize};
+    /// 
+    /// #[derive(Deserialize)]
+    /// struct EchoRequest {
+    ///     message: String,
+    /// }
+    /// 
+    /// #[derive(Serialize)]
+    /// struct EchoResponse {
+    ///     echo: String,
+    /// }
+    /// 
+    /// async fn handle_request(peer_request: fastn_net::PeerRequest) -> Result<(), fastn_net::HandleRequestError<eyre::Error>> {
+    ///     peer_request.handle(|request: EchoRequest| async move {
+    ///         Ok(EchoResponse {
+    ///             echo: format!("You said: {}", request.message),
+    ///         })
+    ///     }).await
+    /// }
+    /// ```
+    pub async fn handle<INPUT, OUTPUT, F, Fut, E>(
+        self,
+        handler: F,
+    ) -> Result<(), HandleRequestError<E>>
+    where
+        INPUT: for<'de> serde::Deserialize<'de>,
+        OUTPUT: serde::Serialize,
+        F: FnOnce(INPUT) -> Fut,
+        Fut: std::future::Future<Output = Result<OUTPUT, E>>,
+        E: std::fmt::Display,
+    {
+        // Get input and response handle
+        let (input, response_handle) = match self.get_input().await {
+            Ok(result) => result,
+            Err(e) => return Err(HandleRequestError::GetInputFailed { source: e }),
+        };
+
+        // Call the handler
+        match handler(input).await {
+            Ok(output) => {
+                // Send successful response
+                response_handle.send_response(output).await
+                    .map_err(|source| HandleRequestError::SendResponseFailed { source })?;
+            }
+            Err(error) => {
+                // Send error response
+                response_handle.send_error(error).await
+                    .map_err(|source| HandleRequestError::SendErrorFailed { source })?;
+            }
+        }
+
+        Ok(())
+    }
+}
+
+/// Error when handling a request through the convenient handler API
+#[derive(Debug, thiserror::Error)]
+pub enum HandleRequestError<E> {
+    #[error("Failed to get input: {source}")]
+    GetInputFailed { source: GetInputError },
+
+    #[error("Failed to send response: {source}")]
+    SendResponseFailed { source: P2PSendError },
+
+    #[error("Failed to send error response: {source}")]
+    SendErrorFailed { source: P2PSendError },
+
+    #[error("Handler error: {error}")]
+    HandlerError { error: E },
 }
 
 impl P2PResponseHandle {
@@ -545,5 +627,30 @@ mod tests {
         let json = serde_json::to_string(&response).unwrap();
         let parsed: EchoResponse = serde_json::from_str(&json).unwrap();
         assert_eq!(response, parsed);
+    }
+
+    #[test]
+    fn test_handle_request_error() {
+        // Test that HandleRequestError types work
+        let get_input_err = HandleRequestError::<String>::GetInputFailed {
+            source: GetInputError::ReceiveError {
+                source: eyre::anyhow!("connection closed"),
+            },
+        };
+        assert!(get_input_err.to_string().contains("Failed to get input"));
+
+        let send_response_err = HandleRequestError::<String>::SendResponseFailed {
+            source: P2PSendError::SerializationError {
+                source: serde_json::Error::io(std::io::Error::other("test")),
+            },
+        };
+        assert!(send_response_err.to_string().contains("Failed to send response"));
+
+        let send_error_err = HandleRequestError::<String>::SendErrorFailed {
+            source: P2PSendError::SendError {
+                source: eyre::anyhow!("network error"),
+            },
+        };
+        assert!(send_error_err.to_string().contains("Failed to send error response"));
     }
 }

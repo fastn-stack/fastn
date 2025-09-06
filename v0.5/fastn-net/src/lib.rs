@@ -53,8 +53,8 @@ mod utils;
 mod utils_iroh;
 
 pub use endpoint::{
-    GetInputError, ListenerAlreadyActiveError, ListenerNotFoundError, P2PResponseHandle, P2PSendError,
-    PeerRequest, is_p2p_listening, p2p_listen, p2p_stop_listening,
+    GetInputError, HandleRequestError, ListenerAlreadyActiveError, ListenerNotFoundError, 
+    P2PResponseHandle, P2PSendError, PeerRequest, is_p2p_listening, p2p_listen, p2p_stop_listening,
 };
 pub use get_endpoint::get_endpoint;
 pub use get_stream::{PeerStreamSenders, get_stream};
