@@ -13,20 +13,20 @@
 //!
 //! ## Usage Patterns
 //!
-//! ### Client Side
+//! ## API Overview
 //!
-//! ```rust,no_run  
+//! ### Client Side
+//! ```rust,ignore
 //! // Type-safe P2P calls with shared error types
 //! type EchoResult = Result<EchoResponse, EchoError>;
-//! let result: EchoResult = fastn_p2p::call(/* ... */).await?;
+//! let result: EchoResult = fastn_p2p::call(/*...*/).await?;
 //! ```
 //!
-//! ### Server Side
-//!
-//! ```rust,no_run
+//! ### Server Side  
+//! ```rust,ignore
 //! // High-level request handling with automatic response management
-//! let stream = fastn_p2p::listen(/* ... */)?;
-//! // Handle requests with type-safe closures
+//! let stream = fastn_p2p::listen(/*...*/)?;
+//! request.handle(|req: EchoRequest| async move { /*...*/ }).await?;
 //! ```
 
 extern crate self as fastn_p2p;
