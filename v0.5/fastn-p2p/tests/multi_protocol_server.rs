@@ -409,7 +409,7 @@ mod tests {
                     Ok(response) => {
                         println!("✅ Client received response: '{}'", response.echo);
                         assert_eq!(response.echo, "Echo: Hello P2P world!");
-                        assert_eq!(response.length, 17);
+                        assert_eq!(response.length, 16);
                     }
                     Err(error) => {
                         panic!("❌ Client received error: {} (code: {})", error.message, error.code);
