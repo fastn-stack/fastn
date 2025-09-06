@@ -1758,6 +1758,7 @@ dependencies = [
  "chrono",
  "eyre",
  "fastn-id52",
+ "fastn-net",
  "fastn-p2p",
  "futures-util",
  "serde",
