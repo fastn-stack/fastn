@@ -84,7 +84,6 @@ where
 fn listen_generic<P>(
     secret_key: fastn_id52::SecretKey,
     expected: &[P],
-    graceful: fastn_net::Graceful,
 ) -> Result<
     impl futures_core::stream::Stream<Item = eyre::Result<fastn_p2p::Request<P>>>,
     fastn_p2p::ListenerAlreadyActiveError,
@@ -119,12 +118,11 @@ where
 
         // Spawn connection acceptor task
         let acceptor_tx = tx.clone();
-        let acceptor_graceful = graceful.clone();
         let acceptor_endpoint_cancellation = endpoint_cancellation_token.clone();
         let acceptor_expected = expected.clone();
         let acceptor_public_key = public_key;
 
-        tokio::spawn(async move {
+        crate::spawn(async move {
             println!("🔧 DEBUG: Started connection acceptor task");
             loop {
                 println!("🔧 DEBUG: Waiting for endpoint.accept()");
@@ -139,10 +137,11 @@ where
                             }
                         };
 
-                        // Spawn task to handle this specific connection
+                        // Spawn task to handle this specific connection  
                         let handler_tx = acceptor_tx.clone();
                         let handler_expected = acceptor_expected.clone();
-                        tokio::spawn(async move {
+                        // Use global spawn helper
+                        crate::spawn(async move {
                             if let Err(e) = handle_connection::<P>(conn, handler_expected, handler_tx).await {
                                 tracing::warn!("Connection handling failed: {e}");
                             }
@@ -150,7 +149,7 @@ where
                     }
 
                     // Handle global graceful shutdown
-                    _ = acceptor_graceful.cancelled() => {
+                    _ = crate::cancelled() => {
                         tracing::debug!("Global shutdown: stopping listener for endpoint {public_key}");
                         break;
                     }
@@ -224,5 +223,5 @@ where
        Sync + 
        'static,
 {
-    listen_generic(secret_key, expected, crate::graceful())
+    listen_generic(secret_key, expected)
 }

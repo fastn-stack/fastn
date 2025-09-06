@@ -89,8 +89,6 @@ async fn call_generic<P, INPUT, OUTPUT, ERROR>(
     sender: fastn_id52::SecretKey,
     target: &fastn_id52::PublicKey,
     protocol: P,
-    peer_stream_senders: fastn_net::PeerStreamSenders,
-    graceful: fastn_net::Graceful,
     input: INPUT,
 ) -> Result<Result<OUTPUT, ERROR>, CallError>
 where
@@ -117,13 +115,13 @@ where
         .await
         .map_err(|source| CallError::EndpointError { source })?;
 
-    // Establish P2P stream
+    // Establish P2P stream using global singletons
     let (mut send_stream, mut recv_stream) = fastn_net::get_stream(
         endpoint,
         net_protocol.into(),
         target,
-        peer_stream_senders,
-        graceful,
+        crate::pool(),
+        crate::globals::graceful(),
     )
     .await
     .map_err(|source| CallError::StreamError { source })?;
@@ -220,7 +218,7 @@ where
     OUTPUT: for<'de> serde::Deserialize<'de>,
     ERROR: for<'de> serde::Deserialize<'de>,
 {
-    call_generic(sender, target, protocol, crate::pool(), crate::graceful(), input).await
+    call_generic(sender, target, protocol, input).await
 }
 
 #[cfg(test)]
