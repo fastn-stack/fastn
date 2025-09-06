@@ -322,9 +322,15 @@ pub enum MessageProcessingError {
 /// Error type for P2P server operations
 #[derive(Error, Debug)]
 pub enum P2PServerError {
-    #[error("Failed to receive P2P request: {source}")]
-    RequestReceiveFailed { source: String },
+    #[error("Failed to start P2P listener")]
+    ListenerStartFailed {
+        #[from]
+        source: fastn_p2p::ListenerAlreadyActiveError,
+    },
 
-    #[error("Failed to handle P2P request: {source}")]
-    RequestHandlingFailed { source: String },
+    #[error("Failed to receive P2P request: {message}")]
+    RequestReceiveFailed { message: String },
+
+    #[error("Failed to handle P2P request: {message}")]
+    RequestHandlingFailed { message: String },
 }
