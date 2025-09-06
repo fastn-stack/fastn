@@ -28,10 +28,14 @@ pub async fn http_to_peer(
 
     tracing::info!("peer_proxy: {remote_node_id52}");
 
+    // Convert ID52 string to PublicKey
+    let remote_public_key = remote_node_id52.parse::<fastn_id52::PublicKey>()
+        .map_err(|e| eyre::anyhow!("Invalid remote_node_id52: {}", e))?;
+    
     let (mut send, mut recv) = crate::get_stream(
         self_endpoint,
         header,
-        remote_node_id52.to_string(),
+        &remote_public_key,
         peer_connections.clone(),
         graceful,
     )
@@ -122,10 +126,14 @@ pub async fn http_to_peer_non_streaming(
 
     tracing::info!("peer_proxy: {remote_node_id52}");
 
+    // Convert ID52 string to PublicKey
+    let remote_public_key = remote_node_id52.parse::<fastn_id52::PublicKey>()
+        .map_err(|e| eyre::anyhow!("Invalid remote_node_id52: {}", e))?;
+    
     let (mut send, mut recv) = crate::get_stream(
         self_endpoint,
         header,
-        remote_node_id52.to_string(),
+        &remote_public_key,
         peer_connections.clone(),
         graceful,
     )

@@ -67,10 +67,14 @@ pub async fn tcp_to_peer(
 ) -> eyre::Result<()> {
     tracing::info!("tcp_to_peer: {remote_node_id52}");
 
+    // Convert ID52 string to PublicKey
+    let remote_public_key = remote_node_id52.parse::<fastn_id52::PublicKey>()
+        .map_err(|e| eyre::anyhow!("Invalid remote_node_id52: {}", e))?;
+    
     let (send, recv) = crate::get_stream(
         self_endpoint,
         header,
-        remote_node_id52.to_string(),
+        &remote_public_key,
         peer_connections.clone(),
         graceful,
     )
