@@ -31,6 +31,7 @@ extern crate self as fastn_rig;
 pub mod automerge;
 mod email_delivery;
 pub mod endpoint;
+pub mod p2p_delivery_shared;
 pub mod errors;
 mod http_routes;
 mod http_server;
@@ -114,7 +115,7 @@ pub struct P2PMessage {
 pub(crate) struct EndpointHandle {
     /// The secret key for this endpoint
     #[expect(unused)]
-    pub(crate) secret_key: Vec<u8>,
+    pub(crate) secret_key: fastn_id52::SecretKey,
     /// Type of owner (Account, Device, Rig)
     #[expect(unused)]
     pub(crate) owner_type: OwnerType,

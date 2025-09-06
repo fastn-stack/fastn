@@ -93,7 +93,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         envelope_to: to_email.clone(),
     };
 
-    // Attempt delivery using the original working CLI approach
+    // Attempt delivery using original CLI approach (for comparison)
     match attempt_direct_delivery(sender_secret_key, &target_key, p2p_message).await {
         Ok(_) => {
             let elapsed = start_time.elapsed();
@@ -124,22 +124,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-/// Attempt P2P delivery using the exact same approach as working fastn-net-test
+/// Original working P2P delivery function (for testing)
 async fn attempt_direct_delivery(
     sender_key: fastn_id52::SecretKey,
     target_key: &fastn_id52::PublicKey,
     message: fastn_account::AccountToAccountMessage,
 ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-    // Create endpoint (like fastn-net-test)
+    // Create endpoint
     let endpoint = fastn_net::get_endpoint(sender_key).await?;
     println!("📡 Created endpoint");
 
-    // Create peer stream coordination (like fastn-net-test)
+    // Create peer stream coordination
     let peer_stream_senders =
         std::sync::Arc::new(tokio::sync::Mutex::new(std::collections::HashMap::new()));
     let graceful = fastn_net::Graceful::new();
 
-    // Use fastn-net get_stream (exact same as working fastn-net-test)
+    // Use fastn-net get_stream
     let (mut send, mut recv) = fastn_net::get_stream(
         endpoint,
         fastn_net::Protocol::AccountToAccount.into(),
@@ -151,14 +151,13 @@ async fn attempt_direct_delivery(
 
     println!("✅ P2P stream established");
 
-    // Send message as JSON
+    // Send message
     let message_json = serde_json::to_string(&message)?;
     send.write_all(message_json.as_bytes()).await?;
     send.write_all(b"\n").await?;
-
     println!("📤 P2P message sent");
 
-    // Wait for delivery response
+    // Wait for response
     let response = fastn_net::next_string(&mut recv).await?;
     println!("📥 P2P response: {}", response);
 

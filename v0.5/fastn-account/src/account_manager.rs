@@ -75,10 +75,10 @@ impl fastn_account::AccountManager {
     }
 
     /// Get all endpoints from all accounts
-    /// Returns a tuple of (endpoint_id52, secret_key_bytes, account_path)
+    /// Returns a tuple of (endpoint_id52, secret_key, account_path)
     pub async fn get_all_endpoints(
         &self,
-    ) -> Result<Vec<(String, Vec<u8>, std::path::PathBuf)>, fastn_account::GetAllEndpointsError>
+    ) -> Result<Vec<(String, fastn_id52::SecretKey, std::path::PathBuf)>, fastn_account::GetAllEndpointsError>
     {
         let accounts_dir = self.path.join("accounts");
         let mut all_endpoints = Vec::new();
@@ -110,7 +110,7 @@ impl fastn_account::AccountManager {
                             for alias in account.aliases().await {
                                 all_endpoints.push((
                                     alias.id52(),
-                                    alias.secret_key().to_bytes().to_vec(),
+                                    alias.secret_key().clone(),
                                     path.clone(),
                                 ));
                             }

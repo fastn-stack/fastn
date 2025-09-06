@@ -41,7 +41,6 @@ pub async fn start_email_delivery_poller(
     peer_stream_senders: fastn_net::PeerStreamSenders,
 ) -> Result<(), fastn_rig::RunError> {
     println!("📬 Starting email delivery poller...");
-    tracing::info!("📬 Starting email delivery poller...");
 
     // Test the function immediately to see if it works
     println!("🧪 Testing email delivery function before spawning task...");
