@@ -69,7 +69,7 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         {
             let account_manager_clone = account_manager.clone();
             
-            tokio::spawn(async move {
+            fastn_p2p::spawn(async move {
                 if let Err(e) = crate::p2p_server::start_p2p_listener(
                     secret_key,
                     account_manager_clone,
@@ -89,7 +89,7 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         let account_manager_clone = account_manager.clone();
         let rig_secret = rig.secret_key().clone();
         
-        tokio::spawn(async move {
+        fastn_p2p::spawn(async move {
             if let Err(e) = crate::p2p_server::start_p2p_listener(
                 rig_secret,
                 account_manager_clone,
@@ -112,12 +112,10 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     if enable_poller {
         println!("📬 Starting email delivery poller with fastn-p2p");
         let account_manager_clone = account_manager.clone();
-        let graceful_clone = graceful.clone();
         
-        tokio::spawn(async move {
+        fastn_p2p::spawn(async move {
             if let Err(e) = crate::email_poller_p2p::start_email_delivery_poller(
                 account_manager_clone,
-                graceful_clone,
             ).await {
                 eprintln!("❌ Email delivery poller failed: {}", e);
             }
@@ -137,7 +135,7 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         ([0, 0, 0, 0], smtp_port).into(),
         graceful.clone(),
     );
-    let _smtp_handle = graceful.spawn(async move {
+    let _smtp_handle = fastn_p2p::spawn(async move {
         if let Err(e) = smtp_server.start().await {
             tracing::error!("SMTP server error: {}", e);
         }

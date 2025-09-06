@@ -6,15 +6,12 @@ pub async fn start_email_delivery_poller(
 ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     println!("📬 Starting email delivery poller with fastn-p2p...");
     
-    // Use global graceful singleton
-    let graceful = fastn_p2p::graceful();
-    
     // TODO: Implement email scanning and delivery using fastn_p2p::call
     // This will replace the old complex email_delivery.rs
     
     loop {
         tokio::select! {
-            _ = graceful.cancelled() => {
+            _ = fastn_p2p::cancelled() => {
                 println!("📬 Email delivery poller shutting down...");
                 break;
             }
