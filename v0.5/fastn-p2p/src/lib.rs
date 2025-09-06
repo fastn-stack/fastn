@@ -33,6 +33,7 @@ extern crate self as fastn_p2p;
 
 pub mod client;
 pub mod globals;
+pub mod macros;
 pub mod server;
 
 // Re-export essential types from fastn-net that users need
