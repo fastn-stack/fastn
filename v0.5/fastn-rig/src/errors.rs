@@ -318,3 +318,13 @@ pub enum MessageProcessingError {
     #[error("Message processing not implemented for endpoint: {endpoint_id52}")]
     NotImplemented { endpoint_id52: String },
 }
+
+/// Error type for P2P server operations
+#[derive(Error, Debug)]
+pub enum P2PServerError {
+    #[error("Failed to receive P2P request: {source}")]
+    RequestReceiveFailed { source: String },
+
+    #[error("Failed to handle P2P request: {source}")]
+    RequestHandlingFailed { source: String },
+}
