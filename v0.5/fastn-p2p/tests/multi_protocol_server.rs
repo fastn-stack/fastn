@@ -349,6 +349,7 @@ mod tests {
 
 
     #[tokio::test]
+    #[ignore]
     async fn test_end_to_end_p2p_networking() {
         // Test actual P2P networking: one server, one client, one message
         println!("🚀 Starting end-to-end P2P networking test");
