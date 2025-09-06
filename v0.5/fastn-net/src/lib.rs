@@ -43,6 +43,7 @@ mod graceful;
 pub mod http;
 mod http_connection_manager;
 mod http_to_peer;
+mod p2p_call;
 mod peer_to_http;
 mod ping;
 pub mod protocol;
@@ -55,6 +56,7 @@ pub use endpoint::{
     p2p_listen, p2p_stop_listening, is_p2p_listening, 
     PeerConnection, ListenerAlreadyActiveError, ListenerNotFoundError
 };
+pub use p2p_call::{p2p_call, P2PCallError};
 pub use get_endpoint::get_endpoint;
 pub use get_stream::{PeerStreamSenders, get_stream};
 pub use graceful::Graceful;

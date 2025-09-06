@@ -1,20 +1,18 @@
 /// Connection pool for P2P stream management.
 ///
-/// Maintains a map of active peer connections indexed by (self ID52, remote ID52) pairs.
+/// Maintains a map of active peer connections indexed by (self PublicKey, remote PublicKey) pairs.
 /// Each entry contains a channel for requesting new streams on that connection.
 /// Connections are automatically removed when they break or become unhealthy.
 ///
 /// This type is used to reuse existing P2P connections instead of creating new ones
 /// for each request, improving performance and reducing connection overhead.
 pub type PeerStreamSenders = std::sync::Arc<
-    tokio::sync::Mutex<std::collections::HashMap<(SelfID52, RemoteID52), StreamRequestSender>>,
+    tokio::sync::Mutex<std::collections::HashMap<(fastn_id52::PublicKey, fastn_id52::PublicKey), StreamRequestSender>>,
 >;
 
 type Stream = (iroh::endpoint::SendStream, iroh::endpoint::RecvStream);
 type StreamResult = eyre::Result<Stream>;
 type ReplyChannel = tokio::sync::oneshot::Sender<StreamResult>;
-type RemoteID52 = String;
-type SelfID52 = String;
 
 type StreamRequest = (crate::ProtocolHeader, ReplyChannel);
 
@@ -51,7 +49,7 @@ type StreamRequestReceiver = tokio::sync::mpsc::Receiver<StreamRequest>;
 pub async fn get_stream(
     self_endpoint: iroh::Endpoint,
     header: crate::ProtocolHeader,
-    remote_node_id52: RemoteID52,
+    remote_public_key: &fastn_id52::PublicKey,
     peer_stream_senders: PeerStreamSenders,
     graceful: crate::Graceful,
 ) -> eyre::Result<(iroh::endpoint::SendStream, iroh::endpoint::RecvStream)> {
@@ -60,15 +58,15 @@ pub async fn get_stream(
     tracing::trace!("get_stream: {header:?}");
     println!(
         "🔍 DEBUG get_stream: Starting stream request for {}",
-        remote_node_id52
+        remote_public_key.id52()
     );
     let stream_request_sender = get_stream_request_sender(
         self_endpoint,
-        remote_node_id52,
+        remote_public_key,
         peer_stream_senders,
         graceful,
     )
-    .await;
+    .await?;
     println!("✅ DEBUG get_stream: Got stream_request_sender");
     tracing::trace!("got stream_request_sender");
     let (reply_channel, receiver) = tokio::sync::oneshot::channel();
@@ -94,79 +92,81 @@ pub async fn get_stream(
 #[tracing::instrument(skip_all)]
 async fn get_stream_request_sender(
     self_endpoint: iroh::Endpoint,
-    remote_node_id52: RemoteID52,
+    remote_public_key: &fastn_id52::PublicKey,
     peer_stream_senders: PeerStreamSenders,
     graceful: crate::Graceful,
-) -> StreamRequestSender {
+) -> eyre::Result<StreamRequestSender> {
     println!(
         "🔍 DEBUG get_stream_request_sender: Starting for {}",
-        remote_node_id52
+        remote_public_key.id52()
     );
-    // Convert iroh::PublicKey to ID52 string
-    let self_id52 = data_encoding::BASE32_DNSSEC.encode(self_endpoint.node_id().as_bytes());
+    // Convert iroh node_id to fastn_id52::PublicKey
+    let self_public_key = fastn_id52::PublicKey::from_bytes(self_endpoint.node_id().as_bytes())
+        .map_err(|e| eyre::anyhow!("Invalid self endpoint node_id: {}", e))?;
     println!(
-        "🔍 DEBUG get_stream_request_sender: Self ID52: {}",
-        self_id52
+        "🔍 DEBUG get_stream_request_sender: Self PublicKey: {}",
+        self_public_key.id52()
     );
     let mut senders = peer_stream_senders.lock().await;
     println!("🔍 DEBUG get_stream_request_sender: Got peer_stream_senders lock");
 
-    if let Some(sender) = senders.get(&(self_id52.clone(), remote_node_id52.clone())) {
-        return sender.clone();
+    if let Some(sender) = senders.get(&(self_public_key, *remote_public_key)) {
+        return Ok(sender.clone());
     }
 
     // TODO: figure out if the mpsc::channel is the right size
     let (sender, receiver) = tokio::sync::mpsc::channel(1);
     senders.insert(
-        (self_id52.clone(), remote_node_id52.clone()),
+        (self_public_key, *remote_public_key),
         sender.clone(),
     );
     drop(senders);
 
     let graceful_for_connection_manager = graceful.clone();
+    let remote_public_key_for_task = *remote_public_key;
     println!(
         "🚀 DEBUG get_stream_request_sender: Spawning connection_manager task for {}",
-        remote_node_id52
+        remote_public_key.id52()
     );
     graceful.spawn(async move {
         println!(
             "📋 DEBUG connection_manager: Task started for {}",
-            remote_node_id52
+            remote_public_key_for_task.id52()
         );
         let result = connection_manager(
             receiver,
             self_endpoint,
-            remote_node_id52.clone(),
+            remote_public_key_for_task,
             graceful_for_connection_manager,
         )
         .await;
         println!(
             "📋 DEBUG connection_manager: Task ended for {} with result: {:?}",
-            remote_node_id52, result
+            remote_public_key_for_task.id52(), result
         );
 
         // cleanup the peer_stream_senders map, so no future tasks will try to use this.
         let mut senders = peer_stream_senders.lock().await;
-        senders.remove(&(self_id52.clone(), remote_node_id52));
+        senders.remove(&(self_public_key, remote_public_key_for_task));
     });
 
-    sender
+    Ok(sender)
 }
 
 async fn connection_manager(
     mut receiver: StreamRequestReceiver,
     self_endpoint: iroh::Endpoint,
-    remote_node_id52: RemoteID52,
+    remote_public_key: fastn_id52::PublicKey,
     graceful: crate::Graceful,
 ) {
     println!(
         "🔧 DEBUG connection_manager: Function started for {}",
-        remote_node_id52
+        remote_public_key.id52()
     );
     let e = match connection_manager_(
         &mut receiver,
         self_endpoint,
-        remote_node_id52.clone(),
+        remote_public_key,
         graceful,
     )
     .await
@@ -213,21 +213,18 @@ async fn connection_manager(
 async fn connection_manager_(
     receiver: &mut StreamRequestReceiver,
     self_endpoint: iroh::Endpoint,
-    remote_node_id52: RemoteID52,
+    remote_public_key: fastn_id52::PublicKey,
     graceful: crate::Graceful,
 ) -> eyre::Result<()> {
     println!(
         "🔧 DEBUG connection_manager_: Starting main loop for {}",
-        remote_node_id52
+        remote_public_key.id52()
     );
     let conn = match self_endpoint
         .connect(
             {
-                // Convert ID52 to iroh::NodeId
-                use std::str::FromStr;
-                let public_key = fastn_id52::PublicKey::from_str(&remote_node_id52)
-                    .map_err(|e| eyre::anyhow!("{}", e))?;
-                iroh::NodeId::from(iroh::PublicKey::from_bytes(&public_key.to_bytes())?)
+                // Convert PublicKey to iroh::NodeId
+                iroh::NodeId::from(iroh::PublicKey::from_bytes(&remote_public_key.to_bytes())?)
             },
             crate::APNS_IDENTITY,
         )
