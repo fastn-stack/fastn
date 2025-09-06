@@ -19,6 +19,7 @@ autosurgeon.workspace = true
 fastn-id52 = { workspace = true, features = ["automerge"] }
 fastn-mail.workspace = true
 fastn-net.workspace = true
+fastn-p2p.workspace = true
 fastn-router.workspace = true
 fastn-fbr.workspace = true
 

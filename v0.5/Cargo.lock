@@ -1805,6 +1805,7 @@ dependencies = [
  "fastn-id52",
  "fastn-mail",
  "fastn-net",
+ "fastn-p2p",
  "fastn-router",
  "http-body-util",
  "hyper",
