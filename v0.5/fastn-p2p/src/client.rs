@@ -85,7 +85,7 @@ pub enum CallError {
 ///     Ok(())
 /// }
 /// ```
-pub async fn call<INPUT, OUTPUT, ERROR>(
+async fn call_generic<INPUT, OUTPUT, ERROR>(
     sender: fastn_id52::SecretKey,
     target: &fastn_id52::PublicKey,
     protocol: fastn_net::Protocol,
@@ -153,6 +153,51 @@ where
             format!("Response doesn't match expected OUTPUT or ERROR types: {}", response_json)
         )),
     })
+}
+
+/// Make a P2P call using global singletons
+/// 
+/// This is the main function end users should use. It automatically uses
+/// the global connection pool and graceful shutdown coordinator.
+/// 
+/// # Example
+/// 
+/// ```rust,no_run
+/// use serde::{Deserialize, Serialize};
+/// 
+/// #[derive(Serialize)]
+/// struct PingRequest { message: String }
+/// 
+/// #[derive(Deserialize)]
+/// struct PingResponse { echo: String }
+/// 
+/// async fn example() -> Result<(), fastn_p2p::CallError> {
+///     let result: Result<PingResponse, String> = fastn_p2p::call(
+///         secret_key,
+///         &target_public_key,
+///         fastn_p2p::Protocol::Ping,
+///         PingRequest { message: "Hello!".to_string() },
+///     ).await?;
+///     
+///     match result {
+///         Ok(response) => println!("Got response: {}", response.echo),
+///         Err(error) => println!("Got error: {}", error),
+///     }
+///     Ok(())
+/// }
+/// ```
+pub async fn call<INPUT, OUTPUT, ERROR>(
+    sender: fastn_id52::SecretKey,
+    target: &fastn_id52::PublicKey, 
+    protocol: fastn_net::Protocol,
+    input: INPUT,
+) -> Result<Result<OUTPUT, ERROR>, CallError>
+where
+    INPUT: serde::Serialize,
+    OUTPUT: for<'de> serde::Deserialize<'de>,
+    ERROR: for<'de> serde::Deserialize<'de>,
+{
+    call_generic(sender, target, protocol, crate::pool(), crate::graceful(), input).await
 }
 
 #[cfg(test)]

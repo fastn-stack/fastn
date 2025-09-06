@@ -65,10 +65,9 @@ async fn run_multi_protocol_server() -> Result<(), Box<dyn std::error::Error + S
     println!("📡 Server listening on: {public_key}");
     
     // Listen on both Echo and Math protocols
-    let protocols = vec![fastn_net::Protocol::Ping, fastn_net::Protocol::Http];
-    let graceful = fastn_net::Graceful::new();
+    let protocols = vec![fastn_p2p::Protocol::Ping, fastn_p2p::Protocol::Http];
     
-    let stream = fastn_p2p::listen(secret_key, &protocols, graceful)?;
+    let stream = fastn_p2p::listen(secret_key, &protocols)?;
     let mut stream = std::pin::pin!(stream);
     
     let mut request_count = 0;
@@ -83,14 +82,14 @@ async fn run_multi_protocol_server() -> Result<(), Box<dyn std::error::Error + S
                 peer_request.peer().id52());
         
         // Route based on protocol
-        match peer_request.protocol() {
-            fastn_net::Protocol::Ping => {
+        match peer_request.protocol {
+            fastn_p2p::Protocol::Ping => {
                 // Handle Echo protocol using the high-level API
                 if let Err(e) = handle_echo_request(peer_request).await {
                     eprintln!("❌ Echo request failed: {}", e);
                 }
             }
-            fastn_net::Protocol::Http => {
+            fastn_p2p::Protocol::Http => {
                 // Handle Math protocol using the high-level API  
                 if let Err(e) = handle_math_request(peer_request).await {
                     eprintln!("❌ Math request failed: {}", e);
@@ -182,11 +181,6 @@ async fn run_test_client() -> Result<(), Box<dyn std::error::Error + Send + Sync
     let client_secret = fastn_id52::SecretKey::generate();
     let server_public = fastn_id52::SecretKey::generate().public_key(); // Mock server key
     
-    let pool = std::sync::Arc::new(
-        tokio::sync::Mutex::new(std::collections::HashMap::new())
-    );
-    let graceful = fastn_net::Graceful::new();
-    
     // Test Echo protocol
     println!("🔄 Testing Echo protocol...");
     let echo_request = EchoRequest {
@@ -196,9 +190,7 @@ async fn run_test_client() -> Result<(), Box<dyn std::error::Error + Send + Sync
     let echo_result: EchoResult = fastn_p2p::call(
         client_secret.clone(),
         &server_public,
-        fastn_net::Protocol::Ping,
-        pool.clone(),
-        graceful.clone(),
+        fastn_p2p::Protocol::Ping,
         echo_request,
     ).await?;
     
@@ -223,9 +215,7 @@ async fn run_test_client() -> Result<(), Box<dyn std::error::Error + Send + Sync
     let math_result: MathResult = fastn_p2p::call(
         client_secret.clone(),
         &server_public,
-        fastn_net::Protocol::Http,
-        pool.clone(),
-        graceful.clone(), 
+        fastn_p2p::Protocol::Http,
         math_request,
     ).await?;
     
@@ -250,9 +240,7 @@ async fn run_test_client() -> Result<(), Box<dyn std::error::Error + Send + Sync
     let error_result: MathResult = fastn_p2p::call(
         client_secret,
         &server_public,
-        fastn_net::Protocol::Http,
-        pool,
-        graceful,
+        fastn_p2p::Protocol::Http,
         error_request,
     ).await?;
     
@@ -310,11 +298,6 @@ async fn load_test_100_requests() -> Result<(), Box<dyn std::error::Error + Send
     let client_secret = fastn_id52::SecretKey::generate(); 
     let server_public = fastn_id52::SecretKey::generate().public_key();
     
-    let pool = std::sync::Arc::new(
-        tokio::sync::Mutex::new(std::collections::HashMap::new())
-    );
-    let graceful = fastn_net::Graceful::new();
-    
     for i in 1..=100 {
         if i % 2 == 0 {
             // Even requests: Echo protocol
@@ -325,9 +308,7 @@ async fn load_test_100_requests() -> Result<(), Box<dyn std::error::Error + Send
             let result: EchoResult = fastn_p2p::call(
                 client_secret.clone(),
                 &server_public,
-                fastn_net::Protocol::Ping,
-                pool.clone(),
-                graceful.clone(),
+                fastn_p2p::Protocol::Ping,
                 request,
             ).await?;
             
@@ -346,9 +327,7 @@ async fn load_test_100_requests() -> Result<(), Box<dyn std::error::Error + Send
             let result: MathResult = fastn_p2p::call(
                 client_secret.clone(),
                 &server_public,
-                fastn_net::Protocol::Http,
-                pool.clone(),
-                graceful.clone(),
+                fastn_p2p::Protocol::Http,
                 request,
             ).await?;
             
