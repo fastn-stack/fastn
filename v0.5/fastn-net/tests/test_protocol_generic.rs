@@ -14,7 +14,7 @@ fn test_protocol_generic_equality() {
     
     assert_eq!(proto1, proto2, "Protocol::Generic should be equal for same JSON values");
     
-    let expected = vec![proto1.clone()];
+    let expected = [proto1.clone()];
     assert!(expected.contains(&proto2), "contains should work for Protocol::Generic");
     
     println!("✅ Protocol::Generic equality test passed");
