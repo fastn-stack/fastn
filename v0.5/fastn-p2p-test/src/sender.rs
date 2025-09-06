@@ -36,10 +36,14 @@ pub struct EchoError {
 
 #[tokio::main]
 async fn main() -> eyre::Result<()> {
+    println!("🔧 DEBUG SENDER: Starting main function");
+    
     // Initialize tracing
     tracing_subscriber::fmt()
         .with_env_filter("fastn_p2p=trace,fastn_p2p_test=info")
         .init();
+    
+    println!("🔧 DEBUG SENDER: Tracing initialized");
 
     // Parse command line arguments: sender <sender_secret_key> <receiver_id52>
     let args: Vec<String> = std::env::args().collect();
@@ -81,15 +85,22 @@ async fn main() -> eyre::Result<()> {
     };
 
     // Send using fastn-p2p call with meaningful protocol name
+    println!("🔧 DEBUG: About to call fastn_p2p::call");
     let result: Result<EchoResponse, EchoError> = fastn_p2p::call(
         sender_key,
         &receiver_public_key,
         TestProtocol::Echo,
         request,
-    ).await?;
+    ).await.map_err(|e| {
+        eprintln!("❌ fastn_p2p::call failed: {}", e);
+        e
+    })?;
+    println!("🔧 DEBUG: fastn_p2p::call completed successfully");
 
+    println!("🔧 DEBUG: About to match result");
     match result {
         Ok(response) => {
+            println!("🔧 DEBUG: Got Ok response");
             println!("✅ Received response: {}", response.response);
             
             // Output JSON result for test parsing
@@ -101,6 +112,7 @@ async fn main() -> eyre::Result<()> {
             println!("📋 RESULT: {}", serde_json::to_string(&result_json)?);
         }
         Err(error) => {
+            println!("🔧 DEBUG: Got Err response");
             eprintln!("❌ Received error: {}", error.error);
             
             let error_json = serde_json::json!({

@@ -41,10 +41,10 @@ async fn test_multi_sender() {
             let sender_output = Command::new("cargo")
                 .args([
                     "run",
-                    "--bin", 
-                    "sender",
                     "-p",
                     "fastn-p2p-test",
+                    "--bin", 
+                    "sender",
                     &sender_key.to_string(),
                     &receiver_id52_clone,
                 ])
@@ -53,10 +53,21 @@ async fn test_multi_sender() {
                 .expect("Failed to run sender");
 
             let stdout = String::from_utf8_lossy(&sender_output.stdout);
+            let stderr = String::from_utf8_lossy(&sender_output.stderr);
+            
+            println!("🔧 DEBUG: Sender #{} stdout length: {}", sender_id, stdout.len());
+            println!("🔧 DEBUG: Sender #{} stderr length: {}", sender_id, stderr.len());
+            
+            if !stdout.trim().is_empty() {
+                println!("🔧 DEBUG: Sender #{} stdout: {}", sender_id, stdout.trim());
+            }
+            if !stderr.trim().is_empty() {
+                println!("🔧 DEBUG: Sender #{} stderr: {}", sender_id, stderr.trim());
+            }
             
             if sender_output.status.success() {
                 println!("✅ Sender #{} completed successfully", sender_id);
-                if stdout.contains("\"status\": \"success\"") {
+                if stdout.contains("\"status\":\"success\"") {
                     println!("✅ Sender #{} received JSON success", sender_id);
                     true
                 } else {
