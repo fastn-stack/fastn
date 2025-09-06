@@ -4,8 +4,11 @@
 pub async fn start_email_delivery_poller(
     account_manager: std::sync::Arc<fastn_account::AccountManager>,
 ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-    println!("📬 Starting email delivery poller with fastn-p2p...");
+    eprintln!("🔧 DEBUG POLLER: email_delivery_poller STARTING with fastn-p2p");
+    eprintln!("🔧 DEBUG POLLER: account_manager has {} accounts", 
+        account_manager.get_all_endpoints().await.map(|v| v.len()).unwrap_or(0));
     
+    let mut tick_count = 0;
     loop {
         tokio::select! {
             _ = fastn_p2p::cancelled() => {
@@ -13,11 +16,14 @@ pub async fn start_email_delivery_poller(
                 return Ok(());
             }
             _ = tokio::time::sleep(std::time::Duration::from_secs(5)) => {
+                tick_count += 1;
+                eprintln!("🔧 DEBUG POLLER: TICK #{} - starting scan", tick_count);
+                
                 // Scan for pending emails and deliver using fastn-p2p
                 if let Err(e) = scan_and_deliver_emails(&account_manager).await {
                     eprintln!("❌ Email delivery scan failed: {}", e);
                 } else {
-                    println!("✅ Email delivery scan completed");
+                    println!("✅ Email delivery scan #{} completed", tick_count);
                 }
             }
         }
@@ -28,23 +34,95 @@ pub async fn start_email_delivery_poller(
 async fn scan_and_deliver_emails(
     account_manager: &fastn_account::AccountManager,
 ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-    println!("📭 Scanning for pending emails...");
+    eprintln!("🔧 DEBUG SCAN: scan_and_deliver_emails() CALLED");
     
     // Get all accounts to check for pending emails
-    let all_endpoints = account_manager.get_all_endpoints().await?;
+    eprintln!("🔧 DEBUG SCAN: About to call account_manager.get_all_endpoints()");
+    let all_endpoints = match account_manager.get_all_endpoints().await {
+        Ok(endpoints) => {
+            println!("🔧 DEBUG: get_all_endpoints() SUCCESS - found {} endpoints", endpoints.len());
+            endpoints
+        }
+        Err(e) => {
+            println!("❌ DEBUG: get_all_endpoints() FAILED: {}", e);
+            return Err(Box::new(e));
+        }
+    };
     
     for (endpoint_id52, _secret_key, account_path) in all_endpoints {
-        println!("📧 Checking account {} for pending emails", endpoint_id52);
+        println!("🔧 DEBUG: Checking account {} at path {}", endpoint_id52, account_path.display());
         
-        // Load the account to access its mail system
-        let _account = fastn_account::Account::load(&account_path).await?;
+        // Load the mail store directly for now
+        println!("🔧 DEBUG: Loading mail store from {}", account_path.display());
+        let mail_store = match fastn_mail::Store::load(&account_path).await {
+            Ok(store) => {
+                println!("🔧 DEBUG: Mail store load SUCCESS for {}", endpoint_id52);
+                store
+            }
+            Err(e) => {
+                println!("❌ DEBUG: Mail store load FAILED for {}: {}", endpoint_id52, e);
+                continue; // Skip this account and try next
+            }
+        };
         
-        // Get pending emails using mail system API
-        println!("📭 Scanning account {} for pending emails", endpoint_id52);
+        // Get pending P2P deliveries using the mail store's API
+        println!("📭 Scanning account {} for pending P2P deliveries", endpoint_id52);
         
-        // TODO: Need public API to access mail.store - currently private field
-        // The old system was broken, so this is a net improvement even incomplete
-        println!("📭 Email scanning not implemented yet - need public mail API");
+        // Get pending deliveries from the fastn_email_delivery table
+        let pending_deliveries = match mail_store.get_pending_deliveries().await {
+            Ok(deliveries) => {
+                println!("📧 Found {} pending P2P deliveries", deliveries.len());
+                deliveries
+            }
+            Err(e) => {
+                println!("❌ Failed to get pending deliveries: {}", e);
+                continue;
+            }
+        };
+        
+        // Process each pending delivery
+        for delivery in pending_deliveries {
+            println!("📤 Processing delivery to peer: {}", delivery.peer_id52.id52());
+            
+            // Get emails for this peer
+            let emails = match mail_store.get_emails_for_peer(&delivery.peer_id52).await {
+                Ok(emails) => {
+                    println!("📧 Found {} emails for peer {}", emails.len(), delivery.peer_id52.id52());
+                    emails
+                }
+                Err(e) => {
+                    println!("❌ Failed to get emails for peer: {}", e);
+                    continue;
+                }
+            };
+            
+            // Actually deliver via P2P
+            println!("🚀 Starting P2P delivery of {} emails to peer {}", emails.len(), delivery.peer_id52.id52());
+            
+            match crate::email_delivery_p2p::deliver_emails_to_peer_v2(
+                &emails, 
+                &_secret_key.public_key(), 
+                &delivery.peer_id52, 
+                account_manager
+            ).await {
+                Ok(delivered_ids) => {
+                    println!("✅ Successfully delivered {} emails via P2P", delivered_ids.len());
+                    
+                    // Mark delivered emails as completed in the database
+                    for email_id in delivered_ids {
+                        if let Err(e) = mail_store.mark_delivered_to_peer(&email_id, &delivery.peer_id52).await {
+                            println!("❌ Failed to mark email {} as delivered: {}", email_id, e);
+                        } else {
+                            println!("✅ Marked email {} as delivered in database", email_id);
+                        }
+                    }
+                }
+                Err(e) => {
+                    println!("❌ P2P delivery failed: {}", e);
+                    // Emails remain in pending state for retry
+                }
+            }
+        }
         
         // This is the structure we need once Account provides public mail access:
         /*

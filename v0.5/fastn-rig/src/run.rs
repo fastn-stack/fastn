@@ -109,17 +109,21 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         .unwrap_or(true);
     
     if enable_poller {
-        println!("📬 Starting email delivery poller with fastn-p2p");
+        eprintln!("🔧 DEBUG RUN: ENABLE_EMAIL_POLLER=true, about to start poller");
         let account_manager_clone = account_manager.clone();
         
-        fastn_p2p::spawn(async move {
+        let _handle = fastn_p2p::spawn(async move {
+            eprintln!("🔧 DEBUG RUN: Email poller task ACTUALLY SPAWNED");
             if let Err(e) = crate::email_poller_p2p::start_email_delivery_poller(
                 account_manager_clone,
             ).await {
-                eprintln!("❌ Email delivery poller failed: {}", e);
+                eprintln!("❌ DEBUG RUN: Email delivery poller failed: {}", e);
             }
+            eprintln!("🔧 DEBUG RUN: Email poller task ACTUALLY FINISHED");
         });
-        println!("✅ Email delivery poller started");
+        eprintln!("🔧 DEBUG RUN: Email delivery poller spawn completed");
+    } else {
+        eprintln!("🔧 DEBUG RUN: Email delivery poller disabled");
     }
 
     // Start SMTP server

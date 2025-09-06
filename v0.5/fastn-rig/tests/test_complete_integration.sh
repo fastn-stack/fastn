@@ -22,11 +22,15 @@ error() { echo -e "${RED}❌ $1${NC}"; exit 1; }
 
 # Binary path detection
 detect_target_dir() {
-    # Check common binary locations
-    if [ -f "$HOME/target/debug/fastn-rig" ]; then
-        echo "$HOME/target/debug"
+    # Check common binary locations (v0.5 target dir first since that's the new location)
+    if [ -f "../target/debug/fastn-rig" ]; then
+        echo "../target/debug"
     elif [ -f "./target/debug/fastn-rig" ]; then
         echo "./target/debug"
+    elif [ -f "/Users/amitu/Projects/fastn-me/v0.5/target/debug/fastn-rig" ]; then
+        echo "/Users/amitu/Projects/fastn-me/v0.5/target/debug"
+    elif [ -f "$HOME/target/debug/fastn-rig" ]; then
+        echo "$HOME/target/debug"
     elif [ -f "/Users/amitu/target/debug/fastn-rig" ]; then
         echo "/Users/amitu/target/debug"
     else
@@ -36,11 +40,11 @@ detect_target_dir() {
 
 # Global cleanup
 cleanup() {
-    log "🧹 Complete cleanup..."
+    log "🧹 Cleaning up processes (keeping test directory for debugging)..."
     pkill -f "FASTN_HOME.*fastn-complete-test" 2>/dev/null || true
     sleep 2
     pkill -9 -f "FASTN_HOME.*fastn-complete-test" 2>/dev/null || true
-    rm -rf "$TEST_DIR" /tmp/peer*.log 2>/dev/null || true
+    # Keep test directory and log files for debugging
 }
 trap cleanup EXIT
 
@@ -49,8 +53,14 @@ log "=============================================="
 
 # Step 1: Build all binaries ONCE at the start (no compilation during test)
 log "📦 Pre-compiling all required binaries (debug build for speed)..."
-cargo build --bin fastn-rig --bin test_utils >/dev/null 2>&1 || error "Failed to build binaries"
-cargo build --package fastn-mail --features net >/dev/null 2>&1 || error "Failed to build fastn-mail"
+log "🔨 Building fastn-rig and test_utils..."
+if ! cargo build --bin fastn-rig --bin test_utils 2>&1 | tail -10; then
+    error "Failed to build fastn-rig binaries"
+fi
+log "🔨 Building fastn-mail..."
+if ! cargo build --package fastn-mail --features net 2>&1 | tail -10; then
+    error "Failed to build fastn-mail binary"
+fi
 success "All binaries pre-compiled"
 
 # Detect binary locations
@@ -67,6 +77,8 @@ success "Binary paths validated"
 
 # Step 2: Setup environment  
 log "🏗️  Setting up test environment..."
+# Clean up any leftover test directory to start fresh
+rm -rf "$TEST_DIR" 2>/dev/null || true
 cleanup
 mkdir -p "$TEST_DIR/peer1" "$TEST_DIR/peer2"
 success "Test directories created"
@@ -112,7 +124,7 @@ cleanup() {
     sleep 3
     kill -9 $PID1 $PID2 2>/dev/null || true
     wait 2>/dev/null || true
-    rm -rf "$TEST_DIR" /tmp/peer*.log 2>/dev/null || true
+    # Keep test directory and log files for debugging
 }
 trap cleanup EXIT
 
@@ -182,9 +194,16 @@ warn "P2P delivery failed even with direct binaries and precise timing"
 log "🐛 This suggests the issue is NOT compilation delays..."
 
 log "Recent peer 1 P2P logs:"
-grep -E "P2P|stream.*reply|deliver.*emails" /tmp/peer1_run.log | tail -3 || warn "No P2P logs"
+grep -E "P2P|stream.*reply|deliver.*emails|DEBUG" /tmp/peer1_run.log | tail -10 || warn "No P2P logs"
 
 log "Recent peer 2 acceptance logs:"
-grep -E "Connection accepted|Account message" /tmp/peer2_run.log | tail -3 || warn "No acceptance logs"
+grep -E "Connection accepted|Account message|DEBUG" /tmp/peer2_run.log | tail -10 || warn "No acceptance logs"
 
-error "Direct binary execution also timed out - deeper issue confirmed"
+log "📁 Debug artifacts preserved at:"
+log "   Test directory: $TEST_DIR"
+log "   Peer 1 run log: /tmp/peer1_run.log"
+log "   Peer 2 run log: /tmp/peer2_run.log"
+log "   Peer 1 init log: /tmp/peer1_init.log" 
+log "   Peer 2 init log: /tmp/peer2_init.log"
+
+error "Direct binary execution also timed out - check artifacts above for debugging"
