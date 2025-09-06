@@ -1,3 +1,4 @@
+
 /// Error type for p2p_call function
 #[derive(Debug, thiserror::Error)]
 pub enum P2PCallError {
@@ -68,7 +69,7 @@ pub enum P2PCallError {
 ///         message: "Hello!".to_string(),
 ///     };
 ///
-///     let response: PingResponse = fastn_net::p2p_call(
+///     let result: Result<PingResponse, String> = fastn_net::p2p_call(
 ///         sender_secret_key,
 ///         &target_public_key,
 ///         fastn_net::Protocol::Ping,
@@ -76,22 +77,26 @@ pub enum P2PCallError {
 ///         graceful,
 ///         request,
 ///     ).await?;
-///
-///     println!("Got response: {}", response.echo);
+///     
+///     match result {
+///         Ok(response) => println!("Got response: {}", response.echo),
+///         Err(error) => println!("Got error: {}", error),
+///     }
 ///     Ok(())
 /// }
 /// ```
-pub async fn p2p_call<INPUT, OUTPUT>(
+pub async fn p2p_call<INPUT, OUTPUT, ERROR>(
     sender: fastn_id52::SecretKey,
     target: &fastn_id52::PublicKey,
     protocol: fastn_net::Protocol,
     peer_stream_senders: fastn_net::PeerStreamSenders,
     graceful: fastn_net::Graceful,
     input: INPUT,
-) -> Result<OUTPUT, P2PCallError>
+) -> Result<Result<OUTPUT, ERROR>, P2PCallError>
 where
     INPUT: serde::Serialize,
     OUTPUT: for<'de> serde::Deserialize<'de>,
+    ERROR: for<'de> serde::Deserialize<'de>,
 {
     // Get endpoint for the sender
     let endpoint = fastn_net::get_endpoint(sender)
@@ -132,10 +137,22 @@ where
         .await
         .map_err(|source| P2PCallError::ReceiveError { source })?;
 
-    let response: OUTPUT = serde_json::from_str(&response_json)
-        .map_err(|source| P2PCallError::DeserializationError { source })?;
+    // Try to deserialize as success response first
+    if let Ok(success_response) = serde_json::from_str::<OUTPUT>(&response_json) {
+        return Ok(Ok(success_response));
+    }
 
-    Ok(response)
+    // If that fails, try to deserialize as ERROR type
+    if let Ok(error_response) = serde_json::from_str::<ERROR>(&response_json) {
+        return Ok(Err(error_response));
+    }
+
+    // If both fail, it's a deserialization error
+    Err(P2PCallError::DeserializationError {
+        source: serde_json::Error::io(std::io::Error::other(
+            format!("Response doesn't match expected OUTPUT or ERROR types: {}", response_json)
+        )),
+    })
 }
 
 #[cfg(test)]
