@@ -55,6 +55,7 @@ pub struct MathError {
     pub details: String,
 }
 
+#[allow(dead_code)]
 type MathResult = Result<MathResponse, MathError>;
 
 // ============================================================================
@@ -62,6 +63,7 @@ type MathResult = Result<MathResponse, MathError>;
 // ============================================================================
 
 /// Multi-protocol P2P server that handles Echo and Math requests
+#[allow(dead_code)]
 async fn run_multi_protocol_server() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     println!("🚀 Starting multi-protocol P2P server");
     
@@ -138,7 +140,8 @@ async fn echo_handler(request: EchoRequest) -> Result<EchoResponse, EchoError> {
     })
 }
 
-/// Math request handler - returns the result directly  
+/// Math request handler - returns the result directly
+#[allow(dead_code)]  
 async fn math_handler(request: MathRequest) -> Result<MathResponse, MathError> {
     println!("🧮 Processing math: {} {} {}", request.a, request.operation, request.b);
     
@@ -172,6 +175,7 @@ async fn math_handler(request: MathRequest) -> Result<MathResponse, MathError> {
 // ============================================================================
 
 /// Client that makes requests to both protocols
+#[allow(dead_code)]
 async fn run_test_client(server_public_key: &fastn_id52::PublicKey) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     println!("📞 Starting test client");
     
@@ -259,6 +263,7 @@ async fn run_test_client(server_public_key: &fastn_id52::PublicKey) -> Result<()
 
 /// Example of how a real application might structure P2P communication
 /// This shows the clean API patterns we've achieved
+#[allow(dead_code)]
 async fn example_main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     // Generate server key that client will connect to
     let server_secret = fastn_id52::SecretKey::generate();
@@ -294,6 +299,7 @@ async fn example_main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> 
 // ============================================================================
 
 /// High-load test: alternates between protocols for 100 requests
+#[allow(dead_code)]
 async fn load_test_100_requests(server_public_key: &fastn_id52::PublicKey) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     println!("🚀 Starting 100-request load test");
     
@@ -391,7 +397,7 @@ mod tests {
         
         // Send one message from client to server
         let client_task = {
-            let server_public_clone = server_public.clone();
+            let server_public_clone = server_public;
             tokio::spawn(async move {
                 println!("📤 Client sending echo request...");
                 
