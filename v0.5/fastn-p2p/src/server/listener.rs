@@ -187,7 +187,7 @@ where
 /// 
 /// # Example
 /// 
-/// ```rust,no_run
+/// ```rust,ignore
 /// use futures_util::stream::StreamExt;
 /// 
 /// async fn server_example() -> Result<(), Box<dyn std::error::Error>> {

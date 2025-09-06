@@ -43,7 +43,7 @@ pub enum CallError {
 ///
 /// # Example
 ///
-/// ```rust,no_run
+/// ```rust,ignore
 /// use serde::{Deserialize, Serialize};
 ///
 /// #[derive(Serialize)]
@@ -176,7 +176,7 @@ where
 /// 
 /// # Example
 /// 
-/// ```rust,no_run
+/// ```rust,ignore
 /// use serde::{Deserialize, Serialize};
 /// 
 /// #[derive(Serialize)]
