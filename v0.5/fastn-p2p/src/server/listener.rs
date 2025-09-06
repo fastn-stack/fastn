@@ -108,11 +108,14 @@ where
     let expected = expected.to_vec(); // Clone for move into async block
 
     Ok(async_stream::try_stream! {
+        println!("🔧 DEBUG: About to call fastn_net::get_endpoint");
         let endpoint = fastn_net::get_endpoint(secret_key.clone()).await?;
+        println!("🔧 DEBUG: Successfully created endpoint");
 
         // Channel to receive PeerRequests from spawned connection handlers
         // Using 1-capacity channel for minimal buffering with backpressure
         let (tx, mut rx) = tokio::sync::mpsc::channel(1);
+        println!("🔧 DEBUG: Created channel");
 
         // Spawn connection acceptor task
         let acceptor_tx = tx.clone();
@@ -122,9 +125,12 @@ where
         let acceptor_public_key = public_key;
 
         tokio::spawn(async move {
+            println!("🔧 DEBUG: Started connection acceptor task");
             loop {
+                println!("🔧 DEBUG: Waiting for endpoint.accept()");
                 tokio::select! {
                     conn_result = endpoint.accept() => {
+                        println!("🔧 DEBUG: endpoint.accept() returned");
                         let conn = match conn_result {
                             Some(conn) => conn,
                             None => {
@@ -162,9 +168,12 @@ where
         });
 
         // Stream PeerRequests from the channel
+        println!("🔧 DEBUG: About to start streaming from channel");
         while let Some(peer_request_result) = rx.recv().await {
+            println!("🔧 DEBUG: Received peer request from channel");
             yield peer_request_result?;
         }
+        println!("🔧 DEBUG: Channel stream ended");
 
         // Clean up: ensure removal from registry when stream ends
         fastn_p2p::server::management::unregister_listener(&public_key);
