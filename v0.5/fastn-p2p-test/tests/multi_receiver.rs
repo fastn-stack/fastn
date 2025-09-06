@@ -58,7 +58,7 @@ async fn test_multi_receiver() {
         
         if sender_output.status.success() {
             println!("✅ Message to receiver #{} sent successfully", i + 1);
-            if stdout.contains("\"status\": \"success\"") {
+            if stdout.contains("\"status\":\"success\"") {
                 success_count += 1;
                 println!("✅ Receiver #{} returned JSON success", i + 1);
             } else {

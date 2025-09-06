@@ -48,7 +48,7 @@ async fn test_single_sender_multiple_messages() {
         
         if sender_output.status.success() {
             println!("✅ Message #{i} sent successfully");
-            if stdout.contains("\"status\": \"success\"") {
+            if stdout.contains("\"status\":\"success\"") {
                 println!("✅ Message #{i} received JSON success");
             } else {
                 println!("⚠️ Message #{i} no JSON result");

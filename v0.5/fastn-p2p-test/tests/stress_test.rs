@@ -50,7 +50,7 @@ async fn test_stress_test() {
             let success = sender_output.status.success();
             if success {
                 let stdout = String::from_utf8_lossy(&sender_output.stdout);
-                let json_success = stdout.contains("\"status\": \"success\"");
+                let json_success = stdout.contains("\"status\":\"success\"");
                 println!("✅ Concurrent sender #{}: {} (JSON: {})", 
                         sender_id, if success { "SUCCESS" } else { "FAILED" }, json_success);
                 json_success
