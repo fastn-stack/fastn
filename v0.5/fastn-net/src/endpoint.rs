@@ -65,13 +65,13 @@ impl PeerRequest {
     /// }
     /// 
     /// async fn handle_connection(mut request: fastn_net::PeerRequest) -> eyre::Result<()> {
-    ///     let (request, mut handle): (Request, _) = request.get_input().await?;
+    ///     let (request, handle): (Request, _) = request.get_input().await?;
     ///     
-    ///     let response = Response {
+    ///     let result = Ok::<Response, String>(Response {
     ///         echo: format!("You said: {}", request.message),
-    ///     };
+    ///     });
     ///     
-    ///     handle.send_response(response).await?;
+    ///     handle.send(result).await?;
     ///     Ok(())
     /// }
     /// ```
@@ -122,10 +122,10 @@ impl PeerRequest {
     /// 
     /// async fn handle_request(peer_request: fastn_net::PeerRequest) -> Result<(), fastn_net::HandleRequestError> {
     ///     peer_request.handle(|request: EchoRequest| async move {
-    ///         let response = EchoResponse {
+    ///         // Handler returns Result<OUTPUT, ERROR> - framework handles rest automatically
+    ///         Ok::<EchoResponse, String>(EchoResponse {
     ///             echo: format!("You said: {}", request.message),
-    ///         };
-    ///         Ok::<EchoResponse, String>(response)
+    ///         })
     ///     }).await
     /// }
     /// ```
@@ -146,19 +146,10 @@ impl PeerRequest {
             Err(e) => return Err(HandleRequestError::GetInputFailed { source: e }),
         };
 
-        // Call the handler
-        match handler(input).await {
-            Ok(output) => {
-                // Send successful response
-                response_handle.send_response(output).await
-                    .map_err(|source| HandleRequestError::SendResponseFailed { source })?;
-            }
-            Err(error) => {
-                // Send error response (converted to standard P2PRemoteError)
-                response_handle.send_error(error).await
-                    .map_err(|source| HandleRequestError::SendErrorFailed { source })?;
-            }
-        }
+        // Call the handler and send the result (automatically handles Ok/Err variants)
+        let handler_result = handler(input).await;
+        response_handle.send(handler_result).await
+            .map_err(|source| HandleRequestError::SendResponseFailed { source })?;
 
         Ok(())
     }
@@ -172,45 +163,34 @@ pub enum HandleRequestError {
 
     #[error("Failed to send response: {source}")]
     SendResponseFailed { source: P2PSendError },
-
-    #[error("Failed to send error response: {source}")]
-    SendErrorFailed { source: P2PSendError },
 }
 
 impl P2PResponseHandle {
-    /// Send a successful response back to the client
+    /// Send a response back to the client
     /// 
     /// This method consumes the handle, ensuring exactly one response per request.
-    pub async fn send_response<OUTPUT>(mut self, output: OUTPUT) -> Result<(), P2PSendError>
+    /// Accepts a Result<OUTPUT, ERROR> and automatically serializes the appropriate variant.
+    /// This ensures type safety by binding OUTPUT and ERROR together.
+    pub async fn send<OUTPUT, ERROR>(mut self, result: Result<OUTPUT, ERROR>) -> Result<(), P2PSendError>
     where
         OUTPUT: serde::Serialize,
+        ERROR: serde::Serialize,
     {
-        // Serialize response
-        let response_json = serde_json::to_string(&output)
-            .map_err(|source| P2PSendError::SerializationError { source })?;
+        let response_json = match result {
+            Ok(output) => {
+                // Serialize successful response
+                serde_json::to_string(&output)
+                    .map_err(|source| P2PSendError::SerializationError { source })?
+            }
+            Err(error) => {
+                // Serialize error response  
+                serde_json::to_string(&error)
+                    .map_err(|source| P2PSendError::SerializationError { source })?
+            }
+        };
 
         // Send JSON followed by newline
         self.send_stream.write_all(response_json.as_bytes()).await
-            .map_err(|e| P2PSendError::SendError { source: eyre::Error::from(e) })?;
-        self.send_stream.write_all(b"\n").await
-            .map_err(|e| P2PSendError::SendError { source: eyre::Error::from(e) })?;
-
-        Ok(())
-    }
-
-    /// Send an error response back to the client
-    /// 
-    /// This method consumes the handle, ensuring exactly one response per request.
-    /// The error will be serialized as JSON using the same format as the client expects.
-    pub async fn send_error<E>(mut self, error: E) -> Result<(), P2PSendError>
-    where
-        E: serde::Serialize,
-    {
-        // Serialize and send error response
-        let error_json = serde_json::to_string(&error)
-            .map_err(|source| P2PSendError::SerializationError { source })?;
-
-        self.send_stream.write_all(error_json.as_bytes()).await
             .map_err(|e| P2PSendError::SendError { source: eyre::Error::from(e) })?;
         self.send_stream.write_all(b"\n").await
             .map_err(|e| P2PSendError::SendError { source: eyre::Error::from(e) })?;
@@ -635,11 +615,5 @@ mod tests {
         };
         assert!(send_response_err.to_string().contains("Failed to send response"));
 
-        let send_error_err = HandleRequestError::SendErrorFailed {
-            source: P2PSendError::SendError {
-                source: eyre::anyhow!("network error"),
-            },
-        };
-        assert!(send_error_err.to_string().contains("Failed to send error response"));
     }
 }
