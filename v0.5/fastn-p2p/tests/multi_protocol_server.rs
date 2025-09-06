@@ -7,8 +7,26 @@ use futures_util::stream::StreamExt;
 use serde::{Deserialize, Serialize};
 
 // ============================================================================
-// PROTOCOL DEFINITIONS - Shared between client and server
+// CLEAN USER-DEFINED PROTOCOLS - Shared between client and server
 // ============================================================================
+
+/// Application-specific protocols - meaningful names instead of Ping/Http lies!
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq)]
+pub enum AppProtocol {
+    Echo,
+    Math,
+    FileTransfer, // For future use
+}
+
+impl std::fmt::Display for AppProtocol {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            AppProtocol::Echo => write!(f, "Echo"),
+            AppProtocol::Math => write!(f, "Math"), 
+            AppProtocol::FileTransfer => write!(f, "FileTransfer"),
+        }
+    }
+}
 
 // Echo Protocol (simple text echo)
 #[derive(Serialize, Deserialize, Debug)]
@@ -64,8 +82,8 @@ async fn run_multi_protocol_server() -> Result<(), Box<dyn std::error::Error + S
     
     println!("📡 Server listening on: {public_key}");
     
-    // Listen on both Echo and Math protocols
-    let protocols = vec![fastn_p2p::Protocol::Ping, fastn_p2p::Protocol::Http];
+    // Listen on both Echo and Math protocols - meaningful names!
+    let protocols = vec![AppProtocol::Echo, AppProtocol::Math];
     
     let mut stream = fastn_p2p::listen!(secret_key, &protocols);
     
@@ -80,18 +98,18 @@ async fn run_multi_protocol_server() -> Result<(), Box<dyn std::error::Error + S
                 peer_request.peer()
         );
         
-        // Route based on protocol
+        // Route based on protocol - clean meaningful names!
         let result = match peer_request.protocol {
-            fastn_p2p::Protocol::Ping => {
+            AppProtocol::Echo => {
                 // Handle Echo protocol using clean function reference
                 peer_request.handle(echo_handler).await
             }
-            fastn_p2p::Protocol::Http => {
+            AppProtocol::Math => {
                 // Handle Math protocol using clean function reference  
                 peer_request.handle(math_handler).await
             }
-            other => {
-                eprintln!("❓ Unexpected protocol: {other}");
+            AppProtocol::FileTransfer => {
+                eprintln!("📁 FileTransfer not implemented yet");
                 Ok(())
             }
         };
@@ -184,7 +202,7 @@ async fn run_test_client(server_public_key: &fastn_id52::PublicKey) -> Result<()
     let echo_result: EchoResult = fastn_p2p::call(
         client_secret.clone(),
         server_public_key,
-        fastn_p2p::Protocol::Ping,
+        AppProtocol::Echo,
         echo_request,
     ).await?;
     
@@ -209,7 +227,7 @@ async fn run_test_client(server_public_key: &fastn_id52::PublicKey) -> Result<()
     let math_result: MathResult = fastn_p2p::call(
         client_secret.clone(),
         server_public_key,
-        fastn_p2p::Protocol::Http,
+        AppProtocol::Math,
         math_request,
     ).await?;
     
@@ -234,7 +252,7 @@ async fn run_test_client(server_public_key: &fastn_id52::PublicKey) -> Result<()
     let error_result: MathResult = fastn_p2p::call(
         client_secret,
         server_public_key,
-        fastn_p2p::Protocol::Http,
+        AppProtocol::Math,
         error_request,
     ).await?;
     
@@ -307,7 +325,7 @@ async fn load_test_100_requests(server_public_key: &fastn_id52::PublicKey) -> Re
             let result: EchoResult = fastn_p2p::call(
                 client_secret.clone(),
                 server_public_key,
-                fastn_p2p::Protocol::Ping,
+                AppProtocol::Echo,
                 request,
             ).await?;
             
@@ -326,7 +344,7 @@ async fn load_test_100_requests(server_public_key: &fastn_id52::PublicKey) -> Re
             let result: MathResult = fastn_p2p::call(
                 client_secret.clone(),
                 server_public_key,
-                fastn_p2p::Protocol::Http,
+                AppProtocol::Math,
                 request,
             ).await?;
             
