@@ -33,6 +33,8 @@ async fn test_multiple_senders_single_receiver() {
         let sender_key = fastn_id52::SecretKey::generate();
         let receiver_id52_clone = receiver_id52.clone();
         
+        println!("🔑 Generated sender #{} key: {}", sender_id, sender_key.public_key().id52());
+        
         let task = tokio::spawn(async move {
             println!("📤 Sender #{} starting...", sender_id);
             
