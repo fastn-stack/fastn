@@ -19,7 +19,7 @@ async fn test_multi_receiver() {
         println!("📡 Starting receiver #{}: {}", receiver_id, receiver_id52);
         
         let receiver = Command::new("cargo")
-            .args(["run", "--bin", "receiver", "-p", "fastn-p2p-test", &receiver_key.to_string()])
+            .args(["run", "--bin", "p2p_receiver", "-p", "fastn-p2p-test", &receiver_key.to_string()])
             .spawn()
             .expect("Failed to start receiver");
             
@@ -44,7 +44,7 @@ async fn test_multi_receiver() {
             .args([
                 "run",
                 "--bin",
-                "sender", 
+                "p2p_sender", 
                 "-p",
                 "fastn-p2p-test",
                 &sender_key.to_string(),

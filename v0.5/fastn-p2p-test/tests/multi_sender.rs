@@ -16,7 +16,7 @@ async fn test_multi_sender() {
     // Start single receiver
     println!("📡 Starting single fastn-p2p receiver for multiple senders...");
     let mut receiver = Command::new("cargo")
-        .args(["run", "--bin", "receiver", "-p", "fastn-p2p-test", &receiver_key.to_string()])
+        .args(["run", "--bin", "p2p_receiver", "-p", "fastn-p2p-test", &receiver_key.to_string()])
         .spawn()
         .expect("Failed to start fastn-p2p receiver");
 
@@ -44,7 +44,7 @@ async fn test_multi_sender() {
                     "-p",
                     "fastn-p2p-test",
                     "--bin", 
-                    "sender",
+                    "p2p_sender",
                     &sender_key.to_string(),
                     &receiver_id52_clone,
                 ])

@@ -29,7 +29,7 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         Ok(()) => {
             println!("🔒 Lock acquired: {}", lock_path.display());
         }
-        Err(e) => {
+        Err(_e) => {
             eprintln!("❌ Another instance of fastn is already running at {}", fastn_home.display());
             return Err(fastn_rig::RunError::LockAcquisitionFailed);
         }

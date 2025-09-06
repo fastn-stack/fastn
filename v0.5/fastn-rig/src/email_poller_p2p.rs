@@ -40,7 +40,8 @@ async fn scan_and_deliver_emails(
         let account = fastn_account::Account::load(&account_path).await?;
         
         // TODO: Use proper public API to get pending emails
-        // For now, just log that we're checking (the old system was broken anyway)
+        // For now, just log that we're checking (the old system was broken anyway)  
+        println!("📭 Email poller tick - would scan {} for pending emails", endpoint_id52);
         if false { // Disabled until proper API is found
             let pending_emails: Vec<fastn_mail::EmailForDelivery> = vec![];
             if !pending_emails.is_empty() {
@@ -50,7 +51,11 @@ async fn scan_and_deliver_emails(
                 let mut emails_by_peer: std::collections::HashMap<String, Vec<_>> = std::collections::HashMap::new();
                 
                 for email in pending_emails {
-                    emails_by_peer.entry(email.peer_id52.clone()).or_default().push(email);
+                    // Extract peer ID from envelope_to field (format: user@peer_id52.com)
+                    if let Some(domain) = email.envelope_to.split('@').nth(1) {
+                        let peer_id52 = domain.replace(".com", "");
+                        emails_by_peer.entry(peer_id52).or_default().push(email);
+                    }
                 }
                 
                 // Deliver to each peer using fastn-p2p
