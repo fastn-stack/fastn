@@ -1807,6 +1807,7 @@ dependencies = [
  "fastn-net",
  "fastn-p2p",
  "fastn-router",
+ "futures-util",
  "http-body-util",
  "hyper",
  "hyper-util",

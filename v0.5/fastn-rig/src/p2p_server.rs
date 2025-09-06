@@ -1,7 +1,7 @@
 //! P2P server implementation using fastn-p2p
 
 use crate::protocols::RigProtocol;
-use futures_util::stream::StreamExt;
+use crate::errors::P2PServerError;
 
 /// Start P2P server for a single endpoint using fastn-p2p
 /// 
@@ -10,7 +10,7 @@ pub async fn start_p2p_listener(
     secret_key: fastn_id52::SecretKey,
     account_manager: std::sync::Arc<fastn_account::AccountManager>,
     message_tx: tokio::sync::mpsc::Sender<fastn_rig::P2PMessage>,
-) -> Result<(), fastn_rig::P2PServerError> {
+) -> Result<(), P2PServerError> {
     let public_key = secret_key.public_key();
     println!("🎧 Starting P2P listener for endpoint: {}", public_key.id52());
 
@@ -26,10 +26,11 @@ pub async fn start_p2p_listener(
 
     println!("📡 P2P listener active, waiting for connections...");
 
+    use futures_util::stream::StreamExt;
     while let Some(request_result) = stream.next().await {
         let request = request_result
-            .map_err(|e| fastn_rig::P2PServerError::RequestReceiveFailed { 
-                source: e.to_string() 
+            .map_err(|e| P2PServerError::RequestReceiveFailed { 
+                message: e.to_string() 
             })?;
 
         println!("📨 Received {} request from {}", 
@@ -80,7 +81,7 @@ pub async fn start_p2p_listener(
 /// Handle email delivery requests using the existing account message infrastructure
 async fn handle_email_delivery_request(
     request: fastn_p2p::Request<RigProtocol>,
-    account_manager: std::sync::Arc<fastn_account::AccountManager>,
+    _account_manager: std::sync::Arc<fastn_account::AccountManager>,
     message_tx: tokio::sync::mpsc::Sender<fastn_rig::P2PMessage>,
     peer_id: fastn_id52::PublicKey,
 ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
@@ -92,6 +93,7 @@ async fn handle_email_delivery_request(
         let p2p_msg = fastn_rig::P2PMessage {
             peer_id52: peer_id,
             our_endpoint: fastn_id52::SecretKey::generate().public_key(), // TODO: Get correct endpoint
+            owner_type: fastn_rig::OwnerType::Account, // TODO: Get correct owner type
             message: serde_json::to_vec(&msg)
                 .map_err(|e| crate::email_delivery_p2p::EmailDeliveryError {
                     message: format!("Serialization failed: {}", e),
