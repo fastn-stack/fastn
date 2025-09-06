@@ -4,7 +4,7 @@ use std::time::Duration;
 use tokio::process::Command;
 
 #[tokio::test]
-async fn test_full_mesh_communication() {
+async fn test_full_mesh() {
     println!("🔧 Testing full mesh: multiple senders ↔ multiple receivers...");
 
     let num_receivers = 2;
