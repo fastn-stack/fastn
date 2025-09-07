@@ -14,7 +14,7 @@ use std::path::PathBuf;
 // Re-enabled after CPU spinning bug fix and fastn-cli-test-utils improvements
 #[tokio::test]
 async fn test_p2p_email_goes_to_inbox() {
-    println!("🚀 Starting comprehensive SMTP→P2P→INBOX integration test");
+    println!("🚀 Starting comprehensive STARTTLS SMTP→P2P→INBOX integration test");
 
     // Use fastn-cli-test-utils for better test management
     let mut test_env = fastn_cli_test_utils::FastnTestEnv::new("p2p-inbox-delivery")
@@ -46,16 +46,17 @@ async fn test_p2p_email_goes_to_inbox() {
 
     println!("✅ Both peers started with valid account IDs");
 
-    // Send email using fastn-cli-test-utils email builder  
-    println!("📧 Sending email via SMTP...");
+    // Send email using STARTTLS mode (Rust test uses encrypted, bash test uses plain text)
+    println!("📧 Sending email via STARTTLS SMTP...");
     let _send_result = test_env.email()
         .from("peer1")
         .to("peer2") 
-        .subject("Integration Test Email")
-        .body("End-to-end SMTP to P2P to INBOX test")
+        .subject("STARTTLS Integration Test")
+        .body("End-to-end STARTTLS SMTP to P2P to INBOX test")
+        .starttls(true)  // Enable STARTTLS for this test
         .send()
         .await
-        .expect("SMTP email send should succeed");
+        .expect("STARTTLS SMTP email send should succeed");
 
     println!("✅ Email sent via SMTP");
 
@@ -121,7 +122,7 @@ async fn test_p2p_email_goes_to_inbox() {
     assert!(peer2_inbox_emails[0].to_string_lossy().contains("/INBOX/"));
     println!("✅ Email folder placement verified: Sent -> INBOX");
 
-    println!("🎉 Complete end-to-end SMTP to P2P to INBOX test passed!");
+    println!("🎉 Complete end-to-end STARTTLS SMTP to P2P to INBOX test passed!");
     
     // Note: FastnTestEnv handles automatic cleanup
 }
@@ -262,10 +263,10 @@ async fn test_email_delivery_response_format() {
 /// Integration test that calls the working bash script
 #[test]
 fn bash_integration_test() {
-    println!("🧪 SMTP to P2P to INBOX integration test via bash script");
+    println!("🧪 Plain text SMTP to P2P to INBOX integration test via bash script");
 
     // Find the script in the tests directory (relative to fastn-rig root)
-    let script_path = "tests/test_complete_integration.sh";
+    let script_path = "tests/email_end_to_end_plaintext.sh";
     if !std::path::Path::new(script_path).exists() {
         panic!(
             "Integration test script not found at: {}\nCurrent dir: {:?}",
@@ -287,9 +288,9 @@ fn bash_integration_test() {
     }
 
     if output.status.success() {
-        println!("✅ Integration test PASSED");
+        println!("✅ Plain text integration test PASSED");
         if stdout.contains("COMPLETE SUCCESS") {
-            println!("✅ SMTP→P2P→INBOX delivery working");
+            println!("✅ Plain text SMTP→P2P→INBOX delivery working");
         }
     } else {
         println!("❌ Integration test FAILED");
@@ -304,6 +305,6 @@ fn bash_integration_test() {
         {
             println!("  {}", line);
         }
-        panic!("Integration test failed - check ./test_complete_integration.sh");
+        panic!("Integration test failed - check ./tests/email_end_to_end_plaintext.sh");
     }
 }

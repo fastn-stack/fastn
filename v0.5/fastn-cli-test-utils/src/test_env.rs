@@ -137,6 +137,7 @@ impl FastnTestEnv {
             to: None,
             subject: "Test Email".to_string(),
             body: "Test Body".to_string(),
+            starttls: false, // Default to plain text
         }
     }
 }
@@ -216,6 +217,7 @@ pub struct EmailBuilder<'a> {
     to: Option<String>,
     subject: String,
     body: String,
+    starttls: bool,
 }
 
 impl<'a> EmailBuilder<'a> {
@@ -239,6 +241,11 @@ impl<'a> EmailBuilder<'a> {
         self
     }
 
+    pub fn starttls(mut self, enable: bool) -> Self {
+        self.starttls = enable;
+        self
+    }
+
     pub async fn send(self) -> Result<EmailResult, Box<dyn std::error::Error>> {
         let from_name = self.from.ok_or("From peer not specified")?;
         let to_name = self.to.ok_or("To peer not specified")?;
@@ -257,6 +264,7 @@ impl<'a> EmailBuilder<'a> {
             .peer_to_peer(from_peer, to_peer)
             .subject(&self.subject)
             .body(&self.body)
+            .starttls(self.starttls)
             .send()
             .await?;
 
