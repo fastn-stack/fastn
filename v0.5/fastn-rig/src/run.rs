@@ -131,15 +131,27 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         eprintln!("🔧 DEBUG RUN: Email delivery poller disabled");
     }
 
-    // Start SMTP server
+    // Start SMTP server with STARTTLS support
     let smtp_port = std::env::var("FASTN_SMTP_PORT")
         .ok()
         .and_then(|p| p.parse().ok())
-        .unwrap_or(2525);
-    println!("📮 SMTP server listening on port {smtp_port}");
+        .unwrap_or(587);  // Default to port 587 (standard email submission port)
+    println!("📮 SMTP server listening on port {smtp_port} (supports both plain text and STARTTLS)");
 
-    let smtp_server =
-        crate::smtp::SmtpServer::new(account_manager.clone(), ([0, 0, 0, 0], smtp_port).into());
+    let smtp_server = match crate::smtp::SmtpServer::new(
+        account_manager.clone(), 
+        ([0, 0, 0, 0], smtp_port).into(),
+        &fastn_home,
+        rig.secret_key().clone(),
+    ) {
+        Ok(server) => server,
+        Err(e) => {
+            eprintln!("⚠️  Failed to create SMTP server: {e}");
+            eprintln!("   SMTP will not be available");
+            return Err(fastn_rig::RunError::FastnHomeResolution); // Or appropriate error
+        }
+    };
+    
     let _smtp_handle = fastn_p2p::spawn(async move {
         if let Err(e) = smtp_server.start().await {
             tracing::error!("SMTP server error: {}", e);

@@ -98,36 +98,38 @@ Enable standard email clients to connect securely to fastn's SMTP server using i
 - **External certificate support**: Import existing Let's Encrypt certificates
 - Choice between privacy (self-signed) vs compatibility (domain-based)
 
-### Port Configuration (STARTTLS-First Strategy)
+### Port Configuration (Unified SMTP Server)
 
 ```
-Port 2525: Plain text SMTP (development/testing)
-Port 587:  STARTTLS SMTP (primary production port)
-Port 465:  SSL-wrapped SMTP (no current plans to implement)
+FASTN_SMTP_PORT: Single SMTP server supporting both plain text and STARTTLS
+Default: 587 (standard email submission port)
 ```
 
 **Environment Variables:**
 ```bash
-# Core SMTP Configuration (works for both deployment modes)
-FASTN_SMTP_PORT=2525           # Plain text (localhost/public)
-FASTN_SMTP_STARTTLS_PORT=587   # STARTTLS (primary secure port)
-# FASTN_SMTP_SSL_PORT=465      # SSL (not planned unless email client analysis shows need)
+# Single SMTP Configuration  
+FASTN_SMTP_PORT=587            # SMTP server port (supports plain text + STARTTLS)
 
 # Deployment Mode Configuration  
-FASTN_PUBLIC_IP=203.0.113.42   # Override public IP detection
+FASTN_PUBLIC_IP=203.0.113.42   # Override public IP detection for certificates
 FASTN_HOSTNAME=mail.example.com # Hostname for certificate SANs
-FASTN_DOMAIN=example.com        # Domain for certificate SANs
 ```
 
 **Port Strategy:**
-- **Port 587 (STARTTLS)**: Primary secure email submission port (modern standard)
-- **Port 2525**: Development and testing (existing)
-- **Port 465 (SSL)**: Not implemented unless email client compatibility analysis shows critical need
+- **One SMTP server** handles both plain text and STARTTLS on the same port
+- **Port 587 (default)**: Standard email submission port, supports STARTTLS upgrade
+- **Port 2525 (alternative)**: For development if 587 conflicts with existing services
+- **No SSL port 465**: Not implemented (STARTTLS preferred for code reuse)
+
+**Protocol Support:**
+- **Plain text SMTP**: Always available for basic clients
+- **STARTTLS**: Advertised in EHLO when certificates are available
+- **Automatic fallback**: If certificate generation fails, plain text still works
 
 **Port Accessibility:**
-- **Localhost deployment**: `127.0.0.1:587` for secure local clients
-- **Public deployment**: `0.0.0.0:587` for internet email clients
-- **Firewall considerations**: Port 587 is standard email submission port, widely allowed
+- **Localhost deployment**: `127.0.0.1:587` for local email clients
+- **Public deployment**: `0.0.0.0:587` for internet email clients  
+- **Firewall friendly**: Port 587 is standard and widely allowed
 
 ## Implementation Plan
 

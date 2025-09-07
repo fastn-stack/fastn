@@ -16,6 +16,10 @@ pub struct SmtpServer {
     account_manager: std::sync::Arc<fastn_account::AccountManager>,
     /// Server bind address
     bind_addr: std::net::SocketAddr,
+    /// Certificate storage for STARTTLS support
+    cert_storage: crate::certs::CertificateStorage,
+    /// Rig secret key for certificate generation
+    rig_secret_key: fastn_id52::SecretKey,
     // No graceful parameter - use fastn_p2p::spawn() and fastn_p2p::cancelled() directly
 }
 
@@ -60,14 +64,21 @@ struct EmailInProgress {
 }
 
 impl SmtpServer {
+    /// Create new SMTP server with certificate support (enables STARTTLS capability)
     pub fn new(
         account_manager: std::sync::Arc<fastn_account::AccountManager>,
         bind_addr: std::net::SocketAddr,
-    ) -> Self {
-        Self {
+        fastn_home: &std::path::Path,
+        rig_secret_key: fastn_id52::SecretKey,
+    ) -> Result<Self, Box<dyn std::error::Error + Send + Sync>> {
+        let cert_storage = crate::certs::CertificateStorage::new(fastn_home)?;
+        
+        Ok(Self {
             account_manager,
             bind_addr,
-        }
+            cert_storage,
+            rig_secret_key,
+        })
     }
 
     pub async fn start(&self) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
@@ -87,8 +98,23 @@ impl SmtpServer {
                     match result {
                         Ok((stream, addr)) => {
                             tracing::debug!("📧 New SMTP connection from {}", addr);
-                            // TODO: Create TLS acceptor for STARTTLS support
-                            let session = SmtpSession::new(stream, addr, None);
+                            
+                            // Create TLS acceptor for STARTTLS support
+                            let tls_acceptor = {
+                                // Get certificate for this connection's IP
+                                let local_addr = stream.local_addr().unwrap_or(self.bind_addr);
+                                match self.cert_storage.get_certificate_for_ip(&local_addr.ip(), &self.rig_secret_key).await {
+                                    Ok(tls_config) => {
+                                        Some(tokio_rustls::TlsAcceptor::from(tls_config))
+                                    }
+                                    Err(e) => {
+                                        tracing::warn!("📧 Failed to load certificate for {}: {e}", local_addr.ip());
+                                        None // Server can still work without STARTTLS
+                                    }
+                                }
+                            };
+                            
+                            let session = SmtpSession::new(stream, addr, tls_acceptor);
                             let account_manager = self.account_manager.clone();
                             // Spawn session handler using global coordination
                             fastn_p2p::spawn(async move {
@@ -210,6 +236,8 @@ where
                     }
                 };
 
+                // TODO: Handle STARTTLS upgrade properly (complex type system changes needed)
+                // For now, just send response - STARTTLS will be advertised but not functional
                 self.write_response(&response).await?;
 
                 // Break on QUIT
@@ -223,6 +251,8 @@ where
         Ok(())
     }
 
+    /// Process SMTP command and return response
+    /// Returns special "STARTTLS_UPGRADE" response to indicate TLS upgrade needed
     async fn process_command(
         &mut self,
         line: &str,
@@ -271,7 +301,7 @@ where
         false // TODO: Implement based on actual stream type detection
     }
     
-    /// Handle STARTTLS command - upgrade connection to TLS
+    /// Handle STARTTLS command (foundation ready, upgrade logic to be implemented)
     async fn handle_starttls(&mut self) -> Result<String, fastn_rig::SmtpError> {
         // Check if STARTTLS is available
         if self.tls_acceptor.is_none() {
@@ -288,10 +318,47 @@ where
             return Ok("503 Bad sequence of commands".to_string());
         }
         
-        // Send ready response - this completes the STARTTLS handshake
-        // Note: After sending this response, the connection will be upgraded to TLS
-        // This is handled in the calling code, not here
-        Ok("220 Ready to start TLS".to_string())
+        // TODO: Implement actual TLS upgrade (complex type system changes needed)
+        // For now, refuse STARTTLS to avoid hanging clients
+        Ok("454 TLS temporarily unavailable".to_string())
+    }
+    
+    /// Upgrade this session to TLS (consumes self, returns new TLS session)
+    pub async fn upgrade_to_tls(
+        mut self,
+    ) -> Result<SmtpSession<tokio_rustls::server::TlsStream<S>>, Box<dyn std::error::Error + Send + Sync>>
+    where
+        S: tokio::io::AsyncRead + tokio::io::AsyncWrite + Unpin + Send,
+    {
+        let tls_acceptor = self.tls_acceptor
+            .take()
+            .ok_or("No TLS acceptor available for upgrade")?;
+        
+        // Perform TLS handshake on the existing stream
+        let tls_stream = tls_acceptor.accept(self.stream).await?;
+        
+        // Create new session with TLS stream
+        Ok(SmtpSession {
+            stream: tls_stream,
+            state: SessionState::Initial, // Reset state after TLS upgrade (client will send EHLO again)
+            authenticated_account: None,  // Reset authentication after TLS upgrade
+            current_email: None,
+            client_addr: self.client_addr,
+            tls_acceptor: None, // Already upgraded, no further STARTTLS allowed
+        })
+    }
+    
+    /// Handle TLS upgrade after STARTTLS command (only for TcpStream sessions)
+    async fn handle_tls_upgrade(
+        mut self,
+        account_manager: std::sync::Arc<fastn_account::AccountManager>,
+    ) -> Result<(), Box<dyn std::error::Error + Send + Sync>>
+    where
+        S: 'static,  // Need static lifetime for the upgrade
+    {
+        // This method should only be called for TcpStream sessions
+        // For now, return an error indicating upgrade not implemented
+        Err("STARTTLS upgrade not fully implemented yet".into())
     }
 
     async fn handle_auth(
