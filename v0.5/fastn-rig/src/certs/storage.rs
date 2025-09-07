@@ -128,3 +128,44 @@ pub async fn get_external_certificate_info(
 
     Ok((subject, expires_at))
 }
+
+/// Create TLS configuration from certificate and key PEM strings (stored in automerge)
+pub async fn create_tls_config_from_pem_strings(
+    cert_pem: &str,
+    key_pem: &str,
+) -> Result<rustls::ServerConfig, CertificateError> {
+    println!("🔐 Creating TLS config from certificate content in automerge");
+
+    // Parse certificate from PEM string
+    let cert_der = rustls_pemfile::certs(&mut cert_pem.as_bytes())
+        .collect::<Result<Vec<_>, _>>()
+        .map_err(|e| CertificateError::CertificateParsing { 
+            source: Box::new(e) 
+        })?;
+
+    if cert_der.is_empty() {
+        return Err(CertificateError::CertificateParsing { 
+            source: "No certificates found in PEM content".into() 
+        });
+    }
+
+    // Parse private key from PEM string
+    let private_key = rustls_pemfile::private_key(&mut key_pem.as_bytes())
+        .map_err(|e| CertificateError::CertificateParsing { 
+            source: Box::new(e) 
+        })?
+        .ok_or_else(|| CertificateError::CertificateParsing { 
+            source: "No private key found in PEM content".into() 
+        })?;
+
+    // Create TLS configuration
+    let config = rustls::ServerConfig::builder()
+        .with_no_client_auth()
+        .with_single_cert(cert_der, private_key)
+        .map_err(|e| CertificateError::TlsConfigCreation { 
+            source: Box::new(e) 
+        })?;
+
+    println!("🔐 TLS configuration created from automerge certificate content");
+    Ok(config)
+}

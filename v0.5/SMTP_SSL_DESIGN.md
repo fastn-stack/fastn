@@ -393,33 +393,108 @@ let tls_config = cert_manager.get_or_create_tls_config().await?;
 
 **RigConfig Integration:**
 ```rust
-// Add to existing RigConfig structure
-impl RigConfig {
-    pub email_certificate: Option<EmailCertificateConfig>,
+// RigConfig stores certificate mode, not certificate data
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub enum EmailCertificateMode {
+    /// Self-signed certificates (stored in stable filesystem location, not synced)
+    SelfSigned,
+    
+    /// External certificate configuration (domain-based, synced via automerge)
+    External {
+        cert_path: String,                   // Path to external certificate file
+        key_path: String,                    // Path to external private key file  
+        domain: String,                      // Domain name for the certificate
+        auto_reload: bool,                   // Watch for certificate file changes
+        last_reload: i64,                    // Unix timestamp when last loaded
+        fallback_to_self_signed: bool,       // Generate self-signed if external fails
+    },
+}
+
+pub struct RigConfig {
+    // ... existing fields ...
+    
+    /// Email certificate configuration
+    pub email_certificate: EmailCertificate,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
-pub enum EmailCertificateConfig {
-    SelfSigned {
-        cert_pem: String,                    // Certificate stored in RigConfig
-        generated_at: time::OffsetDateTime,
-        expires_at: time::OffsetDateTime,
-        subject: String,
-        sans: Vec<String>,
-        // Note: uses_rig_key is implicit - self-signed always uses rig key
-    },
+pub enum EmailCertificate {
+    /// Self-signed certificates (stored in stable filesystem location, not synced)
+    SelfSigned,
+    
+    /// External certificate configuration for domain owners (synced via automerge)
     External {
-        cert_path: String,                   // Path to external certificate file
-        key_path: String,                    // Path to external private key file
-        domain: String,                      // Domain name for the certificate
-        auto_reload: bool,                   // Watch for certificate file changes
-        last_reload: time::OffsetDateTime,   // When certificate was last loaded
-        fallback_to_self_signed: bool,       // Generate self-signed if external fails
+        certificate: ExternalCertificateSource,
+        domain: String,
+        last_updated: i64,
+        fallback_to_self_signed: bool,
+    },
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub enum ExternalCertificateSource {
+    /// File paths to certificate and key (nginx coexistence scenario)
+    FilePaths {
+        cert_path: String,               // "/etc/letsencrypt/live/example.com/fullchain.pem"
+        key_path: String,                // "/etc/letsencrypt/live/example.com/privkey.pem"
+        auto_reload: bool,               // Watch for file changes
+    },
+    /// Certificate content stored in automerge (remote management scenario)
+    Content {
+        cert_pem: String,                // Full certificate PEM data
+        key_pem: String,                 // Full private key PEM data
     },
 }
 ```
 
-**Simplified Key Storage (Using Rig's Secret Key):**
+**Certificate Mode Configuration:**
+
+External certificates are configured via rig management commands, not environment variables.
+
+**fastn-rig CLI Commands for Certificate Management:**
+```bash
+# Configure external certificate via file paths (nginx coexistence)
+fastn-rig cert external-files \
+  --cert /etc/letsencrypt/live/example.com/fullchain.pem \
+  --key /etc/letsencrypt/live/example.com/privkey.pem \
+  --domain example.com
+
+# Configure external certificate via content (remote management)
+fastn-rig cert external-content \
+  --cert-file local-cert.pem \
+  --key-file local-key.pem \
+  --domain example.com
+
+# Switch back to self-signed mode
+fastn-rig cert self-signed
+
+# Show current certificate configuration
+fastn-rig cert status
+```
+
+**Remote Rig Management (Future):**
+```rust
+// Via automerge document update from managing account
+// This will be implemented when remote rig management is added
+let rig_config_update = RigConfigUpdate {
+    email_certificate_mode: EmailCertificateMode::External {
+        certificate: ExternalCertificateSource::Content {
+            cert_pem: "-----BEGIN CERTIFICATE-----\n...",
+            key_pem: "-----BEGIN PRIVATE KEY-----\n...",
+        },
+        domain: "mail.example.com".to_string(),
+        last_updated: unix_timestamp(),
+        fallback_to_self_signed: false,
+    },
+};
+```
+
+**Storage Strategy:**
+- **Domain owners**: External certificate config in automerge (needs remote sync for rig management)
+- **IP-only users**: Self-signed certificates in stable filesystem (local only, no sync needed)
+```
+
+**Key Storage Strategy:**
 - **Self-signed mode**: `uses_rig_key: true` - No separate private key storage needed
 - **External mode**: Points to external certificate files managed by nginx/certbot
 
@@ -448,17 +523,99 @@ EmailCertificateConfig {
 }
 ```
 
-**File System State:**
-```
-{fastn_home}/
-├── .fastn.lock
-├── rig/
-│   └── automerge.sqlite    # Contains certificate config/data
-└── accounts/
-    └── {account_id}/
+### **Stable Filesystem Certificate Storage**
+
+**Directory Structure (Actual fastn Layout):**
+```bash
+# Each rig gets its own fastn_home directory via resolve_fastn_home()
+# Certificate storage in parent directory for sharing across rigs
+
+~/.local/share/fastn/          # Parent directory (varies by OS)
+├── my-rig/                    # First rig's fastn_home
+│   ├── .fastn.lock
+│   ├── rig/automerge.sqlite
+│   └── accounts/
+├── backup-rig/                # Second rig's fastn_home
+│   ├── .fastn.lock
+│   ├── rig/automerge.sqlite  
+│   └── accounts/
+└── certs/                     # Shared certificate storage (fastn_home.parent().join("certs"))
+    ├── self-signed/           # IP-based self-signed certificates
+    │   ├── ip-203.0.113.42.pem
+    │   ├── localhost.pem
+    │   └── hostname-mail.example.com.pem
+    └── metadata.json          # Certificate metadata and expiry tracking
 ```
 
-**No dedicated certificate files** - Everything managed through RigConfig automerge or external paths!
+**Certificate Storage Path Logic:**
+```rust
+let cert_storage_dir = fastn_home.parent()
+    .ok_or("Cannot determine parent directory for certificate storage")?
+    .join("certs");
+```
+
+**Benefits of Stable Storage:**
+- ✅ **Easy backup and migration** - All certificates in single predictable location
+- ✅ **Certificate persistence** - Survives rig deletion/recreation  
+- ✅ **Multi-rig sharing** - All rigs can reuse same certificates
+- ✅ **Operational simplicity** - Can backup/restore certificates independently of rig data
+- ✅ **No automerge sync overhead** - Self-signed certs don't need distribution
+
+### **Per-Connection Certificate Architecture**
+
+**Problem Solved**: IP address changes break certificates
+**Solution**: Generate certificate per connection IP on-demand
+
+**Implementation Strategy:**
+```rust
+async fn handle_starttls_connection(
+    stream: tokio::net::TcpStream,
+    client_addr: SocketAddr,
+) -> Result<(), SmtpError> {
+    // Get the IP address the client connected TO (our server's bind address)
+    let local_addr = stream.local_addr()?;
+    
+    // Get or generate certificate specifically for this IP
+    let tls_config = get_certificate_for_ip(&local_addr.ip()).await?;
+    let acceptor = tokio_rustls::TlsAcceptor::from(Arc::new(tls_config));
+    
+    // Create SMTP session with STARTTLS capability
+    let session = SmtpSession::new(stream, client_addr, Some(acceptor));
+    session.handle().await
+}
+
+async fn get_certificate_for_ip(ip: &std::net::IpAddr) -> Result<rustls::ServerConfig, CertError> {
+    let cert_storage = CertificateStorage::new()?; // Points to {data_dir}/certs/
+    
+    // Try to load existing certificate for this IP
+    let cert_filename = match ip {
+        std::net::IpAddr::V4(ipv4) if ipv4.is_loopback() => "localhost.pem",
+        _ => &format!("ip-{}.pem", ip),
+    };
+    
+    if let Ok(tls_config) = cert_storage.load_tls_config(cert_filename).await {
+        return Ok(tls_config);
+    }
+    
+    // Generate new certificate for this specific IP
+    let sans = vec![
+        "localhost".to_string(),
+        "127.0.0.1".to_string(),
+        ip.to_string(),  // Include the specific IP we're serving on
+    ];
+    
+    let tls_config = generate_certificate_for_sans(&sans).await?;
+    cert_storage.save_tls_config(cert_filename, &tls_config).await?;
+    
+    Ok(tls_config)
+}
+```
+
+**Key Benefits:**
+- ✅ **IP change resilience** - New IPs get new certificates automatically
+- ✅ **Zero configuration** - Works for any deployment without user setup
+- ✅ **Certificate reuse** - Same IP reuses same certificate across rigs
+- ✅ **Stable storage** - Manual certificate acceptance preserved
 
 ## 🌐 **Dual Deployment Architecture**
 
