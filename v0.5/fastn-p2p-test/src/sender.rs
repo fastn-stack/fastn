@@ -37,12 +37,12 @@ pub struct EchoError {
 #[tokio::main]
 async fn main() -> eyre::Result<()> {
     println!("🔧 DEBUG SENDER: Starting main function");
-    
+
     // Initialize tracing
     tracing_subscriber::fmt()
         .with_env_filter("fastn_p2p=trace,fastn_p2p_test=info")
         .init();
-    
+
     println!("🔧 DEBUG SENDER: Tracing initialized");
 
     // Parse command line arguments: sender <sender_secret_key> <receiver_id52>
@@ -71,7 +71,8 @@ async fn main() -> eyre::Result<()> {
     println!("🎯 Target ID52: {receiver_id52}");
 
     // Convert receiver ID52 to public key
-    let receiver_public_key = receiver_id52.parse::<fastn_id52::PublicKey>()
+    let receiver_public_key = receiver_id52
+        .parse::<fastn_id52::PublicKey>()
         .map_err(|e| eyre::eyre!("Invalid receiver_id52: {}", e))?;
 
     println!("📤 Sending test message via fastn-p2p");
@@ -91,7 +92,9 @@ async fn main() -> eyre::Result<()> {
         &receiver_public_key,
         TestProtocol::Echo,
         request,
-    ).await.map_err(|e| {
+    )
+    .await
+    .map_err(|e| {
         eprintln!("❌ fastn_p2p::call failed: {e}");
         e
     })?;
@@ -102,7 +105,7 @@ async fn main() -> eyre::Result<()> {
         Ok(response) => {
             println!("🔧 DEBUG: Got Ok response");
             println!("✅ Received response: {}", response.response);
-            
+
             // Output JSON result for test parsing
             let result_json = serde_json::json!({
                 "status": "success",
@@ -114,9 +117,9 @@ async fn main() -> eyre::Result<()> {
         Err(error) => {
             println!("🔧 DEBUG: Got Err response");
             eprintln!("❌ Received error: {}", error.error);
-            
+
             let error_json = serde_json::json!({
-                "status": "error", 
+                "status": "error",
                 "error": error.error,
                 "timestamp": chrono::Utc::now().to_rfc3339()
             });

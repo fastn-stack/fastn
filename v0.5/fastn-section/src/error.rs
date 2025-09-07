@@ -28,7 +28,7 @@ pub enum Error {
     /// Unclosed brace in expression
     UnclosedBrace,
     /// Wrong number of dashes in section marker (e.g., - or ---)
-    DashCountError,
+    DashCount,
     /// Missing name in section declaration
     MissingName,
     /// Unclosed parenthesis in function marker

@@ -9,7 +9,7 @@ impl fastn_mail::Store {
 
         // Create mail directory structure
         fastn_mail::database::create_directories(account_path).map_err(|e| {
-            StoreCreateError::DirectoryCreationFailed {
+            StoreCreateError::DirectoryCreation {
                 path: account_path.join("mails"),
                 source: e,
             }
@@ -17,7 +17,7 @@ impl fastn_mail::Store {
 
         // Create and connect to database
         let connection = rusqlite::Connection::open(&mail_db_path).map_err(|e| {
-            StoreCreateError::DatabaseCreationFailed {
+            StoreCreateError::DatabaseCreation {
                 path: mail_db_path,
                 source: e,
             }
@@ -25,7 +25,7 @@ impl fastn_mail::Store {
 
         // Create schema
         fastn_mail::database::create_schema(&connection)
-            .map_err(|e| StoreCreateError::MigrationFailed { source: e })?;
+            .map_err(|e| StoreCreateError::Migration { source: e })?;
 
         Ok(Self {
             account_path: account_path.to_path_buf(),
@@ -52,7 +52,7 @@ impl fastn_mail::Store {
 
         // Run migrations (idempotent)
         fastn_mail::database::create_schema(&connection)
-            .map_err(|e| StoreLoadError::MigrationFailed { source: e })?;
+            .map_err(|e| StoreLoadError::Migration { source: e })?;
 
         Ok(Self {
             account_path: account_path.to_path_buf(),

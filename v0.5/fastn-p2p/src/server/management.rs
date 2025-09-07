@@ -22,7 +22,7 @@ pub struct ListenerNotFoundError {
 }
 
 /// Register a new listener in the global registry
-/// 
+///
 /// Returns a cancellation token for the listener, or an error if already active.
 pub(super) fn register_listener(
     public_key: fastn_id52::PublicKey,
@@ -32,8 +32,8 @@ pub(super) fn register_listener(
         .expect("Failed to acquire lock on ACTIVE_LISTENERS");
 
     if listeners.contains_key(&public_key) {
-        return Err(ListenerAlreadyActiveError { 
-            public_key: Box::new(public_key) 
+        return Err(ListenerAlreadyActiveError {
+            public_key: Box::new(public_key),
         });
     }
 
@@ -44,13 +44,13 @@ pub(super) fn register_listener(
 }
 
 /// Remove a listener from the global registry  
-/// 
+///
 /// This is called automatically when listeners shut down.
 pub(super) fn unregister_listener(public_key: &fastn_id52::PublicKey) {
     let mut listeners = ACTIVE_LISTENERS
         .lock()
         .expect("Failed to acquire lock on ACTIVE_LISTENERS");
-    
+
     listeners.remove(public_key);
     tracing::debug!("Removed endpoint {public_key} from active listeners registry");
 }
@@ -69,8 +69,8 @@ pub fn stop_listening(public_key: fastn_id52::PublicKey) -> Result<(), ListenerN
         cancellation_token.cancel();
         Ok(())
     } else {
-        Err(ListenerNotFoundError { 
-            public_key: Box::new(public_key) 
+        Err(ListenerNotFoundError {
+            public_key: Box::new(public_key),
         })
     }
 }
@@ -148,7 +148,7 @@ mod tests {
         // Clean up
         token1.cancel(); // This won't affect registry since already removed
         assert_eq!(active_listener_count(), 1);
-        
+
         unregister_listener(&public_key2);
         assert_eq!(active_listener_count(), 0);
         assert!(active_listeners().is_empty());

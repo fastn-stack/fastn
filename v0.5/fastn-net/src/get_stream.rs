@@ -324,9 +324,7 @@ async fn handle_request(
     use eyre::WrapErr;
 
     tracing::trace!("handling request: {header:?}");
-    println!(
-        "🔧 DEBUG handle_request: Handling stream request for protocol {header:?}"
-    );
+    println!("🔧 DEBUG handle_request: Handling stream request for protocol {header:?}");
 
     println!("🔗 DEBUG handle_request: About to open bi-directional stream");
     let (mut send, mut recv) = match tokio::time::timeout(
@@ -341,9 +339,7 @@ async fn handle_request(
             v
         }
         Ok(Err(e)) => {
-            println!(
-                "❌ DEBUG handle_request: Failed to open bi-directional stream: {e:?}"
-            );
+            println!("❌ DEBUG handle_request: Failed to open bi-directional stream: {e:?}");
             tracing::error!("failed to open_bi: {e:?}");
             return Err(eyre::anyhow!("failed to open_bi: {e:?}"));
         }
@@ -392,9 +388,7 @@ async fn handle_request(
 
     println!("📤 DEBUG handle_request: About to send stream reply");
     reply_channel.send(Ok((send, recv))).unwrap_or_else(|e| {
-        println!(
-            "❌ DEBUG handle_request: Failed to send stream reply: {e:?}"
-        );
+        println!("❌ DEBUG handle_request: Failed to send stream reply: {e:?}");
         tracing::error!("failed to send reply: {e:?}");
     });
     println!("✅ DEBUG handle_request: Stream reply sent successfully");

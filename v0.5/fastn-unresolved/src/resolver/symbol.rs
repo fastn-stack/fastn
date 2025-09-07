@@ -15,8 +15,8 @@ pub fn symbol(
     // S1_name="bar.x"
     // S2_name="x"
     // S3_name="bar#x"
-    name: &mut fastn_unresolved::URIS,
-    definitions: &std::collections::HashMap<String, fastn_unresolved::URD>,
+    name: &mut fastn_unresolved::Uris,
+    definitions: &std::collections::HashMap<String, fastn_unresolved::Urd>,
     arena: &mut fastn_section::Arena,
     output: &mut fastn_unresolved::resolver::Output,
     // locals is the stack of locals (excluding globals).

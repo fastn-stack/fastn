@@ -51,7 +51,7 @@ pub fn section_init(
 
     // Record error if not exactly 2 dashes
     if dash_count != 2 {
-        scanner.add_error(dashdash.clone(), fastn_section::Error::DashCountError);
+        scanner.add_error(dashdash.clone(), fastn_section::Error::DashCount);
     }
 
     scanner.skip_spaces();

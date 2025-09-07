@@ -8,9 +8,9 @@ const ITERATION_THRESHOLD: usize = 100;
 pub struct Compiler {
     pub(crate) definitions_used: std::collections::HashSet<fastn_section::Symbol>,
     pub arena: fastn_section::Arena,
-    pub(crate) definitions: std::collections::HashMap<String, fastn_unresolved::URD>,
+    pub(crate) definitions: std::collections::HashMap<String, fastn_unresolved::Urd>,
     /// checkout resolve_document for why this is an Option
-    pub(crate) content: Option<Vec<fastn_unresolved::URCI>>,
+    pub(crate) content: Option<Vec<fastn_unresolved::Urci>>,
     pub(crate) document: fastn_unresolved::Document,
     // pub global_aliases: fastn_unresolved::AliasesSimple,
     iterations: usize,
@@ -201,7 +201,7 @@ pub fn compile(
 impl fastn_continuation::Continuation for Compiler {
     type Output = Result<fastn_resolved::CompiledDocument, fastn_compiler::Error>;
     type Needed = std::collections::HashSet<fastn_section::Symbol>;
-    type Found = Vec<fastn_unresolved::URD>;
+    type Found = Vec<fastn_unresolved::Urd>;
 
     #[tracing::instrument(skip(self))]
     fn continue_after(mut self, definitions: Self::Found) -> fastn_continuation::Result<Self> {

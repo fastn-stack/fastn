@@ -50,42 +50,42 @@ pub enum SmtpError {
 #[derive(Error, Debug)]
 pub enum RigCreateError {
     #[error("Failed to create fastn_home directory: {path}")]
-    FastnHomeCreationFailed {
+    FastnHomeCreation {
         path: std::path::PathBuf,
         #[source]
         source: std::io::Error,
     },
 
     #[error("Failed to generate rig secret key")]
-    KeyGenerationFailed,
+    KeyGeneration,
 
     #[error("Failed to write rig key file: {path}")]
-    KeyFileWriteFailed {
+    KeyFileWrite {
         path: std::path::PathBuf,
         #[source]
         source: std::io::Error,
     },
 
     #[error("Failed to store rig key in keyring")]
-    KeyringStorageFailed,
+    KeyringStorage,
 
     #[error("Failed to initialize automerge database")]
-    AutomergeInitFailed {
+    AutomergeInit {
         #[source]
         source: Box<dyn std::error::Error + Send + Sync>,
     },
 
     #[error("Failed to create account manager")]
-    AccountManagerCreateFailed {
+    AccountManagerCreate {
         #[source]
         source: fastn_account::AccountManagerCreateError,
     },
 
     #[error("Failed to parse owner public key")]
-    OwnerKeyParsingFailed,
+    OwnerKeyParsing,
 
     #[error("Failed to create rig config document")]
-    RigConfigCreationFailed {
+    RigConfigCreation {
         #[source]
         source: Box<dyn std::error::Error + Send + Sync>,
     },
@@ -95,21 +95,21 @@ pub enum RigCreateError {
 #[derive(Error, Debug)]
 pub enum RigLoadError {
     #[error("Failed to load rig secret key from directory: {path}")]
-    KeyLoadingFailed {
+    KeyLoading {
         path: std::path::PathBuf,
         #[source]
         source: Box<dyn std::error::Error + Send + Sync>,
     },
 
     #[error("Failed to open automerge database: {path}")]
-    AutomergeDatabaseOpenFailed {
+    AutomergeDatabaseOpen {
         path: std::path::PathBuf,
         #[source]
         source: Box<dyn std::error::Error + Send + Sync>,
     },
 
     #[error("Failed to load rig config document")]
-    RigConfigLoadFailed {
+    RigConfigLoad {
         #[source]
         source: Box<dyn std::error::Error + Send + Sync>,
     },
@@ -176,69 +176,69 @@ pub enum EndpointError {
 #[derive(Error, Debug)]
 pub enum RunError {
     #[error("Failed to determine fastn_home directory")]
-    FastnHomeResolutionFailed,
+    FastnHomeResolution,
 
     #[error("Failed to create fastn_home directory: {path}")]
-    FastnHomeCreationFailed {
+    FastnHomeCreation {
         path: std::path::PathBuf,
         #[source]
         source: std::io::Error,
     },
 
     #[error("Failed to open lock file: {path}")]
-    LockFileOpenFailed {
+    LockFileOpen {
         path: std::path::PathBuf,
         #[source]
         source: std::io::Error,
     },
 
     #[error("Failed to acquire exclusive lock")]
-    LockAcquisitionFailed,
+    LockAcquisition,
 
     #[error("Failed to create rig")]
-    RigCreationFailed {
+    RigCreation {
         #[source]
         source: RigCreateError,
     },
 
     #[error("Failed to load rig")]
-    RigLoadingFailed {
+    RigLoading {
         #[source]
         source: RigLoadError,
     },
 
     #[error("Failed to load account manager")]
-    AccountManagerLoadFailed {
+    AccountManagerLoad {
         #[source]
         source: fastn_account::AccountManagerLoadError,
     },
 
     #[error("Failed to set entity online status")]
-    EntityOnlineStatusFailed {
+    EntityOnlineStatus {
         #[source]
         source: EntityStatusError,
     },
 
     #[error("Failed to handle current entity operation")]
-    CurrentEntityFailed {
+    CurrentEntity {
         #[source]
         source: CurrentEntityError,
     },
 
     #[error("Failed to get all endpoints")]
-    EndpointEnumerationFailed {
+    EndpointEnumeration {
         #[source]
         source: fastn_account::GetAllEndpointsError,
     },
 
     #[error("Failed to bring endpoint online")]
-    EndpointOnlineFailed {
+    EndpointOnline {
         #[source]
         source: EndpointError,
     },
 
     #[error("Graceful shutdown failed")]
-    ShutdownFailed {
+    Shutdown {
         #[source]
         source: Box<dyn std::error::Error + Send + Sync>,
     },
@@ -323,14 +323,14 @@ pub enum MessageProcessingError {
 #[derive(Error, Debug)]
 pub enum P2PServerError {
     #[error("Failed to start P2P listener")]
-    ListenerStartFailed {
+    ListenerStart {
         #[from]
         source: fastn_p2p::ListenerAlreadyActiveError,
     },
 
     #[error("Failed to receive P2P request: {message}")]
-    RequestReceiveFailed { message: String },
+    RequestReceive { message: String },
 
     #[error("Failed to handle P2P request: {message}")]
-    RequestHandlingFailed { message: String },
+    RequestHandling { message: String },
 }

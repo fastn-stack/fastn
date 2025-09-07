@@ -14,20 +14,20 @@ mod utils;
 pub use parser::parse;
 
 pub type UR<U, R> = fastn_continuation::UR<U, R, fastn_section::Error>;
-pub type URD = fastn_unresolved::UR<fastn_unresolved::Definition, fastn_resolved::Definition>;
-pub type URCI = fastn_unresolved::UR<
+pub type Urd = fastn_unresolved::UR<fastn_unresolved::Definition, fastn_resolved::Definition>;
+pub type Urci = fastn_unresolved::UR<
     fastn_unresolved::ComponentInvocation,
     fastn_resolved::ComponentInvocation,
 >;
-pub type URIS = fastn_unresolved::UR<fastn_section::IdentifierReference, fastn_section::Symbol>;
+pub type Uris = fastn_unresolved::UR<fastn_section::IdentifierReference, fastn_section::Symbol>;
 
 #[derive(Debug, Clone)]
 pub struct Document {
     pub aliases: Option<fastn_section::AliasesID>,
     pub module: fastn_section::Module,
     pub module_doc: Option<fastn_section::Span>,
-    pub definitions: Vec<URD>,
-    pub content: Vec<URCI>,
+    pub definitions: Vec<Urd>,
+    pub content: Vec<Urci>,
     pub errors: Vec<fastn_section::Spanned<fastn_section::Error>>,
     pub warnings: Vec<fastn_section::Spanned<fastn_section::Warning>>,
     pub comments: Vec<fastn_section::Span>,
@@ -54,7 +54,7 @@ pub struct Definition {
 pub enum InnerDefinition {
     Component {
         arguments: Vec<UR<Argument, fastn_resolved::Argument>>,
-        body: Vec<URCI>,
+        body: Vec<Urci>,
     },
     Variable {
         kind: UR<Kind, fastn_resolved::Kind>,
@@ -125,7 +125,7 @@ pub struct ComponentInvocation {
     ///
     /// all local symbols are resolved with respect to the module.
     pub module: fastn_section::Module,
-    pub name: URIS,
+    pub name: Uris,
     /// once a caption is resolved, it is set to () here, and moved to properties
     pub caption: UR<Option<fastn_section::HeaderValue>, ()>,
     pub properties: Vec<UR<Property, fastn_resolved::Property>>,

@@ -2,31 +2,31 @@
 #[derive(Debug, thiserror::Error)]
 pub enum CallError {
     #[error("Failed to establish P2P stream: {source}")]
-    EndpointError { source: eyre::Error },
+    Endpoint { source: eyre::Error },
 
     #[error("Failed to establish P2P stream: {source}")]
-    StreamError { source: eyre::Error },
+    Stream { source: eyre::Error },
 
     #[error("Failed to serialize request: {source}")]
-    SerializationError { source: serde_json::Error },
+    Serialization { source: serde_json::Error },
 
     #[error("Failed to send request: {source}")]
-    SendError { source: eyre::Error },
+    Send { source: eyre::Error },
 
     #[error("Failed to receive response: {source}")]
-    ReceiveError { source: eyre::Error },
+    Receive { source: eyre::Error },
 
     #[error("Failed to deserialize response: {source}")]
-    DeserializationError { source: serde_json::Error },
+    Deserialization { source: serde_json::Error },
 }
 
 /// Make a P2P call using global singletons
-/// 
+///
 /// This is the main function end users should use. It automatically uses
 /// the global connection pool and graceful shutdown coordinator.
-/// 
+///
 /// # Example
-/// 
+///
 /// ```rust,ignore
 /// let result: Result<MyResponse, MyError> = fastn_p2p::call(
 ///     secret_key, &target, protocol, request
@@ -34,20 +34,20 @@ pub enum CallError {
 /// ```
 pub async fn call<P, INPUT, OUTPUT, ERROR>(
     sender: fastn_id52::SecretKey,
-    target: &fastn_id52::PublicKey, 
+    target: &fastn_id52::PublicKey,
     protocol: P,
     input: INPUT,
 ) -> Result<Result<OUTPUT, ERROR>, CallError>
 where
-    P: serde::Serialize + 
-       for<'de> serde::Deserialize<'de> + 
-       Clone + 
-       PartialEq + 
-       std::fmt::Display +
-       std::fmt::Debug +
-       Send + 
-       Sync + 
-       'static,
+    P: serde::Serialize
+        + for<'de> serde::Deserialize<'de>
+        + Clone
+        + PartialEq
+        + std::fmt::Display
+        + std::fmt::Debug
+        + Send
+        + Sync
+        + 'static,
     INPUT: serde::Serialize,
     OUTPUT: for<'de> serde::Deserialize<'de>,
     ERROR: for<'de> serde::Deserialize<'de>,

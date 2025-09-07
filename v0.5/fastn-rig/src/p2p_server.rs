@@ -1,17 +1,20 @@
 //! P2P server implementation using fastn-p2p
 
-use crate::protocols::RigProtocol;
 use crate::errors::P2PServerError;
+use crate::protocols::RigProtocol;
 
 /// Start P2P server for a single endpoint using fastn-p2p
-/// 
+///
 /// This replaces the complex EndpointManager with clean fastn-p2p APIs
 pub async fn start_p2p_listener(
     secret_key: fastn_id52::SecretKey,
     account_manager: std::sync::Arc<fastn_account::AccountManager>,
 ) -> Result<(), P2PServerError> {
     let public_key = secret_key.public_key();
-    println!("🎧 Starting P2P listener for endpoint: {}", public_key.id52());
+    println!(
+        "🎧 Starting P2P listener for endpoint: {}",
+        public_key.id52()
+    );
 
     // Listen on all rig protocols using the clean fastn-p2p API
     let protocols = vec![
@@ -27,14 +30,15 @@ pub async fn start_p2p_listener(
 
     use futures_util::stream::StreamExt;
     while let Some(request_result) = stream.next().await {
-        let request = request_result
-            .map_err(|e| P2PServerError::RequestReceiveFailed { 
-                message: e.to_string() 
-            })?;
+        let request = request_result.map_err(|e| P2PServerError::RequestReceive {
+            message: e.to_string(),
+        })?;
 
-        println!("📨 Received {} request from {}", 
-                request.protocol, 
-                request.peer().id52());
+        println!(
+            "📨 Received {} request from {}",
+            request.protocol,
+            request.peer().id52()
+        );
 
         // Route based on protocol using clean matching
         match request.protocol {
@@ -42,9 +46,12 @@ pub async fn start_p2p_listener(
                 // Handle email delivery directly using account manager
                 let account_manager_clone = account_manager.clone();
 
-                if let Err(e) = request.handle(|msg| handle_email_message_direct(
-                    msg, account_manager_clone, public_key
-                )).await {
+                if let Err(e) = request
+                    .handle(|msg| {
+                        handle_email_message_direct(msg, account_manager_clone, public_key)
+                    })
+                    .await
+                {
                     eprintln!("❌ Email delivery request failed: {e}");
                 }
             }
@@ -54,7 +61,7 @@ pub async fn start_p2p_listener(
                 // TODO: Implement account message handling
             }
             RigProtocol::HttpProxy => {
-                // Handle HTTP proxy requests  
+                // Handle HTTP proxy requests
                 println!("🌐 Handling HTTP proxy (TODO: implement)");
                 // TODO: Implement HTTP proxy handling
             }
@@ -75,14 +82,20 @@ async fn handle_email_message_direct(
     msg: fastn_account::AccountToAccountMessage,
     account_manager: std::sync::Arc<fastn_account::AccountManager>,
     our_endpoint: fastn_id52::PublicKey,
-) -> Result<crate::email_delivery_p2p::EmailDeliveryResponse, crate::email_delivery_p2p::EmailDeliveryError> {
+) -> Result<
+    crate::email_delivery_p2p::EmailDeliveryResponse,
+    crate::email_delivery_p2p::EmailDeliveryError,
+> {
     println!("📧 Processing email delivery directly");
-    
+
     // Generate a peer ID for now (TODO: get from actual request context)
     let peer_id = fastn_id52::SecretKey::generate().public_key();
-    
+
     // Process email directly using account manager
-    match account_manager.handle_account_message(&peer_id, &our_endpoint, msg).await {
+    match account_manager
+        .handle_account_message(&peer_id, &our_endpoint, msg)
+        .await
+    {
         Ok(_) => {
             println!("✅ Email processed successfully via fastn-p2p");
             Ok(crate::email_delivery_p2p::EmailDeliveryResponse {

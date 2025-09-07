@@ -1,5 +1,5 @@
 pub(crate) fn resolved_content(
-    content: Vec<fastn_unresolved::URCI>,
+    content: Vec<fastn_unresolved::Urci>,
 ) -> Vec<fastn_resolved::ComponentInvocation> {
     // self.content should be all UR::R now
     // every symbol in self.symbol_used in the bag must be UR::R now
@@ -7,7 +7,7 @@ pub(crate) fn resolved_content(
 }
 
 pub(crate) fn used_definitions(
-    definitions: std::collections::HashMap<String, fastn_unresolved::URD>,
+    definitions: std::collections::HashMap<String, fastn_unresolved::Urd>,
     definitions_used: std::collections::HashSet<fastn_section::Symbol>,
     arena: fastn_section::Arena,
 ) -> indexmap::IndexMap<String, fastn_resolved::Definition> {

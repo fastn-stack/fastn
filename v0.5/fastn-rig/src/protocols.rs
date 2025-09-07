@@ -1,5 +1,5 @@
 //! fastn-rig specific P2P protocols
-//! 
+//!
 //! Defines meaningful protocol names for fastn-rig P2P communication
 
 use serde::{Deserialize, Serialize};
@@ -21,7 +21,7 @@ impl std::fmt::Display for RigProtocol {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             RigProtocol::EmailDelivery => write!(f, "EmailDelivery"),
-            RigProtocol::AccountMessage => write!(f, "AccountMessage"), 
+            RigProtocol::AccountMessage => write!(f, "AccountMessage"),
             RigProtocol::HttpProxy => write!(f, "HttpProxy"),
             RigProtocol::RigControl => write!(f, "RigControl"),
         }

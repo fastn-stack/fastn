@@ -1,7 +1,6 @@
-
 pub struct Request<P> {
     peer: fastn_id52::PublicKey,
-    pub protocol: P,  // Keep public for protocol-based routing
+    pub protocol: P, // Keep public for protocol-based routing
     send: iroh::endpoint::SendStream,
     recv: iroh::endpoint::RecvStream,
 }
@@ -14,7 +13,12 @@ impl<P> Request<P> {
         send: iroh::endpoint::SendStream,
         recv: iroh::endpoint::RecvStream,
     ) -> Self {
-        Self { peer, protocol, send, recv }
+        Self {
+            peer,
+            protocol,
+            send,
+            recv,
+        }
     }
 
     /// Get the public key of the peer that sent this request
@@ -28,25 +32,25 @@ impl<P> Request<P> {
     }
 
     /// Read and deserialize a JSON request from the peer connection
-    /// 
+    ///
     /// Returns the deserialized input and a response handle that must be used
     /// to send exactly one response back to the client.
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```rust,ignore
     /// use serde::{Deserialize, Serialize};
-    /// 
+    ///
     /// #[derive(Deserialize)]
     /// struct Request {
     ///     message: String,
     /// }
-    /// 
+    ///
     /// #[derive(Serialize)]
     /// struct Response {
     ///     echo: String,
     /// }
-    /// 
+    ///
     /// async fn handle_connection(mut request: fastn_p2p::Request<MyProtocol>) -> eyre::Result<()> {
     ///     let (request, handle): (Request, _) = request.get_input().await?;
     ///     
@@ -58,7 +62,9 @@ impl<P> Request<P> {
     ///     Ok(())
     /// }
     /// ```
-    pub async fn get_input<INPUT>(mut self) -> Result<(INPUT, fastn_p2p::ResponseHandle), GetInputError> 
+    pub async fn get_input<INPUT>(
+        mut self,
+    ) -> Result<(INPUT, fastn_p2p::ResponseHandle), GetInputError>
     where
         INPUT: for<'de> serde::Deserialize<'de>,
     {
@@ -78,29 +84,29 @@ impl<P> Request<P> {
     }
 
     /// Handle a request with an async closure
-    /// 
+    ///
     /// This method provides the most convenient way to handle P2P requests.
     /// It automatically:
     /// - Deserializes the incoming request
     /// - Calls your handler function
     /// - Sends the response or error automatically
     /// - Handles all JSON serialization and error conversion
-    /// 
+    ///
     /// # Example
-    /// 
+    ///
     /// ```rust,ignore
     /// use serde::{Deserialize, Serialize};
-    /// 
+    ///
     /// #[derive(Deserialize)]
     /// struct EchoRequest {
     ///     message: String,
     /// }
-    /// 
+    ///
     /// #[derive(Serialize)]
     /// struct EchoResponse {
     ///     echo: String,
     /// }
-    /// 
+    ///
     /// async fn handle_request(peer_request: fastn_p2p::Request<MyProtocol>) -> Result<(), fastn_p2p::HandleRequestError> {
     ///     peer_request.handle(|request: EchoRequest| async move {
     ///         // Handler returns Result<OUTPUT, ERROR> - framework handles rest automatically
@@ -129,7 +135,9 @@ impl<P> Request<P> {
 
         // Call the handler and send the result (automatically handles Ok/Err variants)
         let handler_result = handler(input).await;
-        response_handle.send(handler_result).await
+        response_handle
+            .send(handler_result)
+            .await
             .map_err(|source| HandleRequestError::SendResponseFailed { source })?;
 
         Ok(())

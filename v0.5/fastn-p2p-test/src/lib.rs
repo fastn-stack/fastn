@@ -30,7 +30,7 @@ pub struct EchoResponse {
 }
 
 /// Echo error message
-#[derive(Serialize, Deserialize, Debug)]  
+#[derive(Serialize, Deserialize, Debug)]
 pub struct EchoError {
     pub error: String,
 }

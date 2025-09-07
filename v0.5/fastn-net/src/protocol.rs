@@ -109,7 +109,7 @@ pub enum Protocol {
     AccountToDevice,
     /// Control messages for Rig management (bring online/offline, set current, etc.)
     RigControl,
-    
+
     /// Generic protocol for user-defined types
     /// This allows users to define their own protocol types while maintaining
     /// compatibility with the existing fastn-net infrastructure.
@@ -143,10 +143,10 @@ mod tests {
         // Test Generic variant serialization
         let generic_value = serde_json::json!({"type": "custom", "version": 1});
         let protocol = Protocol::Generic(generic_value.clone());
-        
+
         let serialized = serde_json::to_string(&protocol).unwrap();
         let deserialized: Protocol = serde_json::from_str(&serialized).unwrap();
-        
+
         match deserialized {
             Protocol::Generic(value) => assert_eq!(value, generic_value),
             _ => panic!("Expected Generic variant"),

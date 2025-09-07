@@ -2,17 +2,17 @@ async fn handle_connection<P>(
     conn: iroh::endpoint::Incoming,
     expected_protocols: Vec<P>,
     tx: tokio::sync::mpsc::Sender<eyre::Result<fastn_p2p::Request<P>>>,
-) -> eyre::Result<()> 
+) -> eyre::Result<()>
 where
-    P: serde::Serialize + 
-       for<'de> serde::Deserialize<'de> + 
-       Clone + 
-       PartialEq + 
-       std::fmt::Display +
-       std::fmt::Debug +
-       Send + 
-       Sync + 
-       'static,
+    P: serde::Serialize
+        + for<'de> serde::Deserialize<'de>
+        + Clone
+        + PartialEq
+        + std::fmt::Display
+        + std::fmt::Debug
+        + Send
+        + Sync
+        + 'static,
 {
     // Wait for the connection to be established
     let connection = conn.await?;
@@ -26,8 +26,7 @@ where
     let net_protocols: Vec<fastn_net::Protocol> = expected_protocols
         .iter()
         .map(|p| {
-            let json_value = serde_json::to_value(p)
-                .expect("Protocol should be serializable");
+            let json_value = serde_json::to_value(p).expect("Protocol should be serializable");
             fastn_net::Protocol::Generic(json_value)
         })
         .collect();
@@ -63,12 +62,8 @@ where
         tracing::debug!("Accepted {user_protocol} connection from peer: {peer_key}");
 
         // Create PeerRequest and send it through the channel
-        let peer_request = fastn_p2p::server::request::Request::new(
-            peer_key,
-            user_protocol,
-            send,
-            recv,
-        );
+        let peer_request =
+            fastn_p2p::server::request::Request::new(peer_key, user_protocol, send, recv);
 
         if (tx.send(Ok(peer_request)).await).is_err() {
             // Channel receiver has been dropped, stop processing
@@ -80,7 +75,6 @@ where
     Ok(())
 }
 
-
 fn listen_generic<P>(
     secret_key: fastn_id52::SecretKey,
     expected: &[P],
@@ -89,15 +83,15 @@ fn listen_generic<P>(
     fastn_p2p::ListenerAlreadyActiveError,
 >
 where
-    P: serde::Serialize + 
-       for<'de> serde::Deserialize<'de> + 
-       Clone + 
-       PartialEq + 
-       std::fmt::Display +
-       std::fmt::Debug +
-       Send + 
-       Sync + 
-       'static,
+    P: serde::Serialize
+        + for<'de> serde::Deserialize<'de>
+        + Clone
+        + PartialEq
+        + std::fmt::Display
+        + std::fmt::Debug
+        + Send
+        + Sync
+        + 'static,
 {
     let public_key = secret_key.public_key();
 
@@ -137,7 +131,7 @@ where
                             }
                         };
 
-                        // Spawn task to handle this specific connection  
+                        // Spawn task to handle this specific connection
                         let handler_tx = acceptor_tx.clone();
                         let handler_expected = acceptor_expected.clone();
                         // Use global spawn helper
@@ -180,15 +174,15 @@ where
 }
 
 /// Start listening for P2P requests using global graceful shutdown
-/// 
+///
 /// This is the main function end users should use. It automatically uses
 /// the global graceful shutdown coordinator.
-/// 
+///
 /// # Example
-/// 
+///
 /// ```rust,ignore
 /// use futures_util::stream::StreamExt;
-/// 
+///
 /// async fn server_example() -> Result<(), Box<dyn std::error::Error>> {
 ///     let mut stream = fastn_p2p::listen!(secret_key, &protocols)?;
 ///     let mut stream = std::pin::pin!(stream);
@@ -213,15 +207,15 @@ pub fn listen<P>(
     fastn_p2p::ListenerAlreadyActiveError,
 >
 where
-    P: serde::Serialize + 
-       for<'de> serde::Deserialize<'de> + 
-       Clone + 
-       PartialEq + 
-       std::fmt::Display +
-       std::fmt::Debug +
-       Send + 
-       Sync + 
-       'static,
+    P: serde::Serialize
+        + for<'de> serde::Deserialize<'de>
+        + Clone
+        + PartialEq
+        + std::fmt::Display
+        + std::fmt::Debug
+        + Send
+        + Sync
+        + 'static,
 {
     listen_generic(secret_key, expected)
 }

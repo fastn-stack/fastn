@@ -10,7 +10,7 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     if !is_initialized {
         eprintln!("❌ fastn_home not initialized at {}", fastn_home.display());
         eprintln!("   Run 'fastn-rig init' first to initialize the rig");
-        return Err(fastn_rig::RunError::FastnHomeResolutionFailed);
+        return Err(fastn_rig::RunError::FastnHomeResolution);
     }
 
     // Acquire exclusive lock for runtime
@@ -20,7 +20,7 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         .truncate(false)
         .write(true)
         .open(&lock_path)
-        .map_err(|e| fastn_rig::RunError::LockFileOpenFailed {
+        .map_err(|e| fastn_rig::RunError::LockFileOpen {
             path: lock_path.clone(),
             source: e,
         })?;
@@ -30,8 +30,11 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
             println!("🔒 Lock acquired: {}", lock_path.display());
         }
         Err(_e) => {
-            eprintln!("❌ Another instance of fastn is already running at {}", fastn_home.display());
-            return Err(fastn_rig::RunError::LockAcquisitionFailed);
+            eprintln!(
+                "❌ Another instance of fastn is already running at {}",
+                fastn_home.display()
+            );
+            return Err(fastn_rig::RunError::LockAcquisition);
         }
     };
 
@@ -42,11 +45,11 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     // Load Rig and AccountManager
     println!("📂 Loading existing fastn_home...");
     let rig = fastn_rig::Rig::load(fastn_home.clone())
-        .map_err(|e| fastn_rig::RunError::RigLoadingFailed { source: e })?;
+        .map_err(|e| fastn_rig::RunError::RigLoading { source: e })?;
     let account_manager = std::sync::Arc::new(
         fastn_account::AccountManager::load(fastn_home.clone())
             .await
-            .map_err(|e| fastn_rig::RunError::AccountManagerLoadFailed { source: e })?,
+            .map_err(|e| fastn_rig::RunError::AccountManagerLoad { source: e })?,
     );
 
     println!("🔑 Rig ID52: {}", rig.id52());
@@ -58,21 +61,22 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     let all_endpoints = account_manager
         .get_all_endpoints()
         .await
-        .map_err(|e| fastn_rig::RunError::EndpointEnumerationFailed { source: e })?;
+        .map_err(|e| fastn_rig::RunError::EndpointEnumeration { source: e })?;
 
     // Start fastn-p2p listeners for all online endpoints
     let mut total_endpoints = 0;
     for (id52, secret_key, _account_path) in all_endpoints {
-        if rig.is_entity_online(&id52).await
-            .map_err(|e| fastn_rig::RunError::EntityOnlineStatusFailed { source: e })? 
+        if rig
+            .is_entity_online(&id52)
+            .await
+            .map_err(|e| fastn_rig::RunError::EntityOnlineStatus { source: e })?
         {
             let account_manager_clone = account_manager.clone();
-            
+
             fastn_p2p::spawn(async move {
-                if let Err(e) = crate::p2p_server::start_p2p_listener(
-                    secret_key,
-                    account_manager_clone,
-                ).await {
+                if let Err(e) =
+                    crate::p2p_server::start_p2p_listener(secret_key, account_manager_clone).await
+                {
                     eprintln!("❌ Account P2P listener failed for {id52}: {e}");
                 }
             });
@@ -80,19 +84,20 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         }
     }
 
-    // Start fastn-p2p listener for rig endpoint  
+    // Start fastn-p2p listener for rig endpoint
     let rig_id52 = rig.id52();
-    if rig.is_entity_online(&rig_id52).await
-        .map_err(|e| fastn_rig::RunError::EntityOnlineStatusFailed { source: e })? 
+    if rig
+        .is_entity_online(&rig_id52)
+        .await
+        .map_err(|e| fastn_rig::RunError::EntityOnlineStatus { source: e })?
     {
         let account_manager_clone = account_manager.clone();
         let rig_secret = rig.secret_key().clone();
-        
+
         fastn_p2p::spawn(async move {
-            if let Err(e) = crate::p2p_server::start_p2p_listener(
-                rig_secret,
-                account_manager_clone,
-            ).await {
+            if let Err(e) =
+                crate::p2p_server::start_p2p_listener(rig_secret, account_manager_clone).await
+            {
                 eprintln!("❌ Rig P2P listener failed for {rig_id52}: {e}");
             }
         });
@@ -107,16 +112,16 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         .unwrap_or_else(|_| "true".to_string())
         .parse::<bool>()
         .unwrap_or(true);
-    
+
     if enable_poller {
         eprintln!("🔧 DEBUG RUN: ENABLE_EMAIL_POLLER=true, about to start poller");
         let account_manager_clone = account_manager.clone();
-        
+
         let _handle = fastn_p2p::spawn(async move {
             eprintln!("🔧 DEBUG RUN: Email poller task ACTUALLY SPAWNED");
-            if let Err(e) = crate::email_poller_p2p::start_email_delivery_poller(
-                account_manager_clone,
-            ).await {
+            if let Err(e) =
+                crate::email_poller_p2p::start_email_delivery_poller(account_manager_clone).await
+            {
                 eprintln!("❌ DEBUG RUN: Email delivery poller failed: {e}");
             }
             eprintln!("🔧 DEBUG RUN: Email poller task ACTUALLY FINISHED");
@@ -132,11 +137,9 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         .and_then(|p| p.parse().ok())
         .unwrap_or(2525);
     println!("📮 SMTP server listening on port {smtp_port}");
-    
-    let smtp_server = crate::smtp::SmtpServer::new(
-        account_manager.clone(),
-        ([0, 0, 0, 0], smtp_port).into(),
-    );
+
+    let smtp_server =
+        crate::smtp::SmtpServer::new(account_manager.clone(), ([0, 0, 0, 0], smtp_port).into());
     let _smtp_handle = fastn_p2p::spawn(async move {
         if let Err(e) = smtp_server.start().await {
             tracing::error!("SMTP server error: {}", e);
@@ -148,21 +151,27 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         .ok()
         .and_then(|p| p.parse().ok())
         .unwrap_or(0);
-    println!("🌐 HTTP server starting on port {}", if http_port == 0 { "auto".to_string() } else { http_port.to_string() });
-    
-    crate::http_server::start_http_server(
-        account_manager.clone(),
-        rig.clone(), 
-        Some(http_port),
-    )
-    .await?;
+    println!(
+        "🌐 HTTP server starting on port {}",
+        if http_port == 0 {
+            "auto".to_string()
+        } else {
+            http_port.to_string()
+        }
+    );
+
+    crate::http_server::start_http_server(account_manager.clone(), rig.clone(), Some(http_port))
+        .await?;
 
     println!("\n📨 fastn is running with fastn-p2p. Press Ctrl+C to stop.");
-    
+
     // Wait for graceful shutdown
-    fastn_p2p::globals::graceful().shutdown().await.map_err(|e| fastn_rig::RunError::ShutdownFailed {
-        source: Box::new(std::io::Error::other(format!("Shutdown failed: {e}")))
-    })?;
+    fastn_p2p::globals::graceful()
+        .shutdown()
+        .await
+        .map_err(|e| fastn_rig::RunError::Shutdown {
+            source: Box::new(std::io::Error::other(format!("Shutdown failed: {e}"))),
+        })?;
 
     println!("👋 Goodbye!");
     Ok(())

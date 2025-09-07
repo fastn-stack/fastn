@@ -126,7 +126,7 @@ impl PublicKey {
     }
 
     /// Returns the raw 32-byte representation of the public key.
-    pub fn to_bytes(&self) -> [u8; 32] {
+    pub fn to_bytes(self) -> [u8; 32] {
         *self.0.as_bytes()
     }
 
@@ -495,14 +495,14 @@ impl Signature {
     }
 
     /// Returns the raw 64-byte representation of the signature.
-    pub fn to_bytes(&self) -> [u8; 64] {
+    pub fn to_bytes(self) -> [u8; 64] {
         self.0.to_bytes()
     }
 
     /// Converts the signature to a `Vec<u8>`.
     ///
     /// This is useful when you need an owned copy of the signature bytes.
-    pub fn to_vec(&self) -> Vec<u8> {
+    pub fn to_vec(self) -> Vec<u8> {
         self.to_bytes().to_vec()
     }
 }

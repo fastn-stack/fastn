@@ -26,9 +26,7 @@ impl fastn_mail::Store {
             .map_err(|e| GetPendingDeliveriesError::DatabaseQueryFailed { source: e })?;
 
         let now = chrono::Utc::now().timestamp();
-        println!(
-            "🔍 Executing pending deliveries query with timestamp: {now}"
-        );
+        println!("🔍 Executing pending deliveries query with timestamp: {now}");
 
         let rows = stmt
             .query_map([now], |row| {

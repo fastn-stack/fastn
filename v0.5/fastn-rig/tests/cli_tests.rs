@@ -164,7 +164,7 @@ fn test_status_without_init() {
     assert!(!output.status.success());
     let stderr = String::from_utf8(output.stderr).unwrap();
     assert!(
-        stderr.contains("KeyLoadingFailed")
+        stderr.contains("KeyLoading")
             || stderr.contains("Failed to load rig")
             || stderr.contains("Run 'init' first")
     );

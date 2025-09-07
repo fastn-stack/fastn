@@ -1,7 +1,7 @@
 //! # fastn-p2p: High-Level Type-Safe P2P Communication
 //!
 //! This crate provides a high-level, type-safe API for P2P communication in the fastn ecosystem.
-//! It builds on top of `fastn-net` but exposes only the essential, locked-down APIs that 
+//! It builds on top of `fastn-net` but exposes only the essential, locked-down APIs that
 //! reduce the possibility of bugs through strong typing and compile-time verification.
 //!
 //! ## Design Philosophy
@@ -42,25 +42,15 @@ pub use fastn_net::{Graceful, Protocol};
 // Note: PeerStreamSenders is intentionally NOT exported - users should use global singletons
 
 // Global singleton access - graceful is completely encapsulated in coordination module
+pub use coordination::{cancelled, spawn};
 pub use globals::pool;
-pub use coordination::{spawn, cancelled};
 
 // Client API - clean, simple naming (only expose simple version)
-pub use client::{call, CallError};
+pub use client::{CallError, call};
 
-// Server API - clean, simple naming  
+// Server API - clean, simple naming
 pub use server::{
-    listen,
+    GetInputError, HandleRequestError, ListenerAlreadyActiveError, ListenerNotFoundError, Request,
+    ResponseHandle, SendError, active_listener_count, active_listeners, is_listening, listen,
     stop_listening,
-    is_listening,
-    active_listener_count,
-    active_listeners,
-    Request,
-    ResponseHandle,
-    GetInputError,
-    SendError,
-    HandleRequestError,
-    ListenerAlreadyActiveError,
-    ListenerNotFoundError,
 };
-
