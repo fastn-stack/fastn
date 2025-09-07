@@ -1,5 +1,9 @@
 #!/bin/bash
-# Complete self-contained SMTP to P2P to INBOX integration test
+# 🎯 CRITICAL END-TO-END EMAIL TEST (PLAIN TEXT MODE)
+# 
+# This is one of the most important tests in fastn - validates complete email pipeline.
+# Tests plain text SMTP → fastn-p2p → INBOX delivery.
+# Companion test: email_end_to_end_starttls.rs (tests STARTTLS mode)
 # Pre-compiles all binaries then uses them directly for precise timing
 
 set -euo pipefail
@@ -49,8 +53,10 @@ cleanup() {
 }
 trap cleanup EXIT
 
-log "🚀 FASTN SMTP→P2P→INBOX COMPLETE INTEGRATION TEST"
+log "🚀 🎯 CRITICAL: FASTN PLAIN TEXT EMAIL END-TO-END TEST 🎯"
 log "=============================================="
+log "Testing: Plain Text SMTP → fastn-p2p → INBOX delivery"
+log "Companion: email_end_to_end_starttls.rs (STARTTLS mode)"
 
 # Step 1: Build all binaries ONCE at the start (no compilation during test)
 log "📦 Pre-compiling all required binaries (debug build for speed)..."

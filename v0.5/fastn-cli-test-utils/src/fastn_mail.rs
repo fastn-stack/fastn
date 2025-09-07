@@ -40,6 +40,7 @@ impl FastnMailCommand {
             body: "Test Body".to_string(),
             smtp_port: 2525,
             password: None,
+            starttls: false, // Default to plain text
         }
     }
 
@@ -85,6 +86,7 @@ pub struct FastnMailSendBuilder {
     body: String,
     smtp_port: u16,
     password: Option<String>,
+    starttls: bool,
 }
 
 impl FastnMailSendBuilder {
@@ -124,6 +126,12 @@ impl FastnMailSendBuilder {
         self
     }
 
+    /// Enable STARTTLS for secure connection
+    pub fn starttls(mut self, enable: bool) -> Self {
+        self.starttls = enable;
+        self
+    }
+
     /// Send using peer credentials (extracts email addresses from peer)
     pub fn peer_to_peer(
         mut self,
@@ -159,6 +167,11 @@ impl FastnMailSendBuilder {
             "--body".to_string(),
             self.body,
         ]);
+
+        // Add STARTTLS flag if enabled
+        if self.starttls {
+            self.base.args.push("--starttls".to_string());
+        }
 
         self.base.execute().await
     }
