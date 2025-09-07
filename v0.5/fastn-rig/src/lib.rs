@@ -29,6 +29,7 @@
 extern crate self as fastn_rig;
 
 pub mod automerge;
+mod certs;
 pub mod email_delivery_p2p;
 pub mod email_poller_p2p;
 pub mod errors;

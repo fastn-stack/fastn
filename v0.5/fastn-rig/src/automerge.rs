@@ -22,6 +22,8 @@ pub struct RigConfig {
     pub created_at: i64,
     /// The current active entity
     pub current_entity: fastn_id52::PublicKey,
+    /// Email certificate configuration for STARTTLS support
+    pub email_certificate: EmailCertificateConfig,
 }
 
 // Additional methods for RigConfig beyond basic CRUD
@@ -57,6 +59,37 @@ impl RigConfig {
         })?;
         Ok(config.current_entity)
     }
+}
+
+/// Email certificate configuration for STARTTLS and external certificate support
+#[derive(Debug, Clone, PartialEq, serde::Serialize, fastn_automerge::Reconcile, fastn_automerge::Hydrate)]
+pub enum EmailCertificateConfig {
+    /// Self-signed certificate using rig's Ed25519 key (default)
+    SelfSigned {
+        /// Certificate PEM data stored in RigConfig
+        cert_pem: String,
+        /// Unix timestamp when certificate was generated
+        generated_at: i64,
+        /// Unix timestamp when certificate expires
+        expires_at: i64,
+        /// Subject Alternative Names
+        sans: Vec<String>,
+    },
+    /// External certificate (nginx/Let's Encrypt integration)
+    External {
+        /// Path to external certificate file
+        cert_path: String,
+        /// Path to external private key file  
+        key_path: String,
+        /// Domain name for the certificate
+        domain: String,
+        /// Watch for certificate file changes
+        auto_reload: bool,
+        /// Unix timestamp when certificate was last loaded
+        last_reload: i64,
+        /// Generate self-signed if external certificate fails
+        fallback_to_self_signed: bool,
+    },
 }
 
 #[derive(
