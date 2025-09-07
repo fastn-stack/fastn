@@ -89,8 +89,14 @@ run_rust_test() {
         RUST_RESULT="✅ PASSED"
         TESTS_PASSED=$((TESTS_PASSED + 1))
     else
-        error "Rust STARTTLS test FAILED"
-        RUST_RESULT="❌ FAILED"
+        if [ "$RUN_BASH" = false ]; then
+            # Running only Rust test - exit immediately on failure
+            error "Rust STARTTLS test FAILED"
+        else
+            # Running both tests - continue to show final results
+            warn "Rust STARTTLS test FAILED"
+            RUST_RESULT="❌ FAILED"
+        fi
     fi
     TESTS_RUN=$((TESTS_RUN + 1))
     echo
@@ -103,16 +109,23 @@ run_bash_test() {
     log "Mode: Plain text SMTP → fastn-p2p → INBOX"
     echo
     
-    cd v0.5/fastn-rig
+    cd fastn-rig
     if bash tests/email_end_to_end_plaintext.sh; then
         success "Bash plain text test PASSED"
         BASH_RESULT="✅ PASSED"
         TESTS_PASSED=$((TESTS_PASSED + 1))
     else
-        error "Bash plain text test FAILED"
-        BASH_RESULT="❌ FAILED"
+        if [ "$RUN_RUST" = false ]; then
+            # Running only bash test - exit immediately on failure
+            cd ..
+            error "Bash plain text test FAILED"
+        else
+            # Running both tests - continue to show final results
+            warn "Bash plain text test FAILED"
+            BASH_RESULT="❌ FAILED"
+        fi
     fi
-    cd ../..
+    cd ..
     TESTS_RUN=$((TESTS_RUN + 1))
     echo
 }
