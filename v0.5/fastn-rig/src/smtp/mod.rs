@@ -19,10 +19,12 @@ pub struct SmtpServer {
     // No graceful parameter - use fastn_p2p::spawn() and fastn_p2p::cancelled() directly
 }
 
-#[derive(Debug)]
-pub struct SmtpSession {
-    /// Client connection
-    stream: tokio::net::TcpStream,
+pub struct SmtpSession<S> 
+where 
+    S: tokio::io::AsyncRead + tokio::io::AsyncWrite + Unpin + Send,
+{
+    /// Client connection (generic over stream type for STARTTLS support)
+    stream: S,
     /// Current session state
     state: SessionState,
     /// Authenticated account ID52 (if any)
@@ -31,6 +33,8 @@ pub struct SmtpSession {
     current_email: Option<EmailInProgress>,
     /// Client IP address
     client_addr: std::net::SocketAddr,
+    /// TLS acceptor for STARTTLS upgrade (None if already encrypted)
+    tls_acceptor: Option<tokio_rustls::TlsAcceptor>,
 }
 
 #[derive(Debug, PartialEq)]
@@ -83,7 +87,8 @@ impl SmtpServer {
                     match result {
                         Ok((stream, addr)) => {
                             tracing::debug!("📧 New SMTP connection from {}", addr);
-                            let session = SmtpSession::new(stream, addr);
+                            // TODO: Create TLS acceptor for STARTTLS support
+                            let session = SmtpSession::new(stream, addr, None);
                             let account_manager = self.account_manager.clone();
                             // Spawn session handler using global coordination
                             fastn_p2p::spawn(async move {
@@ -104,14 +109,22 @@ impl SmtpServer {
     }
 }
 
-impl SmtpSession {
-    fn new(stream: tokio::net::TcpStream, client_addr: std::net::SocketAddr) -> Self {
+impl<S> SmtpSession<S> 
+where 
+    S: tokio::io::AsyncRead + tokio::io::AsyncWrite + Unpin + Send,
+{
+    fn new(
+        stream: S, 
+        client_addr: std::net::SocketAddr,
+        tls_acceptor: Option<tokio_rustls::TlsAcceptor>,
+    ) -> Self {
         Self {
             stream,
             state: SessionState::Initial,
             authenticated_account: None,
             current_email: None,
             client_addr,
+            tls_acceptor,
         }
     }
 
@@ -221,6 +234,7 @@ impl SmtpSession {
 
         match command.as_str() {
             "EHLO" | "HELO" => self.handle_helo(args).await,
+            "STARTTLS" => self.handle_starttls().await,
             "AUTH" => self.handle_auth(args, account_manager).await,
             "MAIL" => self.handle_mail_from(args).await,
             "RCPT" => self.handle_rcpt_to(args).await,
@@ -234,7 +248,50 @@ impl SmtpSession {
 
     async fn handle_helo(&mut self, _args: &str) -> Result<String, fastn_rig::SmtpError> {
         self.state = SessionState::Ready;
-        Ok("250-fastn SMTP Server\r\n250-AUTH PLAIN LOGIN\r\n250 HELP".to_string())
+        
+        let mut capabilities = vec![
+            "250-fastn SMTP Server",
+            "250-AUTH PLAIN LOGIN",
+        ];
+        
+        // Add STARTTLS capability if TLS acceptor available and not already encrypted
+        if self.tls_acceptor.is_some() && !self.is_encrypted() {
+            capabilities.push("250-STARTTLS");
+        }
+        
+        capabilities.push("250 HELP");
+        Ok(capabilities.join("\r\n"))
+    }
+    
+    /// Check if the current connection is already encrypted
+    fn is_encrypted(&self) -> bool {
+        // For plain TcpStream, always false
+        // For TlsStream, would be true
+        // This is a placeholder - actual implementation would check stream type
+        false // TODO: Implement based on actual stream type detection
+    }
+    
+    /// Handle STARTTLS command - upgrade connection to TLS
+    async fn handle_starttls(&mut self) -> Result<String, fastn_rig::SmtpError> {
+        // Check if STARTTLS is available
+        if self.tls_acceptor.is_none() {
+            return Ok("454 TLS not available".to_string());
+        }
+        
+        // Check if already encrypted
+        if self.is_encrypted() {
+            return Ok("454 TLS already started".to_string());
+        }
+        
+        // Check if in correct state (should be after EHLO)
+        if self.state != SessionState::Ready {
+            return Ok("503 Bad sequence of commands".to_string());
+        }
+        
+        // Send ready response - this completes the STARTTLS handshake
+        // Note: After sending this response, the connection will be upgraded to TLS
+        // This is handled in the calling code, not here
+        Ok("220 Ready to start TLS".to_string())
     }
 
     async fn handle_auth(
