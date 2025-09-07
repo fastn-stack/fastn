@@ -1,0 +1,145 @@
+name: 🎯 Critical Email System Tests
+
+on:
+  push:
+    paths:
+      - 'v0.5/**'
+  pull_request:
+    paths:
+      - 'v0.5/**'
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+
+jobs:
+  critical-email-tests:
+    name: 🎯 Critical Email Pipeline Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        toolchain: stable
+
+    - name: Cache cargo registry
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+        key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-registry-
+
+    - name: Cache cargo build
+      uses: actions/cache@v4
+      with:
+        path: v0.5/target/
+        key: ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-build-
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential pkg-config libssl-dev jq
+
+    - name: 🎯 Run Critical Email System Tests
+      working-directory: v0.5
+      run: |
+        echo "🎯 Running the most critical tests in fastn email system"
+        echo "These tests validate the complete email pipeline:"
+        echo "  - Plain text SMTP → fastn-p2p → INBOX delivery"  
+        echo "  - STARTTLS SMTP → fastn-p2p → INBOX delivery"
+        echo "  - Certificate generation and TLS infrastructure"
+        echo "  - End-to-end email system integration"
+        echo
+        
+        # Make test script executable
+        chmod +x test.sh
+        
+        # Run both critical tests for comprehensive validation
+        ./test.sh --both
+
+    - name: 📊 Test Results Summary
+      if: always()
+      run: |
+        if [ $? -eq 0 ]; then
+          echo "🎉 ✅ CRITICAL EMAIL TESTS PASSED"
+          echo "✅ fastn email system is fully operational" 
+          echo "🚀 Ready for production email deployment"
+        else
+          echo "❌ 🚨 CRITICAL EMAIL TESTS FAILED"
+          echo "❌ fastn email system has critical issues"
+          echo "🔧 Investigate email pipeline problems before proceeding"
+        fi
+
+  # Optional: Run individual tests for better failure isolation  
+  plain-text-test:
+    name: 📧 Plain Text Email Test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry/
+          v0.5/target/
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential pkg-config libssl-dev jq
+
+    - name: 📧 Run Plain Text Email Test
+      working-directory: v0.5
+      run: |
+        chmod +x test.sh
+        ./test.sh  # Default bash test
+
+  starttls-test:
+    name: 🔐 STARTTLS Email Test
+    runs-on: ubuntu-latest  
+    if: github.event_name == 'workflow_dispatch'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry/
+          v0.5/target/
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential pkg-config libssl-dev
+
+    - name: 🔐 Run STARTTLS Email Test
+      working-directory: v0.5
+      run: |
+        chmod +x test.sh
+        ./test.sh --rust

@@ -285,73 +285,75 @@ Always format output as clean summaries:
 For complex queries, translate user requests into appropriate commands.
 ```
 
-### Dynamic Command Translation Agent
-```markdown
----
-name: server-query
-description: Translates natural language server questions into SSH commands and returns clean results
-tools: Bash, Read
----
-
-You convert server questions into commands and return clean results.
-
-Connection: `ssh admin@prod-server.com`
-
-Command translations:
-- "CPU usage" → `top -bn1 | grep 'Cpu(s)' | sed 's/.*, *\([0-9.]*\)%* id.*/\1/' | awk '{print 100-$1"%"}'`
-- "Memory usage" → `free -m | awk 'NR==2{printf "%.1f%%", $3*100/$2}'`
-- "Running processes" → `ps aux --sort=-%cpu | head -10`
-- "Network connections" → `netstat -tuln | wc -l`
-- "Disk space" → `df -h | grep -v tmpfs`
-- "System load" → `uptime | cut -d',' -f3- | cut -d':' -f2`
-
-Process:
-1. Parse the user's question
-2. Select appropriate command  
-3. Execute via SSH
-4. Format output clearly
-5. Return only the key metric
-
-Example: "How's the CPU?" → "CPU: 30%"
-```
 
 ## Hierarchical Agent Systems
 
-You can create sophisticated agent hierarchies with a main dispatcher and specialized sub-agents.
+You can create agent hierarchies where a main dispatcher delegates to specialized sub-agents. Here's a complete example:
 
-### Main Dispatcher Agent
+### The Delegation Chain
+
+```
+User: "on my server check CPU"
+  ↓
+server-cmd (main dispatcher) 
+  ↓ (uses Task tool to call)
+server-monitor (handles single server)
+  ↓
+Returns: "CPU: 23.5%"
+```
+
+### 1. Main Dispatcher Agent
 ```markdown
 ---
 name: server-cmd
-description: Server command dispatcher. Use for ANY server operations like "on my server", "check all servers", "deploy to prod"
-tools: Task, Bash, Read
+description: Server command dispatcher. Use for ANY server operations like "on my server", "check all servers"
+tools: Task
 ---
 
 You are a server operations coordinator who delegates to specialized agents.
 
 When user says:
-- "on my server [command]" → Use `server-monitor` agent
-- "on all servers [command]" → Use `multi-server` agent
-- "deploy to [env]" → Use `deployment` agent  
-- "check logs on [server]" → Use `log-analyzer` agent
-- "run CI tests" → Use `ci-runner` agent
+- "on my server [command]" → Use Task tool to call `server-monitor` agent
+- "on all servers [command]" → Use Task tool to call `multi-server` agent
 
 Process:
 1. Parse the user's server command
-2. Identify target (single server, all servers, specific env)
-3. Determine operation type (monitoring, deployment, logs)
-4. Use Task tool to delegate to appropriate specialized agent
-5. Return formatted results
+2. Identify target (single server vs all servers)
+3. Use Task tool to delegate to appropriate agent
+4. Return the agent's results to user
 
-Always delegate rather than doing work directly.
+Never execute commands directly - always delegate using Task tool.
 ```
 
-### Sub-Agent: Multi-Server Coordinator
+### 2. Single Server Agent (called by server-cmd)
+```markdown
+---
+name: server-monitor
+description: Monitors individual server metrics via SSH
+tools: Bash
+---
+
+You monitor a single server via SSH.
+
+Default server: `ssh admin@prod-server.com`
+
+Available metrics:
+- **CPU**: `top -bn1 | grep 'Cpu(s)' | awk '{print $2}' | cut -d'%' -f1"`
+- **Memory**: `free -m | awk 'NR==2{printf "%.1f%%", $3*100/$2}'`
+- **Disk**: `df -h / | awk 'NR==2{print $5}'`
+
+Return clean formatted results like:
+- "CPU: 30.5%"
+- "Memory: 67.2% used"
+- "Disk: 45% full"
+```
+
+### 3. Multi-Server Agent (called by server-cmd)
 ```markdown
 ---
 name: multi-server
 description: Executes commands across multiple servers in parallel
-tools: Bash, Task
+tools: Bash
 ---
 
 You coordinate operations across multiple servers.
@@ -359,31 +361,52 @@ You coordinate operations across multiple servers.
 Servers:
 - web1: `ssh web@web1.company.com`
 - web2: `ssh web@web2.company.com`
-- db1: `ssh db@db1.company.com`  
-- cache1: `ssh redis@cache1.company.com`
+- db1: `ssh db@db1.company.com`
 
 For each server operation:
-1. Run command on all servers in parallel using background processes
-2. Collect results from each server
-3. Format as summary table
-4. Highlight any anomalies or issues
+1. Run command on all servers in parallel using `&`
+2. Collect results with `wait`
+3. Format as table:
 
-Use `&` for parallel execution and `wait` to collect results.
+| Server | Metric | Status |
+|--------|--------|--------|
+| web1   | CPU: 25% | ✅ |
+| web2   | CPU: 67% | ⚠️  |
+| db1    | CPU: 89% | 🚨 |
 ```
 
-### Usage Examples
+### Complete Usage Examples
 
-**Simple**: "on my server check CPU"
-- `server-cmd` → delegates to → `server-monitor` 
-- Result: "CPU: 23.5%"
+**Single server request:**
+```
+You: "on my server check CPU"
 
-**Multi-server**: "on all servers check memory usage"
-- `server-cmd` → delegates to → `multi-server`
-- Result: Table showing memory usage across all servers
+server-cmd receives request
+  → Parses: target=single server, command=check CPU  
+  → Uses Task tool: calls server-monitor
+  → server-monitor executes: ssh admin@prod-server.com "top -bn1..."
+  → server-monitor returns: "CPU: 23.5%"
+  → server-cmd returns result to you
+```
 
-**Deployment**: "deploy to staging"  
-- `server-cmd` → delegates to → `deployment`
-- Result: "✅ Staging deployment successful"
+**Multi-server request:**
+```
+You: "on all servers check memory"
+
+server-cmd receives request
+  → Parses: target=all servers, command=check memory
+  → Uses Task tool: calls multi-server  
+  → multi-server executes parallel SSH commands
+  → multi-server returns formatted table
+  → server-cmd returns table to you
+```
+
+### Key Points About Hierarchies
+
+1. **Main agent** (`server-cmd`) **never executes commands directly** - it only parses and delegates
+2. **Sub-agents** (`server-monitor`, `multi-server`) do the actual work  
+3. **Task tool** is how agents call other agents
+4. **Clear delegation rules** prevent confusion about who does what
 
 ## Debugging Agent Issues
 
