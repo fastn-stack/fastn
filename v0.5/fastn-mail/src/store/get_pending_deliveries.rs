@@ -27,8 +27,7 @@ impl fastn_mail::Store {
 
         let now = chrono::Utc::now().timestamp();
         println!(
-            "🔍 Executing pending deliveries query with timestamp: {}",
-            now
+            "🔍 Executing pending deliveries query with timestamp: {now}"
         );
 
         let rows = stmt

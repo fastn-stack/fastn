@@ -261,7 +261,7 @@ async fn connection_manager_(
                 idle_counter += 1;
             },
             Some((header, reply_channel)) = receiver.recv() => {
-                println!("📨 DEBUG connection_manager: Received stream request for {:?}, idle counter: {}", header, idle_counter);
+                println!("📨 DEBUG connection_manager: Received stream request for {header:?}, idle counter: {idle_counter}");
                 tracing::info!("connection: {header:?}, idle counter: {idle_counter}");
                 idle_counter = 0;
                 // is this a good idea to serialize this part? if 10 concurrent requests come in, we will
@@ -325,8 +325,7 @@ async fn handle_request(
 
     tracing::trace!("handling request: {header:?}");
     println!(
-        "🔧 DEBUG handle_request: Handling stream request for protocol {:?}",
-        header
+        "🔧 DEBUG handle_request: Handling stream request for protocol {header:?}"
     );
 
     println!("🔗 DEBUG handle_request: About to open bi-directional stream");
@@ -343,8 +342,7 @@ async fn handle_request(
         }
         Ok(Err(e)) => {
             println!(
-                "❌ DEBUG handle_request: Failed to open bi-directional stream: {:?}",
-                e
+                "❌ DEBUG handle_request: Failed to open bi-directional stream: {e:?}"
             );
             tracing::error!("failed to open_bi: {e:?}");
             return Err(eyre::anyhow!("failed to open_bi: {e:?}"));
@@ -395,8 +393,7 @@ async fn handle_request(
     println!("📤 DEBUG handle_request: About to send stream reply");
     reply_channel.send(Ok((send, recv))).unwrap_or_else(|e| {
         println!(
-            "❌ DEBUG handle_request: Failed to send stream reply: {:?}",
-            e
+            "❌ DEBUG handle_request: Failed to send stream reply: {e:?}"
         );
         tracing::error!("failed to send reply: {e:?}");
     });

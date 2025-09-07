@@ -20,8 +20,7 @@ impl fastn_mail::Store {
             _ => {
                 return Err(ImapSearchError::DatabaseQueryFailed {
                     source: rusqlite::Error::InvalidColumnName(format!(
-                        "Unsupported search criteria: {}",
-                        criteria
+                        "Unsupported search criteria: {criteria}"
                     )),
                 });
             }

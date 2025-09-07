@@ -108,7 +108,7 @@ where
     // If both fail, it's a deserialization error
     Err(CallError::DeserializationError {
         source: serde_json::Error::io(std::io::Error::other(
-            format!("Response doesn't match expected OUTPUT or ERROR types: {}", response_json)
+            format!("Response doesn't match expected OUTPUT or ERROR types: {response_json}")
         )),
     })
 }

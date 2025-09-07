@@ -52,7 +52,7 @@ async fn main() -> eyre::Result<()> {
                 key
             }
             Err(e) => {
-                eprintln!("❌ Invalid secret key provided: {}", e);
+                eprintln!("❌ Invalid secret key provided: {e}");
                 return Err(eyre::eyre!("Invalid secret key: {}", e));
             }
         }
@@ -62,7 +62,7 @@ async fn main() -> eyre::Result<()> {
     };
 
     let receiver_id52 = receiver_key.public_key().id52();
-    println!("🔑 Receiver ID52: {}", receiver_id52);
+    println!("🔑 Receiver ID52: {receiver_id52}");
 
     // Output JSON for easy parsing in tests  
     let startup_info = serde_json::json!({
@@ -110,13 +110,13 @@ async fn main() -> eyre::Result<()> {
         }).await;
         
         match result {
-            Ok(_) => println!("✅ Request #{} handled successfully", message_count),
-            Err(e) => eprintln!("❌ Request #{} handling failed: {}", message_count, e),
+            Ok(_) => println!("✅ Request #{message_count} handled successfully"),
+            Err(e) => eprintln!("❌ Request #{message_count} handling failed: {e}"),
         }
         
         // Stop after handling 10 messages for this test
         if message_count >= 10 {
-            println!("🎯 Handled {} messages, shutting down receiver", message_count);
+            println!("🎯 Handled {message_count} messages, shutting down receiver");
             break;
         }
     }

@@ -20,7 +20,7 @@ async fn main() -> eyre::Result<()> {
                 key
             }
             Err(e) => {
-                eprintln!("❌ Invalid secret key provided: {}", e);
+                eprintln!("❌ Invalid secret key provided: {e}");
                 return Err(eyre::eyre!("Invalid secret key: {}", e));
             }
         }
@@ -31,7 +31,7 @@ async fn main() -> eyre::Result<()> {
     };
 
     let receiver_id52 = receiver_key.public_key().id52();
-    println!("🔑 Receiver ID52: {}", receiver_id52);
+    println!("🔑 Receiver ID52: {receiver_id52}");
 
     // Output JSON for easy parsing in tests
     let startup_info = serde_json::json!({
@@ -72,16 +72,16 @@ async fn main() -> eyre::Result<()> {
                                     println!("⚠️ Authorization disabled - accepting all connections");
 
                                     if let Err(e) = handle_connection(conn).await {
-                                        eprintln!("❌ Connection handler error: {}", e);
+                                        eprintln!("❌ Connection handler error: {e}");
                                     }
                                 }
                                 Err(e) => {
-                                    eprintln!("❌ Failed to get remote peer ID: {}", e);
+                                    eprintln!("❌ Failed to get remote peer ID: {e}");
                                 }
                             }
                         }
                         Err(e) => {
-                            eprintln!("❌ Failed to accept connection: {}", e);
+                            eprintln!("❌ Failed to accept connection: {e}");
                         }
                     }
                 });
@@ -103,12 +103,12 @@ async fn handle_connection(conn: iroh::endpoint::Connection) -> eyre::Result<()>
 
         match fastn_net::accept_bi(&conn, &[fastn_net::Protocol::Generic(serde_json::json!("Echo"))]).await {
             Ok((protocol, send, recv)) => {
-                println!("✅ Accepted {:?} stream via fastn_net::accept_bi", protocol);
+                println!("✅ Accepted {protocol:?} stream via fastn_net::accept_bi");
 
                 // Spawn concurrent handler for this stream
                 tokio::spawn(async move {
                     if let Err(e) = handle_stream(protocol, send, recv).await {
-                        println!("❌ Stream handler error: {}", e);
+                        println!("❌ Stream handler error: {e}");
                     }
                 });
 
@@ -116,7 +116,7 @@ async fn handle_connection(conn: iroh::endpoint::Connection) -> eyre::Result<()>
                 println!("🔄 Continuing to accept more streams concurrently");
             }
             Err(e) => {
-                println!("❌ Failed to accept stream: {}", e);
+                println!("❌ Failed to accept stream: {e}");
                 return Ok(());
             }
         }
@@ -128,20 +128,20 @@ async fn handle_stream(
     mut send: iroh::endpoint::SendStream,
     mut recv: iroh::endpoint::RecvStream,
 ) -> eyre::Result<()> {
-    println!("🧵 Stream handler started for {:?} protocol", protocol);
+    println!("🧵 Stream handler started for {protocol:?} protocol");
 
     // fastn_net::accept_bi already handled protocol negotiation and sent ACK
 
     // Read actual message
     let message = fastn_net::next_string(&mut recv).await?;
-    println!("📨 Stream received message: {}", message);
+    println!("📨 Stream received message: {message}");
 
     // Send response in same format as fastn-p2p-test expects
     let response = serde_json::json!({"response": "Echo: Hello from fastn-net test!"});
     let response_str = serde_json::to_string(&response)?;
     send.write_all(response_str.as_bytes()).await?;
     send.write_all(b"\n").await?;
-    println!("📤 Stream sent response: {}", response_str);
+    println!("📤 Stream sent response: {response_str}");
 
     // Properly close the stream
     send.finish()

@@ -22,7 +22,7 @@ async fn main() -> eyre::Result<()> {
         let sender_key = match sender_secret_str.parse::<fastn_id52::SecretKey>() {
             Ok(key) => key,
             Err(e) => {
-                eprintln!("❌ Invalid sender secret key: {}", e);
+                eprintln!("❌ Invalid sender secret key: {e}");
                 std::process::exit(1);
             }
         };
@@ -42,9 +42,9 @@ async fn main() -> eyre::Result<()> {
     };
 
     let sender_id52 = sender_key.public_key().id52();
-    println!("🔑 Sender ID52: {}", sender_id52);
+    println!("🔑 Sender ID52: {sender_id52}");
 
-    println!("🎯 Target receiver: {}", receiver_id52);
+    println!("🎯 Target receiver: {receiver_id52}");
 
     // Create endpoint
     let endpoint = fastn_net::get_endpoint(sender_key).await?;
@@ -93,7 +93,7 @@ async fn main() -> eyre::Result<()> {
 
     // Wait for response
     let response = fastn_net::next_string(&mut recv).await?;
-    println!("✅ Received response: {}", response);
+    println!("✅ Received response: {response}");
 
     // Output JSON result for easy parsing in tests
     let result = serde_json::json!({

@@ -55,7 +55,7 @@ async fn main() -> eyre::Result<()> {
         let sender_key = match sender_secret_str.parse::<fastn_id52::SecretKey>() {
             Ok(key) => key,
             Err(e) => {
-                eprintln!("❌ Invalid sender secret key: {}", e);
+                eprintln!("❌ Invalid sender secret key: {e}");
                 std::process::exit(1);
             }
         };
@@ -67,8 +67,8 @@ async fn main() -> eyre::Result<()> {
     };
 
     let sender_id52 = sender_key.public_key().id52();
-    println!("🔑 Sender ID52: {}", sender_id52);
-    println!("🎯 Target ID52: {}", receiver_id52);
+    println!("🔑 Sender ID52: {sender_id52}");
+    println!("🎯 Target ID52: {receiver_id52}");
 
     // Convert receiver ID52 to public key
     let receiver_public_key = receiver_id52.parse::<fastn_id52::PublicKey>()
@@ -92,7 +92,7 @@ async fn main() -> eyre::Result<()> {
         TestProtocol::Echo,
         request,
     ).await.map_err(|e| {
-        eprintln!("❌ fastn_p2p::call failed: {}", e);
+        eprintln!("❌ fastn_p2p::call failed: {e}");
         e
     })?;
     println!("🔧 DEBUG: fastn_p2p::call completed successfully");

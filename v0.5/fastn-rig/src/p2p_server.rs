@@ -41,12 +41,11 @@ pub async fn start_p2p_listener(
             RigProtocol::EmailDelivery => {
                 // Handle email delivery directly using account manager
                 let account_manager_clone = account_manager.clone();
-                let our_endpoint = public_key.clone();
-                
+
                 if let Err(e) = request.handle(|msg| handle_email_message_direct(
-                    msg, account_manager_clone, our_endpoint
+                    msg, account_manager_clone, public_key
                 )).await {
-                    eprintln!("❌ Email delivery request failed: {}", e);
+                    eprintln!("❌ Email delivery request failed: {e}");
                 }
             }
             RigProtocol::AccountMessage => {
@@ -92,9 +91,9 @@ async fn handle_email_message_direct(
             })
         }
         Err(e) => {
-            println!("❌ Email processing failed: {}", e);
+            println!("❌ Email processing failed: {e}");
             Err(crate::email_delivery_p2p::EmailDeliveryError {
-                message: format!("Processing failed: {}", e),
+                message: format!("Processing failed: {e}"),
                 code: "PROCESSING_ERROR".to_string(),
             })
         }

@@ -48,7 +48,7 @@ impl fastn_mail::Store {
                 full_path.display()
             );
             println!("📂 DEBUG: Account path: {}", self.account_path().display());
-            println!("📂 DEBUG: Relative file path: {}", file_path);
+            println!("📂 DEBUG: Relative file path: {file_path}");
             let raw_message =
                 std::fs::read(&full_path).map_err(|e| GetEmailsForPeerError::FileReadFailed {
                     path: full_path.clone(),
@@ -59,7 +59,7 @@ impl fastn_mail::Store {
             // For P2P, envelope_to should be something like "username@{recipient_id52}.domain"
             // But we don't store the full original recipient address, only the ID52
             // For now, use a placeholder format - this could be improved
-            let envelope_to = format!("user@{}.local", recipient_id52);
+            let envelope_to = format!("user@{recipient_id52}.local");
 
             emails.push(EmailForDelivery {
                 email_id,

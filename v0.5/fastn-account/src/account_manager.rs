@@ -204,10 +204,10 @@ impl fastn_account::AccountManager {
                     "📧 DEBUG: Received P2P email message: {} bytes",
                     raw_message.len()
                 );
-                println!("📧 DEBUG: Envelope from: {}", envelope_from);
-                println!("📧 DEBUG: Envelope to: {}", envelope_to);
-                println!("📧 DEBUG: Our endpoint: {}", our_endpoint_id52);
-                println!("📧 DEBUG: Peer ID52: {}", peer_id52);
+                println!("📧 DEBUG: Envelope from: {envelope_from}");
+                println!("📧 DEBUG: Envelope to: {envelope_to}");
+                println!("📧 DEBUG: Our endpoint: {our_endpoint_id52}");
+                println!("📧 DEBUG: Peer ID52: {peer_id52}");
                 println!("📧 Processing email message: {} bytes", raw_message.len());
 
                 // 3. Store in INBOX (this is incoming P2P email from peer)
@@ -221,18 +221,17 @@ impl fastn_account::AccountManager {
                 let response = match email_result {
                     Ok(email_id) => {
                         println!(
-                            "✅ DEBUG: P2P email stored successfully with ID: {}",
-                            email_id
+                            "✅ DEBUG: P2P email stored successfully with ID: {email_id}"
                         );
-                        println!("✅ Email stored with ID: {}", email_id);
+                        println!("✅ Email stored with ID: {email_id}");
                         fastn_account::EmailDeliveryResponse {
                             email_id,
                             status: fastn_account::DeliveryStatus::Accepted,
                         }
                     }
                     Err(e) => {
-                        println!("❌ DEBUG: P2P email storage failed: {}", e);
-                        println!("❌ Email rejected: {}", e);
+                        println!("❌ DEBUG: P2P email storage failed: {e}");
+                        println!("❌ Email rejected: {e}");
                         fastn_account::EmailDeliveryResponse {
                             email_id: "unknown".to_string(),
                             status: fastn_account::DeliveryStatus::Rejected {
@@ -244,7 +243,7 @@ impl fastn_account::AccountManager {
 
                 // TODO: Send response back to sender
                 // This requires the P2P connection context to send the response
-                println!("📤 Would send response: {:?}", response);
+                println!("📤 Would send response: {response:?}");
 
                 // 4. Ensure peer tracking (connection should have already called authorize_connection)
                 // The peer notes document should already exist from connection establishment
