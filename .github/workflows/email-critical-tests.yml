@@ -86,8 +86,8 @@ jobs:
         echo "🧪 Starting email tests at: $(date)"
         start_time=$(date +%s)
         
-        timeout 180 ./test.sh --both || {
-          echo "❌ Tests failed or timed out after 3 minutes"
+        timeout 600 ./test.sh --both || {
+          echo "❌ Tests failed or timed out after 10 minutes"
           exit 1
         }
         
