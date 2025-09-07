@@ -20,8 +20,9 @@ success() { echo -e "${GREEN}✅ $1${NC}"; }
 warn() { echo -e "${YELLOW}⚠️  $1${NC}"; }
 error() { echo -e "${RED}❌ $1${NC}"; exit 1; }
 
-# Binary path detection
+# Binary path detection (mirrors fastn-cli-test-utils::detect_target_dir logic)
 detect_target_dir() {
+    # This logic matches fastn-cli-test-utils for consistency
     # Check common binary locations (v0.5 target dir first since that's the new location)
     if [ -f "../target/debug/fastn-rig" ]; then
         echo "../target/debug"

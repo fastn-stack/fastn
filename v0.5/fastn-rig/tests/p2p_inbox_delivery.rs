@@ -44,32 +44,9 @@ struct FastnRigHelper {
 
 impl FastnRigHelper {
     fn new() -> Self {
-        // Pre-build all binaries to eliminate compilation delays during test
-        let _ = std::process::Command::new("cargo")
-            .args(["build", "--bin", "fastn-rig", "--bin", "test_utils"])
-            .output()
-            .expect("Failed to pre-build fastn-rig binaries");
-
-        let _ = std::process::Command::new("cargo")
-            .args(["build", "--package", "fastn-mail", "--features", "net"])
-            .output()
-            .expect("Failed to pre-build fastn-mail with net features");
-
-        // Detect binary paths
-        let target_dir = Self::detect_target_dir();
-        let fastn_rig_bin = target_dir.join("fastn-rig");
-        let fastn_mail_bin = target_dir.join("fastn-mail");
-
-        assert!(
-            fastn_rig_bin.exists(),
-            "fastn-rig binary not found at {:?}",
-            fastn_rig_bin
-        );
-        assert!(
-            fastn_mail_bin.exists(),
-            "fastn-mail binary not found at {:?}",
-            fastn_mail_bin
-        );
+        // Use unified CLI utilities for building and path detection
+        let fastn_rig_bin = fastn_cli_test_utils::get_fastn_rig_binary();
+        let fastn_mail_bin = fastn_cli_test_utils::get_fastn_mail_binary();
 
         Self {
             skip_keyring: std::env::var("SKIP_KEYRING").unwrap_or_else(|_| "true".to_string()),
@@ -78,28 +55,6 @@ impl FastnRigHelper {
         }
     }
 
-    fn detect_target_dir() -> PathBuf {
-        // Check common binary locations - flexible for both workspace and home target dirs
-        let v0_5_target = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-            .parent()
-            .expect("Failed to get project root")
-            .join("target/debug");
-        let home_target = PathBuf::from(std::env::var("HOME").unwrap_or_default()).join("target/debug");
-        let local_target = PathBuf::from("./target/debug");
-        let project_target = PathBuf::from("/Users/amitu/target/debug");
-
-        if v0_5_target.join("fastn-rig").exists() {
-            v0_5_target
-        } else if home_target.join("fastn-rig").exists() {
-            home_target
-        } else if local_target.join("fastn-rig").exists() {
-            local_target
-        } else if project_target.join("fastn-rig").exists() {
-            project_target
-        } else {
-            panic!("Could not find fastn-rig binary in common target directories");
-        }
-    }
 
     /// Run fastn-rig init (pre-compiled binary - no compilation delay)
     async fn init(

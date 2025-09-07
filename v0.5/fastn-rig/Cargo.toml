@@ -51,5 +51,6 @@ eyre.workspace = true
 tempfile = "3"
 dirs = "5"
 lettre = "0.11"
+fastn-cli-test-utils = { path = "../fastn-cli-test-utils" }
 
 # Future: fastn-device when created

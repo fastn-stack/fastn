@@ -1,46 +1,9 @@
-use std::path::PathBuf;
 use std::process::Command;
 use tempfile::TempDir;
 
-fn get_binary_path() -> PathBuf {
-    // Use cargo test to build and get the correct binary path
-    let output = Command::new("cargo")
-        .args(["build", "-p", "fastn-rig", "--bin", "fastn-rig"])
-        .output()
-        .expect("Failed to build binary");
-
-    if !output.status.success() {
-        panic!(
-            "Failed to build binary: {}",
-            String::from_utf8_lossy(&output.stderr)
-        );
-    }
-
-    let target_dir = std::env::var("CARGO_TARGET_DIR")
-        .map(PathBuf::from)
-        .unwrap_or_else(|_| {
-            // Check multiple possible target locations
-            let v0_5_target = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-                .parent()
-                .expect("Failed to get project root")
-                .join("target");
-            let home_target = PathBuf::from(std::env::var("HOME").unwrap()).join("target");
-            
-            if v0_5_target.join("debug").join("fastn-rig").exists() {
-                v0_5_target
-            } else if home_target.join("debug").join("fastn-rig").exists() {
-                home_target
-            } else {
-                // Default to v0.5 target if neither exists (build will create it)
-                v0_5_target
-            }
-        });
-    target_dir.join("debug").join("fastn-rig")
-}
-
 #[test]
 fn test_cli_help() {
-    let output = Command::new(get_binary_path())
+    let output = Command::new(fastn_cli_test_utils::get_fastn_rig_binary())
         .arg("--help")
         .output()
         .expect("Failed to execute fastn-rig");
@@ -59,7 +22,7 @@ fn test_cli_init_and_status() {
     let home_path = temp_dir.path().to_str().unwrap();
 
     // Test init command
-    let output = Command::new(get_binary_path())
+    let output = Command::new(fastn_cli_test_utils::get_fastn_rig_binary())
         .arg("--home")
         .arg(home_path)
         .arg("init")
@@ -78,7 +41,7 @@ fn test_cli_init_and_status() {
     assert!(stdout.contains("Owner:"));
 
     // Test status command
-    let output = Command::new(get_binary_path())
+    let output = Command::new(fastn_cli_test_utils::get_fastn_rig_binary())
         .arg("--home")
         .arg(home_path)
         .arg("status")
@@ -103,7 +66,7 @@ fn test_cli_entities() {
     let home_path = temp_dir.path().to_str().unwrap();
 
     // Initialize first
-    let output = Command::new(get_binary_path())
+    let output = Command::new(fastn_cli_test_utils::get_fastn_rig_binary())
         .arg("--home")
         .arg(home_path)
         .arg("init")
@@ -113,7 +76,7 @@ fn test_cli_entities() {
     assert!(output.status.success());
 
     // Test entities command
-    let output = Command::new(get_binary_path())
+    let output = Command::new(fastn_cli_test_utils::get_fastn_rig_binary())
         .arg("--home")
         .arg(home_path)
         .arg("entities")
@@ -138,7 +101,7 @@ fn test_cli_set_online() {
     let home_path = temp_dir.path().to_str().unwrap();
 
     // Initialize first
-    let output = Command::new(get_binary_path())
+    let output = Command::new(fastn_cli_test_utils::get_fastn_rig_binary())
         .arg("--home")
         .arg(home_path)
         .arg("init")
@@ -148,7 +111,7 @@ fn test_cli_set_online() {
     assert!(output.status.success());
 
     // Get the rig ID52 from status
-    let output = Command::new(get_binary_path())
+    let output = Command::new(fastn_cli_test_utils::get_fastn_rig_binary())
         .arg("--home")
         .arg(home_path)
         .arg("status")
@@ -165,7 +128,7 @@ fn test_cli_set_online() {
         .expect("Could not find rig ID52");
 
     // Test set-online command
-    let output = Command::new(get_binary_path())
+    let output = Command::new(fastn_cli_test_utils::get_fastn_rig_binary())
         .arg("--home")
         .arg(home_path)
         .arg("set-online")
@@ -190,7 +153,7 @@ fn test_status_without_init() {
     let home_path = temp_dir.path().to_str().unwrap();
 
     // Test status on uninitialized home should fail gracefully
-    let output = Command::new(get_binary_path())
+    let output = Command::new(fastn_cli_test_utils::get_fastn_rig_binary())
         .arg("--home")
         .arg(home_path)
         .arg("status")

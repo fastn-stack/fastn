@@ -39,6 +39,9 @@ mod http_server;
 mod rig;
 mod run;
 mod smtp;
+
+#[cfg(test)]
+pub mod test_utils;
 mod template_context;
 
 pub use run::run;
