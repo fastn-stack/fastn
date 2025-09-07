@@ -1587,6 +1587,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "fastn-cli-test-utils"
+version = "0.1.0"
+dependencies = [
+ "eyre",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "tokio",
+ "tokio-test",
+ "tracing",
+]
+
+[[package]]
 name = "fastn-compiler"
 version = "0.1.0"
 dependencies = [
@@ -1801,6 +1814,7 @@ dependencies = [
  "eyre",
  "fastn-account",
  "fastn-automerge",
+ "fastn-cli-test-utils",
  "fastn-fbr",
  "fastn-id52",
  "fastn-mail",
