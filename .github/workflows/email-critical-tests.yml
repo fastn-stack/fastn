@@ -53,6 +53,9 @@ jobs:
 
     - name: 🎯 Run Critical Email System Tests
       working-directory: v0.5
+      env:
+        SKIP_KEYRING: true
+        RUST_LOG: info
       run: |
         echo "🎯 Running the most critical tests in fastn email system"
         echo "These tests validate the complete email pipeline:"
@@ -65,8 +68,16 @@ jobs:
         # Make test script executable
         chmod +x test.sh
         
+        # First try a simple compilation test
+        echo "🔨 Testing compilation..."
+        cargo build --bin fastn-rig --bin fastn-mail
+        
         # Run both critical tests for comprehensive validation
-        ./test.sh --both
+        echo "🧪 Running critical email tests..."
+        timeout 300 ./test.sh --both || {
+          echo "❌ Tests failed or timed out after 5 minutes"
+          exit 1
+        }
 
     - name: 📊 Test Results Summary
       if: always()
