@@ -5,9 +5,9 @@
 # If these tests pass, the entire fastn email system is operational.
 #
 # Usage:
-#   ./test.sh            # Run both critical tests (default)
-#   ./test.sh --rust     # Run only Rust STARTTLS test
-#   ./test.sh --bash     # Run only bash plain text test
+#   ./test.sh            # Run bash plain text test (default, fastest)
+#   ./test.sh --rust     # Run only Rust STARTTLS test (slower due to cargo)
+#   ./test.sh --both     # Run both critical tests (comprehensive validation)
 #   ./test.sh --help     # Show this help
 
 set -euo pipefail
@@ -26,26 +26,28 @@ error() { echo -e "${RED}❌ $1${NC}"; exit 1; }
 warn() { echo -e "${YELLOW}⚠️  $1${NC}"; }
 header() { echo -e "${BOLD}${BLUE}$1${NC}"; }
 
-# Parse command line arguments
-RUN_RUST=true
+# Parse command line arguments  
+RUN_RUST=false
 RUN_BASH=true
 
 case "${1:-}" in
     --rust)
         RUN_BASH=false
+        RUN_RUST=true
         log "Running only Rust STARTTLS test"
         ;;
-    --bash)
-        RUN_RUST=false
-        log "Running only bash plain text test"
+    --both)
+        RUN_RUST=true
+        RUN_BASH=true
+        log "Running both critical email tests"
         ;;
     --help)
         echo "🎯 FASTN CRITICAL EMAIL SYSTEM TESTS"
         echo
         echo "Usage:"
-        echo "  ./test.sh            # Run both critical tests (default)"
-        echo "  ./test.sh --rust     # Run only Rust STARTTLS test"
-        echo "  ./test.sh --bash     # Run only bash plain text test"
+        echo "  ./test.sh            # Run bash plain text test (default, fastest)"
+        echo "  ./test.sh --rust     # Run only Rust STARTTLS test (slower due to cargo)"
+        echo "  ./test.sh --both     # Run both critical tests (comprehensive validation)"
         echo "  ./test.sh --help     # Show this help"
         echo
         echo "These tests validate the complete fastn email pipeline:"
@@ -56,7 +58,7 @@ case "${1:-}" in
         exit 0
         ;;
     "")
-        log "Running both critical email tests"
+        log "Running bash plain text test (default, fastest)"
         ;;
     *)
         error "Unknown option: $1. Use --help for usage information."
@@ -82,7 +84,7 @@ run_rust_test() {
     log "Mode: Encrypted STARTTLS SMTP → fastn-p2p → INBOX"
     echo
     
-    if cargo test -p fastn-rig test_complete_email_pipeline_with_starttls -- --nocapture; then
+    if cargo test -p fastn-rig email_end_to_end_starttls -- --nocapture; then
         success "Rust STARTTLS test PASSED"
         RUST_RESULT="✅ PASSED"
         TESTS_PASSED=$((TESTS_PASSED + 1))
