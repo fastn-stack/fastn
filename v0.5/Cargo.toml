@@ -21,6 +21,7 @@ members = [
     "fastn-wasm",
     "fastn-net-test",
     "fastn-p2p-test",
+    "fastn-cli-test-utils",
 ]
 exclude = []
 resolver = "2"
