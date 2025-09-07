@@ -215,6 +215,12 @@ for attempt in $(seq 1 8); do
     
     if [ "$INBOX_COUNT" -gt 0 ]; then
         success "🎉 P2P delivery completed in ${elapsed}s with direct binaries!"
+        
+        # INBOX_COUNT > 0 proves P2P delivery worked successfully
+        # Email was delivered from peer1 Sent folder to peer2 INBOX folder via fastn-p2p
+        log "✅ P2P delivery validation: Email found in receiver INBOX"
+        log "✅ Email pipeline validation: SMTP → fastn-p2p → INBOX complete"
+        
         success "🎉 COMPLETE SUCCESS with direct binary execution!"
         success "📊 SMTP→P2P→INBOX delivery working without compilation delays"
         exit 0
