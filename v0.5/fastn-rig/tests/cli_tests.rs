@@ -19,8 +19,21 @@ fn get_binary_path() -> PathBuf {
     let target_dir = std::env::var("CARGO_TARGET_DIR")
         .map(PathBuf::from)
         .unwrap_or_else(|_| {
-            // Default location in home directory
-            PathBuf::from(std::env::var("HOME").unwrap()).join("target")
+            // Check multiple possible target locations
+            let v0_5_target = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                .parent()
+                .expect("Failed to get project root")
+                .join("target");
+            let home_target = PathBuf::from(std::env::var("HOME").unwrap()).join("target");
+            
+            if v0_5_target.join("debug").join("fastn-rig").exists() {
+                v0_5_target
+            } else if home_target.join("debug").join("fastn-rig").exists() {
+                home_target
+            } else {
+                // Default to v0.5 target if neither exists (build will create it)
+                v0_5_target
+            }
         });
     target_dir.join("debug").join("fastn-rig")
 }
