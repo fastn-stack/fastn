@@ -1,0 +1,16 @@
+[package]
+name = "fastn-cli-test-utils"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.86"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+tempfile = "3"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+eyre = "0.6"
+tracing = "0.1"
+
+[dev-dependencies]
+tokio-test = "0.4"
