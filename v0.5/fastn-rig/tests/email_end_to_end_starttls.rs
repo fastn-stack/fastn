@@ -15,12 +15,12 @@
 
 use std::path::PathBuf;
 
-/// 🎯 THE MOST CRITICAL TEST: Complete STARTTLS SMTP→P2P→INBOX Email Delivery
+/// 🎯 CRITICAL TEST: Complete STARTTLS Email Pipeline  
 /// 
 /// This test validates the entire fastn email system end-to-end using STARTTLS encryption.
 /// If this test passes, users can send encrypted emails through fastn with full P2P delivery.
 #[tokio::test]
-async fn test_complete_email_pipeline_with_starttls() {
+async fn email_end_to_end_starttls() {
     println!("🚀 Starting CRITICAL END-TO-END EMAIL TEST (STARTTLS Mode)");
     println!("🔐 Testing: STARTTLS SMTP → fastn-p2p → INBOX delivery");
 
