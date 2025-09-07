@@ -4,21 +4,21 @@ use thiserror::Error;
 #[derive(Error, Debug)]
 pub enum StoreCreateError {
     #[error("Failed to create mail directories: {path}")]
-    DirectoryCreationFailed {
+    DirectoryCreation {
         path: std::path::PathBuf,
         #[source]
         source: std::io::Error,
     },
 
     #[error("Failed to create mail database: {path}")]
-    DatabaseCreationFailed {
+    DatabaseCreation {
         path: std::path::PathBuf,
         #[source]
         source: rusqlite::Error,
     },
 
     #[error("Failed to run database migrations")]
-    MigrationFailed {
+    Migration {
         #[source]
         source: rusqlite::Error,
     },
@@ -38,7 +38,7 @@ pub enum StoreLoadError {
     },
 
     #[error("Failed to run database migrations")]
-    MigrationFailed {
+    Migration {
         #[source]
         source: rusqlite::Error,
     },

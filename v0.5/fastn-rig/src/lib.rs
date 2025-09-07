@@ -31,18 +31,18 @@ extern crate self as fastn_rig;
 pub mod automerge;
 pub mod email_delivery_p2p;
 pub mod email_poller_p2p;
-pub mod p2p_server;
-pub mod protocols;
 pub mod errors;
 mod http_routes;
 mod http_server;
+pub mod p2p_server;
+pub mod protocols;
 mod rig;
 mod run;
 mod smtp;
 
+mod template_context;
 #[cfg(test)]
 pub mod test_utils;
-mod template_context;
 
 pub use run::run;
 
@@ -56,7 +56,7 @@ pub fn resolve_fastn_home(
             Ok(env_path) => Ok(std::path::PathBuf::from(env_path)),
             Err(_) => {
                 let proj_dirs = directories::ProjectDirs::from("com", "fastn", "fastn")
-                    .ok_or(RunError::FastnHomeResolutionFailed)?;
+                    .ok_or(RunError::FastnHomeResolution)?;
                 Ok(proj_dirs.data_dir().to_path_buf())
             }
         },
@@ -65,8 +65,8 @@ pub fn resolve_fastn_home(
 
 // Re-export specific error types
 pub use errors::{
-    CurrentEntityError, EmailDeliveryError, EntityStatusError,
-    MessageProcessingError, RigCreateError, RigHttpError, RigLoadError, RunError, SmtpError,
+    CurrentEntityError, EmailDeliveryError, EntityStatusError, MessageProcessingError,
+    RigCreateError, RigHttpError, RigLoadError, RunError, SmtpError,
 };
 
 /// Type of owner for an endpoint

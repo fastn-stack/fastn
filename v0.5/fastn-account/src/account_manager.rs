@@ -78,8 +78,10 @@ impl fastn_account::AccountManager {
     /// Returns a tuple of (endpoint_id52, secret_key, account_path)
     pub async fn get_all_endpoints(
         &self,
-    ) -> Result<Vec<(String, fastn_id52::SecretKey, std::path::PathBuf)>, fastn_account::GetAllEndpointsError>
-    {
+    ) -> Result<
+        Vec<(String, fastn_id52::SecretKey, std::path::PathBuf)>,
+        fastn_account::GetAllEndpointsError,
+    > {
         let accounts_dir = self.path.join("accounts");
         let mut all_endpoints = Vec::new();
 
@@ -220,9 +222,7 @@ impl fastn_account::AccountManager {
                 // 4. Create response based on email processing result
                 let response = match email_result {
                     Ok(email_id) => {
-                        println!(
-                            "✅ DEBUG: P2P email stored successfully with ID: {email_id}"
-                        );
+                        println!("✅ DEBUG: P2P email stored successfully with ID: {email_id}");
                         println!("✅ Email stored with ID: {email_id}");
                         fastn_account::EmailDeliveryResponse {
                             email_id,

@@ -120,7 +120,7 @@ mod tests {
             .await?
             .expect_failure()?;  // We expect this to fail
         
-        assert!(result.contains_output("Failed to load rig") || result.contains_output("KeyLoadingFailed"));
+        assert!(result.contains_output("Failed to load rig") || result.contains_output("KeyLoading"));
         
         println!("✅ Error handling works pleasantly");
         Ok(())

@@ -272,11 +272,18 @@ impl SmtpSession {
         // Extract account ID52 from username with debug logging
         let account_id52 = match creds.extract_account_id52() {
             Some(id52) => {
-                tracing::info!("📧 SMTP: Successfully extracted account ID52: {} from username: {}", id52.id52(), creds.username);
+                tracing::info!(
+                    "📧 SMTP: Successfully extracted account ID52: {} from username: {}",
+                    id52.id52(),
+                    creds.username
+                );
                 id52
             }
             None => {
-                tracing::warn!("📧 SMTP: Failed to extract account ID52 from username: {}", creds.username);
+                tracing::warn!(
+                    "📧 SMTP: Failed to extract account ID52 from username: {}",
+                    creds.username
+                );
                 return Ok("535 Authentication failed: invalid username format".to_string());
             }
         };

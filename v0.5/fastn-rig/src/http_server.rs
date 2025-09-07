@@ -30,13 +30,13 @@ pub async fn start_http_server(
             // Bind to any available port
             let listener = tokio::net::TcpListener::bind("127.0.0.1:0")
                 .await
-                .map_err(|e| fastn_rig::RunError::ShutdownFailed {
+                .map_err(|e| fastn_rig::RunError::Shutdown {
                     source: Box::new(e),
                 })?;
 
             let actual_port = listener
                 .local_addr()
-                .map_err(|e| fastn_rig::RunError::ShutdownFailed {
+                .map_err(|e| fastn_rig::RunError::Shutdown {
                     source: Box::new(e),
                 })?
                 .port();
@@ -50,7 +50,7 @@ pub async fn start_http_server(
             let bind_addr = format!("127.0.0.1:{http_port}");
             let listener = tokio::net::TcpListener::bind(&bind_addr)
                 .await
-                .map_err(|e| fastn_rig::RunError::ShutdownFailed {
+                .map_err(|e| fastn_rig::RunError::Shutdown {
                     source: Box::new(e),
                 })?;
 

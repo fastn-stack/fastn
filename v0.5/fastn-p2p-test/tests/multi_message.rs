@@ -17,7 +17,14 @@ async fn test_single_sender_multiple_messages() {
     // Start receiver
     println!("📡 Starting fastn-p2p receiver...");
     let mut receiver = Command::new("cargo")
-        .args(["run", "--bin", "p2p_receiver", "-p", "fastn-p2p-test", &receiver_key.to_string()])
+        .args([
+            "run",
+            "--bin",
+            "p2p_receiver",
+            "-p",
+            "fastn-p2p-test",
+            &receiver_key.to_string(),
+        ])
         .spawn()
         .expect("Failed to start fastn-p2p receiver");
 
@@ -29,7 +36,7 @@ async fn test_single_sender_multiple_messages() {
     // Send multiple messages sequentially
     for i in 1..=5 {
         println!("📤 Sending message #{i}...");
-        
+
         let sender_output = Command::new("cargo")
             .args([
                 "run",
@@ -45,7 +52,7 @@ async fn test_single_sender_multiple_messages() {
             .expect("Failed to run fastn-p2p sender");
 
         let stdout = String::from_utf8_lossy(&sender_output.stdout);
-        
+
         if sender_output.status.success() {
             println!("✅ Message #{i} sent successfully");
             if stdout.contains("\"status\":\"success\"") {
@@ -57,7 +64,7 @@ async fn test_single_sender_multiple_messages() {
             println!("❌ Message #{i} failed: {}", sender_output.status);
             break;
         }
-        
+
         // Small delay between messages
         tokio::time::sleep(Duration::from_millis(500)).await;
     }

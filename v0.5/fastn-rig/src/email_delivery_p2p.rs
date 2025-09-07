@@ -18,7 +18,7 @@ pub struct EmailDeliveryError {
 }
 
 /// Deliver emails to a peer using fastn-p2p
-/// 
+///
 /// This is the new implementation using the locked-down fastn-p2p API
 /// instead of the low-level fastn-net get_stream approach.
 pub async fn deliver_emails_to_peer_v2(
@@ -39,7 +39,7 @@ pub async fn deliver_emails_to_peer_v2(
     );
 
     // For now, use a placeholder secret key - we'll fix the account integration later
-    let our_secret_key = fastn_id52::SecretKey::generate();  // TODO: Get from account
+    let our_secret_key = fastn_id52::SecretKey::generate(); // TODO: Get from account
     println!("✅ DEBUG: Using placeholder secret key for testing");
 
     let mut delivered_email_ids = Vec::new();
@@ -58,9 +58,12 @@ pub async fn deliver_emails_to_peer_v2(
             envelope_to: email.envelope_to.clone(),
         };
 
-        // Use the new type-safe fastn-p2p call instead of manual stream handling  
-        println!("📧 DEBUG: Calling fastn_p2p::call for email {}", email.email_id);
-        
+        // Use the new type-safe fastn-p2p call instead of manual stream handling
+        println!(
+            "📧 DEBUG: Calling fastn_p2p::call for email {}",
+            email.email_id
+        );
+
         let call_result = tokio::time::timeout(
             std::time::Duration::from_secs(30),
             fastn_p2p::call::<RigProtocol, _, EmailDeliveryResponse, EmailDeliveryError>(
@@ -68,8 +71,9 @@ pub async fn deliver_emails_to_peer_v2(
                 peer_id52,
                 RigProtocol::EmailDelivery,
                 request,
-            )
-        ).await;
+            ),
+        )
+        .await;
 
         match call_result {
             Ok(Ok(Ok(_response))) => {
@@ -77,20 +81,32 @@ pub async fn deliver_emails_to_peer_v2(
                 delivered_email_ids.push(email.email_id.clone());
             }
             Ok(Ok(Err(_delivery_error))) => {
-                println!("❌ DEBUG: Email {} delivery rejected by peer", email.email_id);
+                println!(
+                    "❌ DEBUG: Email {} delivery rejected by peer",
+                    email.email_id
+                );
                 // Skip adding to delivered list - will be retried later
             }
             Ok(Err(call_error)) => {
-                println!("❌ DEBUG: Email {} fastn-p2p call failed: {}", email.email_id, call_error);
+                println!(
+                    "❌ DEBUG: Email {} fastn-p2p call failed: {}",
+                    email.email_id, call_error
+                );
                 // Skip adding to delivered list
             }
             Err(_timeout) => {
-                println!("⏰ DEBUG: Email {} delivery timed out after 30 seconds", email.email_id);
+                println!(
+                    "⏰ DEBUG: Email {} delivery timed out after 30 seconds",
+                    email.email_id
+                );
                 // Skip adding to delivered list
             }
         }
     }
 
-    println!("🎯 DEBUG: Completed delivery of {} emails via fastn-p2p", delivered_email_ids.len());
+    println!(
+        "🎯 DEBUG: Completed delivery of {} emails via fastn-p2p",
+        delivered_email_ids.len()
+    );
     Ok(delivered_email_ids)
 }

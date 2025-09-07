@@ -7,16 +7,19 @@ use std::process::Command;
 pub fn get_binary_path(binary_name: &str) -> PathBuf {
     let target_dir = detect_target_dir();
     let binary_path = target_dir.join(binary_name);
-    
+
     // If binary doesn't exist, try building the common package
     if !binary_path.exists() {
         let _ = ensure_built(&[binary_name]);
     }
-    
+
     if !binary_path.exists() {
-        panic!("Binary {binary_name} not found at {}", binary_path.display());
+        panic!(
+            "Binary {binary_name} not found at {}",
+            binary_path.display()
+        );
     }
-    
+
     binary_path
 }
 
@@ -52,7 +55,8 @@ pub fn ensure_built(binary_names: &[&str]) -> Result<(), Box<dyn std::error::Err
             return Err(format!(
                 "Failed to build {binary_name}: {}",
                 String::from_utf8_lossy(&output.stderr)
-            ).into());
+            )
+            .into());
         }
     }
     Ok(())
@@ -75,10 +79,11 @@ impl CommandOutput {
             Err(format!(
                 "Command failed with exit code {:?}\nstdout: {}\nstderr: {}",
                 self.exit_code, self.stdout, self.stderr
-            ).into())
+            )
+            .into())
         }
     }
-    
+
     pub fn expect_failure(self) -> Result<Self, Box<dyn std::error::Error>> {
         if !self.success {
             Ok(self)
@@ -86,11 +91,11 @@ impl CommandOutput {
             Err(format!("Command unexpectedly succeeded\nstdout: {}", self.stdout).into())
         }
     }
-    
+
     pub fn contains_output(&self, text: &str) -> bool {
         self.stdout.contains(text) || self.stderr.contains(text)
     }
-    
+
     /// Extract account ID from fastn-rig init output
     pub fn extract_account_id(&self) -> Result<String, Box<dyn std::error::Error>> {
         for line in self.stdout.lines() {
@@ -102,7 +107,7 @@ impl CommandOutput {
         }
         Err("Account ID not found in output".into())
     }
-    
+
     /// Extract password from fastn-rig init output
     pub fn extract_password(&self) -> Result<String, Box<dyn std::error::Error>> {
         for line in self.stdout.lines() {
@@ -125,7 +130,7 @@ pub fn detect_target_dir() -> PathBuf {
             return path.join("debug");
         }
     }
-    
+
     // Strategy 2: Workspace target (v0.5/target/debug)
     let manifest_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     let workspace_root = manifest_dir
@@ -133,24 +138,23 @@ pub fn detect_target_dir() -> PathBuf {
         .find(|p| p.join("Cargo.toml").exists() && p.join("fastn-rig").exists())
         .expect("Could not find workspace root");
     let v0_5_target = workspace_root.join("target/debug");
-    
+
     // Strategy 3: Home target (~/target/debug)
-    let home_target = PathBuf::from(std::env::var("HOME").unwrap_or_default())
-        .join("target/debug");
-    
+    let home_target = PathBuf::from(std::env::var("HOME").unwrap_or_default()).join("target/debug");
+
     // Strategy 4: Current directory target (./target/debug)
     let local_target = PathBuf::from("./target/debug");
-    
+
     // Strategy 5: Hardcoded legacy path
     let legacy_target = PathBuf::from("/Users/amitu/target/debug");
-    
+
     // Check in order of preference
     for candidate in [&v0_5_target, &home_target, &local_target, &legacy_target] {
         if candidate.exists() {
             return candidate.clone();
         }
     }
-    
+
     // If none exist, default to workspace target (build will create it)
     v0_5_target
 }

@@ -60,7 +60,7 @@ async fn main() -> eyre::Result<()> {
     // Use same format as fastn-p2p-test for compatibility
     let test_message = serde_json::json!({
         "from": sender_id52,
-        "to": receiver_id52, 
+        "to": receiver_id52,
         "message": "Hello from fastn-net test!",
         "timestamp": chrono::Utc::now().timestamp()
     });
@@ -68,9 +68,10 @@ async fn main() -> eyre::Result<()> {
     println!("📤 About to send test message via fastn-net get_stream");
 
     // Convert receiver_id52 string to PublicKey
-    let receiver_public_key = receiver_id52.parse::<fastn_id52::PublicKey>()
+    let receiver_public_key = receiver_id52
+        .parse::<fastn_id52::PublicKey>()
         .map_err(|e| eyre::anyhow!("Invalid receiver_id52: {}", e))?;
-    
+
     // Use get_stream exactly like http_proxy.rs does
     let (mut send, mut recv) = fastn_net::get_stream(
         endpoint,

@@ -1,7 +1,7 @@
 fn find_all_definitions_in_a_module(
     compiler: &mut fastn_compiler::Compiler,
     (file, module): (String, fastn_section::Module),
-) -> Vec<fastn_unresolved::URD> {
+) -> Vec<fastn_unresolved::Urd> {
     // we need to fetch the symbol from the store
     let source = match std::fs::File::open(file.as_str()).and_then(std::io::read_to_string) {
         Ok(v) => v,
@@ -31,7 +31,7 @@ fn find_all_definitions_in_a_module(
 pub fn lookup(
     compiler: &mut fastn_compiler::Compiler,
     symbols: std::collections::HashSet<fastn_section::Symbol>,
-) -> Vec<fastn_unresolved::URD> {
+) -> Vec<fastn_unresolved::Urd> {
     let unique_modules = symbols
         .iter()
         .map(|s| file_for_symbol(s, &mut compiler.arena))

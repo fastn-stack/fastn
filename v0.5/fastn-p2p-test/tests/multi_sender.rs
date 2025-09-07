@@ -10,13 +10,20 @@ async fn test_multi_sender() {
     // Create receiver key
     let receiver_key = fastn_id52::SecretKey::generate();
     let receiver_id52 = receiver_key.public_key().id52();
-    
+
     println!("🔑 Receiver ID52: {}", receiver_id52);
 
     // Start single receiver
     println!("📡 Starting single fastn-p2p receiver for multiple senders...");
     let mut receiver = Command::new("cargo")
-        .args(["run", "--bin", "p2p_receiver", "-p", "fastn-p2p-test", &receiver_key.to_string()])
+        .args([
+            "run",
+            "--bin",
+            "p2p_receiver",
+            "-p",
+            "fastn-p2p-test",
+            &receiver_key.to_string(),
+        ])
         .spawn()
         .expect("Failed to start fastn-p2p receiver");
 
@@ -32,18 +39,22 @@ async fn test_multi_sender() {
     for sender_id in 1..=num_senders {
         let sender_key = fastn_id52::SecretKey::generate();
         let receiver_id52_clone = receiver_id52.clone();
-        
-        println!("🔑 Generated sender #{} key: {}", sender_id, sender_key.public_key().id52());
-        
+
+        println!(
+            "🔑 Generated sender #{} key: {}",
+            sender_id,
+            sender_key.public_key().id52()
+        );
+
         let task = tokio::spawn(async move {
             println!("📤 Sender #{} starting...", sender_id);
-            
+
             let sender_output = Command::new("cargo")
                 .args([
                     "run",
                     "-p",
                     "fastn-p2p-test",
-                    "--bin", 
+                    "--bin",
                     "p2p_sender",
                     &sender_key.to_string(),
                     &receiver_id52_clone,
@@ -54,17 +65,25 @@ async fn test_multi_sender() {
 
             let stdout = String::from_utf8_lossy(&sender_output.stdout);
             let stderr = String::from_utf8_lossy(&sender_output.stderr);
-            
-            println!("🔧 DEBUG: Sender #{} stdout length: {}", sender_id, stdout.len());
-            println!("🔧 DEBUG: Sender #{} stderr length: {}", sender_id, stderr.len());
-            
+
+            println!(
+                "🔧 DEBUG: Sender #{} stdout length: {}",
+                sender_id,
+                stdout.len()
+            );
+            println!(
+                "🔧 DEBUG: Sender #{} stderr length: {}",
+                sender_id,
+                stderr.len()
+            );
+
             if !stdout.trim().is_empty() {
                 println!("🔧 DEBUG: Sender #{} stdout: {}", sender_id, stdout.trim());
             }
             if !stderr.trim().is_empty() {
                 println!("🔧 DEBUG: Sender #{} stderr: {}", sender_id, stderr.trim());
             }
-            
+
             if sender_output.status.success() {
                 println!("✅ Sender #{} completed successfully", sender_id);
                 if stdout.contains("\"status\":\"success\"") {
@@ -79,9 +98,9 @@ async fn test_multi_sender() {
                 false
             }
         });
-        
+
         sender_tasks.push(task);
-        
+
         // Small stagger to avoid overwhelming
         tokio::time::sleep(Duration::from_millis(200)).await;
     }
@@ -104,12 +123,18 @@ async fn test_multi_sender() {
         }
     }
 
-    println!("🎯 Multiple senders test completed: {}/{} successful", success_count, num_senders);
-    
+    println!(
+        "🎯 Multiple senders test completed: {}/{} successful",
+        success_count, num_senders
+    );
+
     // Assert majority success for robust testing
-    assert!(success_count >= num_senders / 2, 
-            "Expected at least half the senders to succeed, got {}/{}", 
-            success_count, num_senders);
+    assert!(
+        success_count >= num_senders / 2,
+        "Expected at least half the senders to succeed, got {}/{}",
+        success_count,
+        num_senders
+    );
 }
 
 /// Process cleanup guard

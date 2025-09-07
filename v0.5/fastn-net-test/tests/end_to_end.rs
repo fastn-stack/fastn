@@ -7,7 +7,7 @@ use tokio::process::Command;
 async fn test_fastn_net_sender_receiver_cli() {
     println!("🔧 Testing fastn-net CLI with deterministic keys...");
 
-    // Create fresh random keys to avoid conflicts with other tests/processes  
+    // Create fresh random keys to avoid conflicts with other tests/processes
     let receiver_key = fastn_id52::SecretKey::generate();
     let sender_key = fastn_id52::SecretKey::generate();
 

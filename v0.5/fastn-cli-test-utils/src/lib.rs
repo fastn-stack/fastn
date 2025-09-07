@@ -7,32 +7,27 @@
 //! - Peer management, SMTP ports, keyring handling
 //! - Fluent API for readable test scenarios
 
-use std::path::PathBuf;
 use std::time::Duration;
 
-pub mod simple;
-pub mod fastn_rig;
 pub mod fastn_mail;
+pub mod fastn_rig;
+pub mod simple;
 pub mod test_env;
 
 pub use simple::{
-    get_binary_path, 
+    CommandOutput, detect_target_dir, ensure_built, get_binary_path, get_fastn_mail_binary,
     get_fastn_rig_binary,
-    get_fastn_mail_binary,
-    detect_target_dir,
-    ensure_built,
-    CommandOutput,
 };
 
-pub use test_env::{FastnTestEnv, PeerHandle, EmailBuilder, EmailResult};
-pub use fastn_rig::FastnRigCommand;
 pub use fastn_mail::{FastnMailCommand, FastnMailSendBuilder};
+pub use fastn_rig::FastnRigCommand;
+pub use test_env::{EmailBuilder, EmailResult, FastnTestEnv, PeerHandle};
 
 /// fastn-specific test configuration
 #[derive(Debug, Clone)]
 pub struct FastnCliConfig {
     pub pre_build: bool,
-    pub cleanup_on_drop: bool, 
+    pub cleanup_on_drop: bool,
     pub default_timeout: Duration,
     pub skip_keyring: bool,
     pub smtp_port_range: std::ops::Range<u16>,

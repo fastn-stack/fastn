@@ -278,7 +278,7 @@ fn error(e: &fastn_section::Error, _s: Option<fastn_section::Span>) -> serde_jso
         fastn_section::Error::InvalidPackageFile => "invalid_package_file",
         fastn_section::Error::BodyWithoutDoubleNewline => "body_without_double_newline",
         fastn_section::Error::UnclosedBrace => "unclosed_brace",
-        fastn_section::Error::DashCountError => "dash_count_error",
+        fastn_section::Error::DashCount => "dash_count_error",
         fastn_section::Error::MissingName => "missing_name",
         fastn_section::Error::UnclosedParen => "unclosed_paren",
         fastn_section::Error::SectionNotAllowedInCondition => "section_not_allowed_in_condition",

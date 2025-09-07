@@ -10,11 +10,18 @@ async fn test_stress_test() {
     // Create one robust receiver
     let receiver_key = fastn_id52::SecretKey::generate();
     let receiver_id52 = receiver_key.public_key().id52();
-    
+
     println!("📡 Starting stress test receiver: {}", receiver_id52);
 
     let mut receiver = Command::new("cargo")
-        .args(["run", "--bin", "p2p_receiver", "-p", "fastn-p2p-test", &receiver_key.to_string()])
+        .args([
+            "run",
+            "--bin",
+            "p2p_receiver",
+            "-p",
+            "fastn-p2p-test",
+            &receiver_key.to_string(),
+        ])
         .spawn()
         .expect("Failed to start receiver");
 
@@ -30,7 +37,7 @@ async fn test_stress_test() {
     for sender_id in 1..=num_concurrent {
         let sender_key = fastn_id52::SecretKey::generate();
         let receiver_id52_clone = receiver_id52.clone();
-        
+
         let task = tokio::spawn(async move {
             // No delay - immediate concurrent execution
             let sender_output = Command::new("cargo")
@@ -39,7 +46,7 @@ async fn test_stress_test() {
                     "--bin",
                     "p2p_sender",
                     "-p",
-                    "fastn-p2p-test", 
+                    "fastn-p2p-test",
                     &sender_key.to_string(),
                     &receiver_id52_clone,
                 ])
@@ -51,15 +58,19 @@ async fn test_stress_test() {
             if success {
                 let stdout = String::from_utf8_lossy(&sender_output.stdout);
                 let json_success = stdout.contains("\"status\":\"success\"");
-                println!("✅ Concurrent sender #{}: {} (JSON: {})", 
-                        sender_id, if success { "SUCCESS" } else { "FAILED" }, json_success);
+                println!(
+                    "✅ Concurrent sender #{}: {} (JSON: {})",
+                    sender_id,
+                    if success { "SUCCESS" } else { "FAILED" },
+                    json_success
+                );
                 json_success
             } else {
                 println!("❌ Concurrent sender #{}: FAILED", sender_id);
                 false
             }
         });
-        
+
         concurrent_tasks.push(task);
     }
 
@@ -80,13 +91,17 @@ async fn test_stress_test() {
         }
     }
 
-    println!("🎉 Stress test completed: {}/{} concurrent connections successful", 
-             concurrent_success, num_concurrent);
-    
+    println!(
+        "🎉 Stress test completed: {}/{} concurrent connections successful",
+        concurrent_success, num_concurrent
+    );
+
     // For stress test, expect at least some success (networking can be flaky under high load)
-    assert!(concurrent_success >= 1, 
-            "Expected at least 1 successful concurrent connection, got {}", 
-            concurrent_success);
+    assert!(
+        concurrent_success >= 1,
+        "Expected at least 1 successful concurrent connection, got {}",
+        concurrent_success
+    );
 }
 
 /// Process cleanup guard

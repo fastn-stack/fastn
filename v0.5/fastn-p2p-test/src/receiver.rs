@@ -30,7 +30,7 @@ pub struct EchoResponse {
     pub response: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]  
+#[derive(Serialize, Deserialize, Debug)]
 pub struct EchoError {
     pub error: String,
 }
@@ -64,7 +64,7 @@ async fn main() -> eyre::Result<()> {
     let receiver_id52 = receiver_key.public_key().id52();
     println!("🔑 Receiver ID52: {receiver_id52}");
 
-    // Output JSON for easy parsing in tests  
+    // Output JSON for easy parsing in tests
     let startup_info = serde_json::json!({
         "status": "started",
         "receiver_id52": receiver_id52,
@@ -85,35 +85,41 @@ async fn main() -> eyre::Result<()> {
 
     println!("📡 fastn-p2p receiver listening on Echo protocol");
     println!("🎯 Waiting for connections...");
-    
+
     println!("🔧 DEBUG: About to call stream.next().await");
 
     // Handle multiple connections
     let mut message_count = 0;
-    
+
     while let Some(request_result) = stream.next().await {
         let request = request_result?;
         message_count += 1;
-        
-        println!("🔗 Accepted connection #{} from {}", message_count, request.peer().id52());
+
+        println!(
+            "🔗 Accepted connection #{} from {}",
+            message_count,
+            request.peer().id52()
+        );
         println!("📨 Received {} protocol request", request.protocol);
-        
+
         // Handle the echo request
-        let result = request.handle(|req: EchoRequest| async move {
-            println!("📨 Received message: {}", req.message);
-            
-            let response = EchoResponse {
-                response: format!("Echo: {}", req.message),
-            };
-            
-            Result::<EchoResponse, EchoError>::Ok(response)
-        }).await;
-        
+        let result = request
+            .handle(|req: EchoRequest| async move {
+                println!("📨 Received message: {}", req.message);
+
+                let response = EchoResponse {
+                    response: format!("Echo: {}", req.message),
+                };
+
+                Result::<EchoResponse, EchoError>::Ok(response)
+            })
+            .await;
+
         match result {
             Ok(_) => println!("✅ Request #{message_count} handled successfully"),
             Err(e) => eprintln!("❌ Request #{message_count} handling failed: {e}"),
         }
-        
+
         // Stop after handling 10 messages for this test
         if message_count >= 10 {
             println!("🎯 Handled {message_count} messages, shutting down receiver");

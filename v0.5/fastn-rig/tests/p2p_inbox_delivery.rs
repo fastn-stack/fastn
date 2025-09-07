@@ -55,7 +55,6 @@ impl FastnRigHelper {
         }
     }
 
-
     /// Run fastn-rig init (pre-compiled binary - no compilation delay)
     async fn init(
         &self,

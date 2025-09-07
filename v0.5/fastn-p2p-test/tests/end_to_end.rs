@@ -61,7 +61,10 @@ async fn test_fastn_p2p_sender_receiver_cli() {
             println!("⚠️ Sender succeeded but no JSON result found");
         }
     } else {
-        println!("❌ fastn-p2p Sender failed with exit code: {}", sender_output.status);
+        println!(
+            "❌ fastn-p2p Sender failed with exit code: {}",
+            sender_output.status
+        );
         if stdout.contains("TimedOut") {
             println!("🐛 Identified timeout in test environment");
         }
