@@ -55,6 +55,10 @@ pub enum Commands {
         /// SMTP password for authentication (required when using SMTP client)
         #[arg(long)]
         password: Option<String>,
+
+        /// Enable STARTTLS for secure SMTP connection
+        #[arg(long)]
+        starttls: bool,
     },
 
     /// List emails in a folder
@@ -127,9 +131,10 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             smtp,
             direct,
             password,
+            starttls,
         } => {
             send_mail_command(
-                &store, to, cc, bcc, subject, body, from, smtp, direct, password,
+                &store, to, cc, bcc, subject, body, from, smtp, direct, password, starttls,
             )
             .await?;
         }
@@ -180,6 +185,7 @@ async fn send_mail_command(
     #[cfg_attr(not(feature = "net"), allow(unused_variables))] smtp_port: Option<u16>,
     direct: bool,
     #[cfg_attr(not(feature = "net"), allow(unused_variables))] password: Option<String>,
+    #[cfg_attr(not(feature = "net"), allow(unused_variables))] starttls: bool,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("📧 Composing email...");
 
@@ -259,6 +265,7 @@ async fn send_mail_command(
                 &body,
                 port,
                 &smtp_password,
+                starttls,
             )
             .await
             {
@@ -651,6 +658,7 @@ async fn send_via_smtp_client(
     body: &str,
     port: u16,
     password: &str,
+    starttls: bool,
 ) -> Result<(), Box<dyn std::error::Error>> {
     // Parse email addresses
     let from_mailbox: lettre::message::Mailbox = from.parse()?;
@@ -688,10 +696,19 @@ async fn send_via_smtp_client(
     );
 
     // Connect to local fastn-rig SMTP server
-    let mailer = lettre::SmtpTransport::builder_dangerous("localhost")
-        .port(port)
-        .credentials(credentials)
-        .build();
+    let mailer = if starttls {
+        println!("🔐 Using STARTTLS connection");
+        lettre::SmtpTransport::starttls_relay("localhost")?
+            .port(port)
+            .credentials(credentials)
+            .build()
+    } else {
+        println!("📧 Using plain text connection");
+        lettre::SmtpTransport::builder_dangerous("localhost")
+            .port(port)
+            .credentials(credentials)
+            .build()
+    };
 
     // Send the email
     lettre::Transport::send(&mailer, &email)?;

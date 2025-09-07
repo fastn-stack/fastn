@@ -94,6 +94,9 @@ impl CertificateStorage {
         rig_secret_key: &fastn_id52::SecretKey,
     ) -> Result<rustls::ServerConfig, CertificateError> {
         use ed25519_dalek::pkcs8::EncodePrivateKey;
+        
+        // Initialize rustls crypto provider if not already done
+        let _ = rustls::crypto::aws_lc_rs::default_provider().install_default();
 
         // Convert Ed25519 key to PKCS#8 format for certificate generation
         let raw_key_bytes = rig_secret_key.to_bytes();
