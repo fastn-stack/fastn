@@ -114,13 +114,13 @@ success "Peer 2: $ACCOUNT2_ID"
 success "Account validation passed"
 
 # Step 4: Start peers (direct binary execution - no compilation delay)
-log "🚀 Starting peer 1 (SMTP: 2525)..."
-SKIP_KEYRING=true FASTN_HOME="$TEST_DIR/peer1" FASTN_SMTP_PORT=2525 \
+log "🚀 Starting peer 1 (SMTP: 587)..."
+SKIP_KEYRING=true FASTN_HOME="$TEST_DIR/peer1" FASTN_SMTP_PORT=587 \
     "$FASTN_RIG" run >/tmp/peer1_run.log 2>&1 &
 PID1=$!
 
-log "🚀 Starting peer 2 (SMTP: 2526)..."  
-SKIP_KEYRING=true FASTN_HOME="$TEST_DIR/peer2" FASTN_SMTP_PORT=2526 \
+log "🚀 Starting peer 2 (SMTP: 588)..."  
+SKIP_KEYRING=true FASTN_HOME="$TEST_DIR/peer2" FASTN_SMTP_PORT=588 \
     "$FASTN_RIG" run >/tmp/peer2_run.log 2>&1 &
 PID2=$!
 
@@ -154,7 +154,7 @@ log "📧 To: $TO"
 
 # Use direct binary (no compilation delay during email send)
 if FASTN_HOME="$TEST_DIR/peer1" "$FASTN_MAIL" send-mail \
-    --smtp 2525 --password "$ACCOUNT1_PWD" \
+    --smtp 587 --password "$ACCOUNT1_PWD" \
     --from "$FROM" --to "$TO" \
     --subject "Direct Binary Test" \
     --body "No compilation delays"; then
