@@ -125,24 +125,24 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         .unwrap_or(587);  // Default to port 587 (standard email submission port)
     println!("📮 SMTP server listening on port {smtp_port} (supports both plain text and STARTTLS)");
 
-    let smtp_server = match crate::smtp::SmtpServer::new(
+    // Create SMTP server with STARTTLS support (MUST succeed)
+    let smtp_server = crate::smtp::SmtpServer::new(
         account_manager.clone(), 
         ([0, 0, 0, 0], smtp_port).into(),
         &fastn_home,
         rig.secret_key().clone(),
-    ) {
-        Ok(server) => {
-            println!("✅ SMTP server created with STARTTLS certificate support");
-            server
-        }
-        Err(e) => {
-            eprintln!("⚠️  Failed to create SMTP server with certificates: {e}");
-            eprintln!("   Falling back to basic SMTP server without STARTTLS");
-            // TODO: Create fallback SMTP server without certificate requirements
-            return Err(fastn_rig::RunError::FastnHomeResolution);
-        }
-    };
+    ).map_err(|e| {
+        eprintln!("❌ CRITICAL: Failed to create SMTP server: {e}");
+        eprintln!("   This indicates a serious problem that must be fixed:");
+        eprintln!("   - Certificate storage creation failed");
+        eprintln!("   - Directory permissions issues");  
+        eprintln!("   - TLS/crypto library problems");
+        eprintln!("   fastn_home: {}", fastn_home.display());
+        eprintln!("   Certificate dir would be: {}", fastn_home.parent().map(|p| p.join("certs").display().to_string()).unwrap_or_else(|| "UNKNOWN".to_string()));
+        fastn_rig::RunError::FastnHomeResolution // Stop execution to force debugging
+    })?;
     
+    println!("✅ SMTP server created with STARTTLS certificate support");
     let _smtp_handle = fastn_p2p::spawn(async move {
         if let Err(e) = smtp_server.start().await {
             tracing::error!("SMTP server error: {}", e);

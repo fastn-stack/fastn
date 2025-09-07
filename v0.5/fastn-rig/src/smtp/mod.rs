@@ -82,7 +82,14 @@ impl SmtpServer {
     }
 
     pub async fn start(&self) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-        let listener = tokio::net::TcpListener::bind(self.bind_addr).await?;
+        println!("🔧 SMTP server attempting to bind to {}", self.bind_addr);
+        let listener = tokio::net::TcpListener::bind(self.bind_addr).await
+            .map_err(|e| {
+                eprintln!("❌ CRITICAL: Failed to bind SMTP server to {}: {}", self.bind_addr, e);
+                eprintln!("   Error type: {}", e.kind());
+                eprintln!("   This is likely a port permission or port-in-use issue");
+                e
+            })?;
         tracing::info!("📧 SMTP server listening on {}", self.bind_addr);
         println!("📧 SMTP server listening on {}", self.bind_addr);
 
