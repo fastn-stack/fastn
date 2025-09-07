@@ -115,13 +115,13 @@ success "Peer 2: $ACCOUNT2_ID"
 success "Account validation passed"
 
 # Step 4: Start peers (direct binary execution - no compilation delay)
-log "🚀 Starting peer 1 (SMTP: 8587)..."
-SKIP_KEYRING=true FASTN_HOME="$TEST_DIR/peer1" FASTN_SMTP_PORT=8587 \
+log "🚀 Starting peer 1 (SMTP: 2525)..."
+SKIP_KEYRING=true FASTN_HOME="$TEST_DIR/peer1" FASTN_SMTP_PORT=2525 \
     "$FASTN_RIG" run >/tmp/peer1_run.log 2>&1 &
 PID1=$!
 
-log "🚀 Starting peer 2 (SMTP: 8588)..."  
-SKIP_KEYRING=true FASTN_HOME="$TEST_DIR/peer2" FASTN_SMTP_PORT=8588 \
+log "🚀 Starting peer 2 (SMTP: 2526)..."  
+SKIP_KEYRING=true FASTN_HOME="$TEST_DIR/peer2" FASTN_SMTP_PORT=2526 \
     "$FASTN_RIG" run >/tmp/peer2_run.log 2>&1 &
 PID2=$!
 
@@ -140,29 +140,30 @@ trap cleanup EXIT
 log "⏳ Waiting for peers to start (10 seconds for CI compatibility)..."
 sleep 10
 
-# Verify servers are actually listening on expected ports
-log "🔍 Verifying servers are listening..."
+# Verify servers started successfully by checking logs (netstat not available on all systems)
+log "🔍 Verifying servers started successfully..."
 
-# Show all listening ports for debugging
-echo "📊 All listening ports:"
-netstat -ln 2>/dev/null | grep LISTEN | head -20 || echo "netstat failed"
-
-# Check for our specific ports
-if ! netstat -ln 2>/dev/null | grep -q ":8587.*LISTEN"; then
-    echo "❌ Peer 1 SMTP server NOT listening on port 8587"
+# Check peer 1 server logs for successful startup
+if grep -q "SMTP server listening on.*2525" /tmp/peer1_run.log; then
+    log "✅ Peer 1 SMTP server confirmed listening on port 2525"
+else
+    echo "❌ Peer 1 SMTP server startup failed"
     echo "📋 Peer 1 process logs (last 20 lines):"
     tail -20 /tmp/peer1_run.log || echo "No peer1 log file"
-    error "Peer 1 SMTP server not listening on port 8587"
+    error "Peer 1 SMTP server not listening on port 2525"
 fi
 
-if ! netstat -ln 2>/dev/null | grep -q ":8588.*LISTEN"; then
-    echo "❌ Peer 2 SMTP server NOT listening on port 8588"
+# Check peer 2 server logs for successful startup  
+if grep -q "SMTP server listening on.*2526" /tmp/peer2_run.log; then
+    log "✅ Peer 2 SMTP server confirmed listening on port 2526"
+else
+    echo "❌ Peer 2 SMTP server startup failed" 
     echo "📋 Peer 2 process logs (last 20 lines):"
     tail -20 /tmp/peer2_run.log || echo "No peer2 log file"
-    error "Peer 2 SMTP server not listening on port 8588" 
+    error "Peer 2 SMTP server not listening on port 2526" 
 fi
 
-success "Both SMTP servers confirmed listening"
+success "Both SMTP servers confirmed started successfully"
 
 # Check if processes are still running after startup wait
 if ! kill -0 $PID1 2>/dev/null; then
@@ -191,7 +192,7 @@ log "📧 To: $TO"
 
 # Use direct binary (no compilation delay during email send)
 if FASTN_HOME="$TEST_DIR/peer1" "$FASTN_MAIL" send-mail \
-    --smtp 8587 --password "$ACCOUNT1_PWD" \
+    --smtp 2525 --password "$ACCOUNT1_PWD" \
     --from "$FROM" --to "$TO" \
     --subject "Direct Binary Test" \
     --body "No compilation delays"; then
