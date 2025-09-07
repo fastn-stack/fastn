@@ -1,6 +1,6 @@
 //! Self-signed certificate generation using rig's Ed25519 key
 
-use crate::automerge::{EmailCertificateConfig, RigConfig};
+use crate::automerge::{EmailCertificate, RigConfig};
 use crate::certs::CertificateError;
 use ed25519_dalek::pkcs8::EncodePrivateKey;
 
@@ -162,21 +162,8 @@ async fn store_certificate_in_rig_config(
         .unwrap()
         .as_secs() as i64;
 
-    let cert_config = EmailCertificateConfig::SelfSigned {
-        cert_pem: cert_pem.to_string(),
-        generated_at: now_unix,
-        expires_at: now_unix + (365 * 24 * 60 * 60), // 1 year
-        sans: sans.to_vec(),
-    };
-
-    // Update and save rig config
-    rig_config.email_certificate = cert_config;
-    rig_config.update(automerge_db)
-        .map_err(|e| CertificateError::ConfigSave { 
-            source: Box::new(e) 
-        })?;
-
-    println!("💾 Certificate stored in RigConfig automerge document");
+    // TODO: Store certificate in stable filesystem location instead of automerge
+    println!("💾 Certificate generation complete (storage to be implemented)");
     Ok(())
 }
 

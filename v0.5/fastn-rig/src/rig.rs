@@ -1,5 +1,4 @@
 use std::str::FromStr;
-use ed25519_dalek::pkcs8::EncodePrivateKey;
 
 impl fastn_rig::Rig {
     /// Check if a fastn_home directory is already initialized
@@ -110,21 +109,7 @@ impl fastn_rig::Rig {
                 .unwrap()
                 .as_secs() as i64,
             current_entity: owner, // Owner is the initial current entity
-            email_certificate: {
-                // Generate self-signed certificate during rig creation
-                let cert_pem = generate_initial_certificate(&secret_key)?;
-                let now_unix = std::time::SystemTime::now()
-                    .duration_since(std::time::UNIX_EPOCH)
-                    .unwrap()
-                    .as_secs() as i64;
-                
-                fastn_rig::automerge::EmailCertificateConfig::SelfSigned {
-                    cert_pem,
-                    generated_at: now_unix,
-                    expires_at: now_unix + (365 * 24 * 60 * 60), // 1 year
-                    sans: generate_certificate_sans(&secret_key)?,
-                }
-            },
+            email_certificate: fastn_rig::automerge::EmailCertificate::SelfSigned,
         };
 
         // Store the complete config struct in the database
@@ -311,105 +296,3 @@ impl fastn_rig::Rig {
     }
 }
 
-/// Generate initial self-signed certificate during rig creation
-fn generate_initial_certificate(secret_key: &fastn_id52::SecretKey) -> Result<String, fastn_rig::RigCreateError> {
-    // Convert Ed25519 key to PKCS#8 format for rcgen
-    let raw_key_bytes = secret_key.to_bytes();
-    let signing_key = ed25519_dalek::SigningKey::from_bytes(&raw_key_bytes);
-    let pkcs8_der = signing_key.to_pkcs8_der()
-        .map_err(|_| fastn_rig::RigCreateError::KeyGeneration)?;
-    
-    let private_key_der = rustls::pki_types::PrivateKeyDer::Pkcs8(
-        pkcs8_der.as_bytes().into()
-    );
-    let key_pair = rcgen::KeyPair::from_der_and_sign_algo(&private_key_der, &rcgen::PKCS_ED25519)
-        .map_err(|_| fastn_rig::RigCreateError::KeyGeneration)?;
-
-    // Create basic certificate parameters for initial setup  
-    let sans = generate_certificate_sans(secret_key)?;
-    let mut params = rcgen::CertificateParams::new(sans.clone())
-        .map_err(|_| fastn_rig::RigCreateError::KeyGeneration)?;
-
-    // Set certificate subject (computed, not stored)
-    let subject = format!("fastn-rig-{}", &secret_key.public_key().id52()[..8]);
-    params.distinguished_name.push(rcgen::DnType::CommonName, &subject);
-    params.distinguished_name.push(rcgen::DnType::OrganizationName, "fastn");
-    params.distinguished_name.push(rcgen::DnType::OrganizationalUnitName, "P2P Email Server");
-
-    // Set validity period (1 year)
-    let now = time::OffsetDateTime::now_utc();
-    params.not_before = now;
-    params.not_after = now + time::Duration::days(365);
-
-    // Set key usage for email protocols
-    params.key_usages = vec![
-        rcgen::KeyUsagePurpose::DigitalSignature,
-        rcgen::KeyUsagePurpose::KeyEncipherment,
-    ];
-    params.extended_key_usages = vec![
-        rcgen::ExtendedKeyUsagePurpose::ServerAuth,
-    ];
-
-    // Generate certificate
-    let cert = params.self_signed(&key_pair)
-        .map_err(|_| fastn_rig::RigCreateError::KeyGeneration)?;
-
-    let cert_pem = cert.pem();
-
-    println!("📜 Generated initial self-signed certificate during rig creation");
-    Ok(cert_pem)
-}
-
-/// Generate Subject Alternative Names for certificate based on deployment environment
-fn generate_certificate_sans(secret_key: &fastn_id52::SecretKey) -> Result<Vec<String>, fastn_rig::RigCreateError> {
-    let mut sans = vec![
-        "localhost".to_string(),
-        "127.0.0.1".to_string(),
-    ];
-
-    // Add public IP if detectable (makes certificate work for both localhost and public deployments)
-    if let Ok(public_ip) = std::env::var("FASTN_PUBLIC_IP") {
-        // Use explicitly configured public IP
-        sans.push(public_ip.clone());
-        println!("🌐 Added configured public IP to certificate: {}", public_ip);
-    } else {
-        // Try to auto-detect public IP (best effort, not critical)
-        match detect_current_public_ip() {
-            Ok(ip) => {
-                sans.push(ip.clone());
-                println!("🌐 Auto-detected and added public IP to certificate: {}", ip);
-            }
-            Err(_) => {
-                println!("ℹ️  Could not auto-detect public IP (certificate will work for localhost only)");
-                // Not an error - certificate still works for localhost deployment
-            }
-        }
-    }
-
-    // Add hostname if configured
-    if let Ok(hostname) = std::env::var("FASTN_HOSTNAME") {
-        sans.push(hostname.clone());
-        println!("🏠 Added hostname to certificate: {}", hostname);
-    }
-
-    // Add domain if configured  
-    if let Ok(domain) = std::env::var("FASTN_DOMAIN") {
-        sans.push(domain.clone());
-        println!("🌍 Added domain to certificate: {}", domain);
-    }
-
-    // Add rig-specific mDNS name for future local discovery
-    let rig_local = format!("{}.local", secret_key.public_key().id52());
-    sans.push(rig_local);
-
-    println!("📜 Certificate will be valid for: {:?}", sans);
-    Ok(sans)
-}
-
-/// Detect current machine's public IP (best effort, not critical)
-fn detect_current_public_ip() -> Result<String, Box<dyn std::error::Error>> {
-    // This is a simplified sync version for rig creation
-    // For now, just return error to keep it simple during init
-    // The async version in certs module can be used later for regeneration
-    Err("Public IP detection not available during rig init (use FASTN_PUBLIC_IP env var)".into())
-}

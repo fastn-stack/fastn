@@ -7,12 +7,14 @@
 //! - TLS configuration for STARTTLS SMTP server
 
 mod errors;
+mod filesystem;
 mod self_signed;
 mod storage;
 
 pub use errors::CertificateError;
+pub use filesystem::CertificateStorage;
 
-use crate::automerge::EmailCertificateConfig;
+use crate::automerge::{EmailCertificate, ExternalCertificateSource};
 use std::path::Path;
 use std::sync::Arc;
 
@@ -51,24 +53,24 @@ impl CertificateManager {
             })?;
 
         match &rig_config.email_certificate {
-            EmailCertificateConfig::SelfSigned { cert_pem, expires_at, .. } => {
-                // Check if this is a placeholder or expired certificate
-                let now = std::time::SystemTime::now()
-                    .duration_since(std::time::UNIX_EPOCH)
-                    .unwrap()
-                    .as_secs() as i64;
-                
-                if cert_pem == "PLACEHOLDER" || *expires_at <= now {
-                    // Placeholder or expired certificate, generate new one
-                    self.generate_and_store_self_signed_certificate().await
-                } else {
-                    // Valid certificate, use existing
-                    self.create_tls_config_from_self_signed(&rig_config, cert_pem).await
-                }
+            EmailCertificate::SelfSigned => {
+                // For self-signed mode, certificates are generated per-connection
+                // and stored in stable filesystem location
+                return Err(CertificateError::ConfigLoad { 
+                    source: "Self-signed certificates should use per-connection lookup, not global TLS config".into() 
+                });
             }
-            EmailCertificateConfig::External { cert_path, key_path, .. } => {
-                // Load external certificate
-                self.load_external_certificate(cert_path, key_path).await
+            EmailCertificate::External { certificate, .. } => {
+                // Load external certificate (domain-based)
+                match certificate {
+                    ExternalCertificateSource::FilePaths { cert_path, key_path, .. } => {
+                        self.load_external_certificate(cert_path, key_path).await
+                    }
+                    ExternalCertificateSource::Content { cert_pem, key_pem } => {
+                        // Load certificate from content stored in automerge
+                        self.create_tls_config_from_pem_content(cert_pem, key_pem).await
+                    }
+                }
             }
         }
     }
@@ -92,7 +94,7 @@ impl CertificateManager {
         self_signed::create_tls_config_from_stored_cert(rig_config, cert_pem).await
     }
 
-    /// Load external certificate and create TLS config
+    /// Load external certificate from file paths and create TLS config
     async fn load_external_certificate(
         &self,
         cert_path: &str,
@@ -100,5 +102,15 @@ impl CertificateManager {
     ) -> Result<rustls::ServerConfig, CertificateError> {
         // Implementation in storage.rs
         storage::load_external_certificate(cert_path, key_path).await
+    }
+
+    /// Create TLS config from certificate content stored in automerge
+    async fn create_tls_config_from_pem_content(
+        &self,
+        cert_pem: &str,
+        key_pem: &str,
+    ) -> Result<rustls::ServerConfig, CertificateError> {
+        // Implementation in storage.rs
+        storage::create_tls_config_from_pem_strings(cert_pem, key_pem).await
     }
 }

@@ -22,8 +22,8 @@ pub struct RigConfig {
     pub created_at: i64,
     /// The current active entity
     pub current_entity: fastn_id52::PublicKey,
-    /// Email certificate configuration for STARTTLS support
-    pub email_certificate: EmailCertificateConfig,
+    /// Email certificate configuration 
+    pub email_certificate: EmailCertificate,
 }
 
 // Additional methods for RigConfig beyond basic CRUD
@@ -61,34 +61,39 @@ impl RigConfig {
     }
 }
 
-/// Email certificate configuration for STARTTLS and external certificate support
+/// Email certificate configuration
 #[derive(Debug, Clone, PartialEq, serde::Serialize, fastn_automerge::Reconcile, fastn_automerge::Hydrate)]
-pub enum EmailCertificateConfig {
-    /// Self-signed certificate using rig's Ed25519 key (default)
-    SelfSigned {
-        /// Certificate PEM data stored in RigConfig
-        cert_pem: String,
-        /// Unix timestamp when certificate was generated
-        generated_at: i64,
-        /// Unix timestamp when certificate expires
-        expires_at: i64,
-        /// Subject Alternative Names
-        sans: Vec<String>,
-    },
-    /// External certificate (nginx/Let's Encrypt integration)
+pub enum EmailCertificate {
+    /// Self-signed certificates stored in stable filesystem location (not synced)
+    /// Certificates generated per-connection IP and cached on disk
+    SelfSigned,
+    
+    /// External certificate configuration for domain owners (synced via automerge)
     External {
-        /// Path to external certificate file
-        cert_path: String,
-        /// Path to external private key file  
-        key_path: String,
+        /// Certificate content or file path configuration
+        certificate: ExternalCertificateSource,
         /// Domain name for the certificate
         domain: String,
-        /// Watch for certificate file changes
-        auto_reload: bool,
-        /// Unix timestamp when certificate was last loaded
-        last_reload: i64,
+        /// Unix timestamp when certificate was last loaded/updated
+        last_updated: i64,
         /// Generate self-signed if external certificate fails
         fallback_to_self_signed: bool,
+    },
+}
+
+/// External certificate source - either file paths or certificate content
+#[derive(Debug, Clone, PartialEq, serde::Serialize, fastn_automerge::Reconcile, fastn_automerge::Hydrate)]
+pub enum ExternalCertificateSource {
+    /// File paths to certificate and key (nginx coexistence scenario)
+    FilePaths {
+        cert_path: String,
+        key_path: String,
+        auto_reload: bool,  // Watch for file changes
+    },
+    /// Certificate content stored directly in automerge (remote management scenario)
+    Content {
+        cert_pem: String,
+        key_pem: String,
     },
 }
 
