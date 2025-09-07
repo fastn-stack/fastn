@@ -99,6 +99,13 @@ impl CommandOutput {
     /// Extract account ID from fastn-rig init output
     pub fn extract_account_id(&self) -> Result<String, Box<dyn std::error::Error>> {
         for line in self.stdout.lines() {
+            // Check for "Primary account:" format first
+            if line.contains("Primary account:") {
+                if let Some(id) = line.split("Primary account:").nth(1) {
+                    return Ok(id.trim().to_string());
+                }
+            }
+            // Fallback to old "Account ID:" format
             if line.contains("Account ID:") {
                 if let Some(id) = line.split_whitespace().nth(2) {
                     return Ok(id.to_string());
