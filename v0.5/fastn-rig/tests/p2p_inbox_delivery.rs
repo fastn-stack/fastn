@@ -79,13 +79,18 @@ impl FastnRigHelper {
     }
 
     fn detect_target_dir() -> PathBuf {
-        // Check common binary locations
-        let home_target =
-            PathBuf::from(std::env::var("HOME").unwrap_or_default()).join("target/debug");
+        // Check common binary locations - flexible for both workspace and home target dirs
+        let v0_5_target = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .expect("Failed to get project root")
+            .join("target/debug");
+        let home_target = PathBuf::from(std::env::var("HOME").unwrap_or_default()).join("target/debug");
         let local_target = PathBuf::from("./target/debug");
         let project_target = PathBuf::from("/Users/amitu/target/debug");
 
-        if home_target.join("fastn-rig").exists() {
+        if v0_5_target.join("fastn-rig").exists() {
+            v0_5_target
+        } else if home_target.join("fastn-rig").exists() {
             home_target
         } else if local_target.join("fastn-rig").exists() {
             local_target
