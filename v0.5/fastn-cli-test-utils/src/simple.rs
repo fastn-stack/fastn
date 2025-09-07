@@ -90,6 +90,30 @@ impl CommandOutput {
     pub fn contains_output(&self, text: &str) -> bool {
         self.stdout.contains(text) || self.stderr.contains(text)
     }
+    
+    /// Extract account ID from fastn-rig init output
+    pub fn extract_account_id(&self) -> Result<String, Box<dyn std::error::Error>> {
+        for line in self.stdout.lines() {
+            if line.contains("Account ID:") {
+                if let Some(id) = line.split_whitespace().nth(2) {
+                    return Ok(id.to_string());
+                }
+            }
+        }
+        Err("Account ID not found in output".into())
+    }
+    
+    /// Extract password from fastn-rig init output
+    pub fn extract_password(&self) -> Result<String, Box<dyn std::error::Error>> {
+        for line in self.stdout.lines() {
+            if line.contains("Password:") {
+                if let Some(password) = line.split_whitespace().nth(1) {
+                    return Ok(password.to_string());
+                }
+            }
+        }
+        Err("Password not found in output".into())
+    }
 }
 
 /// Detect target directory across multiple possible locations
