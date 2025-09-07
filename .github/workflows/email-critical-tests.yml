@@ -51,33 +51,49 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y build-essential pkg-config libssl-dev jq
 
+    - name: 🔨 Pre-compile All Email System Binaries
+      working-directory: v0.5
+      run: |
+        echo "🔨 Compiling fastn email system binaries..."
+        echo "This step isolates compilation time from test execution time"
+        
+        time cargo build --bin fastn-rig --bin fastn-mail --bin test_utils
+        
+        echo "✅ Binaries compiled successfully"
+        echo "Binary locations:"
+        ls -la target/debug/fastn-rig target/debug/fastn-mail target/debug/test_utils
+
     - name: 🎯 Run Critical Email System Tests
       working-directory: v0.5
       env:
         SKIP_KEYRING: true
-        RUST_LOG: info
       run: |
-        echo "🎯 Running the most critical tests in fastn email system"
+        echo "🎯 Running the most critical tests in fastn email system (PRE-COMPILED)"
         echo "These tests validate the complete email pipeline:"
         echo "  - Plain text SMTP → fastn-p2p → INBOX delivery"  
         echo "  - STARTTLS SMTP → fastn-p2p → INBOX delivery"
         echo "  - Certificate generation and TLS infrastructure"
         echo "  - End-to-end email system integration"
         echo
+        echo "⏱️  Timing: This step measures PURE email system performance"
+        echo "⏱️  Compilation time excluded from this measurement"
+        echo
         
         # Make test script executable
         chmod +x test.sh
         
-        # First try a simple compilation test
-        echo "🔨 Testing compilation..."
-        cargo build --bin fastn-rig --bin fastn-mail
+        # Run both critical tests with timing
+        echo "🧪 Starting email tests at: $(date)"
+        start_time=$(date +%s)
         
-        # Run both critical tests for comprehensive validation
-        echo "🧪 Running critical email tests..."
-        timeout 300 ./test.sh --both || {
-          echo "❌ Tests failed or timed out after 5 minutes"
+        timeout 180 ./test.sh --both || {
+          echo "❌ Tests failed or timed out after 3 minutes"
           exit 1
         }
+        
+        end_time=$(date +%s)
+        duration=$((end_time - start_time))
+        echo "⏱️  Email tests completed in: ${duration} seconds"
 
     - name: 📊 Test Results Summary
       if: always()
