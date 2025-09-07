@@ -13,19 +13,12 @@ MUSIC_WAS_PLAYING=$(osascript -e 'tell application "System Events"
     return "no"
 end tell' 2>/dev/null)
 
-# Save current volume and set to max
+# Save current volume (don't change it)
 CURRENT_VOLUME=$(osascript -e 'output volume of (get volume settings)')
-osascript -e 'set volume output volume 100'
 
-# Small delay to ensure volume change takes effect
-sleep 0.2
-
-# Play notification
+# Play notification at current volume
 say "Claude is done and waiting for your next task!"
 afplay /System/Library/Sounds/Glass.aiff
-
-# Restore original volume
-osascript -e "set volume output volume $CURRENT_VOLUME"
 
 # Resume music if it was playing
 if [ "$MUSIC_WAS_PLAYING" = "yes" ]; then
