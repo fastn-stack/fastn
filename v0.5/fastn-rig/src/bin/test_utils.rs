@@ -68,10 +68,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     });
                     println!("{}", serde_json::to_string_pretty(&result)?);
                 }
-                "account-id" => println!("{}", account_id),
-                "password" => println!("{}", password),
-                "all" => println!("{}:{}", account_id, password),
-                _ => return Err(format!("Unknown format: {}", format).into()),
+                "account-id" => println!("{account_id}"),
+                "password" => println!("{password}"),
+                "all" => println!("{account_id}:{password}"),
+                _ => return Err(format!("Unknown format: {format}").into()),
             }
         }
 

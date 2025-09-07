@@ -17,13 +17,13 @@ pub async fn start_email_delivery_poller(
             }
             _ = tokio::time::sleep(std::time::Duration::from_secs(5)) => {
                 tick_count += 1;
-                eprintln!("🔧 DEBUG POLLER: TICK #{} - starting scan", tick_count);
+                eprintln!("🔧 DEBUG POLLER: TICK #{tick_count} - starting scan");
                 
                 // Scan for pending emails and deliver using fastn-p2p
                 if let Err(e) = scan_and_deliver_emails(&account_manager).await {
-                    eprintln!("❌ Email delivery scan failed: {}", e);
+                    eprintln!("❌ Email delivery scan failed: {e}");
                 } else {
-                    println!("✅ Email delivery scan #{} completed", tick_count);
+                    println!("✅ Email delivery scan #{tick_count} completed");
                 }
             }
         }
@@ -44,7 +44,7 @@ async fn scan_and_deliver_emails(
             endpoints
         }
         Err(e) => {
-            println!("❌ DEBUG: get_all_endpoints() FAILED: {}", e);
+            println!("❌ DEBUG: get_all_endpoints() FAILED: {e}");
             return Err(Box::new(e));
         }
     };
@@ -56,17 +56,17 @@ async fn scan_and_deliver_emails(
         println!("🔧 DEBUG: Loading mail store from {}", account_path.display());
         let mail_store = match fastn_mail::Store::load(&account_path).await {
             Ok(store) => {
-                println!("🔧 DEBUG: Mail store load SUCCESS for {}", endpoint_id52);
+                println!("🔧 DEBUG: Mail store load SUCCESS for {endpoint_id52}");
                 store
             }
             Err(e) => {
-                println!("❌ DEBUG: Mail store load FAILED for {}: {}", endpoint_id52, e);
+                println!("❌ DEBUG: Mail store load FAILED for {endpoint_id52}: {e}");
                 continue; // Skip this account and try next
             }
         };
         
         // Get pending P2P deliveries using the mail store's API
-        println!("📭 Scanning account {} for pending P2P deliveries", endpoint_id52);
+        println!("📭 Scanning account {endpoint_id52} for pending P2P deliveries");
         
         // Get pending deliveries from the fastn_email_delivery table
         let pending_deliveries = match mail_store.get_pending_deliveries().await {
@@ -75,7 +75,7 @@ async fn scan_and_deliver_emails(
                 deliveries
             }
             Err(e) => {
-                println!("❌ Failed to get pending deliveries: {}", e);
+                println!("❌ Failed to get pending deliveries: {e}");
                 continue;
             }
         };
@@ -91,7 +91,7 @@ async fn scan_and_deliver_emails(
                     emails
                 }
                 Err(e) => {
-                    println!("❌ Failed to get emails for peer: {}", e);
+                    println!("❌ Failed to get emails for peer: {e}");
                     continue;
                 }
             };
@@ -111,14 +111,14 @@ async fn scan_and_deliver_emails(
                     // Mark delivered emails as completed in the database
                     for email_id in delivered_ids {
                         if let Err(e) = mail_store.mark_delivered_to_peer(&email_id, &delivery.peer_id52).await {
-                            println!("❌ Failed to mark email {} as delivered: {}", email_id, e);
+                            println!("❌ Failed to mark email {email_id} as delivered: {e}");
                         } else {
-                            println!("✅ Marked email {} as delivered in database", email_id);
+                            println!("✅ Marked email {email_id} as delivered in database");
                         }
                     }
                 }
                 Err(e) => {
-                    println!("❌ P2P delivery failed: {}", e);
+                    println!("❌ P2P delivery failed: {e}");
                     // Emails remain in pending state for retry
                 }
             }

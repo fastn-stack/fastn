@@ -86,7 +86,7 @@ impl HttpResponse {
         let mut response = format!("HTTP/1.1 {} {}\r\n", self.status, self.status_text);
 
         for (key, value) in &self.headers {
-            response.push_str(&format!("{}: {}\r\n", key, value));
+            response.push_str(&format!("{key}: {value}\r\n"));
         }
 
         response.push_str("\r\n");

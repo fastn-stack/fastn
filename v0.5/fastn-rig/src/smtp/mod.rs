@@ -186,7 +186,7 @@ impl SmtpSession {
                     Ok(response) => response,
                     Err(fastn_rig::SmtpError::InvalidCommandSyntax { command }) => {
                         tracing::debug!("📧 Invalid command syntax: {}", command);
-                        format!("500 Syntax error: {}", command)
+                        format!("500 Syntax error: {command}")
                     }
                     Err(fastn_rig::SmtpError::AuthenticationFailed) => {
                         "535 Authentication failed".to_string()
@@ -228,7 +228,7 @@ impl SmtpSession {
             "RSET" => self.handle_reset().await,
             "QUIT" => self.handle_quit().await,
             "NOOP" => Ok("250 OK".to_string()),
-            _ => Ok(format!("500 Command '{}' not recognized", command)),
+            _ => Ok(format!("500 Command '{command}' not recognized")),
         }
     }
 
@@ -251,7 +251,7 @@ impl SmtpSession {
         match mechanism.as_str() {
             "PLAIN" => self.handle_auth_plain(parts[1], account_manager).await,
             "LOGIN" => Ok("500 AUTH LOGIN not yet implemented".to_string()),
-            _ => Ok(format!("500 AUTH mechanism '{}' not supported", mechanism)),
+            _ => Ok(format!("500 AUTH mechanism '{mechanism}' not supported")),
         }
     }
 
@@ -357,7 +357,7 @@ impl SmtpSession {
         // Parse MAIL FROM using parser module
         let from_addr = parser::parse_mail_from(args).map_err(|e| {
             fastn_rig::SmtpError::InvalidCommandSyntax {
-                command: format!("MAIL FROM: {}", e),
+                command: format!("MAIL FROM: {e}"),
             }
         })?;
 
@@ -378,7 +378,7 @@ impl SmtpSession {
         // Parse RCPT TO using parser module
         let to_addr = parser::parse_rcpt_to(args).map_err(|e| {
             fastn_rig::SmtpError::InvalidCommandSyntax {
-                command: format!("RCPT TO: {}", e),
+                command: format!("RCPT TO: {e}"),
             }
         })?;
 
@@ -459,9 +459,9 @@ impl SmtpSession {
                     email.recipients,
                     e
                 );
-                println!("🐛 DEBUG: Email storage error details: {}", e);
+                println!("🐛 DEBUG: Email storage error details: {e}");
                 if let Some(source) = std::error::Error::source(&e) {
-                    println!("🐛 DEBUG: Root cause: {:?}", source);
+                    println!("🐛 DEBUG: Root cause: {source:?}");
                 } else {
                     println!("🐛 DEBUG: No additional error details");
                 }

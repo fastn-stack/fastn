@@ -16,14 +16,13 @@ impl fastn_mail::Store {
         );
 
         // Create RFC 3464-style bounce message
-        let bounce_subject = format!("Mail Delivery Failure: {}", original_email_id);
+        let bounce_subject = format!("Mail Delivery Failure: {original_email_id}");
         let bounce_body = format!(
             "Your email could not be delivered to the recipient.\n\n\
-            Original Email ID: {}\n\
-            Failure Reason: {}\n\n\
+            Original Email ID: {original_email_id}\n\
+            Failure Reason: {rejection_reason}\n\n\
             This is an automated message from the fastn mail delivery system.\n\
-            The original message has been removed from the delivery queue.",
-            original_email_id, rejection_reason
+            The original message has been removed from the delivery queue."
         );
 
         // Build bounce email in RFC 5322 format
@@ -33,14 +32,13 @@ impl fastn_mail::Store {
         let bounce_email = format!(
             "From: Mail Delivery System <mailer-daemon@system.local>\r\n\
             To: Original Sender\r\n\
-            Subject: {}\r\n\
-            Date: {}\r\n\
-            Message-ID: <{}>\r\n\
+            Subject: {bounce_subject}\r\n\
+            Date: {timestamp}\r\n\
+            Message-ID: <{bounce_message_id}>\r\n\
             MIME-Version: 1.0\r\n\
             Content-Type: text/plain; charset=utf-8\r\n\
             \r\n\
-            {}",
-            bounce_subject, timestamp, bounce_message_id, bounce_body
+            {bounce_body}"
         );
 
         // Store bounce message in sender's INBOX using p2p_receive_email

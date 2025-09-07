@@ -13,8 +13,7 @@ impl fastn_mail::Store {
         if algorithm != "REFERENCES" {
             return Err(ImapThreadError::DatabaseQueryFailed {
                 source: rusqlite::Error::InvalidColumnName(format!(
-                    "Unsupported algorithm: {}",
-                    algorithm
+                    "Unsupported algorithm: {algorithm}"
                 )),
             });
         }

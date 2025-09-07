@@ -73,7 +73,7 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
                     secret_key,
                     account_manager_clone,
                 ).await {
-                    eprintln!("❌ Account P2P listener failed for {}: {}", id52, e);
+                    eprintln!("❌ Account P2P listener failed for {id52}: {e}");
                 }
             });
             total_endpoints += 1;
@@ -93,14 +93,14 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
                 rig_secret,
                 account_manager_clone,
             ).await {
-                eprintln!("❌ Rig P2P listener failed for {}: {}", rig_id52, e);
+                eprintln!("❌ Rig P2P listener failed for {rig_id52}: {e}");
             }
         });
         total_endpoints += 1;
         println!("✅ Rig endpoint online");
     }
 
-    println!("📡 Started {} P2P listeners using fastn-p2p", total_endpoints);
+    println!("📡 Started {total_endpoints} P2P listeners using fastn-p2p");
 
     // Start email delivery poller using fastn-p2p
     let enable_poller = std::env::var("ENABLE_EMAIL_POLLER")
@@ -117,7 +117,7 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
             if let Err(e) = crate::email_poller_p2p::start_email_delivery_poller(
                 account_manager_clone,
             ).await {
-                eprintln!("❌ DEBUG RUN: Email delivery poller failed: {}", e);
+                eprintln!("❌ DEBUG RUN: Email delivery poller failed: {e}");
             }
             eprintln!("🔧 DEBUG RUN: Email poller task ACTUALLY FINISHED");
         });
@@ -131,7 +131,7 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         .ok()
         .and_then(|p| p.parse().ok())
         .unwrap_or(2525);
-    println!("📮 SMTP server listening on port {}", smtp_port);
+    println!("📮 SMTP server listening on port {smtp_port}");
     
     let smtp_server = crate::smtp::SmtpServer::new(
         account_manager.clone(),

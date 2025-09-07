@@ -1,0 +1,2 @@
+# Enable lint for outdated format strings
+avoid-breaking-exported-api = false

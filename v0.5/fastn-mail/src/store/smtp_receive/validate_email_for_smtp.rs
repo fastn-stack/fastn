@@ -123,13 +123,12 @@ fn validate_message_size(size_bytes: usize) -> Result<(), SmtpReceiveError> {
     if size_bytes > MAX_MESSAGE_SIZE {
         return Err(SmtpReceiveError::MessageParsingFailed {
             message: format!(
-                "Message too large: {} bytes (limit: {} bytes)",
-                size_bytes, MAX_MESSAGE_SIZE
+                "Message too large: {size_bytes} bytes (limit: {MAX_MESSAGE_SIZE} bytes)"
             ),
         });
     }
 
-    println!("✅ Message size valid: {} bytes", size_bytes);
+    println!("✅ Message size valid: {size_bytes} bytes");
     Ok(())
 }
 

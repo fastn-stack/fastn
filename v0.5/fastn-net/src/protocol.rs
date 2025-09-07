@@ -129,7 +129,7 @@ impl std::fmt::Display for Protocol {
             Protocol::AccountToAccount => write!(f, "AccountToAccount"),
             Protocol::AccountToDevice => write!(f, "AccountToDevice"),
             Protocol::RigControl => write!(f, "RigControl"),
-            Protocol::Generic(value) => write!(f, "Generic({})", value),
+            Protocol::Generic(value) => write!(f, "Generic({value})"),
         }
     }
 }
