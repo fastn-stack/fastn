@@ -1,151 +1,137 @@
 # fastn-cli-test-utils
 
-Unified CLI testing utilities for the fastn workspace, eliminating duplication of binary discovery, process management, and test environment setup.
+**Comprehensive fastn CLI testing utilities** that make testing fastn commands pleasant by handling all the drudgery of binary discovery, process management, argument passing, and cleanup.
 
-## Problem Solved
+## 🎯 **fastn-Centric Philosophy** 
 
-Before this crate, CLI testing was scattered across multiple files with duplicated patterns:
+This is **not** a generic CLI testing framework - it's specifically designed for **fastn** and knows about:
+- All fastn commands (`fastn-rig`, `fastn-mail`, `fastn-automerge`, etc.)
+- fastn concepts (peers, SMTP ports, keyring, accounts, passwords)
+- fastn environment variables (`FASTN_HOME`, `SKIP_KEYRING`, `FASTN_SMTP_PORT`)
+- fastn test patterns (two-peer email tests, P2P delivery, etc.)
 
-- **fastn-rig/tests/cli_tests.rs**: Custom binary path detection
-- **fastn-rig/tests/p2p_inbox_delivery.rs**: Complex process management  
-- **fastn-rig/tests/test_complete_integration.sh**: Bash script with manual cleanup
-- Multiple files implementing similar Drop-based process cleanup
+This makes writing fastn tests **extremely pleasant** because the test utilities handle all repetitive patterns.
 
-## Key Features
+## ✨ **Pleasant API Examples**
 
-### 🎯 **Automatic Binary Discovery**
-- Supports both workspace (`v0.5/target/debug/`) and home (`~/target/debug/`) target directories
-- Respects `CARGO_TARGET_DIR` environment variable
-- Falls back gracefully across multiple locations
-
-### 🧹 **RAII Process Management** 
-- Automatic process cleanup via Drop trait
-- No more manual `pkill` or forgotten process cleanup
-- Proper async process lifecycle management
-
-### ⚡ **Pre-compilation Strategy**
-- Eliminates compilation delays during test execution
-- Configurable: can disable for faster test iteration
-
-### 🔗 **Fluent API**
-- Chain operations for readable test code
-- Type-safe builder patterns for complex scenarios
-
-## Usage Examples
-
-### Simple Two-Peer Email Test
+### Simple CLI Command Testing
 ```rust
-use fastn_cli_test_utils::TestScenario;
-use std::time::Duration;
+use fastn_cli_test_utils::FastnRigCommand;
 
 #[tokio::test]
+async fn test_rig_status() -> Result<(), Box<dyn std::error::Error>> {
+    let mut env = FastnTestEnv::new("status-test")?;
+    let peer = env.create_peer("test-peer").await?;
+    
+    // Test status with one beautiful line
+    FastnRigCommand::new()
+        .home(&peer.home_path)
+        .status()
+        .execute().await?
+        .expect_success()?;
+        
+    Ok(())
+}
+```
+
+### Email Testing (The Pain Point Eliminated)
+```rust
+#[tokio::test]
 async fn test_email_delivery() -> Result<(), Box<dyn std::error::Error>> {
-    TestScenario::new("email-test")
-        .with_peers(&["sender", "receiver"])
-        .with_smtp_ports(&[2525, 2526])
-        .without_keyring()
-        .run(|mut test| async move {
-            // Start peers and wait for ready
-            test.start_all_peers().await?;
-            test.wait_for_startup().await?;
-            
-            // Send email with fluent API
-            test.email()
-                .from("sender")
-                .to("receiver")
-                .subject("Test Email")
-                .body("Testing P2P delivery")
-                .send()
-                .await?
-                .expect_success()?
-                .wait_for_delivery(Duration::from_secs(30))
-                .await?;
-            
-            // Automatic cleanup on scope exit
-            Ok(())
-        })
-        .await
+    let mut env = FastnTestEnv::new("email-test")?;
+    
+    // Create peers (automatic init, account extraction, port assignment)
+    env.create_peer("sender").await?;
+    env.create_peer("receiver").await?;
+    
+    // Start processes (automatic SMTP port configuration)
+    env.start_peer("sender").await?;
+    env.start_peer("receiver").await?;
+    env.wait_for_startup().await?;
+    
+    // Send email (automatic credential management, address formatting)
+    env.email()
+        .from("sender")
+        .to("receiver")
+        .subject("Pleasant Test")
+        .body("No more argument drudgery!")
+        .send().await?
+        .expect_success()?;
+    
+    // Automatic process cleanup on drop
+    Ok(())
 }
 ```
 
-### Advanced Custom Configuration
+### Custom Mail Operations
 ```rust
-let custom_config = CliConfig {
-    pre_build: false,           // Build on demand
-    cleanup_on_drop: true,      // Auto cleanup
-    skip_keyring: true,         // Skip keyring in tests
-    default_timeout: Duration::from_secs(60),
-    smtp_port_range: 3000..3100,
-};
+use fastn_cli_test_utils::FastnMailCommand;
 
-TestScenario::new("advanced-test")
-    .with_config(custom_config)
-    .with_peers(&["hub", "client1", "client2"])
-    .run(|mut test| async move {
-        // Selective peer startup
-        test.start_peer("hub").await?;
-        test.start_peer("client1").await?;
-        
-        // Multiple email sequence
-        for i in 1..=10 {
-            test.email()
-                .from("client1")
-                .to("hub")
-                .subject(&format!("Message {i}"))
-                .send()
-                .await?
-                .expect_success()?;
-        }
-        
-        Ok(())
-    })
-    .await
+// Direct fastn-mail command with all the argument handling done for you
+FastnMailCommand::new()
+    .home(&peer_home)
+    .send_mail()
+    .from("test@sender.com")
+    .to("inbox@receiver.com") 
+    .subject("Custom Email")
+    .smtp_port(2525)
+    .password("secret123")
+    .send().await?
+    .expect_success()?;
 ```
 
-## Benefits Over Previous Approach
+## 🚀 **What Gets Handled For You**
 
-### Before (Duplicated Code)
+### Before (Manual Drudgery)
 ```rust
-// Every test file had this complexity:
-fn detect_target_dir() -> PathBuf {
-    if PathBuf::from("$HOME/target/debug/fastn-rig").exists() {
-        PathBuf::from("$HOME/target/debug")  
-    } else if PathBuf::from("./target/debug/fastn-rig").exists() {
-        // ... 5 more fallback locations
-    } else {
-        panic!("Binary not found");
-    }
-}
+// Every test had to handle:
+fn detect_target_dir() -> PathBuf { /* 30+ lines of fallback logic */ }
 
-struct ProcessCleanup { /* manual Drop impl */ }
+let output = Command::new(&binary_path)
+    .arg("send-mail")
+    .arg("--smtp").arg("2525")
+    .arg("--password").arg(&password)
+    .arg("--from").arg(&format!("test@{}.com", sender_id))
+    .arg("--to").arg(&format!("inbox@{}.com", receiver_id))
+    .arg("--subject").arg("Test")
+    .arg("--body").arg("Body")
+    .env("FASTN_HOME", &sender_home)
+    .output().await?;
 
-// Manual process spawning, environment setup, cleanup...
+// Manual process cleanup, error handling, output parsing...
 ```
 
-### After (Unified & Fluent)
+### After (Pleasant API)
 ```rust
-// Simple, readable, reliable:
-TestScenario::new("my-test")
-    .with_peers(&["peer1", "peer2"])
-    .run(|test| async { /* test logic */ })
-    .await
+// All that becomes:
+env.email().from("sender").to("receiver").send().await?.expect_success()?;
 ```
 
-## Target Directory Flexibility
+## 🔧 **Handles All fastn Complexity**
 
-The crate automatically handles both configurations:
-- **Workspace builds**: `v0.5/target/debug/` (current setup)
-- **Home builds**: `~/target/debug/` (if you switch back)
-- **Custom builds**: Via `CARGO_TARGET_DIR` environment variable
+- ✅ **Binary Discovery**: Workspace/home target flexibility, `CARGO_TARGET_DIR` support
+- ✅ **Argument Patterns**: All fastn command argument structures 
+- ✅ **Environment Variables**: `FASTN_HOME`, `SKIP_KEYRING`, `FASTN_SMTP_PORT`, etc.
+- ✅ **Process Lifecycle**: RAII cleanup, background processes, startup waiting
+- ✅ **Peer Management**: Account IDs, passwords, SMTP port allocation
+- ✅ **Error Handling**: Expect success/failure, output validation, account extraction
+- ✅ **Email Patterns**: Peer-to-peer addressing, credential management
 
-Tests work seamlessly regardless of your cargo configuration.
+## 📊 **Migration Results**
 
-## Migration Path
+| File | Before | After | Reduction |
+|------|--------|-------|-----------|
+| `cli_tests.rs` | 40+ lines of binary detection | 1 function call | 95%+ |
+| `p2p_inbox_delivery.rs` | 25+ lines of helper class | 2 function calls | 90%+ |
+| `test_complete_integration.sh` | Manual bash detection | References same logic | Consistent |
 
-Replace existing CLI test patterns:
-1. Add `fastn-cli-test-utils = "0.1.0"` to test dependencies
-2. Replace manual binary detection with `TestScenario` 
-3. Replace manual process management with fluent API
-4. Remove custom cleanup code (handled automatically)
+## 💡 **Target Directory Flexibility**
 
-This creates more reliable, readable, and maintainable CLI tests.
+Works seamlessly with all configurations:
+- **Workspace**: `v0.5/target/debug/` (current)
+- **Home**: `~/target/debug/` (if you switch back)
+- **Custom**: Via `CARGO_TARGET_DIR` environment variable
+
+Tests just work regardless of your cargo target configuration!
+
+This crate transforms fastn CLI testing from tedious to pleasant. 🎉
