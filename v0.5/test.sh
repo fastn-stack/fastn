@@ -52,13 +52,9 @@ case "${1:-}" in
         echo
         echo "These tests validate the complete fastn email pipeline:"
         echo "  - SMTP server functionality (plain text and STARTTLS)"
-        echo "  - Inline P2P email delivery during SMTP submission"
+        echo "  - fastn-p2p email delivery between rigs"
         echo "  - Email storage in Sent and INBOX folders"  
         echo "  - End-to-end email system integration"
-        echo
-        echo "NOTE: Tests use ENABLE_EMAIL_POLLER=false for speed"
-        echo "      Emails still deliver via INLINE P2P during SMTP submission"
-        echo "      Email poller only handles retry logic for failed deliveries"
         exit 0
         ;;
     "")

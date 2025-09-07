@@ -10,7 +10,7 @@ set -euo pipefail
 
 # Configuration
 export PATH="$PATH:$HOME/.cargo/bin"
-export ENABLE_EMAIL_POLLER=false  # Disable poller for faster tests - emails still deliver inline
+# Use all default fastn-rig behavior - no overrides
 TEST_DIR="/tmp/fastn-complete-test"
 
 # Colors

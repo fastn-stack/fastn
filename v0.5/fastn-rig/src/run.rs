@@ -108,28 +108,15 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     println!("📡 Started {total_endpoints} P2P listeners using fastn-p2p");
 
     // Start email delivery poller using fastn-p2p
-    let enable_poller = std::env::var("ENABLE_EMAIL_POLLER")
-        .unwrap_or_else(|_| "true".to_string())
-        .parse::<bool>()
-        .unwrap_or(true);
+    println!("📬 Starting email delivery poller...");
+    let account_manager_clone = account_manager.clone();
 
-    if enable_poller {
-        eprintln!("🔧 DEBUG RUN: ENABLE_EMAIL_POLLER=true, about to start poller");
-        let account_manager_clone = account_manager.clone();
-
-        let _handle = fastn_p2p::spawn(async move {
-            eprintln!("🔧 DEBUG RUN: Email poller task ACTUALLY SPAWNED");
-            if let Err(e) =
-                crate::email_poller_p2p::start_email_delivery_poller(account_manager_clone).await
-            {
-                eprintln!("❌ DEBUG RUN: Email delivery poller failed: {e}");
-            }
-            eprintln!("🔧 DEBUG RUN: Email poller task ACTUALLY FINISHED");
-        });
-        eprintln!("🔧 DEBUG RUN: Email delivery poller spawn completed");
-    } else {
-        eprintln!("🔧 DEBUG RUN: Email delivery poller disabled");
-    }
+    let _poller_handle = fastn_p2p::spawn(async move {
+        if let Err(e) = crate::email_poller_p2p::start_email_delivery_poller(account_manager_clone).await {
+            tracing::error!("Email delivery poller failed: {e}");
+        }
+    });
+    println!("✅ Email delivery poller started");
 
     // Start SMTP server with STARTTLS support
     let smtp_port = std::env::var("FASTN_SMTP_PORT")
