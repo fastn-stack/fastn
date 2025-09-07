@@ -115,13 +115,13 @@ success "Peer 2: $ACCOUNT2_ID"
 success "Account validation passed"
 
 # Step 4: Start peers (direct binary execution - no compilation delay)
-log "🚀 Starting peer 1 (SMTP: 587)..."
-SKIP_KEYRING=true FASTN_HOME="$TEST_DIR/peer1" FASTN_SMTP_PORT=587 \
+log "🚀 Starting peer 1 (SMTP: 8587)..."
+SKIP_KEYRING=true FASTN_HOME="$TEST_DIR/peer1" FASTN_SMTP_PORT=8587 \
     "$FASTN_RIG" run >/tmp/peer1_run.log 2>&1 &
 PID1=$!
 
-log "🚀 Starting peer 2 (SMTP: 588)..."  
-SKIP_KEYRING=true FASTN_HOME="$TEST_DIR/peer2" FASTN_SMTP_PORT=588 \
+log "🚀 Starting peer 2 (SMTP: 8588)..."  
+SKIP_KEYRING=true FASTN_HOME="$TEST_DIR/peer2" FASTN_SMTP_PORT=8588 \
     "$FASTN_RIG" run >/tmp/peer2_run.log 2>&1 &
 PID2=$!
 
@@ -136,9 +136,19 @@ cleanup() {
 }
 trap cleanup EXIT
 
-# Wait for peers to fully start (no compilation - should be faster)
-log "⏳ Waiting for peers to start (6 seconds - no compilation delay)..."
-sleep 6
+# Wait for peers to fully start and verify they're listening
+log "⏳ Waiting for peers to start (10 seconds for CI compatibility)..."
+sleep 10
+
+# Verify servers are actually listening on expected ports
+log "🔍 Verifying servers are listening..."
+if ! netstat -ln 2>/dev/null | grep -q ":8587.*LISTEN"; then
+    error "Peer 1 SMTP server not listening on port 8587"
+fi
+if ! netstat -ln 2>/dev/null | grep -q ":8588.*LISTEN"; then
+    error "Peer 2 SMTP server not listening on port 8588" 
+fi
+success "Both SMTP servers confirmed listening"
 
 # Verify processes are running
 kill -0 $PID1 2>/dev/null || error "Peer 1 process died"
@@ -155,7 +165,7 @@ log "📧 To: $TO"
 
 # Use direct binary (no compilation delay during email send)
 if FASTN_HOME="$TEST_DIR/peer1" "$FASTN_MAIL" send-mail \
-    --smtp 587 --password "$ACCOUNT1_PWD" \
+    --smtp 8587 --password "$ACCOUNT1_PWD" \
     --from "$FROM" --to "$TO" \
     --subject "Direct Binary Test" \
     --body "No compilation delays"; then

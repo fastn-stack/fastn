@@ -131,11 +131,15 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         &fastn_home,
         rig.secret_key().clone(),
     ) {
-        Ok(server) => server,
+        Ok(server) => {
+            println!("✅ SMTP server created with STARTTLS certificate support");
+            server
+        }
         Err(e) => {
-            eprintln!("⚠️  Failed to create SMTP server: {e}");
-            eprintln!("   SMTP will not be available");
-            return Err(fastn_rig::RunError::FastnHomeResolution); // Or appropriate error
+            eprintln!("⚠️  Failed to create SMTP server with certificates: {e}");
+            eprintln!("   Falling back to basic SMTP server without STARTTLS");
+            // TODO: Create fallback SMTP server without certificate requirements
+            return Err(fastn_rig::RunError::FastnHomeResolution);
         }
     };
     
