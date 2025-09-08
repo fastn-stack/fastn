@@ -2,9 +2,7 @@ name: 🎯 Critical Email System Tests
 
 on:
   push:
-    paths:
-      - 'v0.5/**'
-  pull_request:
+    branches: [ main ]
     paths:
       - 'v0.5/**'
   workflow_dispatch:
