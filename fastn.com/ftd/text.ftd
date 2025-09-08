@@ -143,5 +143,31 @@ accepts an integer value and is optional.
 
 -- end: ds.rendered
 
+-- ds.h2: `role: optional ftd.type`
+
+The `role` attribute applies predefined typography styling to text. It accepts
+an [`ftd.type`](ftd/built-in-types/#ftd-type) record value and is optional.
+
+-- ds.rendered: Sample code using `role`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.text: Heading Text
+	role: $inherited.types.heading-large
+	
+	\-- ftd.text: Body Text
+	role: $inherited.types.copy-regular
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: Heading Text
+		role: $inherited.types.heading-large
+		
+		-- ftd.text: Body Text
+		role: $inherited.types.copy-regular
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
 
 -- end: ds.page
