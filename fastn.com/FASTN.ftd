@@ -615,6 +615,9 @@ skip: true
 
 # Docs: /ftd/data-modelling/
 
+-- FTD 0.4 Language Specification: /language-spec/
+  document: language-spec/index.ftd
+
 ## `fastn` Made Easy: /book/
 
 - Introduction: 
