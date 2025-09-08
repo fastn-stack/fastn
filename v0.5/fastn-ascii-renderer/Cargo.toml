@@ -1,0 +1,17 @@
+[package]
+name = "fastn-ascii-renderer"
+version = "0.1.0"
+authors.workspace = true
+edition.workspace = true
+description = "ASCII rendering engine for FTD components"
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+fastn-compiler.workspace = true
+fastn-resolved.workspace = true
+fastn-section.workspace = true
+
+[dev-dependencies]
