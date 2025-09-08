@@ -149,6 +149,22 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         }
     });
 
+    // Start IMAP server  
+    let imap_port = std::env::var("FASTN_IMAP_PORT")
+        .ok()
+        .and_then(|p| p.parse().ok())
+        .unwrap_or(1143);  // Default to unprivileged port 1143
+    println!("📨 Starting IMAP server on port {imap_port}...");
+    
+    let imap_account_manager = account_manager.clone();
+    let _imap_handle = fastn_p2p::spawn(async move {
+        if let Err(e) = crate::imap::start_imap_server(imap_account_manager, imap_port).await {
+            tracing::error!("IMAP server error: {}", e);
+        }
+    });
+    
+    println!("✅ IMAP server started on port {imap_port}");
+
     // Start HTTP server
     let http_port = std::env::var("FASTN_HTTP_PORT")
         .ok()
