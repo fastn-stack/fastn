@@ -1118,10 +1118,10 @@ lang: ftd
 \-- integer px:
 \-- decimal percent:
 \-- string calc:
-\-- integer vh:
-\-- integer vw:
-\-- integer vmin:
-\-- integer vmax:
+\-- decimal vh:
+\-- decimal vw:
+\-- decimal vmin:
+\-- decimal vmax:
 \-- decimal dvh:
 \-- decimal lvh:
 \-- decimal svh:
@@ -3087,10 +3087,10 @@ style: italic
 - `portion <integer>`: It specifies how much the item will grow relative to the
    rest of the items inside the same container.
 - `percent <integer>`: This gives <integer>% space
-- `vh <integer>`: Relative to 1% of the height of the viewport
-- `vw <integer>`: Relative to 1% of the width of the viewport
-- `vmin <integer>`: Sets the value relative to the smaller dimension between the width and height of the viewport.
-- `vmax <integer>`: Sets the value relative to the larger dimension between the width and height of the viewport.
+- `vh <decimal>`: Relative to 1% of the height of the viewport
+- `vw <decimal>`: Relative to 1% of the width of the viewport
+- `vmin <decimal>`: Sets the value relative to the smaller dimension between the width and height of the viewport.
+- `vmax <decimal>`: Sets the value relative to the larger dimension between the width and height of the viewport.
 - `dvh <decimal>`:  Sets the value relative to the dynamic changing viewport.
 - `lvh <decimal>`:  Sets the value relative to the large view port height.
 - `svh <decimal>`:  Sets the value relative to the small view port height.
