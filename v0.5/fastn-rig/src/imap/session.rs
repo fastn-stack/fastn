@@ -161,10 +161,25 @@ impl ImapSession {
     ) -> Result<(), Box<dyn std::error::Error>> {
         println!("🔑 IMAP LOGIN attempt: user={}", username);
         
+        // Extract account ID from username format: user@{account_id52}.com
+        let account_id = if username.contains('@') {
+            let parts: Vec<&str> = username.split('@').collect();
+            if parts.len() >= 2 {
+                let domain_part = parts[1];
+                // Extract ID52 from domain (before .com or .local)
+                domain_part.split('.').next().unwrap_or(domain_part)
+            } else {
+                username
+            }
+        } else {
+            username
+        };
+        
+        println!("🔍 Extracted account ID: {}", account_id);
+        
         // For now, accept any login (TODO: implement real authentication)
-        // This allows us to test the complete protocol flow
         Self::send_response_static(writer, &format!("{} OK LOGIN completed", tag)).await?;
-        println!("✅ IMAP LOGIN successful for user: {}", username);
+        println!("✅ IMAP LOGIN successful for account: {}", account_id);
         Ok(())
     }
     
