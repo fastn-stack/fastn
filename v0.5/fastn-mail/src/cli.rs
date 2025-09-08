@@ -351,8 +351,8 @@ async fn send_mail_command(
     direct: bool,
     #[cfg_attr(not(feature = "net"), allow(unused_variables))] password: Option<String>,
     #[cfg_attr(not(feature = "net"), allow(unused_variables))] starttls: bool,
-    verify_sent: bool,
-    verify_all: bool,
+    _verify_sent: bool,  // TODO: Implement verification
+    _verify_all: bool,   // TODO: Implement verification
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("📧 Composing email...");
 
@@ -880,5 +880,67 @@ async fn send_via_smtp_client(
     // Send the email
     lettre::Transport::send(&mailer, &email)?;
 
+    Ok(())
+}
+
+// TODO: Remove when dual verification is implemented
+#[allow(unused_variables)]
+async fn imap_connect_command(
+    host: &str,
+    port: u16,
+    username: &str,
+    password: &str,
+    starttls: bool,
+    test_operations: bool,
+) -> Result<(), Box<dyn std::error::Error>> {
+    println!("🔗 IMAP Connect command - TODO: implement");
+    Ok(())
+}
+
+#[allow(unused_variables)]
+async fn imap_list_command(
+    store: &fastn_mail::Store,
+    host: &str,
+    port: u16,
+    username: &str,
+    password: &str,
+    pattern: &str,
+    starttls: bool,
+    verify_folders: bool,
+) -> Result<(), Box<dyn std::error::Error>> {
+    println!("📁 IMAP List command - TODO: implement");
+    Ok(())
+}
+
+#[allow(unused_variables)]
+async fn imap_fetch_command(
+    store: &fastn_mail::Store,
+    host: &str,
+    port: u16,
+    username: &str,
+    password: &str,
+    folder: &str,
+    sequence: &str,
+    items: &str,
+    uid: bool,
+    starttls: bool,
+    verify_content: bool,
+) -> Result<(), Box<dyn std::error::Error>> {
+    println!("📨 IMAP Fetch command - TODO: implement");
+    Ok(())
+}
+
+#[allow(unused_variables)]
+async fn imap_test_pipeline_command(
+    store: &fastn_mail::Store,
+    host: &str,
+    port: u16,
+    username: &str,
+    password: &str,
+    starttls: bool,
+    include_smtp: bool,
+    smtp_port: u16,
+) -> Result<(), Box<dyn std::error::Error>> {
+    println!("🧪 IMAP Test Pipeline command - TODO: implement");
     Ok(())
 }
