@@ -883,8 +883,6 @@ async fn send_via_smtp_client(
     Ok(())
 }
 
-// TODO: Remove when dual verification is implemented
-#[allow(unused_variables)]
 async fn imap_connect_command(
     host: &str,
     port: u16,
@@ -893,9 +891,84 @@ async fn imap_connect_command(
     starttls: bool,
     test_operations: bool,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    println!("🔗 IMAP Connect command - TODO: implement");
-    Ok(())
+    #[cfg(feature = "net")]
+    {
+        println!("🔗 Connecting to IMAP server {}:{}", host, port);
+        println!("👤 Username: {}", username);
+        println!("🔐 STARTTLS: {}", if starttls { "enabled" } else { "disabled" });
+
+        // Connect to IMAP server
+        let tcp_stream = tokio::net::TcpStream::connect((host, port)).await?;
+        println!("✅ TCP connection established");
+
+        // Wrap tokio stream to be compatible with futures-io traits
+        let compat_stream = tokio_util::compat::TokioAsyncReadCompatExt::compat(tcp_stream);
+        
+        // Create IMAP client
+        let client = async_imap::Client::new(compat_stream);
+        println!("✅ IMAP client created");
+
+        // Handle STARTTLS if requested  
+        let mut imap_session = if starttls {
+            println!("🔐 STARTTLS requested but not yet implemented - using plain text");
+            println!("📧 Using plain text connection");
+            
+            // Login with credentials (plain text)
+            println!("🔑 Authenticating...");
+            client.login(username, password).await.map_err(|(err, _)| err)?
+        } else {
+            println!("📧 Using plain text connection");
+            
+            // Login with credentials (plain text)
+            println!("🔑 Authenticating...");
+            client.login(username, password).await.map_err(|(err, _)| err)?
+        };
+
+        println!("✅ Authentication successful");
+
+        if test_operations {
+            println!("🧪 Running basic operation tests...");
+
+            // Test CAPABILITY
+            println!("📋 Testing CAPABILITY...");
+            let capabilities = imap_session.capabilities().await?;
+            println!("✅ Server capabilities: {} items", capabilities.len());
+            for cap in capabilities.iter().take(5) {
+                println!("   - {:?}", cap);  // Use debug formatting
+            }
+            if capabilities.len() > 5 {
+                println!("   ... and {} more", capabilities.len() - 5);
+            }
+
+            // Test LIST (simplified - collect stream first)
+            println!("📁 Testing LIST command...");
+            use futures::stream::TryStreamExt; // Import TryStreamExt for try_collect
+            let mailbox_list: Vec<_> = imap_session.list(Some(""), Some("*")).await?.try_collect().await?;
+            println!("✅ Found {} mailboxes:", mailbox_list.len());
+            for mailbox in mailbox_list.iter().take(5) {
+                println!("   📂 {}", mailbox.name());
+            }
+
+            println!("✅ All basic operations completed");
+        }
+
+        // Logout
+        println!("👋 Logging out...");
+        imap_session.logout().await?;
+        println!("✅ IMAP connection test completed successfully");
+
+        Ok(())
+    }
+
+    #[cfg(not(feature = "net"))]
+    {
+        let _ = (host, port, username, password, starttls, test_operations);
+        println!("❌ Net feature not enabled. Compile with --features net");
+        Err("Net feature required for IMAP commands".into())
+    }
 }
+
+// TODO: Implement STARTTLS support with proper certificate verification
 
 #[allow(unused_variables)]
 async fn imap_list_command(

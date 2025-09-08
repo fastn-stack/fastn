@@ -21,7 +21,7 @@ serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
 tracing.workspace = true
-tokio.workspace = true
+tokio = { workspace = true, features = ["net"] }
 
 # For database storage
 rusqlite.workspace = true
@@ -46,7 +46,9 @@ uuid = { version = "1", features = ["v4"] }
 lettre = { workspace = true, optional = true }
 async-imap = { version = "0.9", optional = true }
 tokio-rustls = { version = "0.26", optional = true }
+tokio-util = { version = "0.7", features = ["compat"], optional = true }
+futures = { version = "0.3", optional = true }
 
 [features]
 default = []
-net = ["lettre", "async-imap", "tokio-rustls"]
+net = ["lettre", "async-imap", "tokio-rustls", "tokio-util", "futures"]
