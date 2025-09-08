@@ -89,6 +89,14 @@ impl ImapSession {
                         Self::send_response_static(&mut writer, &format!("{} BAD LIST command requires reference and pattern", tag)).await?;
                     }
                 }
+                "SELECT" => {
+                    if parts.len() >= 3 {
+                        let folder = parts[2].trim_matches('"');  // Folder name
+                        Self::handle_select_static(&mut writer, tag, folder).await?;
+                    } else {
+                        Self::send_response_static(&mut writer, &format!("{} BAD SELECT command requires folder name", tag)).await?;
+                    }
+                }
                 "LOGOUT" => {
                     Self::handle_logout_static(&mut writer, tag).await?;
                     break;
@@ -172,6 +180,37 @@ impl ImapSession {
         Self::send_response_static(writer, &format!("{} OK LIST completed", tag)).await?;
         println!("✅ IMAP LIST completed - returned {} folders", 4);
         Ok(())
+    }
+    
+    async fn handle_select_static(
+        writer: &mut tokio::net::tcp::WriteHalf<'_>, 
+        tag: &str,
+        folder: &str,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        println!("📁 IMAP SELECT folder: {}", folder);
+        
+        // For now, return basic folder stats (TODO: read actual .eml files)
+        match folder {
+            "INBOX" | "Sent" | "Drafts" | "Trash" => {
+                // Return required SELECT response data
+                Self::send_response_static(writer, "* FLAGS (\\Answered \\Flagged \\Deleted \\Seen \\Draft)").await?;
+                Self::send_response_static(writer, "* OK [PERMANENTFLAGS (\\Answered \\Flagged \\Deleted \\Seen \\Draft \\*)] Flags permitted").await?;
+                Self::send_response_static(writer, "* 0 EXISTS").await?;  // No messages yet
+                Self::send_response_static(writer, "* 0 RECENT").await?;  // No recent messages
+                Self::send_response_static(writer, "* OK [UNSEEN 0] No unseen messages").await?;
+                Self::send_response_static(writer, "* OK [UIDVALIDITY 1] UIDs valid").await?;
+                Self::send_response_static(writer, "* OK [UIDNEXT 1] Next UID").await?;
+                Self::send_response_static(writer, &format!("{} OK [READ-WRITE] SELECT completed", tag)).await?;
+                
+                println!("✅ IMAP SELECT completed for folder: {}", folder);
+                Ok(())
+            }
+            _ => {
+                Self::send_response_static(writer, &format!("{} NO Mailbox does not exist", tag)).await?;
+                println!("❌ IMAP SELECT failed - folder '{}' does not exist", folder);
+                Ok(())
+            }
+        }
     }
     
     async fn handle_logout_static(

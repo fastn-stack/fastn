@@ -103,6 +103,12 @@ impl ImapClient {
             println!("   📂 {}", mailbox.name());
         }
 
+        // Test SELECT command
+        println!("📁 Testing SELECT INBOX command...");
+        let mailbox = imap_session.select("INBOX").await?;
+        println!("✅ Selected INBOX: {} messages, {} recent, {} unseen", 
+            mailbox.exists, mailbox.recent, mailbox.unseen.unwrap_or(0));
+
         println!("✅ All basic operations completed");
         Ok(())
     }
