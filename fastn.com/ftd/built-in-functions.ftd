@@ -847,7 +847,7 @@ string list $a:
 string v:
 integer num:
 
-ftd.insert_at(a, num, v);
+ftd.insert_at(a, v, num);
 
 
 -- void set-dark():
