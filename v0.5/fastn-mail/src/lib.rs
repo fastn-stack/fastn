@@ -4,6 +4,8 @@
 //!
 //! This crate provides a hybrid storage system that combines database indexing with file-based
 //! storage to support real-world email clients while enabling fast IMAP operations.
+//! 
+//! Additionally includes IMAP client functionality for testing and dual verification.
 //!
 //! ## Usage
 //!
@@ -40,6 +42,7 @@
 extern crate self as fastn_mail;
 
 pub mod cli;
+pub mod imap;
 mod database;
 mod errors;
 mod p2p_receive_email;
