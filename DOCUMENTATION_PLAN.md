@@ -140,14 +140,14 @@ fastn.com/
 **Priority Order: Complete fastn 0.4 documentation first, then move to v0.5**
 
 ### Phase 1: fastn 0.4 Documentation Foundation (Week 1-2)
-1. **Audit existing content** - Identify outdated information in current fastn.com
-2. **Write documentation standards** - Establish style guide for contributions
-3. **Begin comprehensive FTD 0.4 language specification** - Start with syntax and type system
-4. **Update existing kernel component docs** - Fix outdated examples and add missing content
+1. ✅ **Audit existing content** - Identified outdated information in current fastn.com
+2. ✅ **Write documentation standards** - Established testing guidelines and debug cheat sheet in CLAUDE.md
+3. 🚧 **Begin comprehensive FTD 0.4 language specification** - **PR READY**: Complete framework at `/spec/` with all 6 major sections
+4. ✅ **Update existing kernel component docs** - **COMPLETED**: Added missing `ftd.audio` component documentation
 
 ### Phase 2: Complete fastn 0.4 Language Specification (Week 3-4)
-1. **Finish comprehensive language specification** - Complete FTD 0.4 docs with full coverage
-2. **Enhanced component documentation** - Add missing components (audio), improve existing ones
+1. **Finish comprehensive language specification** - Expand existing framework with detailed content
+2. ✅ **Enhanced component documentation** - **COMPLETED**: Added `ftd.audio`, updated sitemap
 3. **Create comprehensive examples library** - Real-world usage patterns
 4. **Write cookbook entries** - Common patterns and solutions for 0.4
 
@@ -213,12 +213,24 @@ Hello World  (in red)
 4. **Community Adoption** - External contributions and feedback
 5. **Developer Productivity** - Faster onboarding and development
 
-## Next Steps
+## Progress Status (Updated 2025-09-08)
 
-1. **Create v0.5 directory structure**
-2. **Begin content audit of existing documentation**
-3. **Start with language specification foundation**
-4. **Set up testing infrastructure for documentation examples**
-5. **Establish review process for new content**
+### ✅ Completed
+- **ftd.audio component documentation** - Live at `/ftd/audio/` and `/book/audio/`
+- **Documentation testing standards** - CLAUDE.md with build/test procedures
+- **Language specification framework** - Complete structure at `/spec/` (6 sections)
+
+### 🚧 In Progress (PR Ready)
+- **Language Specification** - Branch: `docs/language-specification-framework`
+  - All 6 major sections created: syntax, types, components, variables, functions, modules
+  - Clean URL structure: `/spec/section/` 
+  - All pages tested and working
+  - Ready for content expansion
+
+### 📋 Next Priority Tasks
+1. **Expand language specification content** - Add detailed examples and edge cases
+2. **Create comprehensive examples library** - Real-world usage patterns  
+3. **Audit and update existing kernel component docs** - Fix outdated examples
+4. **Set up terminal rendering documentation structure**
 
 This plan transforms fastn.com into the definitive resource for fastn development, ensuring that design decisions are documented, specifications are comprehensive, and developers have the resources they need to be productive.
