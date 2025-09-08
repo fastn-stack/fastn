@@ -227,6 +227,11 @@ Hello World  (in red)
   - Fixed insert_at function parameter order in implementation example
   - Corrected delete_at parameter name from 'v' to 'num'
   - Fixed copy-to-clipboard parameter name from 'text' to 'a'
+- **Kernel component documentation audit** - Systematically reviewed 12 components:
+  - Added missing role attribute to ftd.text
+  - Fixed fetch-priority type reference in ftd.image  
+  - Fixed copy-paste error in ftd.column description
+  - Verified accuracy of 9 other kernel components (container, row, checkbox, text-input, video, iframe, code, desktop, mobile)
 
 ### 🚧 In Progress (PR Ready)
 - **Language Specification** - Branch: `docs/language-specification-framework`
@@ -236,9 +241,16 @@ Hello World  (in red)
   - Ready for content expansion
 
 ### 📋 Next Priority Tasks
-1. **Continue kernel component docs audit** - Review individual kernel components (text, image, video, etc.)
-2. **Expand language specification content** - Add detailed examples and edge cases  
-3. **Create comprehensive examples library** - Real-world usage patterns
-4. **Set up terminal rendering documentation structure**
+
+**Phase 1 Documentation Foundation - NEARLY COMPLETE:**
+- ✅ Kernel component audit complete (12/12 components reviewed)
+- ✅ Major reference docs accurate (built-in-types, built-in-functions)
+- 🚧 Language specification framework ready for review
+
+**Phase 2 Candidates (Pick Next):**
+1. **Add missing built-in functions** - Math/string functions found in audit but not documented
+2. **Create comprehensive examples library** - Real-world usage patterns  
+3. **Set up terminal rendering documentation structure** - Prepare for v0.5 content
+4. **Audit remaining documentation files** - Review non-kernel components and guides
 
 This plan transforms fastn.com into the definitive resource for fastn development, ensuring that design decisions are documented, specifications are comprehensive, and developers have the resources they need to be productive.
