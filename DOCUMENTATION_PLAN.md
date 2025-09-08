@@ -219,6 +219,10 @@ Hello World  (in red)
 - **ftd.audio component documentation** - Live at `/ftd/audio/` and `/book/audio/`
 - **Documentation testing standards** - CLAUDE.md with build/test procedures
 - **Language specification framework** - Complete structure at `/spec/` (6 sections)
+- **Built-in types accuracy fixes** - Fixed 3 critical issues in built-in-types.ftd:
+  - Corrected ftd.fetch-priority → ftd.image-fetch-priority type name
+  - Added 7 missing text-input-type variants (datetime, date, time, month, week, color, file)
+  - Fixed vh/vw/vmin/vmax data types from integer to decimal
 
 ### 🚧 In Progress (PR Ready)
 - **Language Specification** - Branch: `docs/language-specification-framework`
@@ -228,9 +232,9 @@ Hello World  (in red)
   - Ready for content expansion
 
 ### 📋 Next Priority Tasks
-1. **Expand language specification content** - Add detailed examples and edge cases
-2. **Create comprehensive examples library** - Real-world usage patterns  
-3. **Audit and update existing kernel component docs** - Fix outdated examples
+1. **Continue kernel component docs audit** - Review built-in-functions.ftd next
+2. **Expand language specification content** - Add detailed examples and edge cases  
+3. **Create comprehensive examples library** - Real-world usage patterns
 4. **Set up terminal rendering documentation structure**
 
 This plan transforms fastn.com into the definitive resource for fastn development, ensuring that design decisions are documented, specifications are comprehensive, and developers have the resources they need to be productive.
