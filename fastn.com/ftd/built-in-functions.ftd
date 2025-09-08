@@ -338,7 +338,7 @@ the system mode.
 
 
 
--- ds.h2: `copy-to-clipboard(text: string)`
+-- ds.h2: `copy-to-clipboard(a: string)`
 
 This is FScript as well as a standard `fastn` function. This function enables
 copy content in clipboard.
