@@ -157,8 +157,9 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     println!("📨 Starting IMAP server on port {imap_port}...");
     
     let imap_account_manager = account_manager.clone();
+    let imap_fastn_home = fastn_home.clone();
     let _imap_handle = fastn_p2p::spawn(async move {
-        if let Err(e) = crate::imap::start_imap_server(imap_account_manager, imap_port).await {
+        if let Err(e) = crate::imap::start_imap_server(imap_account_manager, imap_port, imap_fastn_home).await {
             tracing::error!("IMAP server error: {}", e);
         }
     });
