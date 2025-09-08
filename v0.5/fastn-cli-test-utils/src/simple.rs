@@ -30,6 +30,8 @@ pub fn get_fastn_rig_binary() -> PathBuf {
 
 /// Get path to fastn-mail binary (convenience helper for common case)  
 pub fn get_fastn_mail_binary() -> PathBuf {
+    // Always ensure fastn-mail is built with net feature for SMTP client support
+    let _ = ensure_built(&["fastn-mail"]);
     get_binary_path("fastn-mail")
 }
 

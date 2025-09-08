@@ -50,8 +50,10 @@ async fn email_end_to_end_starttls() {
     test_env.start_peer("sender").await.expect("Failed to start sender peer");
     test_env.start_peer("receiver").await.expect("Failed to start receiver peer");
 
-    // Wait for peers to fully initialize
-    tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+    // Wait for peers to fully initialize (longer wait for CI)
+    let wait_time = if std::env::var("CI").is_ok() { 15 } else { 5 };
+    println!("⏳ Waiting {}s for peers to initialize (CI needs more time)", wait_time);
+    tokio::time::sleep(std::time::Duration::from_secs(wait_time)).await;
 
     // Validate peer setup
     println!("🔍 Validating peer credentials...");
@@ -68,7 +70,7 @@ async fn email_end_to_end_starttls() {
     println!("📧 Using plain text mode (STARTTLS foundation ready, upgrade staged)");
     
     println!("🔍 DEBUG: About to send email using fastn-cli-test-utils...");
-    let send_result = test_env.email()
+    let send_result = match test_env.email()
         .from("sender")
         .to("receiver") 
         .subject("🎯 CRITICAL: Email End-to-End Test")
@@ -76,10 +78,21 @@ async fn email_end_to_end_starttls() {
         .starttls(false)  // Use plain text until STARTTLS upgrade implemented
         .send()
         .await
-        .expect("CRITICAL: SMTP email send must succeed");
-
-    println!("🔍 DEBUG: Email send result: {:?}", send_result.output);
-    println!("✅ CRITICAL: Email sent successfully via SMTP");
+    {
+        Ok(result) => {
+            println!("🔍 DEBUG: Email send result: {}", result.output.stdout);
+            if !result.output.stderr.is_empty() {
+                println!("🔍 DEBUG: Email send stderr: {}", result.output.stderr);
+            }
+            println!("✅ CRITICAL: Email sent successfully via SMTP");
+            result
+        }
+        Err(e) => {
+            println!("❌ CRITICAL: Email send failed: {}", e);
+            println!("🔍 CI DEBUG: This explains why no emails found in folders");
+            panic!("CRITICAL: Email sending failed in test environment: {}", e);
+        }
+    };
 
     // Monitor P2P delivery (this is the heart of fastn's email system)
     println!("⏳ CRITICAL: Waiting for P2P delivery via fastn-p2p...");
