@@ -53,17 +53,13 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y build-essential pkg-config libssl-dev jq
 
-    - name: 🔨 Pre-compile All Email System Binaries
+    - name: 🔨 Pre-compile All Email System Binaries  
       working-directory: v0.5
       run: |
-        echo "🔨 Compiling fastn email system binaries..."
-        echo "This step isolates compilation time from test execution time"
+        echo "🔨 Pre-compiling email system binaries using fastn-cli-test-utils..."
+        echo "This ensures correct features (net feature for fastn-mail) and isolates compilation time"
         
-        time cargo build --bin fastn-rig --bin fastn-mail --bin test_utils
-        
-        echo "✅ Binaries compiled successfully"
-        echo "Binary locations:"
-        ls -la target/debug/fastn-rig target/debug/fastn-mail target/debug/test_utils
+        time cargo run -p fastn-cli-test-utils -- precompile
 
     - name: 🎯 Run Critical Email System Tests
       working-directory: v0.5
