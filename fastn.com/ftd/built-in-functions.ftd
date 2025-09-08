@@ -135,7 +135,7 @@ at the index `num` in the given mutable list `a` of same type as `v`.
 
 
 
--- ds.h2: `ftd.delete_at($a: <any> list, v: integer)`
+-- ds.h2: `ftd.delete_at($a: <any> list, num: integer)`
 
 This is a default `fastn` function that will delete the value from index `num`
 from the given mutable list `a`.
