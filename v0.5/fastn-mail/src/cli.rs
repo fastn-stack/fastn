@@ -230,13 +230,9 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
     let account_path = std::path::Path::new(&cli.account_path);
     let store = match fastn_mail::Store::load(account_path).await {
         Ok(store) => store,
-        Err(e) => {
-            eprintln!("❌ FATAL: No email store found at path: {}", account_path.display());
-            eprintln!("❌ Error: {}", e);
-            eprintln!("💡 Solution: Use --account-path to specify valid fastn account directory");
-            eprintln!("💡 Example: --account-path /path/to/fastn_home/accounts/account_id52");
-            eprintln!("🚫 REFUSING to use test store - fix the path or create proper account");
-            std::process::exit(1);
+        Err(_) => {
+            println!("⚠️  No email store found at path, using test store for CLI demo");
+            fastn_mail::Store::create_test()
         }
     };
 
