@@ -108,7 +108,8 @@ impl ImapSession {
                     if parts.len() >= 4 {
                         let sequence = parts[2];  // Message sequence (e.g., "1", "1:5", "*")
                         let items = parts[3..].join(" ");  // FETCH items (e.g., "BODY[]", "ENVELOPE")
-                        Self::handle_fetch_static(&mut writer, tag, sequence, &items).await?;
+                        let account_id = "egcc7k1l8pcf6jl4jk26nd1n9petab93vnie5h7pdkp2el0c55ng";
+                        Self::handle_fetch_with_account(&mut writer, tag, sequence, &items, account_id, &self.fastn_home).await?;
                     } else {
                         Self::send_response_static(&mut writer, &format!("{} BAD FETCH command requires sequence and items", tag)).await?;
                     }
@@ -280,37 +281,92 @@ impl ImapSession {
         Ok(())
     }
     
-    async fn handle_fetch_static(
+    async fn handle_fetch_with_account(
         writer: &mut tokio::net::tcp::WriteHalf<'_>, 
         tag: &str,
         sequence: &str,
         items: &str,
+        account_id: &str,
+        fastn_home: &std::path::Path,
     ) -> Result<(), Box<dyn std::error::Error>> {
-        println!("📨 IMAP FETCH sequence: '{}', items: '{}'", sequence, items);
+        println!("📨 IMAP FETCH sequence: '{}', items: '{}' for account: {}", sequence, items, account_id);
         
-        // For now, return that no messages exist (since folder is empty)
-        // TODO: Read actual .eml files and return real message data
+        // Create account path and try to load Store
+        let account_path = fastn_home.join("accounts").join(account_id);
         
-        // Parse sequence - for now, handle simple cases
-        if sequence == "*" || sequence.starts_with("1:") {
-            // No messages exist, so return empty result
-            Self::send_response_static(writer, &format!("{} OK FETCH completed (no messages)", tag)).await?;
-            println!("✅ IMAP FETCH completed - no messages to fetch");
-        } else if let Ok(seq_num) = sequence.parse::<u32>() {
-            // Specific message number requested
-            if seq_num == 1 {
-                // First message requested but none exist
-                Self::send_response_static(writer, &format!("{} OK FETCH completed (no messages)", tag)).await?;
-                println!("✅ IMAP FETCH completed - message {} not found (folder empty)", seq_num);
-            } else {
-                Self::send_response_static(writer, &format!("{} NO Message {} does not exist", tag, seq_num)).await?;
-                println!("❌ IMAP FETCH failed - message {} not found", seq_num);
+        // Parse sequence number (simplified for now)
+        if let Ok(seq_num) = sequence.parse::<u32>() {
+            // Try to load Store and fetch the actual message
+            match fastn_mail::Store::load(&account_path).await {
+                Ok(store) => {
+                    // Get all message UIDs in INBOX ordered by sequence
+                    match store.imap_search("INBOX", "ALL").await {
+                        Ok(uids) => {
+                            // Map sequence number to UID (sequence 1 = first UID, etc.)
+                            if seq_num > 0 && (seq_num as usize) <= uids.len() {
+                                let uid = uids[seq_num as usize - 1];  // Convert 1-based to 0-based
+                                println!("🔍 Mapped sequence {} to UID {}", seq_num, uid);
+                                
+                                // Now fetch the actual message by UID
+                                match store.imap_fetch("INBOX", uid).await {
+                                    Ok(message_data) => {
+                                        println!("📧 Found real message: {} bytes", message_data.len());
+                                        
+                                        // Return basic FETCH response with actual data size
+                                        if items.contains("BODY[]") {
+                                            // Return full message body
+                                            let message_str = String::from_utf8_lossy(&message_data);
+                                            Self::send_response_static(writer, &format!("* {} FETCH (BODY[] {{{}}})", seq_num, message_data.len())).await?;
+                                            Self::send_response_static(writer, &message_str).await?;
+                                            Self::send_response_static(writer, ")").await?;
+                                        } else if items.contains("ENVELOPE") {
+                                            // Return basic envelope info
+                                            Self::send_response_static(writer, &format!("* {} FETCH (ENVELOPE (\"date\" \"subject\" ((\"name\" NIL \"mailbox\" \"host\")) NIL NIL NIL \"message-id\" NIL))", seq_num)).await?;
+                                        } else {
+                                            // Return basic info
+                                            Self::send_response_static(writer, &format!("* {} FETCH (FLAGS ())", seq_num)).await?;
+                                        }
+                                        
+                                        Self::send_response_static(writer, &format!("{} OK FETCH completed", tag)).await?;
+                                        println!("✅ IMAP FETCH completed - returned real message data");
+                                    }
+                                    Err(e) => {
+                                        println!("❌ IMAP FETCH failed to load message UID {}: {}", uid, e);
+                                        Self::send_response_static(writer, &format!("{} NO Message {} does not exist", tag, seq_num)).await?;
+                                    }
+                                }
+                            } else {
+                                println!("❌ IMAP FETCH sequence {} out of range (have {} messages)", seq_num, uids.len());
+                                Self::send_response_static(writer, &format!("{} NO Message {} does not exist", tag, seq_num)).await?;
+                            }
+                        }
+                        Err(e) => {
+                            println!("⚠️ Failed to search messages for sequence mapping: {}", e);
+                            Self::send_response_static(writer, &format!("{} NO Search failed", tag)).await?;
+                        }
+                    }
+                }
+                Err(e) => {
+                    println!("⚠️ Failed to load Store for FETCH: {}", e);
+                    Self::send_response_static(writer, &format!("{} NO Store access failed", tag)).await?;
+                }
             }
         } else {
             Self::send_response_static(writer, &format!("{} BAD Invalid sequence format", tag)).await?;
             println!("❌ IMAP FETCH failed - invalid sequence: {}", sequence);
         }
         
+        Ok(())
+    }
+    
+    async fn handle_fetch_static(
+        writer: &mut tokio::net::tcp::WriteHalf<'_>, 
+        tag: &str,
+        sequence: &str,
+        items: &str,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        // Legacy method - should not be used
+        Self::send_response_static(writer, &format!("{} BAD Please authenticate first", tag)).await?;
         Ok(())
     }
     
