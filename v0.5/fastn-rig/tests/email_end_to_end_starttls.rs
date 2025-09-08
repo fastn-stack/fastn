@@ -28,6 +28,11 @@ async fn email_end_to_end_starttls() {
     let mut test_env = fastn_cli_test_utils::FastnTestEnv::new("email-end-to-end-starttls")
         .expect("Failed to create test environment");
     
+    // CI vs Local Environment Debugging (no functionality change)
+    println!("🔍 ENV: Running in CI: {}", std::env::var("CI").is_ok());
+    println!("🔍 ENV: GitHub Actions: {}", std::env::var("GITHUB_ACTIONS").is_ok());  
+    println!("🔍 ENV: Container: {}", std::path::Path::new("/.dockerenv").exists());
+    
     // Create two peers for end-to-end testing
     println!("🔧 Creating peer infrastructure...");
     let peer1 = test_env.create_peer("sender").await.expect("Failed to create sender peer");
@@ -102,6 +107,7 @@ async fn email_end_to_end_starttls() {
 
         if attempt == 8 {
             println!("⚠️  P2P delivery taking longer than expected ({}s)...", attempt * 3);
+            println!("🔍 CI DEBUG: This suggests P2P delivery is slower/failing in CI environment");
         }
     }
 
