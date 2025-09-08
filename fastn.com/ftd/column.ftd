@@ -47,7 +47,7 @@ spacing.fixed.px: 20
 
 In this example, a column container is created with a fixed spacing of 20 pixels
 between the child components. Two `ftd.text` components are then placed within
-the row, which will be vertically stacked with the specified spacing.
+the column, which will be vertically stacked with the specified spacing.
 
 -- ds.output:
 
