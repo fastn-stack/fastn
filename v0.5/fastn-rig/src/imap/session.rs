@@ -97,6 +97,15 @@ impl ImapSession {
                         Self::send_response_static(&mut writer, &format!("{} BAD SELECT command requires folder name", tag)).await?;
                     }
                 }
+                "FETCH" => {
+                    if parts.len() >= 4 {
+                        let sequence = parts[2];  // Message sequence (e.g., "1", "1:5", "*")
+                        let items = parts[3..].join(" ");  // FETCH items (e.g., "BODY[]", "ENVELOPE")
+                        Self::handle_fetch_static(&mut writer, tag, sequence, &items).await?;
+                    } else {
+                        Self::send_response_static(&mut writer, &format!("{} BAD FETCH command requires sequence and items", tag)).await?;
+                    }
+                }
                 "LOGOUT" => {
                     Self::handle_logout_static(&mut writer, tag).await?;
                     break;
@@ -211,6 +220,40 @@ impl ImapSession {
                 Ok(())
             }
         }
+    }
+    
+    async fn handle_fetch_static(
+        writer: &mut tokio::net::tcp::WriteHalf<'_>, 
+        tag: &str,
+        sequence: &str,
+        items: &str,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        println!("📨 IMAP FETCH sequence: '{}', items: '{}'", sequence, items);
+        
+        // For now, return that no messages exist (since folder is empty)
+        // TODO: Read actual .eml files and return real message data
+        
+        // Parse sequence - for now, handle simple cases
+        if sequence == "*" || sequence.starts_with("1:") {
+            // No messages exist, so return empty result
+            Self::send_response_static(writer, &format!("{} OK FETCH completed (no messages)", tag)).await?;
+            println!("✅ IMAP FETCH completed - no messages to fetch");
+        } else if let Ok(seq_num) = sequence.parse::<u32>() {
+            // Specific message number requested
+            if seq_num == 1 {
+                // First message requested but none exist
+                Self::send_response_static(writer, &format!("{} OK FETCH completed (no messages)", tag)).await?;
+                println!("✅ IMAP FETCH completed - message {} not found (folder empty)", seq_num);
+            } else {
+                Self::send_response_static(writer, &format!("{} NO Message {} does not exist", tag, seq_num)).await?;
+                println!("❌ IMAP FETCH failed - message {} not found", seq_num);
+            }
+        } else {
+            Self::send_response_static(writer, &format!("{} BAD Invalid sequence format", tag)).await?;
+            println!("❌ IMAP FETCH failed - invalid sequence: {}", sequence);
+        }
+        
+        Ok(())
     }
     
     async fn handle_logout_static(
