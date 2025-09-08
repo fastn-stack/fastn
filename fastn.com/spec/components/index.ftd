@@ -1,0 +1,90 @@
+-- ds.page: Component System
+
+Component definition, invocation, arguments, children, and inheritance in FTD
+
+-- ds.h1: Component Overview
+
+Components are reusable building blocks in FTD. They can accept arguments, contain children, and be customized through property inheritance.
+
+-- ds.h1: Component Definition
+
+Components are defined using the `component` keyword with typed arguments.
+
+-- ds.code: Basic Component
+lang: ftd
+
+\-- component card:
+caption title:
+optional body text:
+
+\-- ftd.column:
+border-width.px: 1
+padding.px: 16
+
+	-- ftd.text: $card.title
+	role: $inherited.types.heading-medium
+	
+	-- ftd.text: $card.text
+	if: { card.text != NULL }
+
+\-- end: ftd.column
+
+\-- end: card
+
+-- ds.h1: Component Invocation
+
+Components are invoked like any other section.
+
+-- ds.code: Component Usage
+lang: ftd
+
+\-- card: Welcome Card
+text: This is the card content
+
+\-- card: Simple Card
+
+-- ds.h1: Component Arguments
+
+Components can accept different types of arguments.
+
+-- ds.code: Argument Types
+lang: ftd
+
+\-- component button:
+caption label:
+optional string url:
+optional ftd.color background-color:
+optional boolean disabled:
+
+	-- ftd.text: $button.label
+	color: white
+	background.solid: $button.background-color
+	if: { !button.disabled }
+
+\-- end: button
+
+-- ds.h1: Children Components
+
+Components can contain and render child components.
+
+-- ds.code: Children Example
+lang: ftd
+
+\-- component container:
+children wrapper:
+
+\-- ftd.column:
+spacing.fixed.px: 16
+
+	$container.wrapper
+
+\-- end: ftd.column
+
+\-- end: container
+
+\-- container:
+
+	-- ftd.text: Child 1
+	-- ftd.text: Child 2
+
+\-- end: container
