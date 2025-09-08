@@ -21,6 +21,7 @@ pub struct ImapSession {
     state: SessionState,
     account_manager: Arc<AccountManager>,
     fastn_home: std::path::PathBuf,
+    authenticated_account: Option<String>,  // Account ID after LOGIN
 }
 
 impl ImapSession {
@@ -36,6 +37,7 @@ impl ImapSession {
             state: SessionState::NotAuthenticated,
             account_manager,
             fastn_home,
+            authenticated_account: None,
         }
     }
 
