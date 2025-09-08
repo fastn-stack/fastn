@@ -1,11 +1,21 @@
-//! IMAP client functionality for fastn-mail
+//! IMAP functionality for fastn-mail
 //!
-//! This module provides IMAP client capabilities for testing fastn email servers
-//! and other IMAP servers. It includes dual verification testing to ensure
-//! protocol results match filesystem reality.
+//! This module provides both:
+//! 1. IMAP server-side storage functions (for fastn-rig IMAP server implementation)  
+//! 2. IMAP client functionality (for testing and dual verification)
 
+// IMAP client functionality (network-based)
 pub mod client;
 pub mod commands;
+
+// IMAP server-side storage functions (filesystem-based)
+// These modules extend the Store impl with IMAP functionality
+pub mod fetch;
+pub mod list_folders;
+pub mod search;
+pub mod select_folder;  
+pub mod store_flags;
+pub mod thread;
 
 pub use client::ImapClient;
 pub use commands::{
