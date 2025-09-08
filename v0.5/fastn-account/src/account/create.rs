@@ -148,6 +148,16 @@ impl fastn_account::Account {
 
         tracing::info!("Created new account with primary alias: {}", id52);
 
+        // Copy default UI content from fastn-home/src to account/public
+        copy_src_to_public(&account_path)
+            .await
+            .map_err(|e| {
+                tracing::warn!("Failed to copy UI content: {}", e);
+                // Don't fail account creation if UI copy fails
+                e
+            })
+            .ok();
+
         // Create account instance
         Ok(Self {
             path: std::sync::Arc::new(account_path),
@@ -253,4 +263,100 @@ impl fastn_account::Account {
 
         Ok(())
     }
+}
+
+/// Copy default UI content from fastn-home/src to account/public
+async fn copy_src_to_public(
+    account_path: &std::path::Path,
+) -> Result<(), crate::CreateInitialDocumentsError> {
+    // Find fastn-home directory (account_path is fastn-home/accounts/account-id52)
+    let fastn_home = account_path
+        .parent()
+        .and_then(|p| p.parent())
+        .ok_or_else(
+            || crate::CreateInitialDocumentsError::AliasDocumentCreationFailed {
+                source: Box::new(std::io::Error::new(
+                    std::io::ErrorKind::NotFound,
+                    "Could not find fastn-home directory",
+                )),
+            },
+        )?;
+
+    // Use embedded fastn-home content from build time
+    static FASTN_HOME_CONTENT: include_dir::Dir = include_dir::include_dir!("../fastn-home/src");
+    
+    let public_dir = account_path.join("public");
+    
+    tracing::info!("Copying embedded UI content to {}", public_dir.display());
+    
+    // Create public directory
+    tokio::fs::create_dir_all(&public_dir).await.map_err(|e| {
+        crate::CreateInitialDocumentsError::AliasDocumentCreationFailed {
+            source: Box::new(e),
+        }
+    })?;
+    
+    // Copy embedded content to public directory
+    copy_embedded_dir(&FASTN_HOME_CONTENT, &public_dir).await.map_err(|e| {
+        crate::CreateInitialDocumentsError::AliasDocumentCreationFailed {
+            source: Box::new(e),
+        }
+    })?;
+    
+    tracing::info!("✅ Copied embedded UI content to account public directory");
+
+    Ok(())
+}
+
+/// Copy embedded directory contents to filesystem
+async fn copy_embedded_dir(
+    embedded_dir: &include_dir::Dir<'_>,
+    dst: &std::path::Path,
+) -> Result<(), std::io::Error> {
+    // Copy all files in the embedded directory
+    for file in embedded_dir.files() {
+        let file_path = dst.join(file.path());
+        
+        // Create parent directories if needed
+        if let Some(parent) = file_path.parent() {
+            tokio::fs::create_dir_all(parent).await?;
+        }
+        
+        // Write file content
+        tokio::fs::write(&file_path, file.contents()).await?;
+    }
+    
+    // Recursively copy subdirectories
+    for subdir in embedded_dir.dirs() {
+        let subdir_path = dst.join(subdir.path());
+        tokio::fs::create_dir_all(&subdir_path).await?;
+        
+        // Recursive call for subdirectory
+        Box::pin(copy_embedded_dir(subdir, &subdir_path)).await?;
+    }
+    
+    Ok(())
+}
+
+/// Recursively copy directory contents
+async fn copy_dir_recursive(
+    src: &std::path::Path,
+    dst: &std::path::Path,
+) -> Result<(), std::io::Error> {
+    tokio::fs::create_dir_all(dst).await?;
+
+    let mut entries = tokio::fs::read_dir(src).await?;
+    while let Some(entry) = entries.next_entry().await? {
+        let entry_path = entry.path();
+        let file_name = entry.file_name();
+        let dst_path = dst.join(&file_name);
+
+        if entry_path.is_dir() {
+            Box::pin(copy_dir_recursive(&entry_path, &dst_path)).await?;
+        } else {
+            tokio::fs::copy(&entry_path, &dst_path).await?;
+        }
+    }
+
+    Ok(())
 }

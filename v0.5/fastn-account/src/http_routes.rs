@@ -35,10 +35,21 @@ impl crate::Account {
         };
 
         // Try folder-based routing first with account context
-        let fbr = fastn_fbr::FolderBasedRouter::new(self.path().await);
+        let account_path = self.path().await;
+        println!("🔍 Account path: {}", account_path.display());
+
+        let fbr = fastn_fbr::FolderBasedRouter::new(&account_path);
         let account_context = self.create_template_context().await;
-        if let Ok(response) = fbr.route_request(request, Some(&account_context)).await {
-            return Ok(response);
+
+        match fbr.route_request(request, Some(&account_context)).await {
+            Ok(response) => {
+                println!("✅ Folder-based routing succeeded for {}", request.path);
+                return Ok(response);
+            }
+            Err(e) => {
+                println!("❌ Folder-based routing failed for {}: {}", request.path, e);
+                // Fall through to default interface
+            }
         }
 
         // Fallback to default account interface

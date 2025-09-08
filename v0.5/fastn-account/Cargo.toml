@@ -15,6 +15,9 @@ fastn-mail.workspace = true
 fastn-router.workspace = true
 fastn-fbr.workspace = true
 autosurgeon.workspace = true
+
+# Include directory for embedded fastn-home content
+include_dir = "0.7"
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
