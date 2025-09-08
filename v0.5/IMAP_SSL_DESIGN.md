@@ -977,21 +977,242 @@ pub struct ImapServer {
 - ✅ **Memory limits** - Limit message index cache size
 - ✅ **File handle limits** - Close unused .eml files
 
-## 🚀 **Implementation Phases**
+## 🚀 **Implementation Phases (Revised: Client-First Approach)**
 
-### Phase 1: Core IMAP Server (Week 1)
+### Phase 0: IMAP Client in fastn-mail (Week 1) 
+**Strategy:** Build the client first to have proper testing tools for server implementation
+
+**Benefits of Client-First Approach:**
+- ✅ **Proper testing tools** - Test server with our own IMAP client instead of external tools
+- ✅ **Protocol understanding** - Implementing client clarifies IMAP protocol requirements
+- ✅ **Integration testing** - Can test full IMAP workflow with fastn-mail commands
+- ✅ **Real-world validation** - Client handles same edge cases as external email clients
+- ✅ **Faster iteration** - No dependency on external IMAP servers for testing
+
+**Implementation Tasks:**
+- [ ] Add IMAP client support to `fastn-mail` with `net` feature (following SMTP pattern)
+- [ ] Implement comprehensive IMAP command set for thorough server testing
+- [ ] Add STARTTLS support using existing certificate infrastructure 
+- [ ] Update email check commands to optionally use IMAP instead of filesystem scanning
+- [ ] Create IMAP client integration tests for end-to-end server testing
+
+### **Complete IMAP Client Command Set in fastn-mail**
+
+**Strategy:** Implement all IMAP4rev1 commands in fastn-mail to serve as comprehensive testing tool for our server implementation and real-world IMAP servers.
+
+**Authentication Commands:**
+```bash
+fastn-mail imap-capability --host localhost --port 1143
+fastn-mail imap-login --host localhost --port 1143 --username test@account.com --password xxx
+fastn-mail imap-starttls --host localhost --port 1143  # Test TLS upgrade
+fastn-mail imap-logout --session-id xxx
+```
+
+**Mailbox Management Commands:**
+```bash
+fastn-mail imap-list --host localhost --port 1143 --pattern "*"
+fastn-mail imap-list --host localhost --port 1143 --pattern "INBOX/*" 
+fastn-mail imap-select --folder INBOX
+fastn-mail imap-examine --folder INBOX  # Read-only selection
+fastn-mail imap-status --folder INBOX --items "MESSAGES UNSEEN RECENT"
+fastn-mail imap-create --folder "INBOX/Test"  # Create new folder
+fastn-mail imap-delete --folder "INBOX/Test"  # Delete folder
+fastn-mail imap-rename --from "INBOX/Old" --to "INBOX/New"
+```
+
+**Message Operations Commands:**
+```bash
+fastn-mail imap-fetch --sequence "1:5" --items "ENVELOPE"
+fastn-mail imap-fetch --sequence "1" --items "BODY[]"  # Full message
+fastn-mail imap-fetch --sequence "1" --items "BODY[HEADER]"  # Headers only
+fastn-mail imap-fetch --sequence "*" --items "FLAGS"  # All message flags
+fastn-mail imap-fetch --uid --sequence "100:200" --items "ENVELOPE"  # UID mode
+
+fastn-mail imap-store --sequence "1" --flags "+FLAGS" --values "\\Seen"  # Mark as read
+fastn-mail imap-store --sequence "1:3" --flags "+FLAGS" --values "\\Flagged"  # Flag messages
+fastn-mail imap-store --sequence "5" --flags "-FLAGS" --values "\\Seen"  # Mark unread
+fastn-mail imap-store --uid --sequence "150" --flags "FLAGS" --values "\\Deleted"  # Replace flags
+
+fastn-mail imap-search --criteria "ALL"
+fastn-mail imap-search --criteria "UNSEEN" 
+fastn-mail imap-search --criteria "SUBJECT \"test\""
+fastn-mail imap-search --criteria "FROM \"alice@example.com\""
+fastn-mail imap-search --criteria "SINCE \"01-Jan-2024\""
+
+fastn-mail imap-expunge  # Permanently remove deleted messages
+fastn-mail imap-close    # Close mailbox and expunge
+```
+
+**Advanced Commands:**
+```bash
+fastn-mail imap-idle --timeout 30  # Real-time notifications (RFC 2177) 
+fastn-mail imap-noop                # Keep connection alive
+fastn-mail imap-check               # Request mailbox update
+
+# Extension commands (if server supports)
+fastn-mail imap-move --sequence "1:5" --destination "INBOX/Archive"  # MOVE extension
+fastn-mail imap-thread --algorithm "REFERENCES" --criteria "ALL"      # THREAD extension
+```
+
+**Connection Management Commands:**
+```bash
+fastn-mail imap-connect --host localhost --port 1143 --starttls
+fastn-mail imap-connect --host localhost --port 993 --ssl  # Direct SSL (if implemented)
+fastn-mail imap-test-connection --host localhost --port 1143 --username test@account.com
+```
+
+**Batch Operations Commands:**
+```bash
+fastn-mail imap-check-all --host localhost --port 1143  # Check all folders for new mail
+fastn-mail imap-sync --source-folder INBOX --dry-run    # Compare local vs IMAP state
+fastn-mail imap-download --folder INBOX --format eml    # Download messages as .eml files
+fastn-mail imap-upload --folder Drafts --file draft.eml # Upload .eml file to folder
+```
+
+**Integration Commands (Replace existing filesystem commands):**
+```bash
+# Enhanced versions of existing commands with IMAP option
+fastn-mail list-mails --folder INBOX --via-imap --host localhost --port 1143
+fastn-mail show-mail --email-id 123 --via-imap --host localhost --port 1143
+fastn-mail count-mails --folder INBOX --via-imap --unseen-only
+
+# New IMAP-enabled commands  
+fastn-mail check-new-mail --via-imap --all-folders
+fastn-mail mark-as-read --email-ids "1,2,3" --via-imap
+fastn-mail flag-important --email-ids "5" --via-imap
+```
+
+**Testing and Debugging Commands:**
+```bash
+fastn-mail imap-debug --host localhost --port 1143 --command "CAPABILITY"  # Raw IMAP
+fastn-mail imap-benchmark --host localhost --port 1143 --operations 100    # Performance
+fastn-mail imap-validate --host localhost --port 1143                      # Protocol conformance
+```
+
+### **🔍 Dual Verification Testing Strategy**
+
+**Critical Innovation:** Every fastn-mail command performs **dual verification** - protocol operation + direct filesystem verification.
+
+**SMTP Dual Verification Example:**
+```bash
+fastn-mail send-mail --to alice@example.com --subject "Test" --body "Hello" \
+  --verify-sent  # New flag
+
+# What happens internally:
+# 1. Send email via SMTP protocol to fastn-rig
+# 2. Wait for SMTP success response  
+# 3. VERIFY: Check Sent folder contains exact .eml file with correct headers
+# 4. VERIFY: Check P2P delivery queue has correct entry
+# 5. VERIFY: Parse .eml content matches what we sent
+# 6. Report: "✅ SMTP OK, ✅ Sent folder OK, ✅ P2P queue OK"
+```
+
+**IMAP Dual Verification Example:**
+```bash
+fastn-mail imap-fetch --sequence "1" --items "ENVELOPE" --verify-folder
+
+# What happens internally:
+# 1. Fetch message via IMAP protocol from server
+# 2. Parse IMAP response (envelope data)
+# 3. VERIFY: Read corresponding .eml file directly from INBOX folder  
+# 4. VERIFY: Parse .eml headers match IMAP envelope exactly
+# 5. VERIFY: Message flags in IMAP match .flags metadata file
+# 6. Report: "✅ IMAP envelope OK, ✅ .eml file OK, ✅ flags match"
+```
+
+**Why This Catches Critical Bugs:**
+
+❌ **Hallucination Detection:**
+```
+IMAP server returns: "* 5 FETCH (ENVELOPE (...))"
+Folder verification finds: Only 3 .eml files in INBOX
+Result: "❌ IMAP claims 5 messages, folder has 3 - server hallucinating!"
+```
+
+❌ **Hardcoded Response Detection:**
+```
+IMAP server always returns: "UNSEEN 2" for any folder
+Folder verification counts: 7 actual unread .eml files  
+Result: "❌ IMAP hardcoded response, actual unseen: 7"
+```
+
+❌ **Stale Cache Detection:**
+```
+IMAP FETCH returns: Old message content
+Folder verification reads: Updated .eml file content
+Result: "❌ IMAP serving stale cache, .eml file updated"
+```
+
+❌ **Missing Integration Detection:**
+```
+IMAP LIST shows: "INBOX" folder exists
+Folder verification finds: No INBOX directory on filesystem
+Result: "❌ IMAP protocol OK, but folder missing - no filesystem integration"
+```
+
+**Comprehensive Dual Verification Commands:**
+
+**SMTP Commands with Verification:**
+```bash
+fastn-mail send-mail --verify-sent     # Check Sent folder + P2P queue
+fastn-mail send-mail --verify-all      # Check Sent + delivery status + recipient folder
+```
+
+**IMAP Commands with Verification:**
+```bash
+fastn-mail imap-list --verify-folders           # Check protocol vs actual directories
+fastn-mail imap-select INBOX --verify-counts    # Check IMAP stats vs .eml file count
+fastn-mail imap-fetch "1:*" --verify-content    # Check IMAP data vs .eml content  
+fastn-mail imap-search "UNSEEN" --verify-flags  # Check IMAP results vs .flags files
+fastn-mail imap-store "+FLAGS \\Seen" --verify-flags  # Check flag update in filesystem
+```
+
+**Complete Integration Commands:**
+```bash
+# Full end-to-end verification with filesystem checks at every step
+fastn-mail test-full-pipeline --verify-all \
+  --smtp-send "test@example.com" \
+  --imap-host localhost --imap-port 1143
+
+# What this does:
+# 1. Send via SMTP → verify Sent folder + P2P queue
+# 2. Wait for P2P delivery → verify INBOX folder updated  
+# 3. Connect via IMAP → verify connection + capabilities
+# 4. List folders via IMAP → verify against actual directories
+# 5. Select INBOX → verify message counts match .eml files
+# 6. Fetch messages → verify content matches .eml files exactly
+# 7. Update flags → verify .flags files updated correctly
+# 8. Search messages → verify results match filesystem reality
+```
+
+**Benefits of Dual Verification:**
+- ✅ **Bug detection impossible to miss** - Protocol lies exposed by filesystem truth
+- ✅ **Implementation validation** - Proves server uses real data, not mocks
+- ✅ **Data integrity assurance** - Content matches between protocol and storage
+- ✅ **Cache coherency testing** - Detects stale or inconsistent server state
+- ✅ **Integration proof** - Server actually reads/writes correct filesystem locations
+- ✅ **Regression prevention** - Changes breaking filesystem integration caught immediately
+- ✅ **P2P email reliability** - Critical for peer-to-peer email infrastructure
+
+**Testing Philosophy:**
+> "Don't just test the protocol works - verify it works with real data in real places"
+
+This approach is essential for P2P email infrastructure where data integrity and reliability are paramount.
+
+### Phase 1: Core IMAP Server (Week 2)
+**Advantage:** Can test server using our own fastn-mail IMAP client
 - [ ] Create IMAP module structure (`fastn-rig/src/imap/`)
 - [ ] Implement basic IMAP server with STARTTLS support
 - [ ] Add session management with generic streams
 - [ ] Implement CAPABILITY, LOGIN, LOGOUT commands
-- [ ] Basic integration tests
+- [ ] Test server using fastn-mail IMAP client (instead of external tools)
 
-### Phase 2: Mailbox Operations (Week 2)  
+### Phase 2: Mailbox Operations (Week 3)  
 - [ ] Implement LIST, SELECT, EXAMINE commands
 - [ ] Add message indexing with UID management
 - [ ] Implement basic FETCH command (headers, body)
 - [ ] Add message flag management system
-- [ ] Email client compatibility testing (Thunderbird)
+- [ ] Validate using fastn-mail client and external email clients (Thunderbird)
 
 ### Phase 3: Message Operations (Week 3)
 - [ ] Complete FETCH command (all attributes)
