@@ -738,6 +738,8 @@ skip: true
     document: ftd/image.ftd
   - `ftd.video`: /book/video/
     document: ftd/video.ftd
+  - `ftd.audio`: /book/audio/
+    document: ftd/audio.ftd
   - `ftd.rive` (animation): /book/rive/
     document: ftd/rive.ftd
     description: animation
@@ -882,6 +884,8 @@ skip: true
     document: ftd/image.ftd
   - `ftd.video`: /video/
     document: ftd/video.ftd
+  - `ftd.audio`: /audio/
+    document: ftd/audio.ftd
   - `ftd.rive` (animation): /rive/
     document: ftd/rive.ftd
     description: animation
