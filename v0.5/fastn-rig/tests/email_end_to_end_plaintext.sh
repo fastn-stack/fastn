@@ -206,7 +206,9 @@ log "📧 From: $FROM"
 log "📧 To: $TO"
 
 # Use direct binary (no compilation delay during email send)
-if FASTN_HOME="$TEST_DIR/peer1" "$FASTN_MAIL" send-mail \
+if FASTN_HOME="$TEST_DIR/peer1" "$FASTN_MAIL" \
+    --account-path "$TEST_DIR/peer1/accounts/$ACCOUNT1_ID" \
+    send-mail \
     --smtp 2525 --password "$ACCOUNT1_PWD" \
     --from "$FROM" --to "$TO" \
     --subject "Direct Binary Test" \
@@ -254,8 +256,9 @@ for attempt in $(seq 1 8); do
         
         # Test IMAP protocol vs filesystem dual verification
         log "📨 Testing IMAP FETCH with dual verification..."
-        if FASTN_HOME="$TEST_DIR/peer2" "$FASTN_MAIL" imap-fetch \
+        if FASTN_HOME="$TEST_DIR/peer2" "$FASTN_MAIL" \
             --account-path "$TEST_DIR/peer2/accounts/$ACCOUNT2_ID" \
+            imap-fetch \
             --host localhost --port 1144 \
             --username "$PEER2_USERNAME" --password "$ACCOUNT2_PWD" \
             --sequence "1" --items "ENVELOPE" \
