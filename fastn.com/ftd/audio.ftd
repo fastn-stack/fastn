@@ -1,3 +1,5 @@
+-- import: fastn.com/assets
+
 -- ds.page: `ftd.audio`
 
 `ftd.audio` is the kernel element used to embed audio content in `ftd`.
