@@ -216,13 +216,17 @@ Hello World  (in red)
 ## Progress Status (Updated 2025-09-08)
 
 ### ✅ Completed
-- **ftd.audio component documentation** - Live at `/ftd/audio/` and `/book/audio/`
-- **Documentation testing standards** - CLAUDE.md with build/test procedures
+- **ftd.audio component documentation** - Live at `/ftd/audio/` and `/book/audio/` with proper layout
+- **Documentation testing standards** - CLAUDE.md with build/test procedures and debugging cheat sheet
 - **Language specification framework** - Complete structure at `/spec/` (6 sections)
-- **Built-in types accuracy fixes** - Fixed 3 critical issues in built-in-types.ftd:
+- **Built-in types accuracy audit** - Fixed 3 critical issues in built-in-types.ftd:
   - Corrected ftd.fetch-priority → ftd.image-fetch-priority type name
   - Added 7 missing text-input-type variants (datetime, date, time, month, week, color, file)
   - Fixed vh/vw/vmin/vmax data types from integer to decimal
+- **Built-in functions accuracy audit** - Fixed 3 critical issues in built-in-functions.ftd:
+  - Fixed insert_at function parameter order in implementation example
+  - Corrected delete_at parameter name from 'v' to 'num'
+  - Fixed copy-to-clipboard parameter name from 'text' to 'a'
 
 ### 🚧 In Progress (PR Ready)
 - **Language Specification** - Branch: `docs/language-specification-framework`
@@ -232,7 +236,7 @@ Hello World  (in red)
   - Ready for content expansion
 
 ### 📋 Next Priority Tasks
-1. **Continue kernel component docs audit** - Review built-in-functions.ftd next
+1. **Continue kernel component docs audit** - Review individual kernel components (text, image, video, etc.)
 2. **Expand language specification content** - Add detailed examples and edge cases  
 3. **Create comprehensive examples library** - Real-world usage patterns
 4. **Set up terminal rendering documentation structure**
