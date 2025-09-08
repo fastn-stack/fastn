@@ -35,6 +35,7 @@ pub mod email_poller_p2p;
 pub mod errors;
 mod http_routes;
 mod http_server;
+mod imap;
 pub mod p2p_server;
 pub mod protocols;
 mod rig;
