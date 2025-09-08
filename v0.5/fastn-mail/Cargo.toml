@@ -44,7 +44,9 @@ uuid = { version = "1", features = ["v4"] }
 
 # Networking clients (optional)
 lettre = { workspace = true, optional = true }
+async-imap = { version = "0.9", optional = true }
+tokio-rustls = { workspace = true, optional = true }
 
 [features]
 default = []
-net = ["lettre"]
+net = ["lettre", "async-imap", "tokio-rustls"]

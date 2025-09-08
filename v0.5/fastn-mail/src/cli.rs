@@ -59,6 +59,14 @@ pub enum Commands {
         /// Enable STARTTLS for secure SMTP connection
         #[arg(long)]
         starttls: bool,
+
+        /// Verify email was stored in Sent folder after SMTP success
+        #[arg(long)]
+        verify_sent: bool,
+
+        /// Comprehensive verification: Sent folder + P2P queue + content integrity  
+        #[arg(long)]
+        verify_all: bool,
     },
 
     /// List emails in a folder
@@ -107,6 +115,114 @@ pub enum Commands {
         #[arg(long)]
         sender_id52: String,
     },
+
+    /// IMAP client commands with dual verification
+    
+    /// Connect to IMAP server and test basic functionality
+    ImapConnect {
+        /// IMAP server hostname
+        #[arg(long, default_value = "localhost")]
+        host: String,
+        /// IMAP server port  
+        #[arg(long, default_value = "1143")]
+        port: u16,
+        /// Username for authentication
+        #[arg(long)]
+        username: String,
+        /// Password for authentication
+        #[arg(long)]
+        password: String,
+        /// Use STARTTLS for secure connection
+        #[arg(long)]
+        starttls: bool,
+        /// Test all basic operations after connecting
+        #[arg(long)]
+        test_operations: bool,
+    },
+
+    /// List mailboxes via IMAP with filesystem verification
+    ImapList {
+        /// IMAP server hostname
+        #[arg(long, default_value = "localhost")]
+        host: String,
+        /// IMAP server port
+        #[arg(long, default_value = "1143")]  
+        port: u16,
+        /// Username for authentication
+        #[arg(long)]
+        username: String,
+        /// Password for authentication
+        #[arg(long)]
+        password: String,
+        /// Mailbox pattern (default: "*" for all)
+        #[arg(long, default_value = "*")]
+        pattern: String,
+        /// Use STARTTLS for secure connection
+        #[arg(long)]
+        starttls: bool,
+        /// Verify IMAP results match actual folder structure
+        #[arg(long)]
+        verify_folders: bool,
+    },
+
+    /// Fetch messages via IMAP with content verification
+    ImapFetch {
+        /// IMAP server hostname
+        #[arg(long, default_value = "localhost")]
+        host: String,
+        /// IMAP server port
+        #[arg(long, default_value = "1143")]
+        port: u16,
+        /// Username for authentication
+        #[arg(long)]
+        username: String,
+        /// Password for authentication
+        #[arg(long)]
+        password: String,
+        /// Mailbox to select (default: INBOX)
+        #[arg(long, default_value = "INBOX")]
+        folder: String,
+        /// Message sequence (e.g., "1", "1:5", "*")
+        #[arg(long, default_value = "1:*")]
+        sequence: String,
+        /// FETCH items (e.g., "ENVELOPE", "BODY[]", "FLAGS")
+        #[arg(long, default_value = "ENVELOPE")]
+        items: String,
+        /// Use UID mode instead of sequence numbers
+        #[arg(long)]
+        uid: bool,
+        /// Use STARTTLS for secure connection
+        #[arg(long)]
+        starttls: bool,
+        /// Verify IMAP data matches .eml file content exactly
+        #[arg(long)]
+        verify_content: bool,
+    },
+
+    /// Complete IMAP pipeline test with full verification
+    ImapTestPipeline {
+        /// IMAP server hostname
+        #[arg(long, default_value = "localhost")]
+        host: String,
+        /// IMAP server port
+        #[arg(long, default_value = "1143")]
+        port: u16,
+        /// Username for authentication
+        #[arg(long)]
+        username: String,
+        /// Password for authentication  
+        #[arg(long)]
+        password: String,
+        /// Use STARTTLS for secure connection
+        #[arg(long)]
+        starttls: bool,
+        /// Also test SMTP sending before IMAP operations
+        #[arg(long)]
+        include_smtp: bool,
+        /// SMTP port (if testing SMTP)
+        #[arg(long, default_value = "2525")]
+        smtp_port: u16,
+    },
 }
 
 pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
@@ -132,9 +248,12 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             direct,
             password,
             starttls,
+            verify_sent,
+            verify_all,
         } => {
             send_mail_command(
                 &store, to, cc, bcc, subject, body, from, smtp, direct, password, starttls,
+                verify_sent, verify_all,
             )
             .await?;
         }
@@ -165,6 +284,52 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         } => {
             p2p_receive_email_command(&store, &message_file, &sender_id52).await?;
         }
+        Commands::ImapConnect {
+            host,
+            port,
+            username,
+            password,
+            starttls,
+            test_operations,
+        } => {
+            imap_connect_command(&host, port, &username, &password, starttls, test_operations).await?;
+        }
+        Commands::ImapList {
+            host,
+            port,
+            username,
+            password,
+            pattern,
+            starttls,
+            verify_folders,
+        } => {
+            imap_list_command(&store, &host, port, &username, &password, &pattern, starttls, verify_folders).await?;
+        }
+        Commands::ImapFetch {
+            host,
+            port,
+            username,
+            password,
+            folder,
+            sequence,
+            items,
+            uid,
+            starttls,
+            verify_content,
+        } => {
+            imap_fetch_command(&store, &host, port, &username, &password, &folder, &sequence, &items, uid, starttls, verify_content).await?;
+        }
+        Commands::ImapTestPipeline {
+            host,
+            port,
+            username,
+            password,
+            starttls,
+            include_smtp,
+            smtp_port,
+        } => {
+            imap_test_pipeline_command(&store, &host, port, &username, &password, starttls, include_smtp, smtp_port).await?;
+        }
     }
 
     Ok(())
@@ -186,6 +351,8 @@ async fn send_mail_command(
     direct: bool,
     #[cfg_attr(not(feature = "net"), allow(unused_variables))] password: Option<String>,
     #[cfg_attr(not(feature = "net"), allow(unused_variables))] starttls: bool,
+    verify_sent: bool,
+    verify_all: bool,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("📧 Composing email...");
 
