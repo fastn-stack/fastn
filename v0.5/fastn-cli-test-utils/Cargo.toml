@@ -4,6 +4,10 @@ version = "0.1.0"
 edition = "2024"
 rust-version = "1.86"
 
+[[bin]]
+name = "precompile"
+path = "src/bin/precompile.rs"
+
 [dependencies]
 tokio = { version = "1", features = ["full"] }
 tempfile = "3"
