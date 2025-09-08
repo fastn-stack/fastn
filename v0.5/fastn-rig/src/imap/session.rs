@@ -20,6 +20,7 @@ pub struct ImapSession {
     client_addr: std::net::SocketAddr,
     state: SessionState,
     account_manager: Arc<AccountManager>,
+    fastn_home: std::path::PathBuf,
 }
 
 impl ImapSession {
@@ -27,12 +28,14 @@ impl ImapSession {
         stream: TcpStream,
         client_addr: std::net::SocketAddr,
         account_manager: Arc<AccountManager>,
+        fastn_home: std::path::PathBuf,
     ) -> Self {
         Self {
             stream,
             client_addr,
             state: SessionState::NotAuthenticated,
             account_manager,
+            fastn_home,
         }
     }
 
