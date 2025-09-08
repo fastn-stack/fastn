@@ -33,10 +33,12 @@ async fn email_end_to_end_starttls() {
     let peer1 = test_env.create_peer("sender").await.expect("Failed to create sender peer");
     let account1_id = peer1.account_id.clone();
     let peer1_home = peer1.home_path.clone();
+    println!("🔍 DEBUG: Peer 1 - Account: {}, Home: {}, SMTP Port: {}", account1_id, peer1_home.display(), peer1.smtp_port);
     
     let peer2 = test_env.create_peer("receiver").await.expect("Failed to create receiver peer");
     let account2_id = peer2.account_id.clone();
     let peer2_home = peer2.home_path.clone();
+    println!("🔍 DEBUG: Peer 2 - Account: {}, Home: {}, SMTP Port: {}", account2_id, peer2_home.display(), peer2.smtp_port);
 
     // Start both peers
     println!("🚀 Starting peer processes...");
@@ -60,7 +62,8 @@ async fn email_end_to_end_starttls() {
     println!("📧 CRITICAL TEST: Sending email via SMTP...");
     println!("📧 Using plain text mode (STARTTLS foundation ready, upgrade staged)");
     
-    let _send_result = test_env.email()
+    println!("🔍 DEBUG: About to send email using fastn-cli-test-utils...");
+    let send_result = test_env.email()
         .from("sender")
         .to("receiver") 
         .subject("🎯 CRITICAL: Email End-to-End Test")
@@ -70,6 +73,7 @@ async fn email_end_to_end_starttls() {
         .await
         .expect("CRITICAL: SMTP email send must succeed");
 
+    println!("🔍 DEBUG: Email send result: {:?}", send_result.output);
     println!("✅ CRITICAL: Email sent successfully via SMTP");
 
     // Monitor P2P delivery (this is the heart of fastn's email system)
@@ -81,11 +85,15 @@ async fn email_end_to_end_starttls() {
 
         // Check sender's Sent folder  
         let sender_sent_emails = find_emails_in_folder(&peer1_home, &account1_id, "Sent").await;
-        println!("📊 Sender Sent: {} emails", sender_sent_emails.len());
+        let sent_folder_path = peer1_home.join("accounts").join(&account1_id).join("mails").join("default").join("Sent");
+        println!("📊 Sender Sent: {} emails (looking in: {})", sender_sent_emails.len(), sent_folder_path.display());
+        println!("🔍 DEBUG: Sent folder exists: {}", sent_folder_path.exists());
 
         // Check receiver's INBOX folder
         let receiver_inbox_emails = find_emails_in_folder(&peer2_home, &account2_id, "INBOX").await;
-        println!("📊 Receiver INBOX: {} emails", receiver_inbox_emails.len());
+        let inbox_folder_path = peer2_home.join("accounts").join(&account2_id).join("mails").join("default").join("INBOX");
+        println!("📊 Receiver INBOX: {} emails (looking in: {})", receiver_inbox_emails.len(), inbox_folder_path.display());
+        println!("🔍 DEBUG: INBOX folder exists: {}", inbox_folder_path.exists());
 
         if !receiver_inbox_emails.is_empty() {
             println!("✅ CRITICAL SUCCESS: P2P delivery completed in {}s via STARTTLS!", attempt * 3);
@@ -116,10 +124,10 @@ async fn email_end_to_end_starttls() {
         .await
         .expect("Failed to read inbox email");
 
-    assert!(sent_content.contains("STARTTLS End-to-End Test"));
-    assert!(inbox_content.contains("STARTTLS End-to-End Test"));
-    assert!(sent_content.contains("encrypted email pipeline"));
-    assert!(inbox_content.contains("encrypted email pipeline"));
+    assert!(sent_content.contains("CRITICAL: Email End-to-End Test"));
+    assert!(inbox_content.contains("CRITICAL: Email End-to-End Test"));
+    assert!(sent_content.contains("complete fastn email pipeline"));
+    assert!(inbox_content.contains("complete fastn email pipeline"));
     println!("✅ CRITICAL: Email content verified - encryption preserved through P2P delivery");
 
     // Verify correct folder placement
