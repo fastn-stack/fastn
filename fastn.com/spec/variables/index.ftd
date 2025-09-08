@@ -1,6 +1,6 @@
 -- ds.page: Variables
 
-Variable declaration, scoping rules, mutability, and references in FTD
+Variable declaration, scoping, and references in FTD
 
 -- ds.h1: Variable Declaration
 
@@ -12,7 +12,6 @@ lang: ftd
 \-- string name: John Doe
 \-- integer age: 25
 \-- boolean active: true
-\-- ftd.color theme: blue
 
 -- ds.h1: Variable References
 
@@ -23,36 +22,4 @@ lang: ftd
 
 \-- ftd.text: Hello $name
 \-- ftd.text: Age: $age
-color: $theme
 visible: $active
-
--- ds.h1: Mutable Variables
-
-Variables can be declared as mutable to allow updates.
-
--- ds.code: Mutable Variables
-lang: ftd
-
-\-- string $name: Initial Value
-\-- integer $counter: 0
-\-- boolean $visible: false
-
-\-- ftd.text: $name
-$on-click$: $name = "Updated Value"
-
--- ds.h1: Variable Scoping
-
-Variables follow lexical scoping rules within components and sections.
-
--- ds.code: Scoping Example
-lang: ftd
-
-\-- string global-var: Global scope
-
-\-- component example:
-\-- string local-var: Local to component
-
-	-- ftd.text: $global-var
-	-- ftd.text: $local-var
-
-\-- end: example

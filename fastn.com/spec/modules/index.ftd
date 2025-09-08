@@ -1,10 +1,10 @@
 -- ds.page: Modules
 
-Import semantics, export rules, aliases, and package system in FTD
+Import semantics, export rules, and package system in FTD
 
 -- ds.h1: Import Statements
 
-Modules are imported using the `import` statement at the top of files.
+Modules are imported at the top of files.
 
 -- ds.code: Basic Imports
 lang: ftd
@@ -15,45 +15,21 @@ lang: ftd
 
 -- ds.h1: Import Aliases
 
-Modules can be imported with aliases for shorter references.
+Modules can be imported with aliases.
 
--- ds.code: Import with Aliases
+-- ds.code: Aliased Imports
 lang: ftd
 
-\-- import: very-long-package-name as short
-\-- import: ui.components.buttons as btn
+\-- import: long-package-name as short
 
-\-- short.component: Using aliased import
-\-- btn.primary: Primary Button
+\-- short.component: Using alias
 
--- ds.h1: Module Exports
+-- ds.h1: Exports
 
-Modules expose their public API through exports.
+Modules expose components and functions through exports.
 
 -- ds.code: Export Examples
 lang: ftd
 
 \-- export: my-component
 \-- export: my-function
-\-- export: my-record
-
-\-- component my-component:
-caption title:
-
-	-- ftd.text: $my-component.title
-
-\-- end: my-component
-
--- ds.h1: Package System
-
-Packages organize related modules and define dependencies.
-
--- ds.code: Package Definition (FASTN.ftd)
-lang: ftd
-
-\-- fastn.package: my-package
-
-\-- fastn.dependency: ui-framework
-\-- fastn.dependency: design-tokens
-
-\-- fastn.auto-import: my-package/common as common
