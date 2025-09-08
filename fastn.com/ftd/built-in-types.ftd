@@ -67,7 +67,7 @@ These types can be categorized into two main groups: **Primitive** and
   - [`ftd.type`](/built-in-types#ftd-type)
   - [`ftd.white-space`](/built-in-types#ftd-white-space)
   - [`ftd.type-data`](/built-in-types#ftd-type-data)
-  - [`ftd.fetch-priority`](/built-in-types#ftd-fetch-priority)
+  - [`ftd.image-fetch-priority`](/built-in-types#ftd-image-fetch-priority)
 
 
 
@@ -823,23 +823,23 @@ background image based on the specified x and y values.
 
 
 
--- ds.h2: `ftd.fetch-priority`
+-- ds.h2: `ftd.image-fetch-priority`
 
-The `ftd.fetch-priority` property is used to specify the priority of the image.
+The `ftd.image-fetch-priority` property is used to specify the priority of the image.
 
--- ds.code: `ftd.fetch-priority`
+-- ds.code: `ftd.image-fetch-priority`
 lang: ftd
 
-\-- or-type fetch-priority:
+\-- or-type image-fetch-priority:
 
 \-- constant string high: high
 \-- constant string low: low
 
-\-- end: fetch-priority
+\-- end: image-fetch-priority
 
 -- ds.markdown:
 
-As shown above, the `ftd.fetch-priority` has following variants
+As shown above, the `ftd.image-fetch-priority` has following variants
 
 - `high`: Fetch the image at a high priority relative to other images.
 
