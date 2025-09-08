@@ -80,6 +80,15 @@ impl ImapSession {
                         Self::send_response_static(&mut writer, &format!("{} BAD LOGIN command requires username and password", tag)).await?;
                     }
                 }
+                "LIST" => {
+                    if parts.len() >= 4 {
+                        let _reference = parts[2].trim_matches('"');  // Reference name (usually "")
+                        let pattern = parts[3].trim_matches('"');     // Mailbox pattern
+                        Self::handle_list_static(&mut writer, tag, pattern).await?;
+                    } else {
+                        Self::send_response_static(&mut writer, &format!("{} BAD LIST command requires reference and pattern", tag)).await?;
+                    }
+                }
                 "LOGOUT" => {
                     Self::handle_logout_static(&mut writer, tag).await?;
                     break;
@@ -134,6 +143,34 @@ impl ImapSession {
         // This allows us to test the complete protocol flow
         Self::send_response_static(writer, &format!("{} OK LOGIN completed", tag)).await?;
         println!("✅ IMAP LOGIN successful for user: {}", username);
+        Ok(())
+    }
+    
+    async fn handle_list_static(
+        writer: &mut tokio::net::tcp::WriteHalf<'_>, 
+        tag: &str,
+        _pattern: &str,  // TODO: Use pattern for filtering
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        println!("📁 IMAP LIST command");
+        
+        // Return standard email folders
+        // For now, return hardcoded list (TODO: read from filesystem)
+        let folders = vec![
+            ("INBOX", "\\HasNoChildren"),
+            ("Sent", "\\HasNoChildren"),
+            ("Drafts", "\\HasNoChildren"),
+            ("Trash", "\\HasNoChildren"),
+        ];
+        
+        for (folder_name, flags) in folders {
+            Self::send_response_static(
+                writer, 
+                &format!("* LIST ({}) \"/\" {}", flags, folder_name)
+            ).await?;
+        }
+        
+        Self::send_response_static(writer, &format!("{} OK LIST completed", tag)).await?;
+        println!("✅ IMAP LIST completed - returned {} folders", 4);
         Ok(())
     }
     
