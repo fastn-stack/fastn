@@ -71,6 +71,15 @@ impl ImapSession {
                 "CAPABILITY" => {
                     Self::handle_capability_static(&mut writer, tag).await?;
                 }
+                "LOGIN" => {
+                    if parts.len() >= 4 {
+                        let username = parts[2].trim_matches('"');  // Remove quotes
+                        let password = parts[3].trim_matches('"');  // Remove quotes
+                        Self::handle_login_static(&mut writer, tag, username, password).await?;
+                    } else {
+                        Self::send_response_static(&mut writer, &format!("{} BAD LOGIN command requires username and password", tag)).await?;
+                    }
+                }
                 "LOGOUT" => {
                     Self::handle_logout_static(&mut writer, tag).await?;
                     break;
@@ -110,6 +119,21 @@ impl ImapSession {
     ) -> Result<(), Box<dyn std::error::Error>> {
         Self::send_response_static(writer, "* CAPABILITY IMAP4rev1").await?;
         Self::send_response_static(writer, &format!("{} OK CAPABILITY completed", tag)).await?;
+        Ok(())
+    }
+    
+    async fn handle_login_static(
+        writer: &mut tokio::net::tcp::WriteHalf<'_>, 
+        tag: &str,
+        username: &str,
+        password: &str,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        println!("🔑 IMAP LOGIN attempt: user={}", username);
+        
+        // For now, accept any login (TODO: implement real authentication)
+        // This allows us to test the complete protocol flow
+        Self::send_response_static(writer, &format!("{} OK LOGIN completed", tag)).await?;
+        println!("✅ IMAP LOGIN successful for user: {}", username);
         Ok(())
     }
     
