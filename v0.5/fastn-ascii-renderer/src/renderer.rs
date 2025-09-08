@@ -1,4 +1,4 @@
-use crate::{AsciiLayout, Canvas, ComponentLayout};
+use crate::{AsciiLayout, Canvas, ComponentLayout, LayoutConstraints};
 
 /// Main ASCII renderer - parallel to HtmlData in fastn-runtime
 pub struct AsciiData {
@@ -6,8 +6,8 @@ pub struct AsciiData {
 }
 
 impl AsciiData {
-    /// Create AsciiData from compiled document (parallel to HtmlData::from_cd)
-    pub fn from_cd(_compiled_doc: &fastn_compiler::CompiledDocument) -> Self {
+    /// Create AsciiData from compiled document (parallel to HtmlData::from_cd)  
+    pub fn from_cd(_compiled_doc: &str) -> Self {
         // TODO: Implement document parsing and layout calculation
         Self {
             layout: AsciiLayout::empty(),
@@ -26,7 +26,7 @@ pub struct AsciiRenderer;
 
 impl AsciiRenderer {
     /// Render a compiled document to ASCII
-    pub fn render(_compiled_doc: &fastn_compiler::CompiledDocument) -> String {
+    pub fn render(_compiled_doc: &str) -> String {
         // TODO: Implement full rendering pipeline
         "<!-- ASCII Rendering Not Yet Implemented -->".to_string()
     }

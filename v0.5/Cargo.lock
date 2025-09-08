@@ -1635,11 +1635,6 @@ dependencies = [
 [[package]]
 name = "fastn-ascii-renderer"
 version = "0.1.0"
-dependencies = [
- "fastn-compiler",
- "fastn-resolved",
- "fastn-section",
-]
 
 [[package]]
 name = "fastn-automerge"

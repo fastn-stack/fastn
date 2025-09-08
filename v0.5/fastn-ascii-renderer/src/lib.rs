@@ -9,33 +9,25 @@
 mod canvas;
 mod layout;
 mod renderer;
-mod components;
+pub mod components;
 
 pub use canvas::{Canvas, Position, Rect};
 pub use layout::{AsciiLayout, LayoutConstraints, ComponentLayout};
-pub use renderer::{AsciiRenderer, AsciiData};
+pub use renderer::{AsciiRenderer, AsciiData, ComponentRenderer};
 
-/// Main entry point for ASCII rendering
-pub fn render_ascii(compiled_doc: &fastn_compiler::CompiledDocument) -> String {
-    let ascii_data = AsciiData::from_cd(compiled_doc);
-    ascii_data.to_ascii()
+/// Main entry point for ASCII rendering (placeholder for now)
+pub fn render_ascii(_compiled_doc: &str) -> String {
+    "<!-- ASCII Rendering Placeholder -->".to_string()
 }
 
 /// Render a single .ftd file to ASCII (for testing)
 pub fn render_ftd_file(path: &std::path::Path) -> Result<String, RenderError> {
-    let source = std::fs::read_to_string(path)
-        .map_err(|e| RenderError::Io(e))?;
+    let _source = std::fs::read_to_string(path)
+        .map_err(RenderError::Io)?;
         
-    let compiled = fastn_compiler::compile(
-        &source,
-        fastn_package::MainPackage::default(), // TODO: proper package
-        None,
-    ).consume_with_fn(/* TODO: definition provider */);
-    
-    match compiled {
-        Ok(doc) => Ok(render_ascii(&doc)),
-        Err(e) => Err(RenderError::Compilation(format!("{:?}", e))),
-    }
+    // TODO: Implement proper FTD file rendering
+    // This is a placeholder until the full compilation pipeline is ready
+    Ok(format!("<!-- FTD file: {} -->", path.display()))
 }
 
 /// Verify .ftd file against .ftd-rendered expected output
