@@ -312,16 +312,25 @@ impl ImapSession {
                                     Ok(message_data) => {
                                         println!("📧 Found real message: {} bytes", message_data.len());
                                         
-                                        // Return basic FETCH response with actual data size
+                                        // Parse the email to extract headers for ENVELOPE
+                                        let message_str = String::from_utf8_lossy(&message_data);
+                                        let envelope_data = Self::parse_envelope_from_eml(&message_str);
+                                        
+                                        // Return proper FETCH response based on requested items
                                         if items.contains("BODY[]") {
-                                            // Return full message body
-                                            let message_str = String::from_utf8_lossy(&message_data);
+                                            // Return full message body with proper IMAP literal format
                                             Self::send_response_static(writer, &format!("* {} FETCH (BODY[] {{{}}})", seq_num, message_data.len())).await?;
                                             Self::send_response_static(writer, &message_str).await?;
-                                            Self::send_response_static(writer, ")").await?;
                                         } else if items.contains("ENVELOPE") {
-                                            // Return basic envelope info
-                                            Self::send_response_static(writer, &format!("* {} FETCH (ENVELOPE (\"date\" \"subject\" ((\"name\" NIL \"mailbox\" \"host\")) NIL NIL NIL \"message-id\" NIL))", seq_num)).await?;
+                                            // Return properly formatted ENVELOPE response
+                                            Self::send_response_static(writer, &format!(
+                                                "* {} FETCH (ENVELOPE ({} {} {} NIL NIL NIL {} NIL))", 
+                                                seq_num,
+                                                envelope_data.date,
+                                                envelope_data.subject, 
+                                                envelope_data.from,
+                                                envelope_data.message_id
+                                            )).await?;
                                         } else {
                                             // Return basic info
                                             Self::send_response_static(writer, &format!("* {} FETCH (FLAGS ())", seq_num)).await?;
@@ -378,4 +387,48 @@ impl ImapSession {
         Self::send_response_static(writer, &format!("{} OK LOGOUT completed", tag)).await?;
         Ok(())
     }
+    
+    /// Parse email headers to create IMAP ENVELOPE data
+    fn parse_envelope_from_eml(eml_content: &str) -> EnvelopeData {
+        let mut date = "NIL".to_string();
+        let mut subject = "NIL".to_string();
+        let mut from = "NIL".to_string();
+        let mut message_id = "NIL".to_string();
+        
+        // Parse headers (simple line-by-line parsing)
+        for line in eml_content.lines() {
+            if line.is_empty() {
+                break; // End of headers
+            }
+            
+            if let Some(value) = line.strip_prefix("Date: ") {
+                date = format!("\"{}\"", value);
+            } else if let Some(value) = line.strip_prefix("Subject: ") {
+                subject = format!("\"{}\"", value);  
+            } else if let Some(value) = line.strip_prefix("From: ") {
+                // Parse From: test@domain.com into proper IMAP format
+                from = format!("((NIL NIL \"{}\" \"{}\" NIL))", 
+                    value.split('@').next().unwrap_or("unknown"),
+                    value.split('@').nth(1).unwrap_or("unknown")
+                );
+            } else if let Some(value) = line.strip_prefix("Message-ID: ") {
+                message_id = format!("\"{}\"", value);
+            }
+        }
+        
+        EnvelopeData {
+            date,
+            subject,
+            from,
+            message_id,
+        }
+    }
+}
+
+/// Simple structure to hold parsed envelope data
+struct EnvelopeData {
+    date: String,
+    subject: String, 
+    from: String,
+    message_id: String,
 }
