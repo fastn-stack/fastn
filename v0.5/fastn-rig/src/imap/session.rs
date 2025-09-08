@@ -97,7 +97,9 @@ impl ImapSession {
                 "SELECT" => {
                     if parts.len() >= 3 {
                         let folder = parts[2].trim_matches('"');  // Folder name
-                        Self::handle_select_static(&mut writer, tag, folder).await?;
+                        // For now, use hardcoded account ID (TODO: use authenticated account)
+                        let account_id = "egcc7k1l8pcf6jl4jk26nd1n9petab93vnie5h7pdkp2el0c55ng";
+                        Self::handle_select_with_account(&mut writer, tag, folder, account_id, &self.fastn_home).await?;
                     } else {
                         Self::send_response_static(&mut writer, &format!("{} BAD SELECT command requires folder name", tag)).await?;
                     }
@@ -211,27 +213,53 @@ impl ImapSession {
         Ok(())
     }
     
-    async fn handle_select_static(
+    async fn handle_select_with_account(
         writer: &mut tokio::net::tcp::WriteHalf<'_>, 
         tag: &str,
         folder: &str,
+        account_id: &str,
+        fastn_home: &std::path::Path,
     ) -> Result<(), Box<dyn std::error::Error>> {
-        println!("📁 IMAP SELECT folder: {}", folder);
+        println!("📁 IMAP SELECT folder: {} for account: {}", folder, account_id);
         
-        // For now, return basic folder stats (TODO: read actual .eml files)
+        // Create account path and try to load Store
+        let account_path = fastn_home.join("accounts").join(account_id);
+        
         match folder {
             "INBOX" | "Sent" | "Drafts" | "Trash" => {
-                // Return required SELECT response data
+                // Try to load the Store and get real message count
+                let message_count = match fastn_mail::Store::load(&account_path).await {
+                    Ok(store) => {
+                        // Try to get folder info using existing IMAP functions
+                        match store.imap_select_folder(folder).await {
+                            Ok(folder_info) => {
+                                println!("📊 Real folder stats: {} exists, {} recent, {} unseen", 
+                                    folder_info.exists, folder_info.recent, folder_info.unseen.unwrap_or(0));
+                                folder_info.exists
+                            }
+                            Err(e) => {
+                                println!("⚠️ Failed to get folder stats: {}, using 0", e);
+                                0
+                            }
+                        }
+                    }
+                    Err(e) => {
+                        println!("⚠️ Failed to load Store: {}, using 0", e);
+                        0
+                    }
+                };
+                
+                // Return required SELECT response data with REAL message count
                 Self::send_response_static(writer, "* FLAGS (\\Answered \\Flagged \\Deleted \\Seen \\Draft)").await?;
                 Self::send_response_static(writer, "* OK [PERMANENTFLAGS (\\Answered \\Flagged \\Deleted \\Seen \\Draft \\*)] Flags permitted").await?;
-                Self::send_response_static(writer, "* 0 EXISTS").await?;  // No messages yet
-                Self::send_response_static(writer, "* 0 RECENT").await?;  // No recent messages
-                Self::send_response_static(writer, "* OK [UNSEEN 0] No unseen messages").await?;
+                Self::send_response_static(writer, &format!("* {} EXISTS", message_count)).await?;  // REAL count!
+                Self::send_response_static(writer, "* 0 RECENT").await?;  // TODO: Calculate real recent count
+                Self::send_response_static(writer, "* OK [UNSEEN 0] No unseen messages").await?;  // TODO: Calculate real unseen
                 Self::send_response_static(writer, "* OK [UIDVALIDITY 1] UIDs valid").await?;
                 Self::send_response_static(writer, "* OK [UIDNEXT 1] Next UID").await?;
                 Self::send_response_static(writer, &format!("{} OK [READ-WRITE] SELECT completed", tag)).await?;
                 
-                println!("✅ IMAP SELECT completed for folder: {}", folder);
+                println!("✅ IMAP SELECT completed for folder: {} ({} messages)", folder, message_count);
                 Ok(())
             }
             _ => {
@@ -240,6 +268,16 @@ impl ImapSession {
                 Ok(())
             }
         }
+    }
+    
+    async fn handle_select_static(
+        writer: &mut tokio::net::tcp::WriteHalf<'_>, 
+        tag: &str,
+        folder: &str,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        // Legacy method - keep for compatibility
+        Self::send_response_static(writer, &format!("{} BAD Please authenticate first", tag)).await?;
+        Ok(())
     }
     
     async fn handle_fetch_static(
