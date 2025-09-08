@@ -2592,6 +2592,13 @@ lang: ftd
 \-- constant string email: email
 \-- constant string password: password
 \-- constant string url: url
+\-- constant string datetime: datetime
+\-- constant string date: date
+\-- constant string time: time
+\-- constant string month: month
+\-- constant string week: week
+\-- constant string color: color
+\-- constant string file: file
 
 \-- end: text-input-type
 
@@ -2612,6 +2619,20 @@ user if site is not secure.
 - **url**: A field for entering a URL. Looks like a `text` input, but has
 validation parameters and relevant keyboard in supporting browsers and devices
 with dynamic keyboards.
+
+- **datetime**: A field for entering a date and time with time zone.
+
+- **date**: A field for entering a date (year, month, and day).
+
+- **time**: A field for entering a time value.
+
+- **month**: A field for entering a month and year.
+
+- **week**: A field for entering a date consisting of a week-year number and a week number.
+
+- **color**: A field for specifying a color value.
+
+- **file**: A field that lets the user select one or more files.
 
 
 
