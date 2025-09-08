@@ -1,0 +1,82 @@
+-- ftd.column:
+spacing.fixed.px: 24
+width: fill-container
+
+-- ftd.text: FTD 0.4 Language Specification
+role: $inherited.types.heading-large
+color: $inherited.colors.text-strong
+
+-- ftd.text: Complete specification for the fastn Template Definition (FTD) language version 0.4
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- ftd.text: 
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+This comprehensive language specification covers all aspects of FTD 0.4, providing
+developers with the definitive reference for fastn template development.
+
+-- ftd.column:
+spacing.fixed.px: 32
+width: fill-container
+margin-top.px: 32
+
+-- spec-section: Syntax
+url: /language-spec/syntax/
+description: Core syntax rules, sections, headers, comments, and complete BNF grammar
+
+-- spec-section: Type System  
+url: /language-spec/type-system/
+description: Primitive types, derived types, records, or-types, and type inference rules
+
+-- spec-section: Components
+url: /language-spec/components/
+description: Component definition, invocation, arguments, children, and inheritance
+
+-- spec-section: Variables
+url: /language-spec/variables/
+description: Variable declaration, scoping rules, mutability, and references
+
+-- spec-section: Functions
+url: /language-spec/functions/
+description: Function definitions, calls, expressions, and built-in functions
+
+-- spec-section: Modules
+url: /language-spec/modules/
+description: Import semantics, export rules, aliases, and package system
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- component spec-section:
+caption title:
+string url:
+string description:
+
+-- ftd.column:
+spacing.fixed.px: 8
+width: fill-container
+padding.px: 24
+border-width.px: 1
+border-color: $inherited.colors.border
+border-radius.px: 8
+background.solid: $inherited.colors.background.step-1
+
+-- ftd.text: $spec-section.title
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+
+-- ftd.text: $spec-section.description
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- ftd.text: → Explore
+role: $inherited.types.copy-regular
+color: $inherited.colors.accent.primary
+margin-top.px: 8
+
+-- end: ftd.column
+
+-- end: spec-section

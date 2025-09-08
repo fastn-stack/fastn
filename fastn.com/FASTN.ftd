@@ -613,6 +613,11 @@ skip: true
       skip: true
       document: featured/fonts/lato.ftd
 
+# Language Reference: /language-spec/
+
+-- FTD 0.4 Language Specification: /language-spec/
+  document: language-spec/index.ftd
+
 # Docs: /ftd/data-modelling/
 
 ## `fastn` Made Easy: /book/
@@ -738,6 +743,8 @@ skip: true
     document: ftd/image.ftd
   - `ftd.video`: /book/video/
     document: ftd/video.ftd
+  - `ftd.audio`: /book/audio/
+    document: ftd/audio.ftd
   - `ftd.rive` (animation): /book/rive/
     document: ftd/rive.ftd
     description: animation
@@ -882,6 +889,8 @@ skip: true
     document: ftd/image.ftd
   - `ftd.video`: /video/
     document: ftd/video.ftd
+  - `ftd.audio`: /audio/
+    document: ftd/audio.ftd
   - `ftd.rive` (animation): /rive/
     document: ftd/rive.ftd
     description: animation
