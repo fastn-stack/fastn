@@ -362,7 +362,7 @@ fn strip_ansi_codes(text: &str) -> String {
     result
 }
 
-fn render_embedded_spec(component: &str, available_width: usize, _available_height: usize) -> Result<DualRender, Box<dyn std::error::Error>> {
+fn render_embedded_spec(component: &str, available_width: usize, available_height: usize) -> Result<DualRender, Box<dyn std::error::Error>> {
     // Strip .ftd extension if present for matching
     let component_path = component.strip_suffix(".ftd").unwrap_or(component);
     
@@ -437,27 +437,57 @@ fn render_embedded_spec(component: &str, available_width: usize, _available_heig
             Ok(DualRender::new(result.join("\n")))
         },
         "components/button" => {
-            // Width-responsive button
+            // Truly responsive button using both width and height
             let text = "Click Me";
             let min_width = text.chars().count() + 4;
+            
+            // Width: Proportional to available width
             let button_width = if available_width < min_width { 
                 min_width 
             } else { 
-                (available_width / 3).min(20) // Make button proportional but not too wide
+                (available_width / 2).max(min_width).min(available_width - 4)
+            };
+            
+            // Height: Proportional to available height  
+            let min_height = 3; // Minimum for border + text
+            let button_height: usize = if available_height < 20 {
+                min_height // Compact for small heights
+            } else if available_height < 60 {
+                5 // Medium height
+            } else {
+                7 // Tall for large heights
             };
             
             let content_width = button_width.saturating_sub(2);
-            let text_padding = (content_width.saturating_sub(text.chars().count())) / 2;
+            let content_height = button_height.saturating_sub(2);
             
-            let top = "┌".to_string() + &"─".repeat(content_width) + "┐";
-            let middle = format!("│{}{}{}│",
-                " ".repeat(text_padding),
-                text,
-                " ".repeat(content_width.saturating_sub(text.chars().count() + text_padding))
-            );
-            let bottom = "└".to_string() + &"─".repeat(content_width) + "┘";
+            // Create button with proper height
+            let mut lines = Vec::new();
             
-            Ok(DualRender::new(format!("{}\n{}\n{}", top, middle, bottom)))
+            // Top border
+            lines.push("┌".to_string() + &"─".repeat(content_width) + "┐");
+            
+            // Vertical content with text centered
+            let text_line_index = content_height / 2;
+            for i in 0..content_height {
+                if i == text_line_index {
+                    // Text line
+                    let text_padding = (content_width.saturating_sub(text.chars().count())) / 2;
+                    lines.push(format!("│{}{}{}│",
+                        " ".repeat(text_padding),
+                        text,
+                        " ".repeat(content_width.saturating_sub(text.chars().count() + text_padding))
+                    ));
+                } else {
+                    // Padding line
+                    lines.push(format!("│{}│", " ".repeat(content_width)));
+                }
+            }
+            
+            // Bottom border
+            lines.push("└".to_string() + &"─".repeat(content_width) + "┘");
+            
+            Ok(DualRender::new(lines.join("\n")))
         },
         "forms/text-input" => {
             // Width-responsive text input
