@@ -79,41 +79,44 @@ pub async fn imap_list_command(
                 
                 // Get actual folders from fastn-mail store
                 let store_folders = store.imap_list_folders().await?;
-            
-            println!("📂 Filesystem folders:");
-            for folder in &store_folders {
-                println!("   📁 {}", folder);
-            }
-            
-            // Compare IMAP results with filesystem reality
-            let imap_folder_names: Vec<String> = mailbox_list.iter()
-                .map(|mb| mb.name().to_string())
-                .collect();
-            
-            // Find discrepancies
-            let mut verification_passed = true;
-            
-            // Check if IMAP shows folders that don't exist on filesystem
-            for imap_folder in &imap_folder_names {
-                if !store_folders.contains(imap_folder) {
-                    println!("❌ VERIFICATION FAILED: IMAP shows '{}' but folder missing on filesystem", imap_folder);
-                    verification_passed = false;
+                
+                println!("📂 Filesystem folders:");
+                for folder in &store_folders {
+                    println!("   📁 {}", folder);
                 }
-            }
             
-            // Check if filesystem has folders that IMAP doesn't show
-            for store_folder in &store_folders {
-                if !imap_folder_names.contains(store_folder) {
-                    println!("❌ VERIFICATION FAILED: Filesystem has '{}' but IMAP doesn't list it", store_folder);
-                    verification_passed = false;
+                // Compare IMAP results with filesystem reality
+                let imap_folder_names: Vec<String> = mailbox_list.iter()
+                    .map(|mb| mb.name().to_string())
+                    .collect();
+                
+                // Find discrepancies
+                let mut verification_passed = true;
+                
+                // Check if IMAP shows folders that don't exist on filesystem
+                for imap_folder in &imap_folder_names {
+                    if !store_folders.contains(imap_folder) {
+                        println!("❌ VERIFICATION FAILED: IMAP shows '{}' but folder missing on filesystem", imap_folder);
+                        verification_passed = false;
+                    }
                 }
-            }
             
-            if verification_passed {
-                println!("✅ DUAL VERIFICATION PASSED: IMAP and filesystem results match perfectly");
+                // Check if filesystem has folders that IMAP doesn't show
+                for store_folder in &store_folders {
+                    if !imap_folder_names.contains(store_folder) {
+                        println!("❌ VERIFICATION FAILED: Filesystem has '{}' but IMAP doesn't list it", store_folder);
+                        verification_passed = false;
+                    }
+                }
+                
+                if verification_passed {
+                    println!("✅ DUAL VERIFICATION PASSED: IMAP and filesystem results match perfectly");
+                } else {
+                    println!("❌ DUAL VERIFICATION FAILED: Discrepancies found between IMAP and filesystem");
+                    return Err("IMAP/filesystem verification failed".into());
+                }
             } else {
-                println!("❌ DUAL VERIFICATION FAILED: Discrepancies found between IMAP and filesystem");
-                return Err("IMAP/filesystem verification failed".into());
+                println!("⚠️ No Store available - skipping filesystem verification");
             }
         }
         
@@ -132,7 +135,7 @@ pub async fn imap_list_command(
 /// Fetch messages via IMAP with content verification
 #[allow(unused_variables)]
 pub async fn imap_fetch_command(
-    store: &fastn_mail::Store,
+    store: Option<&fastn_mail::Store>,
     host: &str,
     port: u16,
     username: &str,
@@ -235,10 +238,10 @@ pub async fn imap_test_pipeline_command(
     imap_connect_command(host, port, username, password, starttls, true).await?;
     
     // Test LIST with verification
-    imap_list_command(store, host, port, username, password, "*", starttls, true).await?;
+    imap_list_command(Some(store), host, port, username, password, "*", starttls, true).await?;
     
     // Test FETCH with verification
-    imap_fetch_command(store, host, port, username, password, "INBOX", "1:*", "ENVELOPE", false, starttls, true).await?;
+    imap_fetch_command(Some(store), host, port, username, password, "INBOX", "1:*", "ENVELOPE", false, starttls, true).await?;
     
     println!("✅ IMAP pipeline test completed successfully");
     Ok(())
