@@ -273,8 +273,8 @@ for attempt in $(seq 1 8); do
             log "📋 IMAP test output:"
             cat /tmp/imap_test.log || echo "No IMAP test log"
             
-            # Continue with filesystem-only validation (existing behavior)
-            log "📁 Falling back to direct filesystem verification only"
+            # FAIL HARD - don't accept partial success
+            error "CRITICAL: IMAP verification MUST work - no fallbacks allowed!"
         fi
         
         # Original filesystem validation (keep as backup/confirmation)
