@@ -189,6 +189,10 @@ impl ImapSession {
                     Self::send_response_static(&mut writer, &format!("{} OK NOOP completed", tag)).await?;
                     println!("✅ IMAP NOOP completed - connection kept alive");
                 }
+                "CLOSE" => {
+                    Self::send_response_static(&mut writer, &format!("{} OK CLOSE completed", tag)).await?;
+                    println!("✅ IMAP CLOSE completed - mailbox closed");
+                }
                 "LOGOUT" => {
                     Self::handle_logout_static(&mut writer, tag).await?;
                     break;
@@ -472,11 +476,46 @@ impl ImapSession {
                 // Get all UIDs in the selected folder (assuming INBOX for now)
                 match store.imap_search("INBOX", "ALL").await {
                     Ok(uids) => {
-                        // Return FLAGS for all UIDs (Thunderbird's most common request)
-                        if items.contains("FLAGS") {
-                            for uid in &uids {
-                                // Return basic flags for each message
-                                Self::send_response_static(writer, &format!("* {} FETCH (UID {} FLAGS ())", uid, uid)).await?;
+                        // Handle different UID FETCH requests from Thunderbird
+                        for uid in &uids {
+                            // Get actual email data for this UID
+                            match store.imap_fetch("INBOX", *uid).await {
+                                Ok(message_data) => {
+                                    let size = message_data.len();
+                                    let message_str = String::from_utf8_lossy(&message_data);
+                                    
+                                    if items.contains("BODY.PEEK[HEADER.FIELDS") {
+                                        // Email client wants header fields - extract from email
+                                        let headers = Self::extract_headers_for_body_peek(&message_str);
+                                        let header_text = format!(
+                                            "Subject: {}\r\nFrom: {}\r\nTo: {}\r\nDate: {}\r\n",
+                                            headers.subject, headers.from, headers.to, headers.date
+                                        );
+                                        
+                                        Self::send_response_static(writer, &format!(
+                                            "* {} FETCH (UID {} RFC822.SIZE {} FLAGS () BODY[HEADER.FIELDS (From To Cc Bcc Subject Date)] {{{}}}",
+                                            uid, uid, size, header_text.len()
+                                        )).await?;
+                                        Self::send_response_static(writer, &header_text).await?;
+                                        Self::send_response_static(writer, ")").await?;
+                                    } else if items.contains("RFC822.SIZE") {
+                                        // Return size and basic info
+                                        Self::send_response_static(writer, &format!(
+                                            "* {} FETCH (UID {} RFC822.SIZE {} FLAGS ())", 
+                                            uid, uid, size
+                                        )).await?;
+                                    } else {
+                                        // Basic FLAGS only
+                                        Self::send_response_static(writer, &format!(
+                                            "* {} FETCH (UID {} FLAGS ())", 
+                                            uid, uid
+                                        )).await?;
+                                    }
+                                }
+                                Err(_) => {
+                                    // Fallback for missing messages
+                                    Self::send_response_static(writer, &format!("* {} FETCH (UID {} FLAGS ())", uid, uid)).await?;
+                                }
                             }
                         }
                         
@@ -550,6 +589,38 @@ impl ImapSession {
         Ok(())
     }
     
+    /// Extract headers for IMAP BODY.PEEK requests
+    fn extract_headers_for_body_peek(eml_content: &str) -> HeaderFields {
+        let mut subject = "".to_string();
+        let mut from = "".to_string();
+        let mut to = "".to_string();
+        let mut date = "".to_string();
+        
+        // Parse headers (simple line-by-line parsing)
+        for line in eml_content.lines() {
+            if line.is_empty() {
+                break; // End of headers
+            }
+            
+            if let Some(value) = line.strip_prefix("Subject: ") {
+                subject = value.to_string();
+            } else if let Some(value) = line.strip_prefix("From: ") {
+                from = value.to_string();
+            } else if let Some(value) = line.strip_prefix("To: ") {
+                to = value.to_string();
+            } else if let Some(value) = line.strip_prefix("Date: ") {
+                date = value.to_string();
+            }
+        }
+        
+        HeaderFields {
+            subject,
+            from,
+            to,
+            date,
+        }
+    }
+
     /// Parse email headers to create IMAP ENVELOPE data
     fn parse_envelope_from_eml(eml_content: &str) -> EnvelopeData {
         let mut date = "NIL".to_string();
@@ -585,6 +656,14 @@ impl ImapSession {
             message_id,
         }
     }
+}
+
+/// Headers for IMAP BODY.PEEK requests
+struct HeaderFields {
+    subject: String,
+    from: String,
+    to: String,
+    date: String,
 }
 
 /// Simple structure to hold parsed envelope data

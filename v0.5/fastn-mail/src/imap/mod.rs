@@ -22,7 +22,9 @@ pub use commands::{
     imap_connect_command,
     imap_fetch_command,
     imap_list_command,
+    imap_status_command,
     imap_test_pipeline_command,
+    imap_uid_fetch_command,
 };
 
 /// IMAP client configuration

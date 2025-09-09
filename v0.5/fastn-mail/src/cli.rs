@@ -199,6 +199,56 @@ pub enum Commands {
         verify_content: bool,
     },
 
+    /// Test UID FETCH command (critical for Thunderbird)
+    ImapUidFetch {
+        /// IMAP server hostname
+        #[arg(long, default_value = "localhost")]
+        host: String,
+        /// IMAP server port
+        #[arg(long, default_value = "8143")]
+        port: u16,
+        /// Username for authentication
+        #[arg(long)]
+        username: String,
+        /// Password for authentication
+        #[arg(long)]
+        password: String,
+        /// Mailbox to select (default: INBOX)
+        #[arg(long, default_value = "INBOX")]
+        folder: String,
+        /// UID sequence (e.g., "1:*", "1:5")
+        #[arg(long, default_value = "1:*")]
+        sequence: String,
+        /// FETCH items (e.g., "FLAGS", "ENVELOPE")
+        #[arg(long, default_value = "FLAGS")]
+        items: String,
+        /// Use STARTTLS for secure connection
+        #[arg(long)]
+        starttls: bool,
+    },
+
+    /// Test STATUS command (required by Thunderbird)
+    ImapStatus {
+        /// IMAP server hostname
+        #[arg(long, default_value = "localhost")]
+        host: String,
+        /// IMAP server port
+        #[arg(long, default_value = "8143")]
+        port: u16,
+        /// Username for authentication
+        #[arg(long)]
+        username: String,
+        /// Password for authentication
+        #[arg(long)]
+        password: String,
+        /// Folder to check status
+        #[arg(long, default_value = "INBOX")]
+        folder: String,
+        /// Use STARTTLS for secure connection
+        #[arg(long)]
+        starttls: bool,
+    },
+
     /// Complete IMAP pipeline test with full verification
     ImapTestPipeline {
         /// IMAP server hostname
@@ -250,6 +300,8 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Commands::ImapConnect { .. } => false,  // Pure IMAP client command
         Commands::ImapList { verify_folders, .. } => *verify_folders,  // Needs Store for verification
         Commands::ImapFetch { verify_content, .. } => *verify_content,  // Needs Store for verification  
+        Commands::ImapUidFetch { .. } => false,  // Pure IMAP client command
+        Commands::ImapStatus { .. } => false,  // Pure IMAP client command
         Commands::ImapTestPipeline { .. } => true,  // Pipeline test needs Store
     };
 
@@ -353,6 +405,28 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             verify_content,
         } => {
             crate::imap::imap_fetch_command(store.as_ref(), &host, port, &username, &password, &folder, &sequence, &items, uid, starttls, verify_content).await?;
+        }
+        Commands::ImapUidFetch {
+            host,
+            port,
+            username,
+            password,
+            folder,
+            sequence,
+            items,
+            starttls,
+        } => {
+            crate::imap::imap_uid_fetch_command(&host, port, &username, &password, &folder, &sequence, &items, starttls).await?;
+        }
+        Commands::ImapStatus {
+            host,
+            port,
+            username,
+            password,
+            folder,
+            starttls,
+        } => {
+            crate::imap::imap_status_command(&host, port, &username, &password, &folder, starttls).await?;
         }
         Commands::ImapTestPipeline {
             host,
