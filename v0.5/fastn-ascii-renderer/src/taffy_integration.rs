@@ -14,15 +14,24 @@ impl TaffyLayoutEngine {
         }
     }
 
-    /// Create a simple text node for Week 1 prototype
-    pub fn create_text_node(&mut self, _text: &str, style: Style) -> Result<NodeId, taffy::TaffyError> {
-        // For Week 1: Create leaf node with text content
-        // Text measurement will be simplified - just character count
-        let node = self.tree.new_leaf(style)?;
+    /// Create a text node with proper text measurement  
+    pub fn create_text_node(&mut self, text: &str, style: Style) -> Result<NodeId, taffy::TaffyError> {
+        // For now, create leaf with explicit size based on text content
+        // TODO: Implement proper text measurement function for Week 3
         
-        // Store text content (simplified - no proper text measurement yet)
-        // In Week 3 we'll add proper text measurement
+        let text_width = text.chars().count() as f32 * 8.0; // 8px per character
+        let text_height = 16.0; // 1 line = 16px
         
+        // Override style to set content size
+        let mut text_style = style;
+        if text_style.size.width == taffy::Dimension::Auto {
+            text_style.size.width = taffy::Dimension::Length(text_width.into());
+        }
+        if text_style.size.height == taffy::Dimension::Auto {
+            text_style.size.height = taffy::Dimension::Length(text_height.into());
+        }
+        
+        let node = self.tree.new_leaf(text_style)?;
         Ok(node)
     }
 

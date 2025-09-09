@@ -272,6 +272,28 @@ impl CoordinateConverter {
             height: self.px_to_lines(layout.size.height),
         }
     }
+
+    /// Get content area inside padding and border
+    pub fn get_content_area(&self, layout: &taffy::Layout) -> CharRect {
+        let total_rect = self.taffy_layout_to_char_rect(layout);
+        
+        // Calculate padding in characters
+        let padding_left = self.px_to_chars(layout.padding.left);
+        let padding_top = self.px_to_lines(layout.padding.top);
+        let padding_right = self.px_to_chars(layout.padding.right);
+        let padding_bottom = self.px_to_lines(layout.padding.bottom);
+        
+        // For now, assume 1-character border if any border exists
+        // TODO: Get actual border width from component style
+        let border = 1; // Simplified for Week 2
+        
+        CharRect {
+            x: total_rect.x + border + padding_left,
+            y: total_rect.y + border + padding_top,
+            width: total_rect.width.saturating_sub((border + padding_left) + (border + padding_right)),
+            height: total_rect.height.saturating_sub((border + padding_top) + (border + padding_bottom)),
+        }
+    }
 }
 
 impl Default for CoordinateConverter {
