@@ -3,12 +3,40 @@
 use crate::{TaffyLayoutEngine, FtdToCssMapper, SimpleFtdComponent, AnsiCanvas, CoordinateConverter};
 use taffy::{Size, AvailableSpace};
 
-/// Pure document rendering - takes fastn document, returns ANSI output
+/// Rendered output with multiple format options
+#[derive(Debug, Clone)]
+pub struct Rendered {
+    ansi_output: String,
+}
+
+impl Rendered {
+    pub fn new(ansi_output: String) -> Self {
+        Self { ansi_output }
+    }
+    
+    /// Get ANSI version with escape codes for terminal display
+    pub fn to_ansi(&self) -> &str {
+        &self.ansi_output
+    }
+    
+    /// Get plain ASCII version with ANSI codes stripped  
+    pub fn to_plain(&self) -> String {
+        strip_ansi_codes(&self.ansi_output)
+    }
+    
+    /// Get side-by-side format for specification files
+    pub fn to_side_by_side(&self) -> String {
+        let plain = self.to_plain();
+        create_side_by_side(&plain, &self.ansi_output)
+    }
+}
+
+/// Pure document rendering - takes fastn document, returns structured output
 pub struct DocumentRenderer;
 
 impl DocumentRenderer {
     /// Render a fastn document at given dimensions
-    pub fn render_document(document: &FastnDocument, width: usize, height: usize) -> Result<String, Box<dyn std::error::Error>> {
+    pub fn render_document(document: &FastnDocument, width: usize, height: usize) -> Result<Rendered, Box<dyn std::error::Error>> {
         // Use CSS layout engine
         let css_mapper = FtdToCssMapper::new();
         let style = css_mapper.component_to_style(&document.root_component);
@@ -42,11 +70,11 @@ impl DocumentRenderer {
         
         Self::render_component_to_canvas(&document.root_component, char_rect, &mut canvas)?;
         
-        Ok(canvas.to_ansi_string())
+        Ok(Rendered::new(canvas.to_ansi_string()))
     }
 
     /// Parse fastn source and render (convenience method)
-    pub fn render_from_source(source: &str, width: usize, height: usize) -> Result<String, Box<dyn std::error::Error>> {
+    pub fn render_from_source(source: &str, width: usize, height: usize) -> Result<Rendered, Box<dyn std::error::Error>> {
         let document = parse_fastn_source(source)?;
         Self::render_document(&document, width, height)
     }
@@ -145,4 +173,52 @@ fn parse_fastn_source(source: &str) -> Result<FastnDocument, Box<dyn std::error:
     }
     
     Err("Unsupported fastn document".into())
+}
+
+fn strip_ansi_codes(text: &str) -> String {
+    let mut result = String::new();
+    let mut in_escape = false;
+    
+    for ch in text.chars() {
+        if ch == '\x1b' {
+            in_escape = true;
+        } else if in_escape && ch == 'm' {
+            in_escape = false;
+        } else if !in_escape {
+            result.push(ch);
+        }
+    }
+    
+    result
+}
+
+fn create_side_by_side(plain: &str, ansi: &str) -> String {
+    let plain_lines: Vec<&str> = plain.lines().collect();
+    let ansi_lines: Vec<&str> = ansi.lines().collect();
+    let max_lines = plain_lines.len().max(ansi_lines.len());
+    
+    // Calculate width of plain version for alignment
+    let plain_width = plain_lines.iter()
+        .map(|line| line.chars().count())
+        .max()
+        .unwrap_or(0);
+    
+    let mut result = Vec::new();
+    
+    for i in 0..max_lines {
+        let plain_line = plain_lines.get(i).unwrap_or(&"");
+        let ansi_line = ansi_lines.get(i).unwrap_or(&"");
+        
+        // Pad plain line to consistent width + 10 spaces separation
+        let padding_needed = plain_width.saturating_sub(plain_line.chars().count());
+        let combined_line = format!("{}{}          {}", 
+            plain_line, 
+            " ".repeat(padding_needed),
+            ansi_line
+        );
+        
+        result.push(combined_line);
+    }
+    
+    result.join("\n")
 }

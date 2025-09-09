@@ -29,7 +29,7 @@ pub use taffy_integration::TaffyLayoutEngine;
 pub use ftd_types::{SimpleFtdComponent, ComponentType, FtdSize};
 pub use css_mapper::FtdToCssMapper;
 pub use ansi_canvas::{AnsiCanvas, AnsiColor, CharPos, CharRect, CoordinateConverter, BorderStyle};
-pub use document_renderer::{DocumentRenderer, FastnDocument};
+pub use document_renderer::{DocumentRenderer, FastnDocument, Rendered};
 
 /// Main entry point for ASCII rendering (placeholder for now)
 pub fn render_ascii(_compiled_doc: &str) -> String {
