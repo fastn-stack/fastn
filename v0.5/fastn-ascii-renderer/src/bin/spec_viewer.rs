@@ -1,5 +1,7 @@
 use clap::Parser;
 use std::path::PathBuf;
+use crossterm::event::Event;
+use ratatui::Terminal;
 
 #[derive(Parser)]
 #[command(name = "spec-viewer")]
@@ -28,22 +30,74 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         std::process::exit(1);
     }
 
-    println!("🚀 fastn spec-viewer starting...");
-    println!("📁 Specs directory: {}", args.specs_dir.display());
-    println!("📏 Default width: {} characters", args.width);
-    
     if args.debug {
+        println!("🚀 fastn spec-viewer starting...");
+        println!("📁 Specs directory: {}", args.specs_dir.display());
+        println!("📏 Default width: {} characters", args.width);
         println!("🔍 Debug mode enabled");
+        
+        // Simple file discovery for debugging
+        discover_spec_files(&args.specs_dir)?;
+        return Ok(());
     }
 
-    // TODO: Launch TUI application
-    println!("🔧 TUI application coming soon...");
-    println!();
-    println!("For now, showing discovered spec files:");
+    // Launch TUI application
+    launch_tui_app(args.specs_dir, args.width)?;
     
-    // Simple file discovery for Week 2
-    discover_spec_files(&args.specs_dir)?;
-    
+    Ok(())
+}
+
+fn launch_tui_app(specs_dir: PathBuf, default_width: usize) -> Result<(), Box<dyn std::error::Error>> {
+    use crossterm::{
+        event::{DisableMouseCapture, EnableMouseCapture},
+        execute,
+        terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
+    };
+    use ratatui::{backend::CrosstermBackend, Terminal};
+    use fastn_ascii_renderer::spec_viewer::SpecViewerApp;
+
+    // Setup terminal
+    enable_raw_mode()?;
+    let mut stdout = std::io::stdout();
+    execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
+    let backend = CrosstermBackend::new(stdout);
+    let mut terminal = Terminal::new(backend)?;
+
+    // Create app
+    let mut app = SpecViewerApp::new(specs_dir);
+    app.current_width = default_width;
+    app.discover_spec_files()?;
+
+    // Main event loop
+    let result = run_tui_loop(&mut terminal, &mut app);
+
+    // Restore terminal
+    disable_raw_mode()?;
+    execute!(
+        terminal.backend_mut(),
+        LeaveAlternateScreen,
+        DisableMouseCapture
+    )?;
+    terminal.show_cursor()?;
+
+    result
+}
+
+fn run_tui_loop<B: ratatui::backend::Backend>(
+    terminal: &mut Terminal<B>,
+    app: &mut fastn_ascii_renderer::spec_viewer::SpecViewerApp,
+) -> Result<(), Box<dyn std::error::Error>> {
+    loop {
+        terminal.draw(|f| app.draw(f))?;
+
+        if let Event::Key(key) = crossterm::event::read()? {
+            app.handle_key_event(key)?;
+            
+            if app.should_quit {
+                break;
+            }
+        }
+    }
     Ok(())
 }
 

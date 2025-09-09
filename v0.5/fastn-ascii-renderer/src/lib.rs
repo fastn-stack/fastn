@@ -26,6 +26,9 @@ mod ftd_types;
 mod css_mapper;
 mod ansi_canvas;
 
+#[cfg(feature = "spec-viewer")]
+pub mod spec_viewer;
+
 pub use canvas::{Canvas, Position, Rect};
 pub use layout::{AsciiLayout, LayoutConstraints, ComponentLayout};
 pub use renderer::{AsciiRenderer, AsciiData, ComponentRenderer};
