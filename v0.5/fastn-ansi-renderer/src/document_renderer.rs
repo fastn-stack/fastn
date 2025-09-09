@@ -73,10 +73,39 @@ impl DocumentRenderer {
         Ok(Rendered::new(canvas.to_ansi_string()))
     }
 
-    /// Parse fastn source and render (convenience method)
+    /// Parse fastn source and render with intelligent height
     pub fn render_from_source(source: &str, width: usize, height: usize) -> Result<Rendered, Box<dyn std::error::Error>> {
         let document = parse_fastn_source(source)?;
-        Self::render_document(&document, width, height)
+        
+        // Calculate intelligent height based on content
+        let content_height = Self::calculate_content_height(&document, width);
+        let actual_height = content_height.min(height); // Cap at requested height
+        
+        Self::render_document(&document, width, actual_height)
+    }
+
+    /// Calculate intelligent height based on document content
+    fn calculate_content_height(document: &FastnDocument, _width: usize) -> usize {
+        let component = &document.root_component;
+        
+        // Base height for text content
+        let mut height = 1; // Text line
+        
+        // Add border height
+        if component.border_width.is_some() {
+            height += 2; // Top + bottom border
+        }
+        
+        // Add padding height  
+        if let Some(padding_px) = component.padding {
+            height += (padding_px / 8) * 2; // Top + bottom padding (px to chars)
+        }
+        
+        // Add outer window margin
+        height += 4; // Outer window padding
+        
+        // Minimum useful height
+        height.max(5)
     }
 
     fn render_component_to_canvas(
