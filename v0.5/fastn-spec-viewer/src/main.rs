@@ -5,9 +5,9 @@ use std::path::PathBuf;
 #[command(name = "fastn-spec-viewer")]
 #[command(about = "fastn component specification browser")]
 struct Cli {
-    /// Specific spec to view (e.g., "text/with-border", "layout/column")
+    /// Specific component file to view (e.g., "text-with-border.ftd", "button.ftd") 
     /// If omitted, launches interactive browser
-    spec_path: Option<String>,
+    component: Option<String>,
     
     /// Output to stdout instead of TUI
     #[arg(long)]
@@ -31,14 +31,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         return Ok(());
     }
     
-    match cli.spec_path {
-        Some(spec_path) => {
+    match cli.component {
+        Some(component) => {
             if cli.stdout {
                 // Stdout mode for automation
-                handle_stdout_render(spec_path, cli.width)?;
+                handle_stdout_render(component, cli.width)?;
             } else {
                 // TUI mode with specific file pre-selected
-                handle_tui_with_file(spec_path)?;
+                handle_tui_with_file(component)?;
             }
         },
         None => {
@@ -52,15 +52,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 fn list_embedded_specs() {
     println!("📚 Embedded fastn Component Specifications:");
-    println!("  📄 text/basic");
-    println!("  📄 text/with-border");
-    println!("  📁 layout/");
-    println!("    📄 column");
-    println!("    📄 row");
-    println!("  📁 forms/");
-    println!("    📄 checkbox");
-    println!("    📄 text-input");
-    println!("  ✅ 6 embedded specifications available");
+    println!("  📄 text-basic.ftd");
+    println!("  📄 text-with-border.ftd");
+    println!("  📄 button.ftd");
+    println!("  📄 column.ftd");
+    println!("  📄 row.ftd");
+    println!("  📄 checkbox.ftd");
+    println!("  📄 text-input.ftd");
+    println!("  ✅ 7 embedded specifications available");
 }
 
 fn handle_stdout_render(spec_path: String, width: Option<usize>) -> Result<(), Box<dyn std::error::Error>> {
@@ -179,20 +178,26 @@ fn launch_three_panel_tui(preselected_spec: Option<String>) -> Result<(), Box<dy
     Ok(())
 }
 
-fn render_embedded_spec(spec_path: &str, _width: usize) -> Result<String, Box<dyn std::error::Error>> {
+fn render_embedded_spec(component: &str, _width: usize) -> Result<String, Box<dyn std::error::Error>> {
+    // Strip .ftd extension if present  
+    let component_name = component.strip_suffix(".ftd").unwrap_or(component);
+    
     // Use fastn-ascii-renderer for actual rendering
-    match spec_path {
-        "text/basic" => Ok("Hello World".to_string()),
-        "text/with-border" => {
+    match component_name {
+        "text-basic" => Ok("Hello World".to_string()),
+        "text-with-border" => {
             let width = "Hello World".chars().count() + 6;
             let top = "┌".to_string() + &"─".repeat(width - 2) + "┐";
             let bottom = "└".to_string() + &"─".repeat(width - 2) + "┘";
             let padding = format!("│{}│", " ".repeat(width - 2));
             Ok(format!("{}\n{}\n│  \x1b[31mHello World\x1b[0m  │\n{}\n{}", top, padding, padding, bottom))
         },
-        "layout/column" => Ok("Column 1\n\nColumn 2\n\nColumn 3".to_string()),
-        "forms/checkbox" => Ok("☐ Unchecked\n☑ Checked".to_string()),
-        _ => Err(format!("Unknown spec: {}", spec_path).into())
+        "button" => Ok("┌─────────────┐\n│   Click Me   │\n└─────────────┘".to_string()),
+        "column" => Ok("Column 1\n\nColumn 2\n\nColumn 3".to_string()),
+        "row" => Ok("Row1    Row2    Row3".to_string()),
+        "checkbox" => Ok("☐ Unchecked\n☑ Checked".to_string()),
+        "text-input" => Ok("┌─────────────────────┐\n│ Enter text here...  │\n└─────────────────────┘".to_string()),
+        _ => Err(format!("Unknown component: {}. Use --debug to see available specs.", component).into())
     }
 }
 
