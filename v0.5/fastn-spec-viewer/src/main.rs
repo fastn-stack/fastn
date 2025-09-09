@@ -244,25 +244,87 @@ fn get_source_for_spec(spec_path: &str) -> String {
     }
 }
 
-fn render_embedded_spec(component: &str, _width: usize) -> Result<String, Box<dyn std::error::Error>> {
+fn render_embedded_spec(component: &str, available_width: usize) -> Result<String, Box<dyn std::error::Error>> {
     // Strip .ftd extension if present for matching
     let component_path = component.strip_suffix(".ftd").unwrap_or(component);
     
-    // Use fastn-ascii-renderer for actual rendering
+    // Simple width-aware rendering for now (TODO: Use full Taffy integration)
     match component_path {
         "text/basic" => Ok("Hello World".to_string()),
         "text/with-border" => {
-            let width = "Hello World".chars().count() + 6;
-            let top = "┌".to_string() + &"─".repeat(width - 2) + "┐";
-            let bottom = "└".to_string() + &"─".repeat(width - 2) + "┘";
-            let padding = format!("│{}│", " ".repeat(width - 2));
-            Ok(format!("{}\n{}\n│  \x1b[31mHello World\x1b[0m  │\n{}\n{}", top, padding, padding, bottom))
+            // Make text responsive to width - demo of width awareness  
+            let text = "Hello World";
+            let min_width = text.chars().count() + 6; // text + padding + border
+            let actual_width = if available_width < min_width { 
+                min_width 
+            } else { 
+                available_width.min(50) // Cap at reasonable size
+            };
+            
+            let content_width = actual_width.saturating_sub(4); // Account for border + padding
+            let top = "┌".to_string() + &"─".repeat(content_width) + "┐";
+            let bottom = "└".to_string() + &"─".repeat(content_width) + "┘";
+            
+            // Center text in available space
+            let text_padding = (content_width.saturating_sub(text.chars().count())) / 2;
+            let text_line = format!("│{}{}{}│", 
+                " ".repeat(text_padding),
+                format!("\x1b[31m{}\x1b[0m", text),
+                " ".repeat(content_width.saturating_sub(text.chars().count() + text_padding))
+            );
+            
+            let padding_line = format!("│{}│", " ".repeat(content_width));
+            
+            Ok(format!("{}\n{}\n{}\n{}\n{}", top, padding_line, text_line, padding_line, bottom))
         },
-        "components/button" => Ok("┌─────────────┐\n│   Click Me   │\n└─────────────┘".to_string()),
+        "components/button" => {
+            // Width-responsive button
+            let text = "Click Me";
+            let min_width = text.chars().count() + 4;
+            let button_width = if available_width < min_width { 
+                min_width 
+            } else { 
+                (available_width / 3).min(20) // Make button proportional but not too wide
+            };
+            
+            let content_width = button_width.saturating_sub(2);
+            let text_padding = (content_width.saturating_sub(text.chars().count())) / 2;
+            
+            let top = "┌".to_string() + &"─".repeat(content_width) + "┐";
+            let middle = format!("│{}{}{}│",
+                " ".repeat(text_padding),
+                text,
+                " ".repeat(content_width.saturating_sub(text.chars().count() + text_padding))
+            );
+            let bottom = "└".to_string() + &"─".repeat(content_width) + "┘";
+            
+            Ok(format!("{}\n{}\n{}", top, middle, bottom))
+        },
+        "forms/text-input" => {
+            // Width-responsive text input
+            let input_width = (available_width * 2 / 3).max(20).min(60);
+            let content_width = input_width.saturating_sub(2);
+            let placeholder = "Enter text here...";
+            
+            let top = "┌".to_string() + &"─".repeat(content_width) + "┐";
+            let middle = format!("│{}{}│",
+                placeholder,
+                " ".repeat(content_width.saturating_sub(placeholder.chars().count()))
+            );
+            let bottom = "└".to_string() + &"─".repeat(content_width) + "┘";
+            
+            Ok(format!("{}\n{}\n{}", top, middle, bottom))
+        },
         "layout/column" => Ok("Column 1\n\nColumn 2\n\nColumn 3".to_string()),
-        "layout/row" => Ok("Row1    Row2    Row3".to_string()),
+        "layout/row" => {
+            // Width-responsive row
+            if available_width >= 30 {
+                Ok("Item1    Item2    Item3".to_string())
+            } else {
+                Ok("Item1\nItem2\nItem3".to_string()) // Stack when narrow
+            }
+        },
         "forms/checkbox" => Ok("☐ Unchecked\n☑ Checked".to_string()),
-        "forms/text-input" => Ok("┌─────────────────────┐\n│ Enter text here...  │\n└─────────────────────┘".to_string()),
         _ => Err(format!("Unknown component: {}. Use --debug to see available specs.", component).into())
     }
 }

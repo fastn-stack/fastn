@@ -2106,6 +2106,7 @@ dependencies = [
  "once_cell",
  "ratatui",
  "syntect",
+ "taffy",
  "walkdir",
 ]
 

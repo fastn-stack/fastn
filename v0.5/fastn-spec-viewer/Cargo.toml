@@ -12,6 +12,7 @@ rust-version.workspace = true
 [dependencies]
 # Core rendering
 fastn-ascii-renderer = { path = "../fastn-ascii-renderer" }
+taffy = "0.5"
 
 # TUI framework
 ratatui = "0.28"
