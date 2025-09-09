@@ -368,7 +368,7 @@ fn render_embedded_spec(component: &str, available_width: usize, available_heigh
         "text/basic" => {
             // Add outer window for basic text
             let text = "Hello World";
-            let window_width = available_width.min(30).max(text.chars().count() + 4);
+            let window_width = (available_width * 2 / 3).max(text.chars().count() + 4).min(available_width - 2);
             
             let window_top = "╭".to_string() + &"─".repeat(window_width - 2) + "╮";
             let window_bottom = "╰".to_string() + &"─".repeat(window_width - 2) + "╯";
