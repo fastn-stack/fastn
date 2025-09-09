@@ -1,5 +1,10 @@
 use clap::Parser;
-use ratatui::layout::Rect;
+use ratatui::{
+    layout::Rect,
+    widgets::{Paragraph, Block, Borders},
+    style::{Style, Color},
+};
+use fastn_spec_viewer::{embedded_specs, spec_renderer};
 
 #[derive(Parser)]
 #[command(name = "fastn-spec-viewer")]
@@ -54,10 +59,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     match cli.component {
         Some(component) => {
             if cli.stdout {
-                // Stdout mode for automation
+                // Stdout mode using clean DocumentRenderer API
                 handle_stdout_render(component, cli.width, cli.height)?;
             } else {
-                // TUI mode with specific file pre-selected
+                // TUI mode with specific file pre-selected  
                 handle_tui_with_file(component)?;
             }
         },
@@ -71,19 +76,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn list_embedded_specs() {
-    println!("📚 Embedded fastn Component Specifications:");
-    println!("  📁 text/");
-    println!("    📄 basic.ftd");
-    println!("    📄 with-border.ftd");
-    println!("  📁 layout/");
-    println!("    📄 column.ftd");
-    println!("    📄 row.ftd");
-    println!("  📁 forms/");
-    println!("    📄 checkbox.ftd");
-    println!("    📄 text-input.ftd");
-    println!("  📁 components/");
-    println!("    📄 button.ftd");
-    println!("  ✅ 7 embedded specifications available");
+    println!("📚 Embedded fastn Document Specifications:");
+    for (category, specs) in embedded_specs::get_spec_categories() {
+        println!("  📁 {}/", category);
+        for spec in specs {
+            println!("    📄 {}", spec);
+        }
+    }
+    println!("  ✅ {} embedded specifications available", embedded_specs::list_embedded_specs().len());
 }
 
 fn handle_stdout_render(spec_path: String, width: Option<usize>, height: Option<usize>) -> Result<(), Box<dyn std::error::Error>> {
@@ -96,8 +96,9 @@ fn handle_stdout_render(spec_path: String, width: Option<usize>, height: Option<
         (render_width as f64 * 1.6).round() as usize
     });
     
-    let output = render_embedded_spec(&spec_path, render_width, render_height)?;
-    print!("{}", output.ansi_version);
+    // Use clean DocumentRenderer API
+    let spec_output = spec_renderer::render_spec(&spec_path, render_width, render_height)?;
+    print!("{}", spec_output.terminal_display());
     Ok(())
 }
 
@@ -123,30 +124,40 @@ fn launch_three_panel_tui(preselected_spec: Option<String>) -> Result<(), Box<dy
         backend::CrosstermBackend, 
         Terminal,
         layout::{Constraint, Direction, Layout},
-        widgets::{Block, Borders, List, Paragraph, ListItem, Clear},
+        widgets::{Block, Borders, List, Paragraph, ListItem},
         style::{Color, Style},
     };
 
     // Setup terminal
-    enable_raw_mode()?;
+    if let Err(e) = enable_raw_mode() {
+        eprintln!("Failed to enable raw mode: {}", e);
+        eprintln!("Try using --stdout flag for non-interactive output.");
+        std::process::exit(1);
+    }
+    
     let mut stdout = std::io::stdout();
     execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
     let backend = CrosstermBackend::new(stdout);
     let mut terminal = Terminal::new(backend)?;
 
-    // Simple three-panel demo for now
-    let mut should_quit = false;
-    let mut show_help = false;
-    let specs = vec!["text/basic.ftd", "text/with-border.ftd", "layout/column.ftd", "forms/checkbox.ftd"];
+    // TUI state
+    let specs = embedded_specs::list_embedded_specs();
     let mut selected = preselected_spec
         .and_then(|path| {
             let path_with_ext = if path.ends_with(".ftd") { path } else { format!("{}.ftd", path) };
             specs.iter().position(|&s| s == path_with_ext)
         })
         .unwrap_or(0);
+    let mut should_quit = false;
+    let mut show_help = false;
 
     while !should_quit {
         terminal.draw(|f| {
+            if show_help {
+                draw_help_overlay(f);
+                return;
+            }
+            
             let chunks = Layout::default()
                 .direction(Direction::Horizontal)
                 .constraints([
@@ -174,62 +185,20 @@ fn launch_three_panel_tui(preselected_spec: Option<String>) -> Result<(), Box<dy
                 .block(Block::default().borders(Borders::ALL).title("Specs"));
             f.render_widget(list, chunks[0]);
 
-            // Source panel - update based on selected file
-            let source_content = get_source_for_spec(specs[selected]);
+            // Source panel - show actual embedded spec source
+            let source_content = embedded_specs::get_embedded_spec(specs[selected])
+                .unwrap_or_else(|e| format!("Error: {}", e));
             let source = Paragraph::new(source_content)
                 .block(Block::default().borders(Borders::ALL).title("Source"));
             f.render_widget(source, chunks[1]);
 
-            // Preview panel  
-            let preview_content = render_embedded_spec(specs[selected], 80, 128)
-                .map(|dual| dual.ansi_version)
-                .unwrap_or_else(|e| e.to_string());
+            // Preview panel using clean DocumentRenderer API
+            let preview_content = spec_renderer::render_spec(specs[selected], 80, 128)
+                .map(|output| output.ansi_version)
+                .unwrap_or_else(|e| format!("Render Error: {}", e));
             let preview = Paragraph::new(preview_content)
                 .block(Block::default().borders(Borders::ALL).title("Preview @ 80ch"));
             f.render_widget(preview, chunks[2]);
-            
-            // Help dialog overlay
-            if show_help {
-                let help_text = "📚 fastn Component Specification Browser\n\n\
-🗂️  Navigation:\n\
-  ↑/↓       Navigate component list\n\
-  Enter     Select component (same as arrow selection)\n\
-  PgUp/PgDn Scroll long previews (when content overflows)\n\n\
-🖥️  Preview Controls:\n\
-  1         40-character preview width\n\
-  2         80-character preview width (default)\n\
-  3         120-character preview width\n\
-  ←/→       Cycle between available widths\n\
-  R         Toggle responsive mode (follows terminal resize)\n\n\
-🎛️  View Controls:\n\
-  F         Toggle fullscreen preview (hide tree + source)\n\
-  T         Toggle file tree panel\n\
-  S         Toggle source panel\n\
-  Tab       Cycle panel focus for keyboard scrolling\n\n\
-💾 File Operations:\n\
-  Ctrl+S    Save current preview as .rendered file\n\
-  Ctrl+R    Regenerate preview (refresh)\n\n\
-ℹ️  Information:\n\
-  ?         Toggle this help dialog\n\
-  I         Show component info (properties, usage)\n\
-  D         Toggle debug mode (show layout calculations)\n\n\
-🚪 Exit:\n\
-  Q         Quit application\n\
-  Esc       Quit application\n\
-  Ctrl+C    Force quit\n\n\
-💡 Tips:\n\
-  • Resize terminal in responsive mode to test layouts\n\
-  • Use fullscreen mode for detailed component inspection\n\
-  • Different widths help test responsive component behavior\n\n\
-                            Press ? or h to close help";
-                
-                let help_area = centered_rect(80, 70, f.area());
-                f.render_widget(Clear, help_area);
-                let help_dialog = Paragraph::new(help_text)
-                    .block(Block::default().borders(Borders::ALL).title(" Help "))
-                    .style(Style::default().bg(Color::Black).fg(Color::White));
-                f.render_widget(help_dialog, help_area);
-            }
         })?;
 
         if let Event::Key(key) = event::read()? {
@@ -240,11 +209,11 @@ fn launch_three_panel_tui(preselected_spec: Option<String>) -> Result<(), Box<dy
                 KeyCode::Down => {
                     selected = (selected + 1) % specs.len();
                 },
-                KeyCode::Char('q') | KeyCode::Esc => {
-                    should_quit = true;
-                },
                 KeyCode::Char('?') | KeyCode::Char('h') => {
                     show_help = !show_help;
+                },
+                KeyCode::Char('q') | KeyCode::Esc => {
+                    should_quit = true;
                 },
                 _ => {}
             }
@@ -259,386 +228,28 @@ fn launch_three_panel_tui(preselected_spec: Option<String>) -> Result<(), Box<dy
     Ok(())
 }
 
-fn get_source_for_spec(spec_path: &str) -> String {
-    let component_path = spec_path.strip_suffix(".ftd").unwrap_or(spec_path);
+fn draw_help_overlay(f: &mut ratatui::Frame) {
+    let help_text = "📚 fastn Document Specification Browser\n\n\
+🗂️  Navigation:\n\
+  ↑/↓       Navigate document list\n\
+  Enter     Select document\n\n\
+🖥️  Preview Controls:\n\
+  1         40-character preview width\n\
+  2         80-character preview width (default)\n\
+  3         120-character preview width\n\n\
+ℹ️  Information:\n\
+  ?         Toggle this help dialog\n\n\
+🚪 Exit:\n\
+  Q         Quit application\n\
+  Esc       Quit application\n\n\
+                            Press ? or h to close help";
     
-    match component_path {
-        "text/basic" => "-- ftd.text: Hello World".to_string(),
-        "text/with-border" => "-- ftd.text: Hello World\nborder-width.px: 1\npadding.px: 8\ncolor: red".to_string(),
-        "layout/column" => "-- ftd.column:\nspacing.fixed.px: 16\n\n    -- ftd.text: Column 1\n    -- ftd.text: Column 2\n    -- ftd.text: Column 3\n\n-- end: ftd.column".to_string(),
-        "forms/checkbox" => "-- ftd.checkbox:\nchecked: false\n\n-- ftd.checkbox:\nchecked: true".to_string(),
-        _ => "-- Unknown component".to_string()
-    }
-}
-
-#[derive(Debug)]
-struct DualRender {
-    ansi_version: String,
-    plain_version: String,
-    combined: String,
-}
-
-impl DualRender {
-    fn new(ansi_output: String) -> Self {
-        // Strip ANSI escape codes for plain version
-        let plain_version = strip_ansi_codes(&ansi_output);
-        
-        // Create side-by-side format with plain version first
-        let side_by_side = create_side_by_side(&plain_version, &ansi_output);
-        
-        Self {
-            ansi_version: ansi_output,
-            plain_version: plain_version.clone(),
-            combined: side_by_side,
-        }
-    }
-}
-
-fn create_side_by_side(plain: &str, ansi: &str) -> String {
-    let plain_lines: Vec<&str> = plain.lines().collect();
-    let ansi_lines: Vec<&str> = ansi.lines().collect();
-    let max_lines = plain_lines.len().max(ansi_lines.len());
-    
-    // Calculate width of plain version for alignment
-    let plain_width = plain_lines.iter()
-        .map(|line| line.chars().count())
-        .max()
-        .unwrap_or(0);
-    
-    let mut result = Vec::new();
-    
-    for i in 0..max_lines {
-        let plain_line = plain_lines.get(i).unwrap_or(&"");
-        let ansi_line = ansi_lines.get(i).unwrap_or(&"");
-        
-        // Pad plain line to consistent width + 10 spaces separation
-        let padding_needed = plain_width.saturating_sub(plain_line.chars().count());
-        let combined_line = format!("{}{}          {}", 
-            plain_line, 
-            " ".repeat(padding_needed),
-            ansi_line
-        );
-        
-        result.push(combined_line);
-    }
-    
-    result.join("\n")
-}
-
-fn generate_all_dimensions(component_path: &str) -> Result<String, Box<dyn std::error::Error>> {
-    let mut all_sections = Vec::new();
-    
-    // Generate all three dimensions
-    for (width, height) in [(40, 64), (80, 128), (120, 192)] {
-        let dual_render = render_embedded_spec(component_path, width, height)?;
-        
-        // Create section with strict formatting: exactly 4 newlines before header, 1 after
-        let section = if all_sections.is_empty() {
-            format!("# {}x{}\n\n{}\n\n\n\n", width, height, dual_render.combined)
-        } else {
-            format!("\n\n\n\n# {}x{}\n\n{}\n\n\n\n", width, height, dual_render.combined)
-        };
-        all_sections.push(section);
-    }
-    
-    Ok(all_sections.join(""))
-}
-
-fn strip_ansi_codes(text: &str) -> String {
-    // Simple ANSI escape code removal
-    let mut result = String::new();
-    let mut in_escape = false;
-    
-    for ch in text.chars() {
-        if ch == '\x1b' {
-            in_escape = true;
-        } else if in_escape && ch == 'm' {
-            in_escape = false;
-        } else if !in_escape {
-            result.push(ch);
-        }
-    }
-    
-    result
-}
-
-fn render_embedded_spec(component: &str, available_width: usize, available_height: usize) -> Result<DualRender, Box<dyn std::error::Error>> {
-    // Strip .ftd extension if present for matching
-    let component_path = component.strip_suffix(".ftd").unwrap_or(component);
-    
-    // Use actual CSS rendering engine from fastn-ascii-renderer
-    use fastn_ascii_renderer::{
-        TaffyLayoutEngine, FtdToCssMapper, SimpleFtdComponent, FtdSize, ComponentType,
-        AnsiCanvas, CoordinateConverter, AnsiColor, BorderStyle
-    };
-    use taffy::{Size, AvailableSpace};
-    
-    // Create FTD component with real CSS properties
-    let ftd_component = create_ftd_component_from_spec(component_path)?;
-    
-    // Use CSS layout engine
-    let css_mapper = FtdToCssMapper::new();
-    let style = css_mapper.component_to_style(&ftd_component);
-    
-    // Layout calculation with Taffy
-    let mut layout_engine = TaffyLayoutEngine::new();
-    let node = if ftd_component.children.is_empty() {
-        layout_engine.create_text_node(&ftd_component.text.unwrap_or_default(), style)?
-    } else {
-        // TODO: Handle children properly with Taffy
-        layout_engine.create_text_node("Container", style)?
-    };
-    
-    layout_engine.set_root(node);
-    
-    // Available space from width/height parameters
-    let available_space = Size {
-        width: AvailableSpace::Definite((available_width * 8) as f32), // chars → px
-        height: AvailableSpace::Definite((available_height * 16) as f32), // lines → px
-    };
-    
-    layout_engine.compute_layout(available_space)?;
-    
-    // Get computed layout
-    let layout = layout_engine.get_layout(node)?;
-    
-    // Convert to character coordinates
-    let converter = CoordinateConverter::new();
-    let char_rect = converter.taffy_layout_to_char_rect(layout);
-    
-    // Create canvas and render using CSS-calculated layout
-    let mut canvas = AnsiCanvas::new(available_width, available_height);
-    
-    render_component_to_canvas(&ftd_component, char_rect, &mut canvas)?;
-    
-    let ansi_output = canvas.to_ansi_string();
-    Ok(DualRender::new(ansi_output))
-}
-
-fn create_ftd_component_from_spec(component_path: &str) -> Result<SimpleFtdComponent, Box<dyn std::error::Error>> {
-    // Create real FTD components with CSS properties instead of manual calculations
-    match component_path {
-        "text/basic" => {
-            Ok(SimpleFtdComponent::text("Hello World"))
-        },
-        "text/with-border" => {
-            Ok(SimpleFtdComponent::text("Hello World")
-                .with_border(1)         // border-width.px: 1
-                .with_padding(8))       // padding.px: 8  
-        },
-        "components/button" => {
-            Ok(SimpleFtdComponent::text("Click Me")
-                .with_border(1)         // border-width.px: 1
-                .with_padding(4))       // padding.px: 4
-        },
-        "forms/text-input" => {
-            Ok(SimpleFtdComponent::text("Enter text here...")
-                .with_border(1)         // border-width.px: 1
-                .with_padding(2)        // padding.px: 2
-                .with_width(FtdSize::FillContainer)) // width: fill-container
-        },
-        "layout/column" => {
-            Ok(SimpleFtdComponent::column()
-                .with_spacing(16)       // spacing.fixed.px: 16
-                .with_children(vec![
-                    SimpleFtdComponent::text("Column 1"),
-                    SimpleFtdComponent::text("Column 2"),
-                    SimpleFtdComponent::text("Column 3"),
-                ]))
-        },
-        "layout/row" => {
-            Ok(SimpleFtdComponent::text("Item1    Item2    Item3"))
-        },
-        "forms/checkbox" => {
-            Ok(SimpleFtdComponent::text("☐ Unchecked\n☑ Checked"))
-        },
-        _ => Err(format!("Unknown component: {}. Use --debug to see available specs.", component_path).into())
-    }
-}
-
-fn render_component_to_canvas(
-    component: &SimpleFtdComponent,
-    char_rect: fastn_ascii_renderer::CharRect,
-    canvas: &mut AnsiCanvas,
-) -> Result<(), Box<dyn std::error::Error>> {
-    // Render based on component type using CSS-calculated layout
-    match component.component_type {
-        ComponentType::Text => {
-            // Draw border if component has border_width
-            if component.border_width.is_some() {
-                canvas.draw_border(char_rect, BorderStyle::Single, AnsiColor::Default);
-            }
-            
-            // Calculate text position inside border + padding (CSS box model)
-            let border_offset = if component.border_width.is_some() { 1 } else { 0 };
-            let padding_offset = component.padding.unwrap_or(0) / 8; // px to chars
-            
-            let text_pos = fastn_ascii_renderer::CharPos {
-                x: char_rect.x + border_offset + padding_offset,
-                y: char_rect.y + border_offset + padding_offset,
-            };
-            
-            // Use red color for with-border component (from CSS)
-            let text_color = if component.border_width.is_some() && component.padding.is_some() {
-                AnsiColor::Red
-            } else {
-                AnsiColor::Default
-            };
-            
-            canvas.draw_text(
-                text_pos,
-                &component.text.unwrap_or_default(),
-                text_color,
-                None,
-            );
-        },
-        ComponentType::Column => {
-            // TODO: Implement CSS-accurate column rendering
-            canvas.draw_text(
-                fastn_ascii_renderer::CharPos { x: char_rect.x, y: char_rect.y },
-                "Column 1\n\nColumn 2\n\nColumn 3",
-                AnsiColor::Default,
-                None,
-            );
-        },
-        _ => {
-            canvas.draw_text(
-                fastn_ascii_renderer::CharPos { x: char_rect.x, y: char_rect.y },
-                "Unsupported component",
-                AnsiColor::Default,
-                None,
-            );
-        }
-    }
-    
-    Ok(())
-}
-
-// CSS-based rendering implementation complete above
-// All manual rendering code removed - now using actual CSS engine!
-            // Make text responsive to width - demo of width awareness  
-            let text = "Hello World";
-            let min_width = text.chars().count() + 6; // text + padding + border
-            let actual_width = if available_width < min_width { 
-                min_width 
-            } else { 
-                available_width.min(50) // Cap at reasonable size
-            };
-            
-            let content_width = actual_width.saturating_sub(4); // Account for border + padding
-            let top = "┌".to_string() + &"─".repeat(content_width) + "┐";
-            let bottom = "└".to_string() + &"─".repeat(content_width) + "┘";
-            
-            // Center text in available space
-            let text_padding = (content_width.saturating_sub(text.chars().count())) / 2;
-            let text_line = format!("│{}{}{}│", 
-                " ".repeat(text_padding),
-                format!("\x1b[31m{}\x1b[0m", text),
-                " ".repeat(content_width.saturating_sub(text.chars().count() + text_padding))
-            );
-            
-            let padding_line = format!("│{}│", " ".repeat(content_width));
-            
-            // Add outer window rect to show extent
-            let inner_content = format!("{}\n{}\n{}\n{}\n{}", top, padding_line, text_line, padding_line, bottom);
-            let window_width = actual_width + 4; // Extra space around component
-            let window_top = "╭".to_string() + &"─".repeat(window_width - 2) + "╮";
-            let window_bottom = "╰".to_string() + &"─".repeat(window_width - 2) + "╯";
-            
-            let mut result = Vec::new();
-            result.push(window_top);
-            result.push(format!("│{}│", " ".repeat(window_width - 2))); // Top padding
-            
-            for line in inner_content.lines() {
-                let padding_needed = window_width.saturating_sub(2).saturating_sub(line.chars().count());
-                result.push(format!("│ {}{} │", line, " ".repeat(padding_needed.saturating_sub(1))));
-            }
-            
-            result.push(format!("│{}│", " ".repeat(window_width - 2))); // Bottom padding
-            result.push(window_bottom);
-            
-            Ok(DualRender::new(result.join("\n")))
-        },
-        "components/button" => {
-            // Truly responsive button using both width and height
-            let text = "Click Me";
-            let min_width = text.chars().count() + 4;
-            
-            // Width: Proportional to available width
-            let button_width = if available_width < min_width { 
-                min_width 
-            } else { 
-                (available_width / 2).max(min_width).min(available_width - 4)
-            };
-            
-            // Height: Proportional to available height  
-            let min_height = 3; // Minimum for border + text
-            let button_height: usize = if available_height < 20 {
-                min_height // Compact for small heights
-            } else if available_height < 60 {
-                5 // Medium height
-            } else {
-                7 // Tall for large heights
-            };
-            
-            let content_width = button_width.saturating_sub(2);
-            let content_height = button_height.saturating_sub(2);
-            
-            // Create button with proper height
-            let mut lines = Vec::new();
-            
-            // Top border
-            lines.push("┌".to_string() + &"─".repeat(content_width) + "┐");
-            
-            // Vertical content with text centered
-            let text_line_index = content_height / 2;
-            for i in 0..content_height {
-                if i == text_line_index {
-                    // Text line
-                    let text_padding = (content_width.saturating_sub(text.chars().count())) / 2;
-                    lines.push(format!("│{}{}{}│",
-                        " ".repeat(text_padding),
-                        text,
-                        " ".repeat(content_width.saturating_sub(text.chars().count() + text_padding))
-                    ));
-                } else {
-                    // Padding line
-                    lines.push(format!("│{}│", " ".repeat(content_width)));
-                }
-            }
-            
-            // Bottom border
-            lines.push("└".to_string() + &"─".repeat(content_width) + "┘");
-            
-            Ok(DualRender::new(lines.join("\n")))
-        },
-        "forms/text-input" => {
-            // Width-responsive text input
-            let input_width = (available_width * 2 / 3).max(20).min(60);
-            let content_width = input_width.saturating_sub(2);
-            let placeholder = "Enter text here...";
-            
-            let top = "┌".to_string() + &"─".repeat(content_width) + "┐";
-            let middle = format!("│{}{}│",
-                placeholder,
-                " ".repeat(content_width.saturating_sub(placeholder.chars().count()))
-            );
-            let bottom = "└".to_string() + &"─".repeat(content_width) + "┘";
-            
-            Ok(DualRender::new(format!("{}\n{}\n{}", top, middle, bottom)))
-        },
-        "layout/column" => Ok(DualRender::new("Column 1\n\nColumn 2\n\nColumn 3".to_string())),
-        "layout/row" => {
-            // Width-responsive row
-            if available_width >= 30 {
-                Ok(DualRender::new("Item1    Item2    Item3".to_string()))
-            } else {
-                Ok(DualRender::new("Item1\nItem2\nItem3".to_string())) // Stack when narrow
-            }
-        },
-        "forms/checkbox" => Ok(DualRender::new("☐ Unchecked\n☑ Checked".to_string())),
-        _ => Err(format!("Unknown component: {}. Use --debug to see available specs.", component).into())
-    }
+    let help_area = centered_rect(80, 70, f.area());
+    f.render_widget(ratatui::widgets::Clear, help_area);
+    let help_dialog = Paragraph::new(help_text)
+        .block(Block::default().borders(Borders::ALL).title(" Help "))
+        .style(Style::default().bg(Color::Black).fg(Color::White));
+    f.render_widget(help_dialog, help_area);
 }
 
 fn handle_check_mode(autofix: bool, autofix_component: Option<String>) -> Result<(), Box<dyn std::error::Error>> {
@@ -648,7 +259,7 @@ fn handle_check_mode(autofix: bool, autofix_component: Option<String>) -> Result
         println!("🧪 Checking all component specifications...\n");
     }
     
-    // Discover all .ftd files in specs directory
+    // Discover all .ftd files in specs directory  
     let spec_files = discover_spec_files_from_disk()?;
     let mut total_tests = 0;
     let mut passed_tests = 0;
@@ -665,23 +276,21 @@ fn handle_check_mode(autofix: bool, autofix_component: Option<String>) -> Result
         let rendered_file = format!("{}.rendered", base.display());
         let rendered_path = std::path::PathBuf::from(&rendered_file);
             
-            if rendered_path.exists() {
-                // Compare actual vs expected
-                let expected = std::fs::read_to_string(&rendered_path)?;
-                // Generate all dimensions for this component
-                let file_path_str = spec_file.to_string_lossy();
-                let component_path = file_path_str
-                    .trim_start_matches("specs/")
-                    .trim_end_matches(".ftd");
-                let actual = generate_all_dimensions(component_path)?;
-                
+        if rendered_path.exists() {
+            // Compare actual vs expected using clean API
+            let expected = std::fs::read_to_string(&rendered_path)?;
+            let file_path_str = spec_file.to_string_lossy();
+            let spec_path = file_path_str
+                .trim_start_matches("specs/")
+                .trim_end_matches(".ftd");
+            let actual = spec_renderer::render_all_dimensions(spec_path)?;
+            
             if expected.trim() == actual.trim() {
                 passed_tests += 1;
                 println!("  ✅ All dimensions: PASS");
             } else {
                 failed_tests += 1;
                 println!("  ❌ All dimensions: FAIL");
-                println!("     Snapshots differ from current rendering");
                 
                 // Auto-fix if requested
                 if autofix && should_fix_component(&spec_file, &autofix_component) {
@@ -696,11 +305,11 @@ fn handle_check_mode(autofix: bool, autofix_component: Option<String>) -> Result
             // Auto-create missing file if in autofix mode
             if autofix && should_fix_component(&spec_file, &autofix_component) {
                 let file_path_str = spec_file.to_string_lossy();
-                let component_path = file_path_str
+                let spec_path = file_path_str
                     .trim_start_matches("specs/")
                     .trim_end_matches(".ftd");
                 
-                let all_dimensions = generate_all_dimensions(component_path)?;
+                let all_dimensions = spec_renderer::render_all_dimensions(spec_path)?;
                 std::fs::write(&rendered_path, &all_dimensions)?;
                 fixed_tests += 1;
                 println!("  🔧 CREATED - generated complete rendered file");
@@ -709,17 +318,12 @@ fn handle_check_mode(autofix: bool, autofix_component: Option<String>) -> Result
         println!();
     }
     
-    // Summary  
-    println!("📊 Test Results:");
-    println!("  ✅ Passed: {}", passed_tests);
-    println!("  ❌ Failed: {}", failed_tests);
-    println!("  📝 Total:  {}", total_tests);
-    
+    // Summary reporting
     if autofix {
         println!("📊 Auto-fix Results:");
         println!("  ✅ Passed: {}", passed_tests);
-        println!("  🔧 Fixed: {}", fixed_tests); 
-        println!("  ❌ Failed: {}", failed_tests - fixed_tests);
+        println!("  🔧 Fixed: {}", fixed_tests);
+        println!("  ❌ Failed: {}", (failed_tests as i32).saturating_sub(fixed_tests as i32));
         println!("  📝 Total:  {}", total_tests);
         
         if fixed_tests > 0 {
@@ -743,9 +347,9 @@ fn handle_check_mode(autofix: bool, autofix_component: Option<String>) -> Result
     Ok(())
 }
 
+// Helper functions
 fn discover_spec_files_from_disk() -> Result<Vec<std::path::PathBuf>, Box<dyn std::error::Error>> {
     let mut files = Vec::new();
-    
     for entry in walkdir::WalkDir::new("specs") {
         let entry = entry?;
         if let Some(ext) = entry.path().extension() {
@@ -754,70 +358,13 @@ fn discover_spec_files_from_disk() -> Result<Vec<std::path::PathBuf>, Box<dyn st
             }
         }
     }
-    
     files.sort();
     Ok(files)
-}
-
-fn render_ftd_file_from_disk(
-    file: &std::path::Path, 
-    width: usize,
-    height: usize
-) -> Result<String, Box<dyn std::error::Error>> {
-    let content = std::fs::read_to_string(file)?;
-    
-    // Simple ftd parsing - look for text components
-    if content.contains("-- ftd.text:") {
-        let lines: Vec<&str> = content.lines().collect();
-        for line in lines {
-            if let Some(text_start) = line.find("-- ftd.text:") {
-                let text_content = line[text_start + 12..].trim();
-                
-                // Check properties
-                let has_border = content.contains("border-width");
-                let has_padding = content.contains("padding");
-                let has_color = content.contains("color:");
-                
-                // Use same responsive rendering logic
-                if has_border && has_padding {
-                    let min_width = text_content.chars().count() + 6;
-                    let actual_width = width.max(min_width).min(50);
-                    let content_width = actual_width.saturating_sub(4);
-                    
-                    let top = "┌".to_string() + &"─".repeat(content_width) + "┐";
-                    let bottom = "└".to_string() + &"─".repeat(content_width) + "┘";
-                    
-                    let text_padding = (content_width.saturating_sub(text_content.chars().count())) / 2;
-                    let text_line = if has_color {
-                        format!("│{}\x1b[31m{}\x1b[0m{}│", 
-                            " ".repeat(text_padding),
-                            text_content,
-                            " ".repeat(content_width.saturating_sub(text_content.chars().count() + text_padding))
-                        )
-                    } else {
-                        format!("│{}{}{}│", 
-                            " ".repeat(text_padding),
-                            text_content,
-                            " ".repeat(content_width.saturating_sub(text_content.chars().count() + text_padding))
-                        )
-                    };
-                    
-                    let padding_line = format!("│{}│", " ".repeat(content_width));
-                    return Ok(format!("{}\n{}\n{}\n{}\n{}", top, padding_line, text_line, padding_line, bottom));
-                } else {
-                    return Ok(text_content.to_string());
-                }
-            }
-        }
-    }
-    
-    Ok("<!-- Unsupported component -->".to_string())
 }
 
 fn should_fix_component(spec_file: &std::path::Path, autofix_component: &Option<String>) -> bool {
     match autofix_component {
         Some(target_component) => {
-            // Check if this file matches the target component
             if let Some(file_name) = spec_file.file_name() {
                 if let Some(name_str) = file_name.to_str() {
                     return name_str.starts_with(target_component) || 
@@ -826,7 +373,7 @@ fn should_fix_component(spec_file: &std::path::Path, autofix_component: &Option<
             }
             false
         },
-        None => true, // Fix all components if no specific component specified
+        None => true,
     }
 }
 
