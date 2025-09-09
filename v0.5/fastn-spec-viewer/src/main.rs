@@ -424,7 +424,12 @@ fn handle_check_mode(autofix: bool, autofix_component: Option<String>) -> Result
             if rendered_path.exists() {
                 // Compare actual vs expected
                 let expected = std::fs::read_to_string(&rendered_path)?;
-                let actual = render_ftd_file_from_disk(&spec_file, width, height)?;
+                // Use same rendering logic as stdout mode for consistency
+                let file_path_str = spec_file.to_string_lossy();
+                let component_path = file_path_str
+                    .trim_start_matches("specs/")
+                    .trim_end_matches(".ftd");
+                let actual = render_embedded_spec(component_path, width, height)?;
                 
                 if expected.trim() == actual.trim() {
                     passed_tests += 1;
@@ -445,7 +450,21 @@ fn handle_check_mode(autofix: bool, autofix_component: Option<String>) -> Result
                     }
                 }
             } else {
-                println!("  ⚠️  {}ch: Missing .rendered-{} file", width, width);
+                println!("  ⚠️  {}ch: Missing .rendered-{}x{} file", width, width, height);
+                
+                // Auto-create missing files if in autofix mode
+                if autofix && should_fix_component(&spec_file, &autofix_component) {
+                    let file_path_str = spec_file.to_string_lossy();
+                    let component_path = file_path_str
+                        .trim_start_matches("specs/")
+                        .trim_end_matches(".ftd");
+                    
+                    if let Ok(actual) = render_embedded_spec(component_path, width, height) {
+                        std::fs::write(&rendered_path, &actual)?;
+                        fixed_tests += 1;
+                        println!("  🔧 {}ch: CREATED - generated missing snapshot", width);
+                    }
+                }
             }
         }
         println!();
