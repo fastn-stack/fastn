@@ -18,6 +18,8 @@ mod taffy_integration;
 mod ftd_types;
 mod css_mapper;
 mod ansi_canvas;
+pub mod embedded_specs;
+pub mod spec_renderer;
 
 // spec_viewer module moved to separate fastn-spec-viewer crate
 
@@ -28,6 +30,7 @@ pub use taffy_integration::TaffyLayoutEngine;
 pub use ftd_types::{SimpleFtdComponent, ComponentType, FtdSize};
 pub use css_mapper::FtdToCssMapper;
 pub use ansi_canvas::{AnsiCanvas, AnsiColor, CharPos, CharRect, CoordinateConverter, BorderStyle};
+pub use spec_renderer::{SpecRenderer, DualRender};
 
 /// Main entry point for ASCII rendering (placeholder for now)
 pub fn render_ascii(_compiled_doc: &str) -> String {

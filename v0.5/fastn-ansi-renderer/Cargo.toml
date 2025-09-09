@@ -1,9 +1,9 @@
 [package]
-name = "fastn-ascii-renderer"
+name = "fastn-ansi-renderer"
 version = "0.1.0"
 authors.workspace = true
 edition.workspace = true
-description = "ASCII rendering engine for FTD components"
+description = "ANSI terminal rendering engine for fastn UI components"
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true

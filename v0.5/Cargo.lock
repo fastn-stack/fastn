@@ -1753,7 +1753,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "fastn-ascii-renderer"
+name = "fastn-ansi-renderer"
 version = "0.1.0"
 dependencies = [
  "ansi_term",
@@ -2101,7 +2101,7 @@ version = "0.1.0"
 dependencies = [
  "clap",
  "crossterm 0.27.0",
- "fastn-ascii-renderer",
+ "fastn-ansi-renderer",
  "notify",
  "once_cell",
  "ratatui",
