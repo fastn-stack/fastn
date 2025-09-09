@@ -123,14 +123,85 @@ impl SpecViewerApp {
 
     fn regenerate_current_render(&mut self) -> Result<(), Box<dyn std::error::Error>> {
         if let Some(ref file) = self.current_file {
-            // TODO: Use our ASCII renderer to generate current output
-            // For now, placeholder
-            self.current_render = Some(format!("<!-- Rendered: {} at {}ch -->", 
-                file.display(), self.current_width));
+            // Try to parse and render the fastn file
+            match self.parse_and_render_file(file) {
+                Ok(rendered_output) => {
+                    self.current_render = Some(rendered_output);
+                    self.render_status = RenderStatus::Loading; // Will be updated by update_render_status
+                },
+                Err(e) => {
+                    self.render_status = RenderStatus::ParseError(e.to_string());
+                    self.current_render = Some(format!("Parse Error:\n{}", e));
+                }
+            }
             
             self.update_render_status();
         }
         Ok(())
+    }
+
+    fn parse_and_render_file(&self, file: &std::path::Path) -> Result<String, Box<dyn std::error::Error>> {
+        let content = std::fs::read_to_string(file)?;
+        
+        // For Week 3: Simple parsing - just look for text components
+        // TODO: Integrate with actual fastn parser when available
+        if content.contains("-- ftd.text:") {
+            // Extract text content (very simplified)
+            let lines: Vec<&str> = content.lines().collect();
+            for line in lines {
+                if let Some(text_start) = line.find("-- ftd.text:") {
+                    let text_content = line[text_start + 12..].trim();
+                    
+                    // Check for border and padding
+                    let has_border = content.contains("border-width");
+                    let has_padding = content.contains("padding");
+                    let has_color = content.contains("color:");
+                    
+                    return Ok(self.render_simple_text(text_content, has_border, has_padding, has_color));
+                }
+            }
+        }
+        
+        Ok("<!-- Unsupported component type -->".to_string())
+    }
+
+    fn render_simple_text(&self, text: &str, has_border: bool, has_padding: bool, has_color: bool) -> String {
+        if has_border && has_padding {
+            // Render with border and padding
+            let width = text.chars().count() + 6; // text + padding + border
+            let top_border = "┌".to_string() + &"─".repeat(width - 2) + "┐";
+            let bottom_border = "└".to_string() + &"─".repeat(width - 2) + "┘";
+            let content_line = format!("│  {}  │", text);
+            let padding_line = format!("│{}│", " ".repeat(width - 2));
+            
+            if has_color {
+                // Simple ANSI red color for demonstration
+                format!("{}\n{}\n│  \x1b[31m{}\x1b[0m  │\n{}\n{}",
+                    top_border, padding_line, text, padding_line, bottom_border)
+            } else {
+                format!("{}\n{}\n{}\n{}\n{}", 
+                    top_border, padding_line, content_line, padding_line, bottom_border)
+            }
+        } else if has_border {
+            // Render with border only
+            let width = text.chars().count() + 2; 
+            let top_border = "┌".to_string() + &"─".repeat(width - 2) + "┐";
+            let bottom_border = "└".to_string() + &"─".repeat(width - 2) + "┘";
+            let content_line = format!("│{}│", text);
+            
+            if has_color {
+                format!("{}\n│\x1b[31m{}\x1b[0m│\n{}", top_border, text, bottom_border)
+            } else {
+                format!("{}\n{}\n{}", top_border, content_line, bottom_border)
+            }
+        } else {
+            // Plain text
+            if has_color {
+                format!("\x1b[31m{}\x1b[0m", text)
+            } else {
+                text.to_string()
+            }
+        }
     }
 
     fn update_render_status(&mut self) {

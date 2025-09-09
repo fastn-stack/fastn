@@ -56,8 +56,14 @@ fn launch_tui_app(specs_dir: PathBuf, default_width: usize) -> Result<(), Box<dy
     use ratatui::{backend::CrosstermBackend, Terminal};
     use fastn_ascii_renderer::spec_viewer::SpecViewerApp;
 
-    // Setup terminal
-    enable_raw_mode()?;
+    // Setup terminal with error handling
+    if let Err(e) = enable_raw_mode() {
+        eprintln!("Failed to enable raw mode: {}", e);
+        eprintln!("This usually means the spec-viewer can't run in this environment.");
+        eprintln!("Try running with --debug flag for non-interactive mode.");
+        std::process::exit(1);
+    }
+    
     let mut stdout = std::io::stdout();
     execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
     let backend = CrosstermBackend::new(stdout);
