@@ -332,9 +332,12 @@ fn generate_all_dimensions(component_path: &str) -> Result<String, Box<dyn std::
     for (width, height) in [(40, 64), (80, 128), (120, 192)] {
         let dual_render = render_embedded_spec(component_path, width, height)?;
         
-        // Create section with dimension header and side-by-side content  
-        let section = format!("# {}x{}\n\n{}\n\n\n\n", 
-            width, height, dual_render.combined);
+        // Create section with strict formatting: exactly 4 newlines before header, 1 after
+        let section = if all_sections.is_empty() {
+            format!("# {}x{}\n\n{}\n\n\n\n", width, height, dual_render.combined)
+        } else {
+            format!("\n\n\n\n# {}x{}\n\n{}\n\n\n\n", width, height, dual_render.combined)
+        };
         all_sections.push(section);
     }
     
@@ -359,7 +362,7 @@ fn strip_ansi_codes(text: &str) -> String {
     result
 }
 
-fn render_embedded_spec(component: &str, available_width: usize, available_height: usize) -> Result<DualRender, Box<dyn std::error::Error>> {
+fn render_embedded_spec(component: &str, available_width: usize, _available_height: usize) -> Result<DualRender, Box<dyn std::error::Error>> {
     // Strip .ftd extension if present for matching
     let component_path = component.strip_suffix(".ftd").unwrap_or(component);
     
