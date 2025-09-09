@@ -275,7 +275,30 @@ fn render_embedded_spec(component: &str, available_width: usize, available_heigh
     
     // Simple width-aware rendering for now (TODO: Use full Taffy integration)
     match component_path {
-        "text/basic" => Ok("Hello World".to_string()),
+        "text/basic" => {
+            // Add outer window for basic text
+            let text = "Hello World";
+            let window_width = available_width.min(30).max(text.chars().count() + 4);
+            
+            let window_top = "╭".to_string() + &"─".repeat(window_width - 2) + "╮";
+            let window_bottom = "╰".to_string() + &"─".repeat(window_width - 2) + "╯";
+            
+            let text_padding = (window_width.saturating_sub(2).saturating_sub(text.chars().count())) / 2;
+            let text_line = format!("│{}{}{}│", 
+                " ".repeat(text_padding),
+                text,
+                " ".repeat(window_width.saturating_sub(2).saturating_sub(text.chars().count() + text_padding))
+            );
+            
+            let mut result = Vec::new();
+            result.push(window_top);
+            result.push(format!("│{}│", " ".repeat(window_width - 2))); // Top padding
+            result.push(text_line);
+            result.push(format!("│{}│", " ".repeat(window_width - 2))); // Bottom padding
+            result.push(window_bottom);
+            
+            Ok(result.join("\n"))
+        },
         "text/with-border" => {
             // Make text responsive to width - demo of width awareness  
             let text = "Hello World";
