@@ -10,8 +10,22 @@ homepage.workspace = true
 rust-version.workspace = true
 
 [dependencies]
+# Core rendering
 taffy = "0.5"
 ansi_term = "0.12"
 unicode-width = "0.2"
+
+# Spec viewer TUI
+ratatui = "0.28"
+crossterm = "0.27"
+notify = "6.1"
+walkdir = "2.4"
+syntect = "5.1" 
+once_cell = "1.19"
+clap = { version = "4", features = ["derive"] }
+
+[[bin]]
+name = "spec-viewer"
+path = "src/bin/spec_viewer.rs"
 
 [dev-dependencies]

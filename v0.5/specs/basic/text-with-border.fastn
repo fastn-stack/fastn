@@ -1,0 +1,4 @@
+-- ftd.text: Hello World
+border-width.px: 1
+padding.px: 8
+color: red

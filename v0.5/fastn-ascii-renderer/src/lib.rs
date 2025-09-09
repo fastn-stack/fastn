@@ -9,6 +9,13 @@
 // Placeholder usage for dependencies (will be used in later phases)
 use ansi_term as _;
 use unicode_width as _;
+use clap as _;
+use crossterm as _;  
+use notify as _;
+use once_cell as _;
+use ratatui as _;
+use syntect as _;
+use walkdir as _;
 
 mod canvas;
 mod layout;
