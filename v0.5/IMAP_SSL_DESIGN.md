@@ -105,32 +105,54 @@ where S: AsyncRead + AsyncWrite + Unpin + Send
 ### Core IMAP4rev1 Commands (RFC 3501)
 
 **Authentication State:**
-- `CAPABILITY` - Server capabilities advertisement
-- `LOGIN` - Username/password authentication (reuse SMTP auth)
-- `STARTTLS` - TLS upgrade (reuse SMTP certificate infrastructure)
-- `LOGOUT` - End session
+- ✅ `CAPABILITY` - Server capabilities advertisement
+- ✅ `LOGIN` - Username/password authentication (reuse SMTP auth)
+- `STARTTLS` - TLS upgrade (reuse SMTP certificate infrastructure) 
+- ✅ `LOGOUT` - End session
 
 **Authenticated State:**
-- `LIST` - List available mailboxes/folders
-- `SELECT` - Select mailbox for operations
+- ✅ `LIST` - List available mailboxes/folders
+- ✅ `SELECT` - Select mailbox for operations
 - `EXAMINE` - Select mailbox read-only
-- `STATUS` - Get mailbox status without selection
+- ❌ `STATUS` - Get mailbox status without selection (REQUIRED BY THUNDERBIRD)
+- `LSUB` - List subscribed mailboxes (legacy, REQUIRED BY THUNDERBIRD)
 - `CREATE` - Create new mailbox (future)
 - `DELETE` - Delete mailbox (future)
 - `RENAME` - Rename mailbox (future)
 
 **Selected State (Core Requirements):**
-- `FETCH` - Retrieve messages (headers, body, flags)
+- ✅ `FETCH` - Retrieve messages (headers, body, flags) - BASIC IMPLEMENTATION
+- ❌ `UID FETCH` - UID-based message retrieval (CRITICAL FOR THUNDERBIRD)
 - `STORE` - Modify message flags
+- `UID STORE` - UID-based flag modifications (REQUIRED BY THUNDERBIRD)
 - `SEARCH` - Search messages by criteria
 - `EXPUNGE` - Permanently remove deleted messages
 - `CLOSE` - Close mailbox, expunge deleted messages
-- `NOOP` - No operation, get status updates
+- ❌ `NOOP` - No operation, get status updates (REQUIRED BY THUNDERBIRD)
+
+**CRITICAL REAL-WORLD REQUIREMENTS (Discovered via Thunderbird Testing):**
+- ❌ `UID FETCH 1:* (FLAGS)` - Get message flags by UID (essential for message display)
+- ❌ `STATUS folder (UIDNEXT MESSAGES UNSEEN RECENT)` - Folder statistics
+- ❌ `LSUB "" "*"` - Legacy subscription listing (Thunderbird compatibility)
+- ❌ `NOOP` - Connection keep-alive (prevents timeouts)
 
 **Optional Extensions:**
 - `IDLE` - Real-time push notifications (RFC 2177)
 - `MOVE` - Move messages between folders
 - `THREAD` - Message threading support
+
+### 🔍 Manual Testing Discoveries
+
+**What Works:**
+- Basic folder listing and message counts are correct
+- Authentication and session management working
+- Real email data retrieval from authenticated accounts
+
+**What's Missing for Real Email Clients:**
+- UID-based operations (critical for Thunderbird)
+- Folder status commands (for folder statistics)  
+- Keep-alive commands (prevents connection drops)
+- Message metadata retrieval (for email listing)
 
 ### IMAP Protocol State Machine
 
