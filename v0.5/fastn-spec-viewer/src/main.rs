@@ -25,6 +25,14 @@ struct Cli {
     #[arg(long)]
     check: bool,
     
+    /// Auto-fix mode - update snapshots for failing tests
+    #[arg(long)]
+    autofix: bool,
+    
+    /// Auto-fix specific component (use with --autofix)
+    #[arg(long)]
+    autofix_component: Option<String>,
+    
     /// Debug mode (for development)
     #[arg(long)]
     debug: bool,
@@ -33,9 +41,8 @@ struct Cli {
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cli = Cli::parse();
     
-    if cli.check {
-        println!("🧪 Check mode - validating all specs against snapshots");
-        return handle_check_mode();
+    if cli.check || cli.autofix {
+        return handle_check_mode(cli.autofix, cli.autofix_component);
     }
     
     if cli.debug {
@@ -365,14 +372,19 @@ fn render_embedded_spec(component: &str, available_width: usize, available_heigh
     }
 }
 
-fn handle_check_mode() -> Result<(), Box<dyn std::error::Error>> {
-    println!("🧪 Checking all component specifications...\n");
+fn handle_check_mode(autofix: bool, autofix_component: Option<String>) -> Result<(), Box<dyn std::error::Error>> {
+    if autofix {
+        println!("🔧 Auto-fix mode - updating snapshots...\n");
+    } else {
+        println!("🧪 Checking all component specifications...\n");
+    }
     
     // Discover all .ftd files in specs directory
     let spec_files = discover_spec_files_from_disk()?;
     let mut total_tests = 0;
     let mut passed_tests = 0;
     let mut failed_tests = 0;
+    let mut fixed_tests = 0;
     
     for spec_file in spec_files {
         println!("Testing: {}", spec_file.display());
@@ -401,6 +413,13 @@ fn handle_check_mode() -> Result<(), Box<dyn std::error::Error>> {
                         println!("     Expected: {}", expected.replace('\n', " | "));
                         println!("     Actual:   {}", actual.replace('\n', " | "));
                     }
+                    
+                    // Auto-fix if requested
+                    if autofix && should_fix_component(&spec_file, &autofix_component) {
+                        std::fs::write(&rendered_path, &actual)?;
+                        fixed_tests += 1;
+                        println!("  🔧 {}ch: FIXED - updated snapshot", width);
+                    }
                 }
             } else {
                 println!("  ⚠️  {}ch: Missing .rendered-{} file", width, width);
@@ -415,12 +434,29 @@ fn handle_check_mode() -> Result<(), Box<dyn std::error::Error>> {
     println!("  ❌ Failed: {}", failed_tests);
     println!("  📝 Total:  {}", total_tests);
     
-    if failed_tests > 0 {
-        println!("\n💡 Tip: Use generate mode to update failing snapshots:");
-        println!("   fastn-spec-viewer --generate");
-        std::process::exit(1);
+    if autofix {
+        println!("📊 Auto-fix Results:");
+        println!("  ✅ Passed: {}", passed_tests);
+        println!("  🔧 Fixed: {}", fixed_tests); 
+        println!("  ❌ Failed: {}", failed_tests - fixed_tests);
+        println!("  📝 Total:  {}", total_tests);
+        
+        if fixed_tests > 0 {
+            println!("\n🔧 Updated {} snapshot(s)", fixed_tests);
+        }
     } else {
-        println!("\n🎉 All tests passed!");
+        println!("📊 Test Results:");
+        println!("  ✅ Passed: {}", passed_tests);
+        println!("  ❌ Failed: {}", failed_tests);
+        println!("  📝 Total:  {}", total_tests);
+        
+        if failed_tests > 0 {
+            println!("\n💡 Tip: Use auto-fix to update snapshots:");
+            println!("   fastn-spec-viewer --autofix");
+            std::process::exit(1);
+        } else {
+            println!("\n🎉 All tests passed!");
+        }
     }
     
     Ok(())
@@ -495,6 +531,22 @@ fn render_ftd_file_from_disk(
     }
     
     Ok("<!-- Unsupported component -->".to_string())
+}
+
+fn should_fix_component(spec_file: &std::path::Path, autofix_component: &Option<String>) -> bool {
+    match autofix_component {
+        Some(target_component) => {
+            // Check if this file matches the target component
+            if let Some(file_name) = spec_file.file_name() {
+                if let Some(name_str) = file_name.to_str() {
+                    return name_str.starts_with(target_component) || 
+                           spec_file.to_string_lossy().contains(target_component);
+                }
+            }
+            false
+        },
+        None => true, // Fix all components if no specific component specified
+    }
 }
 
 fn get_terminal_width() -> Option<usize> {
