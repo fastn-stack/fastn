@@ -80,6 +80,23 @@ impl ImapSession {
                     if parts.len() >= 4 {
                         let username = parts[2].trim_matches('"');  // Remove quotes
                         let password = parts[3].trim_matches('"');  // Remove quotes
+                        
+                        // Extract account ID and store in session
+                        let account_id = if username.contains('@') {
+                            let parts: Vec<&str> = username.split('@').collect();
+                            if parts.len() >= 2 {
+                                let domain_part = parts[1];
+                                domain_part.split('.').next().unwrap_or(domain_part)
+                            } else {
+                                username
+                            }
+                        } else {
+                            username
+                        };
+                        
+                        self.authenticated_account = Some(account_id.to_string());
+                        self.state = SessionState::Authenticated { account_id: account_id.to_string() };
+                        
                         Self::handle_login_static(&mut writer, tag, username, password).await?;
                     } else {
                         Self::send_response_static(&mut writer, &format!("{} BAD LOGIN command requires username and password", tag)).await?;
@@ -97,9 +114,13 @@ impl ImapSession {
                 "SELECT" => {
                     if parts.len() >= 3 {
                         let folder = parts[2].trim_matches('"');  // Folder name
-                        // For now, use hardcoded account ID (TODO: use authenticated account)
-                        let account_id = "egcc7k1l8pcf6jl4jk26nd1n9petab93vnie5h7pdkp2el0c55ng";
-                        Self::handle_select_with_account(&mut writer, tag, folder, account_id, &self.fastn_home).await?;
+                        
+                        // Use authenticated account (not hardcoded!)
+                        if let Some(account_id) = &self.authenticated_account {
+                            Self::handle_select_with_account(&mut writer, tag, folder, account_id, &self.fastn_home).await?;
+                        } else {
+                            Self::send_response_static(&mut writer, &format!("{} BAD Please authenticate first", tag)).await?;
+                        }
                     } else {
                         Self::send_response_static(&mut writer, &format!("{} BAD SELECT command requires folder name", tag)).await?;
                     }
@@ -108,8 +129,13 @@ impl ImapSession {
                     if parts.len() >= 4 {
                         let sequence = parts[2];  // Message sequence (e.g., "1", "1:5", "*")
                         let items = parts[3..].join(" ");  // FETCH items (e.g., "BODY[]", "ENVELOPE")
-                        let account_id = "egcc7k1l8pcf6jl4jk26nd1n9petab93vnie5h7pdkp2el0c55ng";
-                        Self::handle_fetch_with_account(&mut writer, tag, sequence, &items, account_id, &self.fastn_home).await?;
+                        
+                        // Use authenticated account (not hardcoded!)
+                        if let Some(account_id) = &self.authenticated_account {
+                            Self::handle_fetch_with_account(&mut writer, tag, sequence, &items, account_id, &self.fastn_home).await?;
+                        } else {
+                            Self::send_response_static(&mut writer, &format!("{} BAD Please authenticate first", tag)).await?;
+                        }
                     } else {
                         Self::send_response_static(&mut writer, &format!("{} BAD FETCH command requires sequence and items", tag)).await?;
                     }
