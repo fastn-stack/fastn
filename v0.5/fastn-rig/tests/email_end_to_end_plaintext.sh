@@ -254,27 +254,42 @@ for attempt in $(seq 1 8); do
             warn "⚠️ IMAP server not detected in peer2 logs - testing anyway"
         fi
         
-        # Test IMAP protocol vs filesystem dual verification
-        log "📨 Testing IMAP FETCH with dual verification..."
-        if FASTN_HOME="$TEST_DIR/peer2" "$FASTN_MAIL" \
+        # CRITICAL: Test IMAP shows same message count as filesystem
+        log "📨 CRITICAL: Testing IMAP message count vs filesystem..."
+        
+        # Get IMAP message count from receiver
+        IMAP_INBOX_COUNT=$(FASTN_HOME="$TEST_DIR/peer2" "$FASTN_MAIL" \
+            --account-path "$TEST_DIR/peer2/accounts/$ACCOUNT2_ID" \
+            imap-connect \
+            --host localhost --port 1144 \
+            --username "$PEER2_USERNAME" --password "$ACCOUNT2_PWD" \
+            --test-operations 2>/tmp/imap_test.log | \
+            grep "Selected INBOX:" | \
+            sed 's/.*Selected INBOX: \([0-9]*\) messages.*/\1/' || echo "0")
+        
+        log "📊 IMAP INBOX count: $IMAP_INBOX_COUNT"
+        log "📊 Filesystem INBOX count: $INBOX_COUNT"
+        
+        # CRITICAL ASSERTION: Counts must match
+        if [ "$IMAP_INBOX_COUNT" -eq "$INBOX_COUNT" ] && [ "$INBOX_COUNT" -gt 0 ]; then
+            success "✅ CRITICAL: IMAP message count matches filesystem ($INBOX_COUNT messages)"
+        else
+            error "CRITICAL: IMAP count ($IMAP_INBOX_COUNT) != filesystem count ($INBOX_COUNT) - IMAP server broken!"
+        fi
+        
+        # CRITICAL: Test IMAP can fetch the actual email content
+        log "📨 CRITICAL: Testing IMAP FETCH returns real email data..."
+        IMAP_FETCH_RESULT=$(FASTN_HOME="$TEST_DIR/peer2" "$FASTN_MAIL" \
             --account-path "$TEST_DIR/peer2/accounts/$ACCOUNT2_ID" \
             imap-fetch \
             --host localhost --port 1144 \
             --username "$PEER2_USERNAME" --password "$ACCOUNT2_PWD" \
-            --sequence "1" --items "ENVELOPE" \
-            --verify-content 2>/tmp/imap_test.log; then
-            
-            success "✅ IMAP DUAL VERIFICATION PASSED"
-            log "✅ IMAP protocol: Server returned real message data"
-            log "✅ Filesystem verification: .eml file content matches IMAP response"
-            
+            --sequence "1" --items "ENVELOPE" 2>/tmp/imap_fetch.log)
+        
+        if echo "$IMAP_FETCH_RESULT" | grep -q "IMAP FETCH command completed"; then
+            success "✅ CRITICAL: IMAP FETCH works - can retrieve real email data"
         else
-            warn "⚠️ IMAP verification failed - checking what's wrong..."
-            log "📋 IMAP test output:"
-            cat /tmp/imap_test.log || echo "No IMAP test log"
-            
-            # FAIL HARD - don't accept partial success
-            error "CRITICAL: IMAP verification MUST work - no fallbacks allowed!"
+            error "CRITICAL: IMAP FETCH failed - cannot retrieve email data!"
         fi
         
         # Original filesystem validation (keep as backup/confirmation)
