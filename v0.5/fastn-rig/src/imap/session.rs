@@ -140,6 +140,55 @@ impl ImapSession {
                         Self::send_response_static(&mut writer, &format!("{} BAD FETCH command requires sequence and items", tag)).await?;
                     }
                 }
+                "UID" => {
+                    if parts.len() >= 4 {
+                        let uid_command = parts[2].to_uppercase(); // FETCH, STORE, etc.
+                        
+                        match uid_command.as_str() {
+                            "FETCH" => {
+                                let sequence = parts[3];  // UID sequence (e.g., "1:*")
+                                let items = parts[4..].join(" ");  // FETCH items
+                                
+                                if let Some(account_id) = &self.authenticated_account {
+                                    Self::handle_uid_fetch(&mut writer, tag, sequence, &items, account_id, &self.fastn_home).await?;
+                                } else {
+                                    Self::send_response_static(&mut writer, &format!("{} BAD Please authenticate first", tag)).await?;
+                                }
+                            }
+                            _ => {
+                                Self::send_response_static(&mut writer, &format!("{} BAD UID command {} not implemented", tag, uid_command)).await?;
+                            }
+                        }
+                    } else {
+                        Self::send_response_static(&mut writer, &format!("{} BAD UID command requires subcommand and arguments", tag)).await?;
+                    }
+                }
+                "STATUS" => {
+                    if parts.len() >= 4 {
+                        let folder = parts[2].trim_matches('"');  // Folder name
+                        let items = parts[3];  // Status items (UIDNEXT MESSAGES UNSEEN RECENT)
+                        
+                        if let Some(account_id) = &self.authenticated_account {
+                            Self::handle_status(&mut writer, tag, folder, items, account_id, &self.fastn_home).await?;
+                        } else {
+                            Self::send_response_static(&mut writer, &format!("{} BAD Please authenticate first", tag)).await?;
+                        }
+                    } else {
+                        Self::send_response_static(&mut writer, &format!("{} BAD STATUS command requires folder and items", tag)).await?;
+                    }
+                }
+                "LSUB" => {
+                    // Legacy subscription command - return same as LIST for compatibility
+                    if parts.len() >= 4 {
+                        Self::handle_list_static(&mut writer, tag, "*").await?;
+                    } else {
+                        Self::send_response_static(&mut writer, &format!("{} BAD LSUB command requires reference and pattern", tag)).await?;
+                    }
+                }
+                "NOOP" => {
+                    Self::send_response_static(&mut writer, &format!("{} OK NOOP completed", tag)).await?;
+                    println!("✅ IMAP NOOP completed - connection kept alive");
+                }
                 "LOGOUT" => {
                     Self::handle_logout_static(&mut writer, tag).await?;
                     break;
@@ -402,6 +451,93 @@ impl ImapSession {
     ) -> Result<(), Box<dyn std::error::Error>> {
         // Legacy method - should not be used
         Self::send_response_static(writer, &format!("{} BAD Please authenticate first", tag)).await?;
+        Ok(())
+    }
+    
+    async fn handle_uid_fetch(
+        writer: &mut tokio::net::tcp::WriteHalf<'_>, 
+        tag: &str,
+        sequence: &str,
+        items: &str,
+        account_id: &str,
+        fastn_home: &std::path::Path,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        println!("📨 IMAP UID FETCH sequence: '{}', items: '{}' for account: {}", sequence, items, account_id);
+        
+        // Create account path and try to load Store
+        let account_path = fastn_home.join("accounts").join(account_id);
+        
+        match fastn_mail::Store::load(&account_path).await {
+            Ok(store) => {
+                // Get all UIDs in the selected folder (assuming INBOX for now)
+                match store.imap_search("INBOX", "ALL").await {
+                    Ok(uids) => {
+                        // Return FLAGS for all UIDs (Thunderbird's most common request)
+                        if items.contains("FLAGS") {
+                            for uid in &uids {
+                                // Return basic flags for each message
+                                Self::send_response_static(writer, &format!("* {} FETCH (UID {} FLAGS ())", uid, uid)).await?;
+                            }
+                        }
+                        
+                        Self::send_response_static(writer, &format!("{} OK UID FETCH completed", tag)).await?;
+                        println!("✅ IMAP UID FETCH completed - returned {} UIDs", uids.len());
+                    }
+                    Err(e) => {
+                        println!("❌ IMAP UID FETCH failed to search messages: {}", e);
+                        Self::send_response_static(writer, &format!("{} NO Search failed", tag)).await?;
+                    }
+                }
+            }
+            Err(e) => {
+                println!("⚠️ Failed to load Store for UID FETCH: {}", e);
+                Self::send_response_static(writer, &format!("{} NO Store access failed", tag)).await?;
+            }
+        }
+        
+        Ok(())
+    }
+    
+    async fn handle_status(
+        writer: &mut tokio::net::tcp::WriteHalf<'_>, 
+        tag: &str,
+        folder: &str,
+        _items: &str,  // Items like (UIDNEXT MESSAGES UNSEEN RECENT)
+        account_id: &str,
+        fastn_home: &std::path::Path,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        println!("📨 IMAP STATUS folder: {} for account: {}", folder, account_id);
+        
+        // Create account path and try to load Store
+        let account_path = fastn_home.join("accounts").join(account_id);
+        
+        match fastn_mail::Store::load(&account_path).await {
+            Ok(store) => {
+                match store.imap_select_folder(folder).await {
+                    Ok(folder_info) => {
+                        // Return STATUS response with folder statistics
+                        Self::send_response_static(writer, &format!(
+                            "* STATUS {} (MESSAGES {} UIDNEXT 2 UNSEEN {} RECENT {})", 
+                            folder, 
+                            folder_info.exists, 
+                            folder_info.unseen.unwrap_or(0), 
+                            folder_info.recent
+                        )).await?;
+                        Self::send_response_static(writer, &format!("{} OK STATUS completed", tag)).await?;
+                        println!("✅ IMAP STATUS completed for folder: {}", folder);
+                    }
+                    Err(e) => {
+                        println!("❌ IMAP STATUS failed for folder {}: {}", folder, e);
+                        Self::send_response_static(writer, &format!("{} NO Folder not found", tag)).await?;
+                    }
+                }
+            }
+            Err(e) => {
+                println!("⚠️ Failed to load Store for STATUS: {}", e);
+                Self::send_response_static(writer, &format!("{} NO Store access failed", tag)).await?;
+            }
+        }
+        
         Ok(())
     }
     
