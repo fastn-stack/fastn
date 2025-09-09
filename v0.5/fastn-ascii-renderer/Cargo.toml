@@ -10,5 +10,8 @@ homepage.workspace = true
 rust-version.workspace = true
 
 [dependencies]
+taffy = "0.5"
+ansi_term = "0.12"
+unicode-width = "0.2"
 
 [dev-dependencies]

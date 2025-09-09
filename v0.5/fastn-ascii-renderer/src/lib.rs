@@ -6,14 +6,24 @@
 //! This crate provides ASCII art rendering for FTD components, enabling
 //! terminal-friendly output and test-driven specification verification.
 
+// Placeholder usage for dependencies (will be used in later phases)
+use ansi_term as _;
+use unicode_width as _;
+
 mod canvas;
 mod layout;
 mod renderer;
 pub mod components;
+mod taffy_integration;
+mod ftd_types;
+mod css_mapper;
 
 pub use canvas::{Canvas, Position, Rect};
 pub use layout::{AsciiLayout, LayoutConstraints, ComponentLayout};
 pub use renderer::{AsciiRenderer, AsciiData, ComponentRenderer};
+pub use taffy_integration::TaffyLayoutEngine;
+pub use ftd_types::{SimpleFtdComponent, ComponentType, FtdSize};
+pub use css_mapper::FtdToCssMapper;
 
 /// Main entry point for ASCII rendering (placeholder for now)
 pub fn render_ascii(_compiled_doc: &str) -> String {
