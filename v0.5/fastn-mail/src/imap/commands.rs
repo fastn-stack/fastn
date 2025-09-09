@@ -33,7 +33,7 @@ pub async fn imap_connect_command(
 /// List mailboxes via IMAP with filesystem verification
 #[allow(unused_variables)]
 pub async fn imap_list_command(
-    store: &fastn_mail::Store,
+    store: Option<&fastn_mail::Store>,
     host: &str,
     port: u16,
     username: &str,
@@ -74,10 +74,11 @@ pub async fn imap_list_command(
         }
         
         if verify_folders {
-            println!("🔍 DUAL VERIFICATION: Checking against filesystem...");
-            
-            // Get actual folders from fastn-mail store
-            let store_folders = store.imap_list_folders().await?;
+            if let Some(store) = store {
+                println!("🔍 DUAL VERIFICATION: Checking against filesystem...");
+                
+                // Get actual folders from fastn-mail store
+                let store_folders = store.imap_list_folders().await?;
             
             println!("📂 Filesystem folders:");
             for folder in &store_folders {
