@@ -135,7 +135,7 @@ at the index `num` in the given mutable list `a` of same type as `v`.
 
 
 
--- ds.h2: `ftd.delete_at($a: <any> list, v: integer)`
+-- ds.h2: `ftd.delete_at($a: <any> list, num: integer)`
 
 This is a default `fastn` function that will delete the value from index `num`
 from the given mutable list `a`.
@@ -338,7 +338,7 @@ the system mode.
 
 
 
--- ds.h2: `copy-to-clipboard(text: string)`
+-- ds.h2: `copy-to-clipboard(a: string)`
 
 This is FScript as well as a standard `fastn` function. This function enables
 copy content in clipboard.
@@ -847,7 +847,7 @@ string list $a:
 string v:
 integer num:
 
-ftd.insert_at(a, num, v);
+ftd.insert_at(a, v, num);
 
 
 -- void set-dark():

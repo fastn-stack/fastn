@@ -252,7 +252,7 @@ This property offers various options for the content to adapt to the container, 
 
 -- ds.h2: `fetch-priority`
 
-Type: `optional` [`ftd.fetch-priority`](ftd/built-in-types/#ftd-fetch-priority)
+Type: `optional` [`ftd.image-fetch-priority`](ftd/built-in-types/#ftd-image-fetch-priority)
 
 Required: False
 

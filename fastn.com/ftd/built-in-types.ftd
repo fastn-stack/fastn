@@ -67,7 +67,7 @@ These types can be categorized into two main groups: **Primitive** and
   - [`ftd.type`](/built-in-types#ftd-type)
   - [`ftd.white-space`](/built-in-types#ftd-white-space)
   - [`ftd.type-data`](/built-in-types#ftd-type-data)
-  - [`ftd.fetch-priority`](/built-in-types#ftd-fetch-priority)
+  - [`ftd.image-fetch-priority`](/built-in-types#ftd-image-fetch-priority)
 
 
 
@@ -823,23 +823,23 @@ background image based on the specified x and y values.
 
 
 
--- ds.h2: `ftd.fetch-priority`
+-- ds.h2: `ftd.image-fetch-priority`
 
-The `ftd.fetch-priority` property is used to specify the priority of the image.
+The `ftd.image-fetch-priority` property is used to specify the priority of the image.
 
--- ds.code: `ftd.fetch-priority`
+-- ds.code: `ftd.image-fetch-priority`
 lang: ftd
 
-\-- or-type fetch-priority:
+\-- or-type image-fetch-priority:
 
 \-- constant string high: high
 \-- constant string low: low
 
-\-- end: fetch-priority
+\-- end: image-fetch-priority
 
 -- ds.markdown:
 
-As shown above, the `ftd.fetch-priority` has following variants
+As shown above, the `ftd.image-fetch-priority` has following variants
 
 - `high`: Fetch the image at a high priority relative to other images.
 
@@ -1118,10 +1118,10 @@ lang: ftd
 \-- integer px:
 \-- decimal percent:
 \-- string calc:
-\-- integer vh:
-\-- integer vw:
-\-- integer vmin:
-\-- integer vmax:
+\-- decimal vh:
+\-- decimal vw:
+\-- decimal vmin:
+\-- decimal vmax:
 \-- decimal dvh:
 \-- decimal lvh:
 \-- decimal svh:
@@ -2592,6 +2592,13 @@ lang: ftd
 \-- constant string email: email
 \-- constant string password: password
 \-- constant string url: url
+\-- constant string datetime: datetime
+\-- constant string date: date
+\-- constant string time: time
+\-- constant string month: month
+\-- constant string week: week
+\-- constant string color: color
+\-- constant string file: file
 
 \-- end: text-input-type
 
@@ -2612,6 +2619,20 @@ user if site is not secure.
 - **url**: A field for entering a URL. Looks like a `text` input, but has
 validation parameters and relevant keyboard in supporting browsers and devices
 with dynamic keyboards.
+
+- **datetime**: A field for entering a date and time with time zone.
+
+- **date**: A field for entering a date (year, month, and day).
+
+- **time**: A field for entering a time value.
+
+- **month**: A field for entering a month and year.
+
+- **week**: A field for entering a date consisting of a week-year number and a week number.
+
+- **color**: A field for specifying a color value.
+
+- **file**: A field that lets the user select one or more files.
 
 
 
@@ -3066,10 +3087,10 @@ style: italic
 - `portion <integer>`: It specifies how much the item will grow relative to the
    rest of the items inside the same container.
 - `percent <integer>`: This gives <integer>% space
-- `vh <integer>`: Relative to 1% of the height of the viewport
-- `vw <integer>`: Relative to 1% of the width of the viewport
-- `vmin <integer>`: Sets the value relative to the smaller dimension between the width and height of the viewport.
-- `vmax <integer>`: Sets the value relative to the larger dimension between the width and height of the viewport.
+- `vh <decimal>`: Relative to 1% of the height of the viewport
+- `vw <decimal>`: Relative to 1% of the width of the viewport
+- `vmin <decimal>`: Sets the value relative to the smaller dimension between the width and height of the viewport.
+- `vmax <decimal>`: Sets the value relative to the larger dimension between the width and height of the viewport.
 - `dvh <decimal>`:  Sets the value relative to the dynamic changing viewport.
 - `lvh <decimal>`:  Sets the value relative to the large view port height.
 - `svh <decimal>`:  Sets the value relative to the small view port height.

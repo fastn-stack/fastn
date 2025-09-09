@@ -1,0 +1,79 @@
+-- import: fastn.com/assets
+
+-- ds.page: `ftd.audio`
+
+`ftd.audio` is the kernel element used to embed audio content in `ftd`.
+
+-- ds.rendered: Usage
+
+	-- ds.rendered.input:
+	
+	\-- ftd.audio:
+	src: https://www.soundjay.com/misc/sounds/bell-ringing-05.wav
+	controls: true
+	
+	-- ds.rendered.output:
+	
+		-- ftd.audio:
+		src: https://www.soundjay.com/misc/sounds/bell-ringing-05.wav
+		controls: true
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.h1: Attributes
+
+`ftd.audio` accepts the below attributes as well all the [common
+attributes](ftd/common/).
+
+-- ds.h2: `src`
+
+Required: True
+
+The `src` attribute specifies the path to the audio to embed. This is the only
+required attribute.
+
+-- ds.code: Audio
+lang: ftd
+
+\-- ftd.audio:
+src: https://www.soundjay.com/misc/sounds/bell-ringing-05.wav
+
+-- ds.h2: `controls`
+
+Type: `Boolean`
+
+Default: `false`
+
+The `controls` attribute is a boolean attribute. When present, it specifies that
+audio controls should be displayed (such as a play/pause button etc).
+
+-- ds.code: Audio with controls
+lang: ftd
+
+\-- ftd.audio:
+src: https://www.soundjay.com/misc/sounds/bell-ringing-05.wav
+controls: true
+
+-- ds.h1: Common Use Cases
+
+-- ds.h2: Background Music
+
+-- ds.code: Background Audio
+lang: ftd
+
+\-- ftd.audio:
+src: https://example.com/background-music.mp3
+controls: false
+
+-- ds.h2: Interactive Audio
+
+-- ds.code: Interactive Audio
+lang: ftd
+
+\-- ftd.audio:
+src: https://example.com/interactive-audio.wav
+controls: true
+
+-- end: ds.page
