@@ -4,33 +4,42 @@
 
 ### **Two Different Rendering Contexts:**
 
-#### **1. Spec Testing (`spec-viewer`)**
+#### **1. Spec Testing (`fastn spec-viewer`)**
 **Purpose**: Component specification development and testing
+
+**Current State**: Static rendering only
 ```bash
-# Lightweight, single-file focused
-cargo run --bin spec-viewer render text-card.ftd --width=80
+# Static component rendering (current implementation)
+fastn spec-viewer render text-card.ftd --width=80
 ```
 
-**Characteristics:**
-- ✅ **Single .ftd files** - No package complexity
-- ✅ **Virtual package** - Framework creates minimal package context
-- ✅ **Source visibility** - Shows folder structure, source code
-- ✅ **Development tools** - Multi-width testing, comparison, generation
-- ✅ **Fast iteration** - Minimal overhead for component development
-
-#### **2. Full Application Rendering (`fastn render`)**  
-**Purpose**: Complete fastn applications with packages, DB, dynamic content
+**Future Runtime Integration**: Interactive spec testing
 ```bash
-# Full-featured application browser
-fastn render --url=myapp.ftd --id52=myapp.local
+# Interactive component testing (future with runtime)  
+fastn spec-viewer tui specs/ --interactive
+# → Click events, state changes, animations in component specs
 ```
 
-**Characteristics:**
-- ✅ **Complete packages** - Package management, dependencies
+**Evolution Path:**
+- ✅ **Phase 1** (Current): Static rendering, visual development
+- 🚧 **Phase 2** (Next): Add runtime for interactive component specs
+- 🚧 **Phase 3** (Future): Component behavior testing with events
+
+#### **2. Full Application Browser (`fastn render`)**
+**Purpose**: Complete fastn application browser with full runtime
+
+**Future Implementation**: Terminal browser with runtime from day one
+```bash
+# Full terminal browser (future implementation)
+fastn render --package=./myapp --url=/dashboard --id52=myapp.local
+```
+
+**Will Include Runtime From Start:**
+- ✅ **Runtime integration** - Built on spec-viewer runtime learnings
+- ✅ **Complete packages** - Package management, dependencies  
 - ✅ **Dynamic content** - Database connections, dynamic URLs
-- ✅ **Application context** - Real fastn applications
-- ✅ **Terminal browser** - Shows URL, id52 hostname, navigation
-- ✅ **Production rendering** - Full fastn runtime environment
+- ✅ **Interactive applications** - Full event handling, state management
+- ✅ **Terminal browser** - URL navigation, id52 hostnames
 
 ## Architecture Comparison
 
