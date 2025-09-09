@@ -1,0 +1,7 @@
+-- fastn.package: fastn-email-docs
+favicon: /-/fastn-email-docs/static/favicon.ico
+
+-- fastn.sitemap:
+
+# Email Documentation
+- fastn Email Setup: /fastn-email-setup/

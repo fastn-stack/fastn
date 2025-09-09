@@ -1,0 +1,98 @@
+-- import: fastn
+
+-- fastn.page: fastn Email Manual Testing Guide
+nav: $fastn.sitemap
+
+-- ftd.column:
+spacing.fixed.em: 1
+
+-- ftd.text: fastn Email Manual Testing Guide
+role: $inherited.types.heading-large
+text-align: center
+
+Quick setup for testing fastn P2P email with Thunderbird
+
+-- ftd.text: 🏗️ Setup Two fastn Rigs  
+role: $inherited.types.heading-medium
+
+**Terminal 1 (Alice's rig):**
+```bash
+mkdir -p ~/fastn-test/alice
+SKIP_KEYRING=true FASTN_HOME=~/fastn-test/alice cargo run --bin fastn-rig -- init
+# Save Alice's account ID and password
+
+SKIP_KEYRING=true FASTN_HOME=~/fastn-test/alice \
+  FASTN_SMTP_PORT=2525 FASTN_IMAP_PORT=1143 \
+  cargo run --bin fastn-rig -- run
+```
+
+**Terminal 2 (Bob's rig):**  
+```bash
+mkdir -p ~/fastn-test/bob
+SKIP_KEYRING=true FASTN_HOME=~/fastn-test/bob cargo run --bin fastn-rig -- init
+# Save Bob's account ID and password
+
+SKIP_KEYRING=true FASTN_HOME=~/fastn-test/bob \
+  FASTN_SMTP_PORT=2526 FASTN_IMAP_PORT=1144 \
+  cargo run --bin fastn-rig -- run
+```
+
+-- ftd.text: 📧 Setup Thunderbird (Alice → Port 1143)
+role: $inherited.types.heading-medium
+
+**Add Account:**
+- File → New → Existing Mail Account → Manual Setup
+
+**Settings:**
+```
+Email: default@{alice_account_id}.com
+Password: {alice_password}
+
+IMAP Server: localhost:1143 (No SSL)
+SMTP Server: localhost:2525 (No SSL)  
+Username: default@{alice_account_id}.com (both servers)
+```
+
+**Test:** Send email to yourself, should appear in INBOX within 10 seconds
+
+-- ftd.text: 📱 Setup Apple Mail (Bob → Port 1144)  
+role: $inherited.types.heading-medium
+
+**Add Account:**
+- Mail → Add Account → Other Mail Account
+
+**Settings:**
+```
+Email: default@{bob_account_id}.com  
+Password: {bob_password}
+
+IMAP Server: localhost:1144 (No SSL)
+SMTP Server: localhost:2526 (No SSL)
+Username: default@{bob_account_id}.com (both servers)  
+```
+
+**Test:** Send email to yourself
+
+-- ftd.text: 🔄 Test P2P Email
+role: $inherited.types.heading-medium
+
+**Test 1: Alice → Bob**
+```
+Thunderbird (Alice) → Send to: default@{bob_account_id}.com
+Apple Mail (Bob) → Check INBOX for delivery (under 10 seconds)
+```
+
+**Test 2: Bob → Alice**  
+```
+Apple Mail (Bob) → Send to: default@{alice_account_id}.com
+Thunderbird (Alice) → Check INBOX for delivery
+```
+
+**Success**: Both directions work with email delivery under 10 seconds
+
+-- ftd.text: 🎉 You're Done!
+role: $inherited.types.heading-medium
+
+If both tests work, you have successfully set up fastn P2P email with standard email clients. 
+
+Share this setup with friends to grow the fastn email network!
