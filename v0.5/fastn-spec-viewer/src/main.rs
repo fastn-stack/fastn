@@ -5,7 +5,7 @@ use std::path::PathBuf;
 #[command(name = "fastn-spec-viewer")]
 #[command(about = "fastn component specification browser")]
 struct Cli {
-    /// Specific component file to view (e.g., "text-with-border.ftd", "button.ftd") 
+    /// Specific component file to view (e.g., "text/with-border.ftd", "layout/column.ftd") 
     /// If omitted, launches interactive browser
     component: Option<String>,
     
@@ -52,13 +52,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 fn list_embedded_specs() {
     println!("📚 Embedded fastn Component Specifications:");
-    println!("  📄 text-basic.ftd");
-    println!("  📄 text-with-border.ftd");
-    println!("  📄 button.ftd");
-    println!("  📄 column.ftd");
-    println!("  📄 row.ftd");
-    println!("  📄 checkbox.ftd");
-    println!("  📄 text-input.ftd");
+    println!("  📁 text/");
+    println!("    📄 basic.ftd");
+    println!("    📄 with-border.ftd");
+    println!("  📁 layout/");
+    println!("    📄 column.ftd");
+    println!("    📄 row.ftd");
+    println!("  📁 forms/");
+    println!("    📄 checkbox.ftd");
+    println!("    📄 text-input.ftd");
+    println!("  📁 components/");
+    println!("    📄 button.ftd");
     println!("  ✅ 7 embedded specifications available");
 }
 
@@ -179,24 +183,24 @@ fn launch_three_panel_tui(preselected_spec: Option<String>) -> Result<(), Box<dy
 }
 
 fn render_embedded_spec(component: &str, _width: usize) -> Result<String, Box<dyn std::error::Error>> {
-    // Strip .ftd extension if present  
-    let component_name = component.strip_suffix(".ftd").unwrap_or(component);
+    // Strip .ftd extension if present for matching
+    let component_path = component.strip_suffix(".ftd").unwrap_or(component);
     
     // Use fastn-ascii-renderer for actual rendering
-    match component_name {
-        "text-basic" => Ok("Hello World".to_string()),
-        "text-with-border" => {
+    match component_path {
+        "text/basic" => Ok("Hello World".to_string()),
+        "text/with-border" => {
             let width = "Hello World".chars().count() + 6;
             let top = "┌".to_string() + &"─".repeat(width - 2) + "┐";
             let bottom = "└".to_string() + &"─".repeat(width - 2) + "┘";
             let padding = format!("│{}│", " ".repeat(width - 2));
             Ok(format!("{}\n{}\n│  \x1b[31mHello World\x1b[0m  │\n{}\n{}", top, padding, padding, bottom))
         },
-        "button" => Ok("┌─────────────┐\n│   Click Me   │\n└─────────────┘".to_string()),
-        "column" => Ok("Column 1\n\nColumn 2\n\nColumn 3".to_string()),
-        "row" => Ok("Row1    Row2    Row3".to_string()),
-        "checkbox" => Ok("☐ Unchecked\n☑ Checked".to_string()),
-        "text-input" => Ok("┌─────────────────────┐\n│ Enter text here...  │\n└─────────────────────┘".to_string()),
+        "components/button" => Ok("┌─────────────┐\n│   Click Me   │\n└─────────────┘".to_string()),
+        "layout/column" => Ok("Column 1\n\nColumn 2\n\nColumn 3".to_string()),
+        "layout/row" => Ok("Row1    Row2    Row3".to_string()),
+        "forms/checkbox" => Ok("☐ Unchecked\n☑ Checked".to_string()),
+        "forms/text-input" => Ok("┌─────────────────────┐\n│ Enter text here...  │\n└─────────────────────┘".to_string()),
         _ => Err(format!("Unknown component: {}. Use --debug to see available specs.", component).into())
     }
 }
