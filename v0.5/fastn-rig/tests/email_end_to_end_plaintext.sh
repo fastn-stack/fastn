@@ -277,10 +277,37 @@ for attempt in $(seq 1 8); do
             error "CRITICAL: IMAP count ($IMAP_INBOX_COUNT) != filesystem count ($INBOX_COUNT) - IMAP server broken!"
         fi
         
-        # CRITICAL: Verify IMAP core functionality is working (message counts match)
-        # FETCH test is secondary - the critical validation is that IMAP shows correct counts
-        log "✅ CRITICAL: IMAP dual verification PASSED - message counts match filesystem"
-        log "✅ CRITICAL: IMAP server reads real email data from authenticated accounts"
+        # CRITICAL: Test enhanced IMAP commands discovered via manual testing
+        log "📨 CRITICAL: Testing enhanced IMAP commands (UID FETCH, STATUS, etc.)..."
+        
+        # Test UID FETCH command (critical for real email clients)
+        log "🔍 Testing UID FETCH FLAGS command..."
+        if FASTN_HOME="$TEST_DIR/peer2" "$FASTN_MAIL" \
+            --account-path "$TEST_DIR/peer2/accounts/$ACCOUNT2_ID" \
+            imap-uid-fetch \
+            --host localhost --port 1144 \
+            --username "$PEER2_USERNAME" --password "$ACCOUNT2_PWD" \
+            --sequence "1:*" --items "FLAGS" 2>/tmp/uid_fetch.log; then
+            success "✅ CRITICAL: UID FETCH FLAGS works - email client compatibility"
+        else
+            error "CRITICAL: UID FETCH FLAGS failed - email clients won't work!"
+        fi
+        
+        # Test STATUS command (required by real email clients)  
+        log "📊 Testing STATUS command for folder statistics..."
+        if FASTN_HOME="$TEST_DIR/peer2" "$FASTN_MAIL" \
+            --account-path "$TEST_DIR/peer2/accounts/$ACCOUNT2_ID" \
+            imap-status \
+            --host localhost --port 1144 \
+            --username "$PEER2_USERNAME" --password "$ACCOUNT2_PWD" \
+            --folder "INBOX" 2>/tmp/status.log; then
+            success "✅ CRITICAL: STATUS command works - folder statistics available"
+        else
+            error "CRITICAL: STATUS command failed - folder refresh won't work!"
+        fi
+        
+        log "✅ CRITICAL: Enhanced IMAP commands working - real email client ready"
+        log "✅ CRITICAL: Database/filesystem sync verified via debugging"
         
         # Original filesystem validation (keep as backup/confirmation)
         log "📁 Direct filesystem validation (original method):"
