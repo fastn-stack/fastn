@@ -255,17 +255,183 @@ impl SpecViewerApp {
 }
 ```
 
-### **Enhanced Controls:**
+## CLI Usage Modes
+
+### **1. Interactive TUI Mode (Default)**
+```bash
+# Launch full TUI application
+cargo run --bin spec-viewer
+fastn spec-viewer
+
+# With specific directory
+cargo run --bin spec-viewer specs/components/
+fastn spec-viewer specs/components/
+```
+
+### **2. Single File Render Mode**
+```bash
+# Render specific file at specific width
+cargo run --bin spec-viewer -- render specs/basic/text.fastn --width=80
+fastn spec-viewer render specs/basic/text.fastn --width=80
+
+# Auto-detect terminal width
+cargo run --bin spec-viewer -- render specs/basic/text.fastn --auto-width
+fastn spec-viewer render specs/basic/text.fastn --auto-width
+
+# Responsive mode (re-render on terminal resize)
+cargo run --bin spec-viewer -- render specs/basic/text.fastn --follow
+fastn spec-viewer render specs/basic/text.fastn --follow
+```
+
+### **3. Testing/Validation Mode**
+```bash
+# Compare file against expected renders
+cargo run --bin spec-viewer -- test specs/basic/text.fastn
+fastn spec-viewer test specs/basic/text.fastn
+
+# Test all files in directory
+cargo run --bin spec-viewer -- test specs/basic/
+fastn spec-viewer test specs/basic/
+
+# Generate missing .rendered files
+cargo run --bin spec-viewer -- generate specs/basic/text.fastn --widths=40,80,120
+fastn spec-viewer generate specs/basic/text.fastn --widths=40,80,120
+```
+
+## Enhanced CLI Interface
+
+### **Command Structure:**
 ```rust
-impl SpecViewerApp {
-    fn handle_key_event(&mut self, key: KeyEvent) {
-        match key.code {
-            // Width switching
-            KeyCode::Left => self.previous_width(),
-            KeyCode::Right => self.next_width(),
-            KeyCode::Char('1') => self.set_width(40),
-            KeyCode::Char('2') => self.set_width(80),
-            KeyCode::Char('3') => self.set_width(120),
+#[derive(Parser)]
+#[command(name = "spec-viewer")]
+#[command(about = "fastn UI component specification viewer")]
+struct Cli {
+    /// Mode of operation
+    #[command(subcommand)]
+    command: Option<Commands>,
+    
+    /// Specs directory (for TUI mode)
+    #[arg(default_value = "specs")]
+    specs_dir: PathBuf,
+}
+
+#[derive(Parser)]
+enum Commands {
+    /// Launch interactive TUI (default when no subcommand)
+    Tui {
+        /// Default preview width
+        #[arg(short, long, default_value = "80")]
+        width: usize,
+    },
+    
+    /// Render single file to stdout
+    Render {
+        /// fastn file to render
+        file: PathBuf,
+        
+        /// Width in characters
+        #[arg(short, long)]
+        width: Option<usize>,
+        
+        /// Auto-detect terminal width
+        #[arg(long)]
+        auto_width: bool,
+        
+        /// Follow mode (re-render on resize)
+        #[arg(short, long)]
+        follow: bool,
+        
+        /// Save output to .rendered file
+        #[arg(short, long)]
+        save: bool,
+    },
+    
+    /// Test file against expected renders
+    Test {
+        /// File or directory to test
+        target: PathBuf,
+        
+        /// Test specific widths only
+        #[arg(long)]
+        widths: Option<String>,  // "40,80,120"
+        
+        /// Verbose output
+        #[arg(short, long)]
+        verbose: bool,
+    },
+    
+    /// Generate .rendered files
+    Generate {
+        /// fastn file to generate renders for
+        file: PathBuf,
+        
+        /// Widths to generate (default: 40,80,120)
+        #[arg(long, default_value = "40,80,120")]
+        widths: String,
+        
+        /// Force overwrite existing files
+        #[arg(short, long)]
+        force: bool,
+    },
+}
+```
+
+## Usage Examples
+
+### **Quick Rendering:**
+```bash
+# See how a component renders at 80 characters
+$ fastn spec-viewer render button.fastn --width=80
+┌──────────────────┐
+│                  │
+│   Click Here     │  
+│                  │
+└──────────────────┘
+
+# Auto-size to terminal  
+$ fastn spec-viewer render button.fastn --auto-width
+# Adapts to current terminal width
+
+# Follow terminal resize
+$ fastn spec-viewer render button.fastn --follow
+# Press Ctrl+C to exit, resizing terminal re-renders component
+```
+
+### **Testing Workflow:**
+```bash
+# Test component against saved expectations
+$ fastn spec-viewer test button.fastn
+✅ PASS 40ch: matches button.rendered-40
+✅ PASS 80ch: matches button.rendered-80  
+❌ FAIL 120ch: differs from button.rendered-120
+   Expected: single border
+   Actual:   double border
+
+# Test entire directory
+$ fastn spec-viewer test specs/components/
+Testing 23 files...
+✅ 20 passed
+❌ 3 failed
+⚠️  2 missing .rendered files
+
+# Generate missing renders
+$ fastn spec-viewer generate button.fastn
+Generated: button.rendered-40
+Generated: button.rendered-80
+Generated: button.rendered-120
+```
+
+### **Integration with External Editors:**
+```bash
+# Edit in VS Code, render in terminal
+$ code specs/layout/flexbox.fastn
+$ fastn spec-viewer render specs/layout/flexbox.fastn --follow
+
+# Edit → Save → Instant visual feedback in terminal
+# Resize terminal → See responsive behavior immediately
+```
+
+### **Enhanced Controls:**
             
             // Mode switching  
             KeyCode::Char('f') | KeyCode::Char('F') => self.toggle_fullscreen(),
