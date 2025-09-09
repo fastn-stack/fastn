@@ -33,7 +33,7 @@ impl FastnMailCommand {
     /// fastn-mail send-mail command with fluent parameter building
     pub fn send_mail(self) -> FastnMailSendBuilder {
         FastnMailSendBuilder {
-            base: self.args(&["send-mail"]),
+            base: self,  // Don't add send-mail yet - will be added in send() with account-path
             from: None,
             to: None,
             subject: "Test Email".to_string(),
@@ -153,6 +153,9 @@ impl FastnMailSendBuilder {
         let to = self.to.ok_or("To address not specified")?;
         let password = self.password.ok_or("Password not specified")?;
 
+        // Clear existing args and build in correct order: --account-path send-mail --smtp ...
+        self.base.args.clear();
+        
         // Add account path first (global flag must come before subcommand)
         if let Some(home_path) = &self.base.fastn_home {
             // Extract account ID from from address  
@@ -172,7 +175,7 @@ impl FastnMailSendBuilder {
         }
 
         self.base.args.extend([
-            "send-mail".to_string(),  // subcommand after account-path
+            "send-mail".to_string(),  // subcommand after global flags
             "--smtp".to_string(),
             self.smtp_port.to_string(),
             "--password".to_string(),
