@@ -17,6 +17,7 @@ pub mod components;
 mod taffy_integration;
 mod ftd_types;
 mod css_mapper;
+mod ansi_canvas;
 
 pub use canvas::{Canvas, Position, Rect};
 pub use layout::{AsciiLayout, LayoutConstraints, ComponentLayout};
@@ -24,6 +25,7 @@ pub use renderer::{AsciiRenderer, AsciiData, ComponentRenderer};
 pub use taffy_integration::TaffyLayoutEngine;
 pub use ftd_types::{SimpleFtdComponent, ComponentType, FtdSize};
 pub use css_mapper::FtdToCssMapper;
+pub use ansi_canvas::{AnsiCanvas, AnsiColor, CharPos, CharRect, CoordinateConverter, BorderStyle};
 
 /// Main entry point for ASCII rendering (placeholder for now)
 pub fn render_ascii(_compiled_doc: &str) -> String {
