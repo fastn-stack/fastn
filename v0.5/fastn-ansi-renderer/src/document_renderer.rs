@@ -68,12 +68,12 @@ impl DocumentRenderer {
         // Create canvas and render using CSS-calculated layout
         let mut canvas = AnsiCanvas::new(width, height);
         
-        // Add outer window border for extent visualization (╭─╮ style)
+        // Add outer window border using full requested dimensions
         let window_rect = crate::CharRect {
             x: 0,
             y: 0,
-            width: width.min(char_rect.width + 4), // Component + margin
-            height: height.min(char_rect.height + 4), // Component + margin  
+            width: width,  // Use full requested width
+            height: height, // Use full requested height
         };
         
         // Use double border style for outer window
