@@ -484,7 +484,15 @@ impl ImapSession {
                                     let size = message_data.len();
                                     let message_str = String::from_utf8_lossy(&message_data);
                                     
-                                    if items.contains("BODY.PEEK[HEADER.FIELDS") {
+                                    if items.contains("BODY[]") {
+                                        // Email client wants full message body (double-click)
+                                        Self::send_response_static(writer, &format!(
+                                            "* {} FETCH (UID {} RFC822.SIZE {} BODY[] {{{}}}",
+                                            uid, uid, size, size
+                                        )).await?;
+                                        Self::send_response_static(writer, &message_str).await?;
+                                        Self::send_response_static(writer, ")").await?;
+                                    } else if items.contains("BODY.PEEK[HEADER.FIELDS") {
                                         // Email client wants header fields - extract from email
                                         let headers = Self::extract_headers_for_body_peek(&message_str);
                                         let header_text = format!(
