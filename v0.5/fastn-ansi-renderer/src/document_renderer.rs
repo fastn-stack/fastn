@@ -68,7 +68,26 @@ impl DocumentRenderer {
         // Create canvas and render using CSS-calculated layout
         let mut canvas = AnsiCanvas::new(width, height);
         
-        Self::render_component_to_canvas(&document.root_component, char_rect, &mut canvas)?;
+        // Add outer window border for extent visualization (╭─╮ style)
+        let window_rect = crate::CharRect {
+            x: 0,
+            y: 0,
+            width: width.min(char_rect.width + 4), // Component + margin
+            height: height.min(char_rect.height + 4), // Component + margin  
+        };
+        
+        // Use double border style for outer window
+        canvas.draw_border(window_rect, crate::BorderStyle::Double, crate::AnsiColor::Default);
+        
+        // Offset component position to be inside window border
+        let component_rect = crate::CharRect {
+            x: char_rect.x + 2, // Inside window border + margin
+            y: char_rect.y + 2, // Inside window border + margin  
+            width: char_rect.width,
+            height: char_rect.height,
+        };
+        
+        Self::render_component_to_canvas(&document.root_component, component_rect, &mut canvas)?;
         
         Ok(Rendered::new(canvas.to_ansi_string()))
     }
@@ -89,7 +108,7 @@ impl DocumentRenderer {
         let component = &document.root_component;
         
         // Base height for text content
-        let mut height = 1; // Text line
+        let mut height: usize = 1; // Text line
         
         // Add border height
         if component.border_width.is_some() {
@@ -98,7 +117,7 @@ impl DocumentRenderer {
         
         // Add padding height  
         if let Some(padding_px) = component.padding {
-            height += (padding_px / 8) * 2; // Top + bottom padding (px to chars)
+            height += ((padding_px / 8) * 2) as usize; // Top + bottom padding (px to chars)
         }
         
         // Add outer window margin
