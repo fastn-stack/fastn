@@ -366,32 +366,59 @@ fn render_embedded_spec(component: &str, available_width: usize, available_heigh
     // Strip .ftd extension if present for matching
     let component_path = component.strip_suffix(".ftd").unwrap_or(component);
     
-    // Simple width-aware rendering for now (TODO: Use full Taffy integration)
+    // Use actual CSS rendering engine from fastn-ascii-renderer
+    use fastn_ascii_renderer::{
+        TaffyLayoutEngine, FtdToCssMapper, SimpleFtdComponent, FtdSize, ComponentType,
+        AnsiCanvas, CoordinateConverter, AnsiColor, BorderStyle
+    };
+    use taffy::{Size, AvailableSpace};
+    
+    // Create FTD component with real CSS properties
+    let ftd_component = create_ftd_component_from_spec(component_path)?;
+    
+    // Use CSS layout engine
+    let css_mapper = FtdToCssMapper::new();
+    let style = css_mapper.component_to_style(&ftd_component);
+    
+    // Layout calculation with Taffy
+    let mut layout_engine = TaffyLayoutEngine::new();
+    let node = if ftd_component.children.is_empty() {
+        layout_engine.create_text_node(&ftd_component.text.unwrap_or_default(), style)?
+    } else {
+        // TODO: Handle children properly with Taffy
+        layout_engine.create_text_node("Container", style)?
+    };
+    
+    layout_engine.set_root(node);
+    
+    // Available space from width/height parameters
+    let available_space = Size {
+        width: AvailableSpace::Definite((available_width * 8) as f32), // chars → px
+        height: AvailableSpace::Definite((available_height * 16) as f32), // lines → px
+    };
+    
+    layout_engine.compute_layout(available_space)?;
+    
+    // Get computed layout
+    let layout = layout_engine.get_layout(node)?;
+    
+    // Convert to character coordinates
+    let converter = CoordinateConverter::new();
+    let char_rect = converter.taffy_layout_to_char_rect(layout);
+    
+    // Create canvas and render using CSS-calculated layout
+    let mut canvas = AnsiCanvas::new(available_width, available_height);
+    
+    render_component_to_canvas(&ftd_component, char_rect, &mut canvas)?;
+    
+    let ansi_output = canvas.to_ansi_string();
+    Ok(DualRender::new(ansi_output))
+}
+
+fn create_ftd_component_from_spec(component_path: &str) -> Result<SimpleFtdComponent, Box<dyn std::error::Error>> {
+    // Create real FTD components with CSS properties instead of manual calculations
     match component_path {
-        "text/basic" => {
-            // Add outer window for basic text
-            let text = "Hello World";
-            let window_width = (available_width * 2 / 3).max(text.chars().count() + 4).min(available_width - 2);
-            
-            let window_top = "╭".to_string() + &"─".repeat(window_width - 2) + "╮";
-            let window_bottom = "╰".to_string() + &"─".repeat(window_width - 2) + "╯";
-            
-            let text_padding = (window_width.saturating_sub(2).saturating_sub(text.chars().count())) / 2;
-            let text_line = format!("│{}{}{}│", 
-                " ".repeat(text_padding),
-                text,
-                " ".repeat(window_width.saturating_sub(2).saturating_sub(text.chars().count() + text_padding))
-            );
-            
-            let mut result = Vec::new();
-            result.push(window_top);
-            result.push(format!("│{}│", " ".repeat(window_width - 2))); // Top padding
-            result.push(text_line);
-            result.push(format!("│{}│", " ".repeat(window_width - 2))); // Bottom padding
-            result.push(window_bottom);
-            
-            Ok(DualRender::new(result.join("\n")))
-        },
+        "text/basic" => Ok(SimpleFtdComponent::text("Hello World")),
         "text/with-border" => {
             // Make text responsive to width - demo of width awareness  
             let text = "Hello World";
