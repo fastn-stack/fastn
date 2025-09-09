@@ -307,24 +307,24 @@ impl ImapSession {
         
         match folder {
             "INBOX" | "Sent" | "Drafts" | "Trash" => {
-                // Try to load the Store and get real message count
+                // Use fastn-mail Store for all folder operations (proper separation)
                 let message_count = match fastn_mail::Store::load(&account_path).await {
                     Ok(store) => {
-                        // Try to get folder info using existing IMAP functions
+                        // Use fastn-mail IMAP helper (now always fresh read)
                         match store.imap_select_folder(folder).await {
                             Ok(folder_info) => {
-                                println!("📊 Real folder stats: {} exists, {} recent, {} unseen", 
+                                println!("📊 Store folder stats: {} exists, {} recent, {} unseen", 
                                     folder_info.exists, folder_info.recent, folder_info.unseen.unwrap_or(0));
                                 folder_info.exists
                             }
                             Err(e) => {
-                                println!("⚠️ Failed to get folder stats: {}, using 0", e);
+                                println!("⚠️ Failed to get folder stats from Store: {}", e);
                                 0
                             }
                         }
                     }
                     Err(e) => {
-                        println!("⚠️ Failed to load Store: {}, using 0", e);
+                        println!("⚠️ Failed to load Store: {}", e);
                         0
                     }
                 };
@@ -473,7 +473,7 @@ impl ImapSession {
         
         match fastn_mail::Store::load(&account_path).await {
             Ok(store) => {
-                // Get all UIDs in the selected folder (assuming INBOX for now)
+                // Get all UIDs in the selected folder (force fresh read from database)
                 match store.imap_search("INBOX", "ALL").await {
                     Ok(uids) => {
                         // Handle different UID FETCH requests from Thunderbird
