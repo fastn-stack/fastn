@@ -1,23 +1,31 @@
-# fastn-ascii-renderer
+# fastn-ansi-renderer
 
-ASCII rendering engine for fastn UI components with CSS-accurate layout calculations.
+ANSI terminal rendering engine for fastn documents with CSS-accurate layout calculations.
 
 ## Features
 
 - **CSS Layout Engine** - Taffy integration for flexbox, grid, and block layout
-- **Unicode Box Drawing** - Professional ASCII art with borders and styling  
-- **ANSI Color Support** - Terminal colors for text and backgrounds
-- **Component Architecture** - Extensible renderer system for all fastn components
-- **Test-Driven Development** - Comprehensive test suite with .ftd/.rendered validation
+- **ANSI Terminal Graphics** - Unicode box drawing with terminal colors and escape codes
+- **Structured Output** - Rendered type with multiple format options (.to_ansi(), .to_plain())
+- **Document Architecture** - Clean API for rendering complete fastn documents
+- **Test-Driven Development** - Comprehensive test suite with CSS layout validation
 
-## Usage
+## Clean API
 
 ```rust
-use fastn_ascii_renderer::{TaffyLayoutEngine, AnsiCanvas, FtdToCssMapper};
+use fastn_ansi_renderer::DocumentRenderer;
 
-// Render fastn components to ASCII
-let output = render_fastn_component(&component);
-println!("{}", output);
+// Render fastn document to structured output
+let rendered = DocumentRenderer::render_from_source(
+    "-- ftd.text: Hello World\nborder-width.px: 1\npadding.px: 8",
+    80,   // width in characters
+    128   // height in lines
+)?;
+
+// Choose output format
+println!("{}", rendered.to_ansi());        // Terminal with ANSI colors
+println!("{}", rendered.to_plain());       // Plain ASCII for editors  
+save_file(rendered.to_side_by_side());     // Spec file format
 ```
 
 ## Architecture
