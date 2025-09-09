@@ -1,3 +1,9 @@
+# ANSI Version (for terminal display)
+┌───────────┐
+│ Click Me  │
+└───────────┘
+
+# Plain ASCII Version (for editor viewing)
 ┌───────────┐
 │ Click Me  │
 └───────────┘
