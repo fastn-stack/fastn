@@ -97,7 +97,7 @@ fn handle_stdout_render(spec_path: String, width: Option<usize>, height: Option<
     });
     
     let output = render_embedded_spec(&spec_path, render_width, render_height)?;
-    print!("{}", output);
+    print!("{}", output.ansi_version);
     Ok(())
 }
 
@@ -181,7 +181,9 @@ fn launch_three_panel_tui(preselected_spec: Option<String>) -> Result<(), Box<dy
             f.render_widget(source, chunks[1]);
 
             // Preview panel  
-            let preview_content = render_embedded_spec(specs[selected], 80, 128).unwrap_or_else(|e| e.to_string());
+            let preview_content = render_embedded_spec(specs[selected], 80, 128)
+                .map(|dual| dual.ansi_version)
+                .unwrap_or_else(|e| e.to_string());
             let preview = Paragraph::new(preview_content)
                 .block(Block::default().borders(Borders::ALL).title("Preview @ 80ch"));
             f.render_widget(preview, chunks[2]);
@@ -269,7 +271,49 @@ fn get_source_for_spec(spec_path: &str) -> String {
     }
 }
 
-fn render_embedded_spec(component: &str, available_width: usize, available_height: usize) -> Result<String, Box<dyn std::error::Error>> {
+#[derive(Debug)]
+struct DualRender {
+    ansi_version: String,
+    plain_version: String,
+    combined: String,
+}
+
+impl DualRender {
+    fn new(ansi_output: String) -> Self {
+        // Strip ANSI escape codes for plain version
+        let plain_version = strip_ansi_codes(&ansi_output);
+        
+        // Create combined format
+        let combined = format!("# ANSI Version (for terminal display)\n{}\n\n# Plain ASCII Version (for editor viewing)\n{}", 
+            ansi_output, plain_version);
+        
+        Self {
+            ansi_version: ansi_output,
+            plain_version,
+            combined,
+        }
+    }
+}
+
+fn strip_ansi_codes(text: &str) -> String {
+    // Simple ANSI escape code removal
+    let mut result = String::new();
+    let mut in_escape = false;
+    
+    for ch in text.chars() {
+        if ch == '\x1b' {
+            in_escape = true;
+        } else if in_escape && ch == 'm' {
+            in_escape = false;
+        } else if !in_escape {
+            result.push(ch);
+        }
+    }
+    
+    result
+}
+
+fn render_embedded_spec(component: &str, available_width: usize, available_height: usize) -> Result<DualRender, Box<dyn std::error::Error>> {
     // Strip .ftd extension if present for matching
     let component_path = component.strip_suffix(".ftd").unwrap_or(component);
     
@@ -297,7 +341,7 @@ fn render_embedded_spec(component: &str, available_width: usize, available_heigh
             result.push(format!("│{}│", " ".repeat(window_width - 2))); // Bottom padding
             result.push(window_bottom);
             
-            Ok(result.join("\n"))
+            Ok(DualRender::new(result.join("\n")))
         },
         "text/with-border" => {
             // Make text responsive to width - demo of width awareness  
@@ -341,7 +385,7 @@ fn render_embedded_spec(component: &str, available_width: usize, available_heigh
             result.push(format!("│{}│", " ".repeat(window_width - 2))); // Bottom padding
             result.push(window_bottom);
             
-            Ok(result.join("\n"))
+            Ok(DualRender::new(result.join("\n")))
         },
         "components/button" => {
             // Width-responsive button
@@ -364,7 +408,7 @@ fn render_embedded_spec(component: &str, available_width: usize, available_heigh
             );
             let bottom = "└".to_string() + &"─".repeat(content_width) + "┘";
             
-            Ok(format!("{}\n{}\n{}", top, middle, bottom))
+            Ok(DualRender::new(format!("{}\n{}\n{}", top, middle, bottom)))
         },
         "forms/text-input" => {
             // Width-responsive text input
@@ -379,18 +423,18 @@ fn render_embedded_spec(component: &str, available_width: usize, available_heigh
             );
             let bottom = "└".to_string() + &"─".repeat(content_width) + "┘";
             
-            Ok(format!("{}\n{}\n{}", top, middle, bottom))
+            Ok(DualRender::new(format!("{}\n{}\n{}", top, middle, bottom)))
         },
-        "layout/column" => Ok("Column 1\n\nColumn 2\n\nColumn 3".to_string()),
+        "layout/column" => Ok(DualRender::new("Column 1\n\nColumn 2\n\nColumn 3".to_string())),
         "layout/row" => {
             // Width-responsive row
             if available_width >= 30 {
-                Ok("Item1    Item2    Item3".to_string())
+                Ok(DualRender::new("Item1    Item2    Item3".to_string()))
             } else {
-                Ok("Item1\nItem2\nItem3".to_string()) // Stack when narrow
+                Ok(DualRender::new("Item1\nItem2\nItem3".to_string())) // Stack when narrow
             }
         },
-        "forms/checkbox" => Ok("☐ Unchecked\n☑ Checked".to_string()),
+        "forms/checkbox" => Ok(DualRender::new("☐ Unchecked\n☑ Checked".to_string())),
         _ => Err(format!("Unknown component: {}. Use --debug to see available specs.", component).into())
     }
 }
@@ -429,7 +473,7 @@ fn handle_check_mode(autofix: bool, autofix_component: Option<String>) -> Result
                 let component_path = file_path_str
                     .trim_start_matches("specs/")
                     .trim_end_matches(".ftd");
-                let actual = render_embedded_spec(component_path, width, height)?;
+                let actual = render_embedded_spec(component_path, width, height)?.combined;
                 
                 if expected.trim() == actual.trim() {
                     passed_tests += 1;
@@ -459,8 +503,8 @@ fn handle_check_mode(autofix: bool, autofix_component: Option<String>) -> Result
                         .trim_start_matches("specs/")
                         .trim_end_matches(".ftd");
                     
-                    if let Ok(actual) = render_embedded_spec(component_path, width, height) {
-                        std::fs::write(&rendered_path, &actual)?;
+                    if let Ok(dual_render) = render_embedded_spec(component_path, width, height) {
+                        std::fs::write(&rendered_path, &dual_render.combined)?;
                         fixed_tests += 1;
                         println!("  🔧 {}ch: CREATED - generated missing snapshot", width);
                     }

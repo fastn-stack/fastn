@@ -1,3 +1,11 @@
+# ANSI Version (for terminal display)
+╭────────────────────────────╮
+│                            │
+│        Hello World         │
+│                            │
+╰────────────────────────────╯
+
+# Plain ASCII Version (for editor viewing)
 ╭────────────────────────────╮
 │                            │
 │        Hello World         │
