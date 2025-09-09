@@ -97,8 +97,8 @@ fn launch_three_panel_tui(preselected_spec: Option<String>) -> Result<(), Box<dy
     use ratatui::{
         backend::CrosstermBackend, 
         Terminal,
-        layout::{Constraint, Direction, Layout},
-        widgets::{Block, Borders, List, Paragraph, ListItem},
+        layout::{Constraint, Direction, Layout, Rect},
+        widgets::{Block, Borders, List, Paragraph, ListItem, Clear},
         style::{Color, Style},
     };
 
@@ -111,9 +111,13 @@ fn launch_three_panel_tui(preselected_spec: Option<String>) -> Result<(), Box<dy
 
     // Simple three-panel demo for now
     let mut should_quit = false;
-    let specs = vec!["text/basic", "text/with-border", "layout/column", "forms/checkbox"];
+    let mut show_help = false;
+    let specs = vec!["text/basic.ftd", "text/with-border.ftd", "layout/column.ftd", "forms/checkbox.ftd"];
     let mut selected = preselected_spec
-        .and_then(|path| specs.iter().position(|&s| s == path))
+        .and_then(|path| {
+            let path_with_ext = if path.ends_with(".ftd") { path } else { format!("{}.ftd", path) };
+            specs.iter().position(|&s| s == path_with_ext)
+        })
         .unwrap_or(0);
 
     while !should_quit {
@@ -145,8 +149,8 @@ fn launch_three_panel_tui(preselected_spec: Option<String>) -> Result<(), Box<dy
                 .block(Block::default().borders(Borders::ALL).title("Specs"));
             f.render_widget(list, chunks[0]);
 
-            // Source panel
-            let source_content = format!("-- ftd.text: Hello World\nborder-width.px: 1\npadding.px: 8\ncolor: red");
+            // Source panel - update based on selected file
+            let source_content = get_source_for_spec(specs[selected]);
             let source = Paragraph::new(source_content)
                 .block(Block::default().borders(Borders::ALL).title("Source"));
             f.render_widget(source, chunks[1]);
@@ -156,6 +160,22 @@ fn launch_three_panel_tui(preselected_spec: Option<String>) -> Result<(), Box<dy
             let preview = Paragraph::new(preview_content)
                 .block(Block::default().borders(Borders::ALL).title("Preview @ 80ch"));
             f.render_widget(preview, chunks[2]);
+            
+            // Help dialog overlay
+            if show_help {
+                let help_text = "fastn spec-viewer Help\n\n\
+                ↑/↓    Navigate files\n\
+                1/2/3  Switch width (40/80/120ch)\n\
+                ?/h    Toggle this help\n\
+                q/Esc  Quit\n\n\
+                Press ? to close this dialog";
+                
+                let help_area = centered_rect(50, 50, f.area());
+                f.render_widget(Clear, help_area);
+                let help_dialog = Paragraph::new(help_text)
+                    .block(Block::default().borders(Borders::ALL).title("Help"));
+                f.render_widget(help_dialog, help_area);
+            }
         })?;
 
         if let Event::Key(key) = event::read()? {
@@ -169,6 +189,9 @@ fn launch_three_panel_tui(preselected_spec: Option<String>) -> Result<(), Box<dy
                 KeyCode::Char('q') | KeyCode::Esc => {
                     should_quit = true;
                 },
+                KeyCode::Char('?') | KeyCode::Char('h') => {
+                    show_help = !show_help;
+                },
                 _ => {}
             }
         }
@@ -180,6 +203,18 @@ fn launch_three_panel_tui(preselected_spec: Option<String>) -> Result<(), Box<dy
     terminal.show_cursor()?;
 
     Ok(())
+}
+
+fn get_source_for_spec(spec_path: &str) -> String {
+    let component_path = spec_path.strip_suffix(".ftd").unwrap_or(spec_path);
+    
+    match component_path {
+        "text/basic" => "-- ftd.text: Hello World".to_string(),
+        "text/with-border" => "-- ftd.text: Hello World\nborder-width.px: 1\npadding.px: 8\ncolor: red".to_string(),
+        "layout/column" => "-- ftd.column:\nspacing.fixed.px: 16\n\n    -- ftd.text: Column 1\n    -- ftd.text: Column 2\n    -- ftd.text: Column 3\n\n-- end: ftd.column".to_string(),
+        "forms/checkbox" => "-- ftd.checkbox:\nchecked: false\n\n-- ftd.checkbox:\nchecked: true".to_string(),
+        _ => "-- Unknown component".to_string()
+    }
 }
 
 fn render_embedded_spec(component: &str, _width: usize) -> Result<String, Box<dyn std::error::Error>> {
@@ -207,4 +242,26 @@ fn render_embedded_spec(component: &str, _width: usize) -> Result<String, Box<dy
 
 fn get_terminal_width() -> Option<usize> {
     crossterm::terminal::size().ok().map(|(cols, _)| cols as usize)
+}
+
+fn centered_rect(percent_x: u16, percent_y: u16, r: Rect) -> Rect {
+    use ratatui::layout::{Constraint, Direction, Layout, Margin};
+    
+    let popup_layout = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints([
+            Constraint::Percentage((100 - percent_y) / 2),
+            Constraint::Percentage(percent_y),
+            Constraint::Percentage((100 - percent_y) / 2),
+        ])
+        .split(r);
+
+    Layout::default()
+        .direction(Direction::Horizontal)
+        .constraints([
+            Constraint::Percentage((100 - percent_x) / 2),
+            Constraint::Percentage(percent_x),
+            Constraint::Percentage((100 - percent_x) / 2),
+        ])
+        .split(popup_layout[1])[1]
 }
