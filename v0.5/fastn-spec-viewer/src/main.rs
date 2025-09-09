@@ -283,16 +283,62 @@ impl DualRender {
         // Strip ANSI escape codes for plain version
         let plain_version = strip_ansi_codes(&ansi_output);
         
-        // Create combined format
-        let combined = format!("# ANSI Version (for terminal display)\n{}\n\n# Plain ASCII Version (for editor viewing)\n{}", 
-            ansi_output, plain_version);
+        // Create side-by-side format with plain version first
+        let side_by_side = create_side_by_side(&plain_version, &ansi_output);
         
         Self {
             ansi_version: ansi_output,
-            plain_version,
-            combined,
+            plain_version: plain_version.clone(),
+            combined: side_by_side,
         }
     }
+}
+
+fn create_side_by_side(plain: &str, ansi: &str) -> String {
+    let plain_lines: Vec<&str> = plain.lines().collect();
+    let ansi_lines: Vec<&str> = ansi.lines().collect();
+    let max_lines = plain_lines.len().max(ansi_lines.len());
+    
+    // Calculate width of plain version for alignment
+    let plain_width = plain_lines.iter()
+        .map(|line| line.chars().count())
+        .max()
+        .unwrap_or(0);
+    
+    let mut result = Vec::new();
+    
+    for i in 0..max_lines {
+        let plain_line = plain_lines.get(i).unwrap_or(&"");
+        let ansi_line = ansi_lines.get(i).unwrap_or(&"");
+        
+        // Pad plain line to consistent width + 10 spaces separation
+        let padding_needed = plain_width.saturating_sub(plain_line.chars().count());
+        let combined_line = format!("{}{}          {}", 
+            plain_line, 
+            " ".repeat(padding_needed),
+            ansi_line
+        );
+        
+        result.push(combined_line);
+    }
+    
+    result.join("\n")
+}
+
+fn generate_all_dimensions(component_path: &str) -> Result<String, Box<dyn std::error::Error>> {
+    let mut all_sections = Vec::new();
+    
+    // Generate all three dimensions
+    for (width, height) in [(40, 64), (80, 128), (120, 192)] {
+        let dual_render = render_embedded_spec(component_path, width, height)?;
+        
+        // Create section with dimension header and side-by-side content  
+        let section = format!("# {}x{}\n\n{}\n\n\n\n", 
+            width, height, dual_render.combined);
+        all_sections.push(section);
+    }
+    
+    Ok(all_sections.join(""))
 }
 
 fn strip_ansi_codes(text: &str) -> String {
@@ -456,59 +502,52 @@ fn handle_check_mode(autofix: bool, autofix_component: Option<String>) -> Result
     for spec_file in spec_files {
         println!("Testing: {}", spec_file.display());
         
-        // Test at different widths with portrait heights (height = width × 1.6)
-        for (width, height) in [(40, 64), (80, 128), (120, 192)] {
-            total_tests += 1;
-            
-            // Check if rendered file exists
-            let base = spec_file.with_extension("");
-            let rendered_file = format!("{}.rendered-{}x{}", base.display(), width, height);
-            let rendered_path = std::path::PathBuf::from(&rendered_file);
+        total_tests += 1;
+        
+        // Single .rendered file contains all dimensions
+        let base = spec_file.with_extension("");
+        let rendered_file = format!("{}.rendered", base.display());
+        let rendered_path = std::path::PathBuf::from(&rendered_file);
             
             if rendered_path.exists() {
                 // Compare actual vs expected
                 let expected = std::fs::read_to_string(&rendered_path)?;
-                // Use same rendering logic as stdout mode for consistency
+                // Generate all dimensions for this component
                 let file_path_str = spec_file.to_string_lossy();
                 let component_path = file_path_str
                     .trim_start_matches("specs/")
                     .trim_end_matches(".ftd");
-                let actual = render_embedded_spec(component_path, width, height)?.combined;
+                let actual = generate_all_dimensions(component_path)?;
                 
-                if expected.trim() == actual.trim() {
-                    passed_tests += 1;
-                    println!("  ✅ {}ch: PASS", width);
-                } else {
-                    failed_tests += 1;
-                    println!("  ❌ {}ch: FAIL", width);
-                    if expected.lines().count() <= 3 && actual.lines().count() <= 3 {
-                        println!("     Expected: {}", expected.replace('\n', " | "));
-                        println!("     Actual:   {}", actual.replace('\n', " | "));
-                    }
-                    
-                    // Auto-fix if requested
-                    if autofix && should_fix_component(&spec_file, &autofix_component) {
-                        std::fs::write(&rendered_path, &actual)?;
-                        fixed_tests += 1;
-                        println!("  🔧 {}ch: FIXED - updated snapshot", width);
-                    }
-                }
+            if expected.trim() == actual.trim() {
+                passed_tests += 1;
+                println!("  ✅ All dimensions: PASS");
             } else {
-                println!("  ⚠️  {}ch: Missing .rendered-{}x{} file", width, width, height);
+                failed_tests += 1;
+                println!("  ❌ All dimensions: FAIL");
+                println!("     Snapshots differ from current rendering");
                 
-                // Auto-create missing files if in autofix mode
+                // Auto-fix if requested
                 if autofix && should_fix_component(&spec_file, &autofix_component) {
-                    let file_path_str = spec_file.to_string_lossy();
-                    let component_path = file_path_str
-                        .trim_start_matches("specs/")
-                        .trim_end_matches(".ftd");
-                    
-                    if let Ok(dual_render) = render_embedded_spec(component_path, width, height) {
-                        std::fs::write(&rendered_path, &dual_render.combined)?;
-                        fixed_tests += 1;
-                        println!("  🔧 {}ch: CREATED - generated missing snapshot", width);
-                    }
+                    std::fs::write(&rendered_path, &actual)?;
+                    fixed_tests += 1;
+                    println!("  🔧 All dimensions: FIXED - updated snapshot");
                 }
+            }
+        } else {
+            println!("  ⚠️  Missing .rendered file");
+            
+            // Auto-create missing file if in autofix mode
+            if autofix && should_fix_component(&spec_file, &autofix_component) {
+                let file_path_str = spec_file.to_string_lossy();
+                let component_path = file_path_str
+                    .trim_start_matches("specs/")
+                    .trim_end_matches(".ftd");
+                
+                let all_dimensions = generate_all_dimensions(component_path)?;
+                std::fs::write(&rendered_path, &all_dimensions)?;
+                fixed_tests += 1;
+                println!("  🔧 CREATED - generated complete rendered file");
             }
         }
         println!();
