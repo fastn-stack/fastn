@@ -1,0 +1,31 @@
+[package]
+name = "fastn-spec-viewer"
+version = "0.1.0"
+authors.workspace = true
+edition.workspace = true
+description = "Interactive specification browser for fastn UI components"
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+# Core rendering
+fastn-ascii-renderer = { path = "../fastn-ascii-renderer" }
+
+# TUI framework
+ratatui = "0.28"
+crossterm = "0.27"
+
+# File operations
+notify = "6.1"
+walkdir = "2.4"
+
+# Syntax highlighting and utilities
+syntect = "5.1" 
+once_cell = "1.19"
+clap = { version = "4", features = ["derive"] }
+
+[[bin]]
+name = "fastn-spec-viewer"
+path = "src/main.rs"

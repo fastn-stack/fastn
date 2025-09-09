@@ -1757,15 +1757,8 @@ name = "fastn-ascii-renderer"
 version = "0.1.0"
 dependencies = [
  "ansi_term",
- "clap",
- "crossterm 0.27.0",
- "notify",
- "once_cell",
- "ratatui",
- "syntect",
  "taffy",
  "unicode-width 0.2.1",
- "walkdir",
 ]
 
 [[package]]
@@ -2100,6 +2093,20 @@ dependencies = [
  "serde_json",
  "string-interner",
  "tracing",
+]
+
+[[package]]
+name = "fastn-spec-viewer"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "crossterm 0.27.0",
+ "fastn-ascii-renderer",
+ "notify",
+ "once_cell",
+ "ratatui",
+ "syntect",
+ "walkdir",
 ]
 
 [[package]]

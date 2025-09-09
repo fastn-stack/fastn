@@ -15,21 +15,8 @@ taffy = "0.5"
 ansi_term = "0.12"
 unicode-width = "0.2"
 
-# Spec viewer TUI (optional)
-ratatui = { version = "0.28", optional = true }
-crossterm = { version = "0.27", optional = true }
-notify = { version = "6.1", optional = true }
-walkdir = { version = "2.4", optional = true }
-syntect = { version = "5.1", optional = true }
-once_cell = { version = "1.19", optional = true }
-clap = { version = "4", features = ["derive"], optional = true }
+# Core ASCII rendering only - TUI moved to fastn-spec-viewer crate
 
-[features]
-default = ["spec-viewer"]
-spec-viewer = ["ratatui", "crossterm", "notify", "syntect", "walkdir", "once_cell", "clap"]
-
-[[bin]]
-name = "spec-viewer"
-path = "src/bin/spec_viewer.rs"
+# Spec viewer moved to separate fastn-spec-viewer crate
 
 [dev-dependencies]
