@@ -1,5 +1,5 @@
 use clap::Parser;
-use std::path::PathBuf;
+use ratatui::layout::Rect;
 
 #[derive(Parser)]
 #[command(name = "fastn-spec-viewer")]
@@ -97,7 +97,7 @@ fn launch_three_panel_tui(preselected_spec: Option<String>) -> Result<(), Box<dy
     use ratatui::{
         backend::CrosstermBackend, 
         Terminal,
-        layout::{Constraint, Direction, Layout, Rect},
+        layout::{Constraint, Direction, Layout},
         widgets::{Block, Borders, List, Paragraph, ListItem, Clear},
         style::{Color, Style},
     };
@@ -163,17 +163,44 @@ fn launch_three_panel_tui(preselected_spec: Option<String>) -> Result<(), Box<dy
             
             // Help dialog overlay
             if show_help {
-                let help_text = "fastn spec-viewer Help\n\n\
-                ↑/↓    Navigate files\n\
-                1/2/3  Switch width (40/80/120ch)\n\
-                ?/h    Toggle this help\n\
-                q/Esc  Quit\n\n\
-                Press ? to close this dialog";
+                let help_text = "📚 fastn Component Specification Browser\n\n\
+🗂️  Navigation:\n\
+  ↑/↓       Navigate component list\n\
+  Enter     Select component (same as arrow selection)\n\
+  PgUp/PgDn Scroll long previews (when content overflows)\n\n\
+🖥️  Preview Controls:\n\
+  1         40-character preview width\n\
+  2         80-character preview width (default)\n\
+  3         120-character preview width\n\
+  ←/→       Cycle between available widths\n\
+  R         Toggle responsive mode (follows terminal resize)\n\n\
+🎛️  View Controls:\n\
+  F         Toggle fullscreen preview (hide tree + source)\n\
+  T         Toggle file tree panel\n\
+  S         Toggle source panel\n\
+  Tab       Cycle panel focus for keyboard scrolling\n\n\
+💾 File Operations:\n\
+  Ctrl+S    Save current preview as .rendered file\n\
+  Ctrl+R    Regenerate preview (refresh)\n\n\
+ℹ️  Information:\n\
+  ?         Toggle this help dialog\n\
+  I         Show component info (properties, usage)\n\
+  D         Toggle debug mode (show layout calculations)\n\n\
+🚪 Exit:\n\
+  Q         Quit application\n\
+  Esc       Quit application\n\
+  Ctrl+C    Force quit\n\n\
+💡 Tips:\n\
+  • Resize terminal in responsive mode to test layouts\n\
+  • Use fullscreen mode for detailed component inspection\n\
+  • Different widths help test responsive component behavior\n\n\
+                            Press ? or h to close help";
                 
-                let help_area = centered_rect(50, 50, f.area());
+                let help_area = centered_rect(80, 70, f.area());
                 f.render_widget(Clear, help_area);
                 let help_dialog = Paragraph::new(help_text)
-                    .block(Block::default().borders(Borders::ALL).title("Help"));
+                    .block(Block::default().borders(Borders::ALL).title(" Help "))
+                    .style(Style::default().bg(Color::Black).fg(Color::White));
                 f.render_widget(help_dialog, help_area);
             }
         })?;
@@ -245,7 +272,7 @@ fn get_terminal_width() -> Option<usize> {
 }
 
 fn centered_rect(percent_x: u16, percent_y: u16, r: Rect) -> Rect {
-    use ratatui::layout::{Constraint, Direction, Layout, Margin};
+    use ratatui::layout::{Constraint, Direction, Layout};
     
     let popup_layout = Layout::default()
         .direction(Direction::Vertical)
