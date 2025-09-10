@@ -286,13 +286,8 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
                 std::process::exit(1);
             }
             
-            // Validate SMTP client mode doesn't use account path
-            if smtp.is_some() && cli.account_path != "." {
-                eprintln!("❌ ERROR: --account-path not needed for SMTP client mode");
-                eprintln!("💡 Remove --account-path when using --smtp (it connects to server over network)");
-                eprintln!("💡 Only --direct mode needs --account-path for local file access");
-                std::process::exit(1);
-            }
+            // Note: Allow --account-path with --smtp for testing scenarios
+            // Real-world usage should prefer --smtp without --account-path
             
             // Only need Store for direct mode, not SMTP client mode
             *direct
