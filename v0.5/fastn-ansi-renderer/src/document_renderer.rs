@@ -92,15 +92,12 @@ impl DocumentRenderer {
         Ok(Rendered::new(canvas.to_ansi_string()))
     }
 
-    /// Parse fastn source and render with intelligent height
+    /// Parse fastn source and render at exact dimensions
     pub fn render_from_source(source: &str, width: usize, height: usize) -> Result<Rendered, Box<dyn std::error::Error>> {
         let document = parse_fastn_source(source)?;
         
-        // Calculate intelligent height based on content
-        let content_height = Self::calculate_content_height(&document, width);
-        let actual_height = content_height.min(height); // Cap at requested height
-        
-        Self::render_document(&document, width, actual_height)
+        // Use exact requested dimensions - no calculation override
+        Self::render_document(&document, width, height)
     }
 
     /// Calculate intelligent height based on document content
