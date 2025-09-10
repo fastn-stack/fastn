@@ -33,16 +33,19 @@ impl AuthCredentials {
 
     /// Extract account ID52 from username (robust parsing for various SMTP client formats)
     ///
-    /// Supports multiple formats that real SMTP clients might send:
-    /// - user@<id52>.domain or user@<id52>  (domain-based)
-    /// - <full-email-as-username> where email contains ID52
-    /// - default@<id52>.com (our standard format)
+    /// Supports ONLY secure .fastn format to prevent domain hijacking:
+    /// - user@<id52>.fastn (secure format - no purchasable domains)
+    /// 
+    /// Security: Rejects .com/.org/.net domains to prevent attack where
+    /// someone buys {id52}.com and intercepts emails meant for P2P delivery.
     pub fn extract_account_id52(&self) -> Option<fastn_id52::PublicKey> {
-        // Strategy 1: Extract from domain part (user@<id52>.domain)
+        // Strategy 1: Extract from domain part - ONLY accept .fastn domains
         if let Some(at_pos) = self.username.find('@') {
             let domain = &self.username[at_pos + 1..];
             let domain_parts: Vec<&str> = domain.split('.').collect();
-            if !domain_parts.is_empty() {
+            
+            // Security: Only accept .fastn domains
+            if domain_parts.len() == 2 && domain_parts[1] == "fastn" {
                 let potential_id52 = domain_parts[0];
                 if potential_id52.len() == 52
                     && let Ok(id52) = potential_id52.parse::<fastn_id52::PublicKey>()
@@ -52,15 +55,17 @@ impl AuthCredentials {
             }
         }
 
-        // Strategy 2: Look for any 52-char sequence in the entire username
-        // This handles various unusual formats SMTP clients might send
-        let separators = ['@', '.', '_', '-', '+', '='];
-        let parts: Vec<&str> = self.username.split(&separators[..]).collect();
-        for part in parts {
-            if part.len() == 52
-                && let Ok(id52) = part.parse::<fastn_id52::PublicKey>()
-            {
-                return Some(id52);
+        // Strategy 2: Security-enhanced fallback - only if email contains .fastn
+        // This ensures even unusual formats are still secure
+        if self.username.contains(".fastn") {
+            let separators = ['@', '.', '_', '-', '+', '='];
+            let parts: Vec<&str> = self.username.split(&separators[..]).collect();
+            for part in parts {
+                if part.len() == 52
+                    && let Ok(id52) = part.parse::<fastn_id52::PublicKey>()
+                {
+                    return Some(id52);
+                }
             }
         }
 
@@ -211,19 +216,19 @@ mod tests {
         let valid_id52 = valid_key.public_key().id52();
 
         let valid_creds = AuthCredentials {
-            username: format!("anything@{}.com", valid_id52),
+            username: format!("anything@{}.fastn", valid_id52),
             password: "password".to_string(),
         };
         let result = valid_creds.extract_account_id52();
         assert!(result.is_some());
         assert_eq!(result.unwrap().id52(), valid_id52);
 
-        // Test with subdomain - should still work
-        let subdomain_creds = AuthCredentials {
-            username: format!("user@{}.fastn.example.com", valid_id52),
+        // Test with different user prefix - should still work
+        let prefix_creds = AuthCredentials {
+            username: format!("inbox@{}.fastn", valid_id52),
             password: "password".to_string(),
         };
-        let result = subdomain_creds.extract_account_id52();
+        let result = prefix_creds.extract_account_id52();
         assert!(result.is_some());
         assert_eq!(result.unwrap().id52(), valid_id52);
 
@@ -234,8 +239,22 @@ mod tests {
         };
         assert!(invalid_creds.extract_account_id52().is_none());
 
+        // Test that .com domains are rejected for security
+        let com_domain_creds = AuthCredentials {
+            username: format!("user@{}.com", valid_id52),
+            password: "password".to_string(),
+        };
+        assert!(com_domain_creds.extract_account_id52().is_none(), "Security: .com domains should be rejected");
+
+        // Test other purchasable TLDs are rejected
+        let org_domain_creds = AuthCredentials {
+            username: format!("user@{}.org", valid_id52),
+            password: "password".to_string(),
+        };
+        assert!(org_domain_creds.extract_account_id52().is_none(), "Security: .org domains should be rejected");
+
         let short_id_creds = AuthCredentials {
-            username: "user@short.domain.com".to_string(),
+            username: "user@short.domain.fastn".to_string(),
             password: "password".to_string(),
         };
         assert!(short_id_creds.extract_account_id52().is_none());

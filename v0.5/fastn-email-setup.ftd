@@ -45,12 +45,12 @@ role: $inherited.types.heading-medium
 
 **Settings:**
 ```
-Email: default@{alice_account_id}.com
+Email: default@{alice_account_id}.fastn
 Password: {alice_password}
 
 IMAP Server: localhost:1143 (No SSL)
 SMTP Server: localhost:2525 (No SSL)  
-Username: default@{alice_account_id}.com (both servers)
+Username: default@{alice_account_id}.fastn (both servers)
 ```
 
 **Test:** Send email to yourself, should appear in INBOX within 10 seconds
@@ -63,12 +63,12 @@ role: $inherited.types.heading-medium
 
 **Settings:**
 ```
-Email: default@{bob_account_id}.com  
+Email: default@{bob_account_id}.fastn  
 Password: {bob_password}
 
 IMAP Server: localhost:1144 (No SSL)
 SMTP Server: localhost:2526 (No SSL)
-Username: default@{bob_account_id}.com (both servers)  
+Username: default@{bob_account_id}.fastn (both servers)  
 ```
 
 **Test:** Send email to yourself
@@ -78,13 +78,13 @@ role: $inherited.types.heading-medium
 
 **Test 1: Alice → Bob**
 ```
-Thunderbird (Alice) → Send to: default@{bob_account_id}.com
+Thunderbird (Alice) → Send to: default@{bob_account_id}.fastn
 Apple Mail (Bob) → Check INBOX for delivery (under 10 seconds)
 ```
 
 **Test 2: Bob → Alice**  
 ```
-Apple Mail (Bob) → Send to: default@{alice_account_id}.com
+Apple Mail (Bob) → Send to: default@{alice_account_id}.fastn
 Thunderbird (Alice) → Check INBOX for delivery
 ```
 

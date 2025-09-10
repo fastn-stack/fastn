@@ -192,12 +192,12 @@ impl Clone for PeerHandle {
 impl PeerHandle {
     /// Get peer's email address for sending
     pub fn email_address(&self) -> String {
-        format!("test@{}.com", self.account_id)
+        format!("test@{}.fastn", self.account_id)
     }
 
     /// Get peer's inbox address for receiving
     pub fn inbox_address(&self) -> String {
-        format!("inbox@{}.com", self.account_id)
+        format!("inbox@{}.fastn", self.account_id)
     }
 
     /// Check if peer process is running

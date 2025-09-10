@@ -299,8 +299,8 @@ fi
 
 # Step 5: Send email (direct binary - no compilation)
 log "📧 Sending email via SMTP (direct binary)..."
-FROM="test@${ACCOUNT1_ID}.com"
-TO="inbox@${ACCOUNT2_ID}.com"
+FROM="test@${ACCOUNT1_ID}.fastn"
+TO="inbox@${ACCOUNT2_ID}.fastn"
 
 log "📧 From: $FROM"  
 log "📧 To: $TO"
@@ -379,7 +379,7 @@ for attempt in $(seq 1 8); do
             log "🔗 Testing IMAP connection to receiver peer..."
         fi
         
-        PEER2_USERNAME="inbox@${ACCOUNT2_ID}.com"
+        PEER2_USERNAME="inbox@${ACCOUNT2_ID}.fastn"
         
         # First verify IMAP server is running by checking logs
         if grep -q "IMAP server listening on.*${IMAP_PORT_FOR_TEST}" "$IMAP_LOG_FILE"; then
