@@ -206,8 +206,8 @@ log "📧 From: $FROM"
 log "📧 To: $TO"
 
 # Use direct binary (no compilation delay during email send)
+# Network client mode: don't use --account-path with --smtp (connects over network)
 if FASTN_HOME="$TEST_DIR/peer1" "$FASTN_MAIL" \
-    --account-path "$TEST_DIR/peer1/accounts/$ACCOUNT1_ID" \
     send-mail \
     --smtp 2525 --password "$ACCOUNT1_PWD" \
     --from "$FROM" --to "$TO" \
@@ -283,7 +283,6 @@ for attempt in $(seq 1 8); do
         # Test UID FETCH command (critical for real email clients)
         log "🔍 Testing UID FETCH FLAGS command..."
         if FASTN_HOME="$TEST_DIR/peer2" "$FASTN_MAIL" \
-            --account-path "$TEST_DIR/peer2/accounts/$ACCOUNT2_ID" \
             imap-uid-fetch \
             --host localhost --port 1144 \
             --username "$PEER2_USERNAME" --password "$ACCOUNT2_PWD" \
@@ -296,7 +295,6 @@ for attempt in $(seq 1 8); do
         # Test STATUS command (required by real email clients)  
         log "📊 Testing STATUS command for folder statistics..."
         if FASTN_HOME="$TEST_DIR/peer2" "$FASTN_MAIL" \
-            --account-path "$TEST_DIR/peer2/accounts/$ACCOUNT2_ID" \
             imap-status \
             --host localhost --port 1144 \
             --username "$PEER2_USERNAME" --password "$ACCOUNT2_PWD" \
