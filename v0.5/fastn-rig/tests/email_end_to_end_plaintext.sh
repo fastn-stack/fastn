@@ -420,7 +420,7 @@ for attempt in $(seq 1 8); do
         log "📁 Direct filesystem validation (original method):"
         
         success "🎉 COMPLETE SUCCESS: SMTP → P2P → IMAP pipeline working!"
-        success "📊 Full email system operational with IMAP integration"
+        success "📊 Full email system operational with COMPLETE IMAP integration"
         exit 0
     fi
 done

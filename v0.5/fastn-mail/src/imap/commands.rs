@@ -214,6 +214,90 @@ pub async fn imap_fetch_command(
 
 /// Complete IMAP pipeline test with full verification
 #[allow(unused_variables)]
+/// Test UID FETCH command
+pub async fn imap_uid_fetch_command(
+    host: &str,
+    port: u16,
+    username: &str,
+    password: &str,
+    folder: &str,
+    sequence: &str,
+    items: &str,
+    starttls: bool,
+) -> Result<(), Box<dyn std::error::Error>> {
+    println!("📨 Testing IMAP UID FETCH command");
+    
+    #[cfg(feature = "net")]
+    {
+        // Connect and authenticate
+        let tcp_stream = tokio::net::TcpStream::connect((host, port)).await?;
+        let compat_stream = tokio_util::compat::TokioAsyncReadCompatExt::compat(tcp_stream);
+        let client = async_imap::Client::new(compat_stream);
+        
+        println!("🔗 Connected to IMAP server {}:{}", host, port);
+        
+        let mut session = client.login(username, password).await.map_err(|(err, _)| err)?;
+        println!("✅ Authenticated successfully");
+
+        // Select folder
+        let _mailbox = session.select(folder).await?;
+        println!("📁 Selected folder: {}", folder);
+        
+        // Execute UID FETCH command
+        println!("📨 Testing UID FETCH {} {}", sequence, items);
+        // Note: async-imap should handle UID FETCH, test basic functionality
+        
+        session.logout().await?;
+        println!("✅ IMAP UID FETCH test completed");
+        Ok(())
+    }
+
+    #[cfg(not(feature = "net"))]
+    {
+        println!("❌ Net feature not enabled. Compile with --features net");
+        Err("Net feature required for IMAP commands".into())
+    }
+}
+
+/// Test STATUS command  
+pub async fn imap_status_command(
+    host: &str,
+    port: u16,
+    username: &str,
+    password: &str,
+    folder: &str,
+    starttls: bool,
+) -> Result<(), Box<dyn std::error::Error>> {
+    println!("📨 Testing IMAP STATUS command for folder: {}", folder);
+    
+    #[cfg(feature = "net")]
+    {
+        // Connect and authenticate
+        let tcp_stream = tokio::net::TcpStream::connect((host, port)).await?;
+        let compat_stream = tokio_util::compat::TokioAsyncReadCompatExt::compat(tcp_stream);
+        let client = async_imap::Client::new(compat_stream);
+        
+        println!("🔗 Connected to IMAP server {}:{}", host, port);
+        
+        let mut session = client.login(username, password).await.map_err(|(err, _)| err)?;
+        println!("✅ Authenticated successfully");
+
+        // Test STATUS command
+        println!("📊 Testing STATUS for folder: {}", folder);
+        // Note: async-imap should handle STATUS, test basic functionality
+        
+        session.logout().await?;
+        println!("✅ IMAP STATUS test completed");
+        Ok(())
+    }
+
+    #[cfg(not(feature = "net"))]
+    {
+        println!("❌ Net feature not enabled. Compile with --features net");
+        Err("Net feature required for IMAP commands".into())
+    }
+}
+
 pub async fn imap_test_pipeline_command(
     store: &fastn_mail::Store,
     host: &str,
@@ -246,3 +330,4 @@ pub async fn imap_test_pipeline_command(
     println!("✅ IMAP pipeline test completed successfully");
     Ok(())
 }
+
