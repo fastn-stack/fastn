@@ -94,3 +94,29 @@ impl fmt::Display for InvalidSignatureBytesError {
 }
 
 impl Error for InvalidSignatureBytesError {}
+
+/// Error returned when DNS resolution fails.
+///
+/// This error occurs when attempting to resolve a public key from DNS but
+/// the operation fails for various reasons.
+#[derive(Debug, Clone)]
+#[cfg(feature = "dns")]
+pub struct ResolveError {
+    pub domain: String,
+    pub scope: String,
+    pub reason: String,
+}
+
+#[cfg(feature = "dns")]
+impl fmt::Display for ResolveError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "Failed to resolve public key for domain '{}' with scope '{}': {}",
+            self.domain, self.scope, self.reason
+        )
+    }
+}
+
+#[cfg(feature = "dns")]
+impl Error for ResolveError {}

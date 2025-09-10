@@ -16,7 +16,7 @@ path = "src/main.rs"
 fastn-account.workspace = true
 fastn-automerge.workspace = true
 autosurgeon.workspace = true
-fastn-id52 = { workspace = true, features = ["automerge"] }
+fastn-id52 = { workspace = true, features = ["automerge", "dns"] }
 fastn-mail.workspace = true
 fastn-p2p.workspace = true
 futures-util.workspace = true

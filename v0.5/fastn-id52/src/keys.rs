@@ -151,6 +151,37 @@ impl PublicKey {
             .verify(message, &signature.0)
             .map_err(|_| SignatureVerificationError)
     }
+
+    /// Resolves a public key from DNS TXT records.
+    ///
+    /// Looks for TXT records on the given domain in the format "{scope}={public_key_id52}".
+    /// For example, if the domain "fifthtry.com" has a TXT record "malai=abc123def456...",
+    /// calling `PublicKey::resolve("fifthtry.com", "malai").await` will return the public key.
+    ///
+    /// # Arguments
+    ///
+    /// * `domain` - The domain to query for TXT records
+    /// * `scope` - The scope/prefix to look for in TXT records
+    ///
+    /// # Returns
+    ///
+    /// Returns the resolved `PublicKey` on success, or a `ResolveError` on failure.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use fastn_id52::PublicKey;
+    ///
+    /// # async fn example() -> Result<(), Box<dyn std::error::Error>> {
+    /// let public_key = PublicKey::resolve("fifthtry.com", "malai").await?;
+    /// println!("Resolved public key: {}", public_key.id52());
+    /// # Ok(())
+    /// # }
+    /// ```
+    #[cfg(feature = "dns")]
+    pub async fn resolve(domain: &str, scope: &str) -> Result<Self, crate::ResolveError> {
+        crate::dns::resolve(domain, scope).await
+    }
 }
 
 // Display implementation - uses ID52 (BASE32_DNSSEC) encoding
