@@ -153,26 +153,11 @@ impl FastnMailSendBuilder {
         let to = self.to.ok_or("To address not specified")?;
         let password = self.password.ok_or("Password not specified")?;
 
-        // Clear existing args and build in correct order: --account-path send-mail --smtp ...
+        // Clear existing args and build in correct order
         self.base.args.clear();
         
-        // Add account path first (global flag must come before subcommand)
-        if let Some(home_path) = &self.base.fastn_home {
-            // Extract account ID from from address  
-            let account_id = if let Some(domain_part) = from.split('@').nth(1) {
-                domain_part.split('.').next().unwrap_or("unknown")
-            } else {
-                "unknown"
-            };
-            
-            let account_path = home_path.join("accounts").join(account_id);
-            self.base.args.extend([
-                "--account-path".to_string(),
-                account_path.to_string_lossy().to_string(),
-            ]);
-            
-            println!("🔍 DEBUG: Using account path: {}", account_path.display());
-        }
+        // SMTP mode: don't use --account-path (network client connects to server)
+        println!("🔍 DEBUG: SMTP mode - not using --account-path (network client)");
 
         self.base.args.extend([
             "send-mail".to_string(),  // subcommand after global flags
