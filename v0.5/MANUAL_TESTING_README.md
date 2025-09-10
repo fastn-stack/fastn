@@ -73,17 +73,18 @@ This guide provides a comprehensive testing framework for FASTN email functional
 
 ## Email Address Format Standard
 
-**CONFIRMED FORMAT** (from working P2P deliveries):
+**SECURE FORMAT** (prevents domain hijacking attacks):
 ```
-user@[52-char-account-id].com
+user@[52-char-account-id].fastn
 ```
 
 **Examples:**
-- `test@v7uum8f25ioqq2rc2ti51n5ufl3cpjhgfucd8tk8r6diu6mbqc70.com`
-- `inbox@gis0i8adnbidgbfqul0bg06cm017lmsqrnq7k46hjojlebn4rn40.com`
+- `test@v7uum8f25ioqq2rc2ti51n5ufl3cpjhgfucd8tk8r6diu6mbqc70.fastn`
+- `inbox@gis0i8adnbidgbfqul0bg06cm017lmsqrnq7k46hjojlebn4rn40.fastn`
 
-**Common Mistakes:**
-- ❌ `default@v7uum8f25ioqq2rc2ti51n5ufl3cpjhgfucd8tk8r6diu6mbqc70` (missing .com)
+**Security Notes:**
+- ✅ `.fastn` TLD cannot be purchased - prevents domain hijacking
+- ❌ `.com/.org/.net` domains rejected - could be purchased by attackers
 - ❌ `test@localhost` (wrong domain)
 - ❌ `test@fastn.dev` (not account-specific)
 
