@@ -52,26 +52,52 @@ Use for **complex components** that benefit from space:
 2. **What's the ideal** width/height for comfortable viewing?  
 3. **What's the maximum** useful size before space is wasted?
 
-#### **Pick 3 Meaningful Dimensions:**
+#### **Pick 2-3 Meaningful Dimensions:**
 - **Constraint test** - Narrow width/height showing adaptation
 - **Optimal test** - Comfortable size showing normal usage  
-- **Generous test** - Wide/tall size showing spacious layout
+- **Generous test** - Wide/tall size showing spacious layout (only if different behavior)
 
-### **Examples of Good Dimension Choices**
+### **Examples of Intelligent Dimension Choices**
+
+#### **Simple Text Component:**
+```
+# 40x8    ← Compact: Shows minimal layout
+# 80x12   ← Standard: Comfortable spacing
+# DON'T ADD 120x12 - just more empty space around same text, no new behavior
+```
 
 #### **Text with Border Component:**
 ```
-# 40x8    ← Compact: Shows text + border in minimal space
-# 80x12   ← Standard: Comfortable reading with breathing room  
-# 120x12  ← Wide: Shows how text adapts to wide container
+# 40x8    ← Compact: Border adapts to narrow space
+# 80x12   ← Standard: Comfortable border with padding
+# 120x12  ← Wide: Border scales to wide container (shows adaptation!)
 ```
 
 #### **Button Component:**
 ```
-# 30x6    ← Compact: Minimal functional button
-# 60x8    ← Standard: Comfortable button with padding
-# 100x8   ← Wide: Shows button in wide container
+# 30x6    ← Compact: Forces minimal button size
+# 80x8    ← Standard: Shows comfortable button sizing
+# SKIP 60x8 - middle size doesn't show meaningful difference
 ```
+
+### **Critical Thinking for Dimensions**
+
+#### **Ask for Each Dimension:**
+1. **Does this show different behavior?** - Layout change, wrapping, adaptation
+2. **Does this demonstrate responsive design?** - Component reacts differently
+3. **Does this teach something new?** - Shows constraint or generous spacing
+
+#### **Skip Dimensions That:**
+- ❌ **Just add empty space** around same content
+- ❌ **Show identical behavior** as another dimension  
+- ❌ **Don't demonstrate responsive adaptation** 
+- ❌ **Are purely aesthetic variations** without functional difference
+
+#### **Include Dimensions That:**
+- ✅ **Show layout adaptation** - Text wrapping, border scaling, content reflow
+- ✅ **Demonstrate constraints** - Component forced to adapt to tight space
+- ✅ **Test edge cases** - Very narrow or very wide container behavior
+- ✅ **Show meaningful differences** - Visibly different component behavior
 
 #### **Form Component:**
 ```
@@ -87,30 +113,6 @@ Use for **complex components** that benefit from space:
 # 120x30  ← Wide: Column with generous margins
 ```
 
-### **Avoid These Dimensions**
-
-#### **❌ Wasteful Choices:**
-- **Text in 200×300** - Huge empty space around small text
-- **Button in 150×100** - Massive window for tiny button
-- **Simple layouts in 500×400** - Unnecessary canvas size
-
-#### **❌ Too Constrained:**
-- **Complex forms in 20×5** - Can't show proper layout
-- **Multi-column in 25×8** - Forces poor responsive behavior
-- **Large components in tiny windows** - Defeats purpose
-
-### **Responsive Testing Focus**
-
-#### **Width is Most Critical:**
-- **Layout changes** - Components stack, wrap, adapt horizontally
-- **Text behavior** - Wrapping, truncation, overflow handling
-- **Spacing adaptation** - Margins, padding adjust to width
-
-#### **Height for Comfort:**
-- **Breathing room** - Enough space for comfortable viewing
-- **Content fitting** - All content visible without scrolling
-- **Visual balance** - Proportional appearance
-
 ### **Quick Decision Rules**
 
 #### **For Simple Components (text, button, input):**
@@ -125,13 +127,15 @@ Use for **complex components** that benefit from space:
 - **Width**: 60-80 (functional), 100-140 (comfortable)
 - **Height**: Content + 20-30% breathing room
 
-## Implementation Notes
+### **Decision Matrix for Each Component:**
 
-### **When Updating Specs:**
-1. **Look at current dimensions** - Are they appropriate?
-2. **Test visually** - Does it look good in terminal?
-3. **Check responsiveness** - Do the 3 dimensions show meaningful differences?
-4. **Optimize if needed** - Reduce wasted space, ensure content fits
+**Before adding a dimension, verify:**
+1. ✅ **Visually different** - Clear visual change from other dimensions
+2. ✅ **Behaviorally different** - Component responds differently  
+3. ✅ **Educationally valuable** - Teaches something about responsive design
+4. ✅ **Practically useful** - Represents real-world usage scenario
+
+**If any answer is NO, skip that dimension.**
 
 ### **Golden Rule:**
 **Show the component properly with no wasted space** - every line and column should have a purpose for the specification demonstration.
