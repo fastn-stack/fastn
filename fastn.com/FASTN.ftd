@@ -615,9 +615,6 @@ skip: true
 
 # Docs: /ftd/data-modelling/
 
--- UI Rendering Specification: /ui-spec/
-  document: ui-spec/index.ftd
-
 ## `fastn` Made Easy: /book/
 
 - Introduction: 
