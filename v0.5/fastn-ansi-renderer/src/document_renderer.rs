@@ -100,29 +100,8 @@ impl DocumentRenderer {
         Self::render_document(&document, width, height)
     }
 
-    /// Calculate intelligent height based on document content
-    fn calculate_content_height(document: &FastnDocument, _width: usize) -> usize {
-        let component = &document.root_component;
-        
-        // Base height for text content
-        let mut height: usize = 1; // Text line
-        
-        // Add border height
-        if component.border_width.is_some() {
-            height += 2; // Top + bottom border
-        }
-        
-        // Add padding height  
-        if let Some(padding_px) = component.padding {
-            height += ((padding_px / 8) * 2) as usize; // Top + bottom padding (px to chars)
-        }
-        
-        // Add outer window margin
-        height += 4; // Outer window padding
-        
-        // Minimum useful height
-        height.max(5)
-    }
+    // Height calculation removed - use exact dimensions provided
+    // Manual height optimization handled by developers in test files
 
     fn render_component_to_canvas(
         component: &SimpleFtdComponent,
