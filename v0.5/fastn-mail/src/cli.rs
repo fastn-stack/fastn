@@ -59,6 +59,14 @@ pub enum Commands {
         /// Enable STARTTLS for secure SMTP connection
         #[arg(long)]
         starttls: bool,
+
+        /// Verify email was stored in Sent folder after SMTP success
+        #[arg(long)]
+        verify_sent: bool,
+
+        /// Comprehensive verification: Sent folder + P2P queue + content integrity  
+        #[arg(long)]
+        verify_all: bool,
     },
 
     /// List emails in a folder
@@ -107,17 +115,160 @@ pub enum Commands {
         #[arg(long)]
         sender_id52: String,
     },
+
+    /// IMAP client commands with dual verification
+    
+    /// Connect to IMAP server and test basic functionality
+    ImapConnect {
+        /// IMAP server hostname
+        #[arg(long, default_value = "localhost")]
+        host: String,
+        /// IMAP server port  
+        #[arg(long, default_value = "1143")]
+        port: u16,
+        /// Username for authentication
+        #[arg(long)]
+        username: String,
+        /// Password for authentication
+        #[arg(long)]
+        password: String,
+        /// Use STARTTLS for secure connection
+        #[arg(long)]
+        starttls: bool,
+        /// Test all basic operations after connecting
+        #[arg(long)]
+        test_operations: bool,
+    },
+
+    /// List mailboxes via IMAP with filesystem verification
+    ImapList {
+        /// IMAP server hostname
+        #[arg(long, default_value = "localhost")]
+        host: String,
+        /// IMAP server port
+        #[arg(long, default_value = "1143")]  
+        port: u16,
+        /// Username for authentication
+        #[arg(long)]
+        username: String,
+        /// Password for authentication
+        #[arg(long)]
+        password: String,
+        /// Mailbox pattern (default: "*" for all)
+        #[arg(long, default_value = "*")]
+        pattern: String,
+        /// Use STARTTLS for secure connection
+        #[arg(long)]
+        starttls: bool,
+        /// Verify IMAP results match actual folder structure
+        #[arg(long)]
+        verify_folders: bool,
+    },
+
+    /// Fetch messages via IMAP with content verification
+    ImapFetch {
+        /// IMAP server hostname
+        #[arg(long, default_value = "localhost")]
+        host: String,
+        /// IMAP server port
+        #[arg(long, default_value = "1143")]
+        port: u16,
+        /// Username for authentication
+        #[arg(long)]
+        username: String,
+        /// Password for authentication
+        #[arg(long)]
+        password: String,
+        /// Mailbox to select (default: INBOX)
+        #[arg(long, default_value = "INBOX")]
+        folder: String,
+        /// Message sequence (e.g., "1", "1:5", "*")
+        #[arg(long, default_value = "1:*")]
+        sequence: String,
+        /// FETCH items (e.g., "ENVELOPE", "BODY[]", "FLAGS")
+        #[arg(long, default_value = "ENVELOPE")]
+        items: String,
+        /// Use UID mode instead of sequence numbers
+        #[arg(long)]
+        uid: bool,
+        /// Use STARTTLS for secure connection
+        #[arg(long)]
+        starttls: bool,
+        /// Verify IMAP data matches .eml file content exactly
+        #[arg(long)]
+        verify_content: bool,
+    },
+
+    /// Complete IMAP pipeline test with full verification
+    ImapTestPipeline {
+        /// IMAP server hostname
+        #[arg(long, default_value = "localhost")]
+        host: String,
+        /// IMAP server port
+        #[arg(long, default_value = "1143")]
+        port: u16,
+        /// Username for authentication
+        #[arg(long)]
+        username: String,
+        /// Password for authentication  
+        #[arg(long)]
+        password: String,
+        /// Use STARTTLS for secure connection
+        #[arg(long)]
+        starttls: bool,
+        /// Also test SMTP sending before IMAP operations
+        #[arg(long)]
+        include_smtp: bool,
+        /// SMTP port (if testing SMTP)
+        #[arg(long, default_value = "2525")]
+        smtp_port: u16,
+    },
 }
 
 pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
-    // Load email store for the specified account
-    let account_path = std::path::Path::new(&cli.account_path);
-    let store = match fastn_mail::Store::load(account_path).await {
-        Ok(store) => store,
-        Err(_) => {
-            println!("⚠️  No email store found at path, using test store for CLI demo");
-            fastn_mail::Store::create_test()
+    // Determine if this command needs Store access (server mode) or is pure client mode
+    let needs_store = match &cli.command {
+        Commands::SendMail { direct, smtp, .. } => {
+            // Validate conflicting usage
+            if *direct && smtp.is_some() {
+                eprintln!("❌ ERROR: Cannot use both --direct (server mode) and --smtp (client mode)");
+                eprintln!("💡 Use --direct for local testing OR --smtp for network client mode");
+                std::process::exit(1);
+            }
+            
+            // Only need Store for direct mode, not SMTP client mode
+            *direct
         }
+        Commands::ListMails { .. } | 
+        Commands::ListFolders | 
+        Commands::ShowMail { .. } |
+        Commands::PendingDeliveries |
+        Commands::GetEmailsForPeer { .. } |
+        Commands::MarkDelivered { .. } |
+        Commands::AcceptP2pMail { .. } => true,  // These always need Store
+        
+        Commands::ImapConnect { .. } => false,  // Pure IMAP client command
+        Commands::ImapList { verify_folders, .. } => *verify_folders,  // Needs Store for verification
+        Commands::ImapFetch { verify_content, .. } => *verify_content,  // Needs Store for verification  
+        Commands::ImapTestPipeline { .. } => true,  // Pipeline test needs Store
+    };
+
+    // Only load Store if needed
+    let store = if needs_store {
+        let account_path = std::path::Path::new(&cli.account_path);
+        match fastn_mail::Store::load(account_path).await {
+            Ok(store) => Some(store),
+            Err(e) => {
+                eprintln!("❌ FATAL: No email store found at path: {}", account_path.display());
+                eprintln!("❌ Error: {}", e);
+                eprintln!("💡 Solution: Use --account-path to specify valid fastn account directory");
+                eprintln!("💡 Example: --account-path /path/to/fastn_home/accounts/account_id52");
+                eprintln!("🔧 Debug: Check if 'fastn-rig init' was run and account exists");
+                std::process::exit(1);
+            }
+        }
+    } else {
+        None  // Don't load Store for pure client commands
     };
 
     match cli.command {
@@ -132,38 +283,87 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             direct,
             password,
             starttls,
+            verify_sent,
+            verify_all,
         } => {
             send_mail_command(
-                &store, to, cc, bcc, subject, body, from, smtp, direct, password, starttls,
+                store.as_ref(), to, cc, bcc, subject, body, from, smtp, direct, password, starttls,
+                verify_sent, verify_all,
             )
             .await?;
         }
         Commands::ListMails { folder, limit } => {
-            list_mails_command(&store, &folder, limit).await?;
+            list_mails_command(store.as_ref().unwrap(), &folder, limit).await?;
         }
         Commands::ListFolders => {
-            list_folders_command(&store).await?;
+            list_folders_command(store.as_ref().unwrap()).await?;
         }
         Commands::ShowMail { email_id } => {
-            show_mail_command(&store, &email_id).await?;
+            show_mail_command(store.as_ref().unwrap(), &email_id).await?;
         }
         Commands::PendingDeliveries => {
-            pending_deliveries_command(&store).await?;
+            pending_deliveries_command(store.as_ref().unwrap()).await?;
         }
         Commands::GetEmailsForPeer { peer_id52 } => {
-            get_emails_for_peer_command(&store, &peer_id52).await?;
+            get_emails_for_peer_command(store.as_ref().unwrap(), &peer_id52).await?;
         }
         Commands::MarkDelivered {
             email_id,
             peer_id52,
         } => {
-            mark_delivered_command(&store, &email_id, &peer_id52).await?;
+            mark_delivered_command(store.as_ref().unwrap(), &email_id, &peer_id52).await?;
         }
         Commands::AcceptP2pMail {
             message_file,
             sender_id52,
         } => {
-            p2p_receive_email_command(&store, &message_file, &sender_id52).await?;
+            p2p_receive_email_command(store.as_ref().unwrap(), &message_file, &sender_id52).await?;
+        }
+        Commands::ImapConnect {
+            host,
+            port,
+            username,
+            password,
+            starttls,
+            test_operations,
+        } => {
+            crate::imap::imap_connect_command(&host, port, &username, &password, starttls, test_operations).await?;
+        }
+        Commands::ImapList {
+            host,
+            port,
+            username,
+            password,
+            pattern,
+            starttls,
+            verify_folders,
+        } => {
+            crate::imap::imap_list_command(store.as_ref(), &host, port, &username, &password, &pattern, starttls, verify_folders).await?;
+        }
+        Commands::ImapFetch {
+            host,
+            port,
+            username,
+            password,
+            folder,
+            sequence,
+            items,
+            uid,
+            starttls,
+            verify_content,
+        } => {
+            crate::imap::imap_fetch_command(store.as_ref(), &host, port, &username, &password, &folder, &sequence, &items, uid, starttls, verify_content).await?;
+        }
+        Commands::ImapTestPipeline {
+            host,
+            port,
+            username,
+            password,
+            starttls,
+            include_smtp,
+            smtp_port,
+        } => {
+            crate::imap::imap_test_pipeline_command(store.as_ref().unwrap(), &host, port, &username, &password, starttls, include_smtp, smtp_port).await?;
         }
     }
 
@@ -175,7 +375,7 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
     reason = "CLI function mirrors command line arguments"
 )]
 async fn send_mail_command(
-    store: &fastn_mail::Store,
+    store: Option<&fastn_mail::Store>,
     to: String,
     cc: Option<String>,
     bcc: Option<String>,
@@ -186,6 +386,8 @@ async fn send_mail_command(
     direct: bool,
     #[cfg_attr(not(feature = "net"), allow(unused_variables))] password: Option<String>,
     #[cfg_attr(not(feature = "net"), allow(unused_variables))] starttls: bool,
+    _verify_sent: bool,  // TODO: Implement verification
+    _verify_all: bool,   // TODO: Implement verification
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("📧 Composing email...");
 
@@ -231,6 +433,7 @@ async fn send_mail_command(
         }
 
         // Call smtp_receive directly for testing
+        let store = store.expect("Store should be available for direct mode");
         match store
             .smtp_receive(&from_addr, &recipients, message.into_bytes())
             .await

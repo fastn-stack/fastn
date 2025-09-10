@@ -33,7 +33,7 @@ impl FastnMailCommand {
     /// fastn-mail send-mail command with fluent parameter building
     pub fn send_mail(self) -> FastnMailSendBuilder {
         FastnMailSendBuilder {
-            base: self.args(&["send-mail"]),
+            base: self,  // Don't add send-mail yet - will be added in send() with account-path
             from: None,
             to: None,
             subject: "Test Email".to_string(),
@@ -148,12 +148,34 @@ impl FastnMailSendBuilder {
 
     /// Execute the send-mail command
     pub async fn send(mut self) -> Result<CommandOutput, Box<dyn std::error::Error>> {
-        // Add all the send-mail arguments
+        // Get values before consuming self
         let from = self.from.ok_or("From address not specified")?;
         let to = self.to.ok_or("To address not specified")?;
         let password = self.password.ok_or("Password not specified")?;
 
+        // Clear existing args and build in correct order: --account-path send-mail --smtp ...
+        self.base.args.clear();
+        
+        // Add account path first (global flag must come before subcommand)
+        if let Some(home_path) = &self.base.fastn_home {
+            // Extract account ID from from address  
+            let account_id = if let Some(domain_part) = from.split('@').nth(1) {
+                domain_part.split('.').next().unwrap_or("unknown")
+            } else {
+                "unknown"
+            };
+            
+            let account_path = home_path.join("accounts").join(account_id);
+            self.base.args.extend([
+                "--account-path".to_string(),
+                account_path.to_string_lossy().to_string(),
+            ]);
+            
+            println!("🔍 DEBUG: Using account path: {}", account_path.display());
+        }
+
         self.base.args.extend([
+            "send-mail".to_string(),  // subcommand after global flags
             "--smtp".to_string(),
             self.smtp_port.to_string(),
             "--password".to_string(),
@@ -173,6 +195,7 @@ impl FastnMailSendBuilder {
             self.base.args.push("--starttls".to_string());
         }
 
+        println!("🔍 DEBUG: fastn-mail command: {:?}", self.base.args);
         self.base.execute().await
     }
 }
