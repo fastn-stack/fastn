@@ -19,10 +19,19 @@ use std::path::PathBuf;
 /// 
 /// This test validates the entire fastn email system end-to-end using STARTTLS encryption.
 /// If this test passes, users can send encrypted emails through fastn with full P2P delivery.
+/// 
+/// Set FASTN_TEST_SINGLE_RIG=1 to test single-rig mode (2 accounts in 1 rig).
 #[tokio::test]
 async fn email_end_to_end_starttls() {
-    println!("🚀 Starting CRITICAL END-TO-END EMAIL TEST (STARTTLS Mode)");
-    println!("🔐 Testing: STARTTLS SMTP → fastn-p2p → INBOX delivery");
+    let single_rig = std::env::var("FASTN_TEST_SINGLE_RIG").unwrap_or_default() == "1";
+    
+    if single_rig {
+        println!("🚀 Starting CRITICAL END-TO-END EMAIL TEST (STARTTLS Mode - SINGLE RIG)");
+        println!("🔐 Testing: STARTTLS SMTP → local delivery → INBOX (2 accounts in 1 rig)");
+    } else {
+        println!("🚀 Starting CRITICAL END-TO-END EMAIL TEST (STARTTLS Mode - DUAL RIG)");
+        println!("🔐 Testing: STARTTLS SMTP → fastn-p2p → INBOX delivery");
+    }
 
     // Use fastn-cli-test-utils for reliable test management
     let mut test_env = fastn_cli_test_utils::FastnTestEnv::new("email-end-to-end-starttls")
@@ -33,17 +42,34 @@ async fn email_end_to_end_starttls() {
     println!("🔍 ENV: GitHub Actions: {}", std::env::var("GITHUB_ACTIONS").is_ok());  
     println!("🔍 ENV: Container: {}", std::path::Path::new("/.dockerenv").exists());
     
-    // Create two peers for end-to-end testing
-    println!("🔧 Creating peer infrastructure...");
-    let peer1 = test_env.create_peer("sender").await.expect("Failed to create sender peer");
-    let account1_id = peer1.account_id.clone();
-    let peer1_home = peer1.home_path.clone();
-    println!("🔍 DEBUG: Peer 1 - Account: {}, Home: {}, SMTP Port: {}", account1_id, peer1_home.display(), peer1.smtp_port);
-    
-    let peer2 = test_env.create_peer("receiver").await.expect("Failed to create receiver peer");
-    let account2_id = peer2.account_id.clone();
-    let peer2_home = peer2.home_path.clone();
-    println!("🔍 DEBUG: Peer 2 - Account: {}, Home: {}, SMTP Port: {}", account2_id, peer2_home.display(), peer2.smtp_port);
+    // Create infrastructure for testing
+    if single_rig {
+        println!("🔧 Creating single rig with 2 accounts...");
+        let peer1 = test_env.create_peer("single-rig").await.expect("Failed to create single rig");
+        let account1_id = peer1.account_id.clone(); 
+        let peer1_home = peer1.home_path.clone();
+        println!("🔍 DEBUG: Single Rig - Home: {}, SMTP Port: {}", peer1_home.display(), peer1.smtp_port);
+        println!("🔍 DEBUG: Account 1: {}", account1_id);
+        
+        // TODO: Need to implement create-account functionality in fastn-cli-test-utils
+        // For now, this will create dual rigs like before until test utils support single-rig
+        println!("⚠️  Single-rig mode not yet implemented in test utils - falling back to dual-rig");
+        let peer2 = test_env.create_peer("receiver").await.expect("Failed to create receiver peer");
+        let account2_id = peer2.account_id.clone();
+        let peer2_home = peer2.home_path.clone();
+        println!("🔍 DEBUG: Peer 2 - Account: {}, Home: {}, SMTP Port: {}", account2_id, peer2_home.display(), peer2.smtp_port);
+    } else {
+        println!("🔧 Creating peer infrastructure...");
+        let peer1 = test_env.create_peer("sender").await.expect("Failed to create sender peer");
+        let account1_id = peer1.account_id.clone();
+        let peer1_home = peer1.home_path.clone();
+        println!("🔍 DEBUG: Peer 1 - Account: {}, Home: {}, SMTP Port: {}", account1_id, peer1_home.display(), peer1.smtp_port);
+        
+        let peer2 = test_env.create_peer("receiver").await.expect("Failed to create receiver peer");
+        let account2_id = peer2.account_id.clone();
+        let peer2_home = peer2.home_path.clone();
+        println!("🔍 DEBUG: Peer 2 - Account: {}, Home: {}, SMTP Port: {}", account2_id, peer2_home.display(), peer2.smtp_port);
+    }
 
     // Start both peers
     println!("🚀 Starting peer processes...");
