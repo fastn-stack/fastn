@@ -44,6 +44,17 @@ impl FtdToCssMapper {
             };
         }
 
+        // Map border-width (simplified to uniform for Week 1)
+        if let Some(border_px) = component.border_width {
+            let border_value = LengthPercentage::Length((border_px as f32).into());
+            style.border = Rect {
+                left: border_value,
+                right: border_value,
+                top: border_value,
+                bottom: border_value,
+            };
+        }
+
         // Map container-specific properties
         match component.component_type {
             ComponentType::Column => {

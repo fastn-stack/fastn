@@ -1,4 +1,4 @@
-use taffy::{TaffyTree, NodeId, Style, Layout};
+use taffy::{TaffyTree, NodeId, Style, Layout, ResolveOrZero};
 
 /// Taffy layout engine integration for FTD components
 pub struct TaffyLayoutEngine {
@@ -28,7 +28,20 @@ impl TaffyLayoutEngine {
             text_style.size.width = taffy::Dimension::Length(text_width.into());
         }
         if text_style.size.height == taffy::Dimension::Auto {
-            text_style.size.height = taffy::Dimension::Length(text_height.into());
+            // Simple minimum height calculation based on CSS properties
+            let mut total_height = text_height; // 1 line = 16px
+            
+            // Add border height (2 lines = 32px if any border exists)
+            if matches!(text_style.border.top, taffy::LengthPercentage::Length(_)) {
+                total_height += 32.0; // 2 lines for top/bottom borders
+            }
+            
+            // Add padding height 
+            if matches!(text_style.padding.top, taffy::LengthPercentage::Length(_)) {
+                total_height += 16.0; // Extra line for padding breathing room
+            }
+            
+            text_style.size.height = taffy::Dimension::Length(total_height.into());
         }
         
         let node = self.tree.new_leaf(text_style)?;
