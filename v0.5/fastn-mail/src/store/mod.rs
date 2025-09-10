@@ -9,12 +9,6 @@ mod create;
 mod create_bounce_message;
 mod get_emails_for_peer;
 mod get_pending_deliveries;
-mod imap_fetch;
-mod imap_list_folders;
-mod imap_search;
-mod imap_select_folder;
-mod imap_store_flags;
-mod imap_thread;
 mod mark_delivered_to_peer;
 pub mod smtp_receive;
 

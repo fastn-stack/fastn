@@ -4,6 +4,13 @@
 # This script runs the most important tests in fastn - the complete email pipeline tests.
 # If these tests pass, the entire fastn email system is operational.
 #
+# 🎯 TESTING PHILOSOPHY:
+# - This script runs exactly ONE comprehensive end-to-end test (with rust/bash variants)
+# - The existing tests are ENHANCED with additional verification (like IMAP)
+# - DO NOT add new separate tests here - enhance the existing ones
+# - The goal is ONE test that validates EVERYTHING: SMTP + P2P + IMAP + filesystem
+# - Each test should use dual verification where possible (protocol vs filesystem)
+#
 # Usage:
 #   ./test.sh           # Run bash plain text test with multi-rig (default, fastest)
 #   ./test.sh --rust    # Run only Rust STARTTLS test with multi-rig
