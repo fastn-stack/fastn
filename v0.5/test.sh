@@ -89,11 +89,14 @@ run_rust_test() {
     header "🔐 CRITICAL TEST #1: Rust STARTTLS Integration"
     log "Test: email_end_to_end_starttls.rs"
     log "Mode: Encrypted STARTTLS SMTP → fastn-p2p → INBOX"
+    warn "⚠️  CRITICAL GAP: Rust test has ZERO IMAP validation (only P2P/filesystem)"
+    log "📋 Note: Bash test has comprehensive IMAP coverage (UID FETCH, STATUS, etc.)"
     echo
     
     if cargo test -p fastn-rig email_end_to_end_starttls -- --nocapture; then
         success "Rust STARTTLS test PASSED"
-        RUST_RESULT="✅ PASSED"
+        warn "⚠️  INCOMPLETE: Missing IMAP validation in Rust test (TODO for future PR)"
+        RUST_RESULT="✅ PASSED (missing IMAP tests)"
         TESTS_PASSED=$((TESTS_PASSED + 1))
     else
         if [ "$RUN_BASH" = false ]; then
@@ -113,7 +116,8 @@ run_rust_test() {
 run_bash_test() {
     header "📧 CRITICAL TEST #2: Bash Plain Text Integration"
     log "Test: email_end_to_end_plaintext.sh"
-    log "Mode: Plain text SMTP → fastn-p2p → INBOX"
+    log "Mode: Plain text SMTP → fastn-p2p → INBOX + FULL IMAP VALIDATION"
+    success "✅ COMPLETE: Tests all new IMAP commands (UID FETCH, STATUS, BODY[])"
     echo
     
     cd fastn-rig
@@ -163,6 +167,11 @@ if [ $TESTS_PASSED -eq $TESTS_RUN ]; then
     success "🎉 ALL CRITICAL TESTS PASSED ($TESTS_PASSED/$TESTS_RUN)"
     success "🎉 fastn email system is FULLY OPERATIONAL"
     echo
+    if [ "$RUN_RUST" = true ]; then
+        warn "⚠️  TODO: Add IMAP validation to Rust STARTTLS test in future PR"
+        warn "⚠️  Current: Rust test only validates P2P delivery, not IMAP commands"
+        echo
+    fi
     echo -e "${BOLD}${GREEN}🚀 READY FOR PRODUCTION EMAIL DEPLOYMENT 🚀${NC}"
     exit 0
 else
