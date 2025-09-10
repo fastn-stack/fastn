@@ -17,12 +17,17 @@ pub fn render_spec(spec_name: &str, width: usize, height: usize) -> Result<SpecO
     })
 }
 
-/// Generate all dimensions for a specification
+/// Generate all dimensions for a specification, parsing existing headers if available
 pub fn render_all_dimensions(spec_name: &str) -> Result<String, Box<dyn std::error::Error>> {
+    // Try to parse existing dimensions from .rendered file
+    let dimensions = parse_existing_dimensions(spec_name).unwrap_or_else(|| {
+        // Default intelligent dimensions per specs/CLAUDE.md guidelines
+        vec![(40, 8), (80, 12), (120, 12)]
+    });
+    
     let mut all_sections = Vec::new();
     
-    // Generate all three dimensions
-    for (width, height) in [(40, 64), (80, 128), (120, 192)] {
+    for (width, height) in dimensions {
         let spec_output = render_spec(spec_name, width, height)?;
         
         // Create section with strict formatting: exactly 4 newlines before header, 1 after
@@ -60,4 +65,34 @@ impl SpecOutput {
     pub fn spec_file_format(&self) -> &str {
         &self.side_by_side
     }
+}
+
+/// Parse existing dimension headers from .rendered file 
+fn parse_existing_dimensions(spec_name: &str) -> Option<Vec<(usize, usize)>> {
+    // Find corresponding .rendered file
+    let spec_path = format!("specs/{}", spec_name);
+    let base = std::path::Path::new(&spec_path).with_extension("");
+    let rendered_file = format!("{}.rendered", base.display());
+    
+    if let Ok(content) = std::fs::read_to_string(&rendered_file) {
+        let mut dimensions = Vec::new();
+        
+        for line in content.lines() {
+            if line.starts_with("# ") {
+                if let Some(dim_str) = line.strip_prefix("# ") {
+                    if let Some((w_str, h_str)) = dim_str.split_once('x') {
+                        if let (Ok(width), Ok(height)) = (w_str.parse::<usize>(), h_str.parse::<usize>()) {
+                            dimensions.push((width, height));
+                        }
+                    }
+                }
+            }
+        }
+        
+        if !dimensions.is_empty() {
+            return Some(dimensions);
+        }
+    }
+    
+    None
 }
