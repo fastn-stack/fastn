@@ -130,5 +130,11 @@ pub use errors::{
 pub use keyring::KeyringError;
 pub use keys::{PublicKey, SecretKey, Signature};
 
+#[cfg(feature = "dns")]
+pub use errors::ResolveError;
+
+#[cfg(feature = "dns")]
+pub mod dns;
+
 #[cfg(feature = "automerge")]
 mod automerge;

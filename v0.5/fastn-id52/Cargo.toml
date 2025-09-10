@@ -18,9 +18,14 @@ serde.workspace = true
 rand.workspace = true
 keyring.workspace = true
 
+# Optional DNS lookup support
+tokio = { workspace = true, optional = true, features = ["rt"] }
+hickory-resolver = { version = "0.24", optional = true }
+
 # Optional autosurgeon support
 autosurgeon = { workspace = true, optional = true }
 automerge = { workspace = true, optional = true }
 
 [features]
+dns = ["dep:tokio", "dep:hickory-resolver"]
 automerge = ["dep:autosurgeon", "dep:automerge"]
