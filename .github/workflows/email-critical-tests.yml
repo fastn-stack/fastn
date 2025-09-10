@@ -76,10 +76,13 @@ jobs:
       env:
         SKIP_KEYRING: true
       run: |
-        echo "🎯 Running the most critical tests in fastn email system (PRE-COMPILED)"
+        echo "🎯 Running ALL critical tests in fastn email system (PRE-COMPILED)"
         echo "These tests validate the complete email pipeline:"
         echo "  - Plain text SMTP → fastn-p2p → INBOX delivery"  
         echo "  - STARTTLS SMTP → fastn-p2p → INBOX delivery"
+        echo "  - Single-rig mode: 2 accounts in 1 rig (intra-rig P2P)"
+        echo "  - Multi-rig mode: 1 account per rig (inter-rig P2P)"
+        echo "  - IMAP dual verification: protocol vs filesystem"
         echo "  - Certificate generation and TLS infrastructure"
         echo "  - End-to-end email system integration"
         echo
@@ -90,12 +93,12 @@ jobs:
         # Make test script executable
         chmod +x test.sh
         
-        # Run both critical tests with timing
-        echo "🧪 Starting email tests at: $(date)"
+        # Run ALL tests: single+multi rig modes × rust+bash tests
+        echo "🧪 Starting comprehensive email tests at: $(date)"
         start_time=$(date +%s)
         
-        timeout 600 ./test.sh --both || {
-          echo "❌ Tests failed or timed out after 10 minutes"
+        timeout 900 ./test.sh --all || {
+          echo "❌ Tests failed or timed out after 15 minutes"
           exit 1
         }
         
