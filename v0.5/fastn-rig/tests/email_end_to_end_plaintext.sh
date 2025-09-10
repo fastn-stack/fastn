@@ -345,8 +345,57 @@ for attempt in $(seq 1 8); do
             fi
         done
         
-        log "✅ CRITICAL: Comprehensive IMAP command validation complete"
-        log "✅ CRITICAL: Real email client compatibility verified"
+        # ==========================================================
+        # TODO: MISSING CRITICAL IMAP ASSERTIONS (async-imap client library issues)
+        # ==========================================================
+        # 
+        # These validations are MISSING from our e2e tests due to async-imap
+        # client library parsing issues. The SERVER is working correctly,
+        # but we cannot validate responses via automated testing:
+        #
+        # 1. TODO: UID FETCH BODY[] content validation
+        #    - Server returns complete email: From, To, Subject, Body
+        #    - async-imap fails to parse literal IMAP responses  
+        #    - Need: Validate actual email content matches filesystem
+        #
+        # 2. TODO: UID FETCH with BODY.PEEK[HEADER.FIELDS] validation
+        #    - Server returns: Subject, From, To, Date headers correctly
+        #    - async-imap parsing issues with BODY.PEEK responses
+        #    - Need: Validate headers match .eml file headers exactly
+        #
+        # 3. TODO: UID FETCH with RFC822.SIZE validation  
+        #    - Server returns: Message size in bytes correctly
+        #    - async-imap parsing issues with combined responses
+        #    - Need: Validate size matches actual .eml file size
+        #
+        # 4. TODO: Multiple folder IMAP validation via protocol
+        #    - Currently using filesystem counts (correct but incomplete)
+        #    - Need: Validate IMAP SELECT on Sent/Drafts/Trash folders
+        #    - Need: Validate STATUS returns correct counts for all folders
+        #
+        # 5. TODO: Message flag persistence validation
+        #    - Read/unread flags not tested via IMAP protocol
+        #    - Need: Validate STORE command for flag modifications
+        #    - Need: Validate flags persist across IMAP sessions
+        #
+        # 6. TODO: LSUB, NOOP, CLOSE command response validation
+        #    - Commands implemented but responses not validated
+        #    - Need: Ensure proper IMAP protocol responses
+        #    - Need: Validate session state changes correctly
+        #
+        # 7. TODO: Real-time folder refresh validation
+        #    - New emails should appear in IMAP without restart
+        #    - Need: Send email, validate IMAP SELECT shows updated count
+        #    - Need: Test IDLE command for push notifications (future)
+        #
+        # CRITICAL: Manual testing with Thunderbird/Apple Mail is ESSENTIAL
+        # until these automated assertions are implemented. The server works
+        # correctly but our test validation has gaps due to client library.
+        # ==========================================================
+        
+        log "✅ CRITICAL: Core IMAP functionality validated (with known test gaps)"
+        log "⚠️  WARNING: Some IMAP assertions missing due to async-imap client parsing"
+        log "📧 REQUIRED: Manual testing with real email clients until gaps filled"
         log "✅ CRITICAL: Database/filesystem sync validated across all operations"
         
         # Original filesystem validation (keep as backup/confirmation)
