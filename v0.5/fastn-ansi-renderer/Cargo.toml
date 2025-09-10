@@ -1,0 +1,22 @@
+[package]
+name = "fastn-ansi-renderer"
+version = "0.1.0"
+authors.workspace = true
+edition.workspace = true
+description = "ANSI terminal rendering engine for fastn UI components"
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+# Core rendering
+taffy = "0.5"
+ansi_term = "0.12"
+unicode-width = "0.2"
+
+# Core ASCII rendering only - TUI moved to fastn-spec-viewer crate
+
+# Spec viewer moved to separate fastn-spec-viewer crate
+
+[dev-dependencies]

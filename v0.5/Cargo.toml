@@ -2,6 +2,8 @@
 members = [
     "fastn",
     "fastn-account",
+    "fastn-ansi-renderer",
+    "fastn-spec-viewer",
     "fastn-automerge",
     "fastn-automerge-derive",
     "fastn-compiler",
