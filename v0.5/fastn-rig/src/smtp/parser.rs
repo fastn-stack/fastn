@@ -36,7 +36,7 @@ impl AuthCredentials {
     /// Supports multiple formats that real SMTP clients might send:
     /// - user@<id52>.domain or user@<id52>  (domain-based)
     /// - <full-email-as-username> where email contains ID52
-    /// - default@<id52> (our standard format)
+    /// - default@<id52>.com (our standard format)
     pub fn extract_account_id52(&self) -> Option<fastn_id52::PublicKey> {
         // Strategy 1: Extract from domain part (user@<id52>.domain)
         if let Some(at_pos) = self.username.find('@') {
