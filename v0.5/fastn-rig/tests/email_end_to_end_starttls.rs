@@ -77,8 +77,13 @@ async fn email_end_to_end_starttls() {
 
     // Start both peers
     println!("🚀 Starting peer processes...");
-    test_env.start_peer("sender").await.expect("Failed to start sender peer");
-    test_env.start_peer("receiver").await.expect("Failed to start receiver peer");
+    if single_rig {
+        test_env.start_peer("single-rig").await.expect("Failed to start single rig");
+        test_env.start_peer("receiver").await.expect("Failed to start receiver peer");
+    } else {
+        test_env.start_peer("sender").await.expect("Failed to start sender peer");
+        test_env.start_peer("receiver").await.expect("Failed to start receiver peer");
+    }
 
     // Wait for peers to fully initialize (longer wait for CI)
     let wait_time = if std::env::var("CI").is_ok() { 15 } else { 5 };
@@ -100,9 +105,15 @@ async fn email_end_to_end_starttls() {
     println!("📧 Using plain text mode (STARTTLS foundation ready, upgrade staged)");
     
     println!("🔍 DEBUG: About to send email using fastn-cli-test-utils...");
+    let (sender_name, receiver_name) = if single_rig {
+        ("single-rig", "receiver")
+    } else {
+        ("sender", "receiver")
+    };
+    
     let send_result = match test_env.email()
-        .from("sender")
-        .to("receiver") 
+        .from(sender_name)
+        .to(receiver_name) 
         .subject("🎯 CRITICAL: Email End-to-End Test")
         .body("This email tests the complete fastn email pipeline: SMTP → fastn-p2p → INBOX")
         .starttls(false)  // Use plain text until STARTTLS upgrade implemented
