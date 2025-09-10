@@ -23,17 +23,14 @@ mkdir -p "$FASTN_EMAIL_DIR"/{alice,bob,charlie}
 mkdir -p "$LOG_DIR"
 
 echo "🔧 Initializing Alice rig..."
-cd "$FASTN_EMAIL_DIR/alice"
 SKIP_KEYRING=true FASTN_HOME="$FASTN_EMAIL_DIR/alice" \
   ~/.cargo/bin/cargo run --bin fastn-rig -- init 2>&1 | tee "$LOG_DIR/alice_init.log"
 
 echo "🔧 Initializing Bob rig..."  
-cd "$FASTN_EMAIL_DIR/bob"
 SKIP_KEYRING=true FASTN_HOME="$FASTN_EMAIL_DIR/bob" \
   ~/.cargo/bin/cargo run --bin fastn-rig -- init 2>&1 | tee "$LOG_DIR/bob_init.log"
 
 echo "🔧 Initializing Charlie rig..."
-cd "$FASTN_EMAIL_DIR/charlie"  
 SKIP_KEYRING=true FASTN_HOME="$FASTN_EMAIL_DIR/charlie" \
   ~/.cargo/bin/cargo run --bin fastn-rig -- init 2>&1 | tee "$LOG_DIR/charlie_init.log"
 

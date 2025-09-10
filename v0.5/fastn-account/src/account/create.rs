@@ -179,7 +179,7 @@ impl fastn_account::Account {
         println!("==================================================");
         println!("Account created successfully!");
         println!("ID52: {id52}");
-        println!("Username: default@{id52}.com");
+        println!("Username: default@{id52}");
         println!("Password: {password}");
         println!("==================================================");
         println!("IMPORTANT: Save this password - it cannot be recovered!");
