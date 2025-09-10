@@ -36,6 +36,8 @@ enum Commands {
     },
     /// Start the rig daemon
     Run,
+    /// Create a new account in the existing rig
+    CreateAccount,
 }
 
 #[tokio::main]
@@ -56,6 +58,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         Commands::SetCurrent { id52 } => set_current_entity(fastn_home, id52).await,
         Commands::SetOnline { id52, online } => set_entity_online(fastn_home, id52, online).await,
         Commands::Run => run_rig(fastn_home).await,
+        Commands::CreateAccount => create_account(fastn_home).await,
     }
 }
 
@@ -163,4 +166,29 @@ async fn run_rig(fastn_home: PathBuf) -> Result<(), Box<dyn Error + Send + Sync>
     fastn_rig::run(Some(fastn_home))
         .await
         .map_err(|e| Box::new(e) as Box<dyn Error + Send + Sync>)
+}
+
+async fn create_account(fastn_home: PathBuf) -> Result<(), Box<dyn Error + Send + Sync>> {
+    println!("🔧 Creating new account in existing rig at {}", fastn_home.display());
+
+    // Create the accounts directory path
+    let accounts_dir = fastn_home.join("accounts");
+    
+    if !accounts_dir.exists() {
+        return Err(format!("Accounts directory not found at {}. Initialize the rig first with 'fastn-rig init'.", accounts_dir.display()).into());
+    }
+    
+    // Create a new account directly using Account::create
+    // This will generate a new ID52, create the account directory, and print the password
+    let new_account = fastn_account::Account::create(&accounts_dir).await?;
+    
+    // Get the account ID52 from the newly created account
+    let new_account_id52 = new_account.primary_id52().await
+        .ok_or("Failed to get primary ID52 from newly created account")?;
+    
+    println!("✅ Account created successfully in existing rig!");
+    println!("👤 New Account ID52: {new_account_id52}");
+    println!("🏠 Account Directory: {}/accounts/{}", fastn_home.display(), new_account_id52);
+    
+    Ok(())
 }

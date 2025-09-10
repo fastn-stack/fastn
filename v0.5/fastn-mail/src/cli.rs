@@ -308,24 +308,8 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Commands::ImapConnect { .. } => false,  // Pure IMAP client command
         Commands::ImapList { verify_folders, .. } => *verify_folders,  // Needs Store for verification
         Commands::ImapFetch { verify_content, .. } => *verify_content,  // Needs Store for verification  
-        Commands::ImapUidFetch { .. } => {
-            // Pure network client - should not have account path
-            if cli.account_path != "." {
-                eprintln!("❌ ERROR: --account-path not needed for network IMAP client commands");
-                eprintln!("💡 Remove --account-path when using imap-uid-fetch (it connects to server over network)");
-                std::process::exit(1);
-            }
-            false
-        }
-        Commands::ImapStatus { .. } => {
-            // Pure network client - should not have account path  
-            if cli.account_path != "." {
-                eprintln!("❌ ERROR: --account-path not needed for network IMAP client commands");
-                eprintln!("💡 Remove --account-path when using imap-status (it connects to server over network)");
-                std::process::exit(1);
-            }
-            false
-        }
+        Commands::ImapUidFetch { .. } => false,  // Pure IMAP client command
+        Commands::ImapStatus { .. } => false,    // Pure IMAP client command
         Commands::ImapTestPipeline { .. } => true,  // Pipeline test needs Store
     };
 
