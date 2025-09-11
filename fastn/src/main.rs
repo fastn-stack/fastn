@@ -85,6 +85,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let external_css = serve.values_of_("external-css");
         let inline_css = serve.values_of_("css");
         let offline = serve.get_flag("offline");
+        let enable_cache = serve.get_flag("enable-cache");
 
         if cfg!(feature = "use-config-json") && !offline {
             fastn_update::update(&ds, false).await?;
@@ -96,7 +97,8 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             .add_external_js(external_js.clone())
             .add_inline_js(inline_js.clone())
             .add_external_css(external_css.clone())
-            .add_inline_css(inline_css.clone());
+            .add_inline_css(inline_css.clone())
+            .set_enable_cache(enable_cache);
 
         return fastn_core::listen(std::sync::Arc::new(config), bind.as_str(), port).await;
     }
@@ -355,7 +357,8 @@ mod sub_command {
             .arg(clap::arg!(--css <URL> "CSS text added in ftd files")
                 .action(clap::ArgAction::Append))
             .arg(clap::arg!(--"download-base-url" <URL> "If running without files locally, download needed files from here"))
-            .arg(clap::arg!(--offline "Disables automatic package update checks to operate in offline mode"));
+            .arg(clap::arg!(--offline "Disables automatic package update checks to operate in offline mode"))
+            .arg(clap::arg!(--"enable-cache" "Enable FTD compilation caching for faster subsequent requests (production use)"));
         serve
                 .arg(
                     clap::arg!(identities: --identities <IDENTITIES> "Http request identities, fastn allows these identities to access documents")
