@@ -407,7 +407,7 @@ mod tests {
                 Result::<(), Box<dyn std::error::Error + Send + Sync>>::Ok(())
             })
         };
-        
+
         // Give server time to start listening
         tokio::time::sleep(std::time::Duration::from_millis(100)).await;
         // Send one message from client to server
