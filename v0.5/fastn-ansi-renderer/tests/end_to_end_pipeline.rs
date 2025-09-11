@@ -1,4 +1,4 @@
-use fastn_ascii_renderer::{
+use fastn_ansi_renderer::{
     AnsiCanvas, AnsiColor, BorderStyle, CharPos, CoordinateConverter, FtdSize, FtdToCssMapper,
     SimpleFtdComponent, TaffyLayoutEngine,
 };

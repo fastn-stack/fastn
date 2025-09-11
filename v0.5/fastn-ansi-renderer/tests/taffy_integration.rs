@@ -1,4 +1,4 @@
-use fastn_ascii_renderer::TaffyLayoutEngine;
+use fastn_ansi_renderer::TaffyLayoutEngine;
 use taffy::{AvailableSpace, Dimension, Size, Style};
 
 #[test]
