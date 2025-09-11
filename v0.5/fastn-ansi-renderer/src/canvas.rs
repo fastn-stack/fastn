@@ -78,7 +78,10 @@ impl Canvas {
             } else {
                 // Draw current line and start new one
                 self.draw_single_line_text(
-                    Position { x: pos.x, y: pos.y + line_num },
+                    Position {
+                        x: pos.x,
+                        y: pos.y + line_num,
+                    },
                     &current_line,
                 );
                 current_line = word.to_string();
@@ -89,7 +92,10 @@ impl Canvas {
         // Draw final line
         if !current_line.is_empty() {
             self.draw_single_line_text(
-                Position { x: pos.x, y: pos.y + line_num },
+                Position {
+                    x: pos.x,
+                    y: pos.y + line_num,
+                },
                 &current_line,
             );
         }

@@ -4,7 +4,7 @@ use crate::certs::CertificateError;
 use std::path::Path;
 
 /// Load external certificate and create TLS configuration
-/// 
+///
 /// Used for nginx/Let's Encrypt certificate integration where
 /// certificates are managed externally and fastn reads from file paths
 pub async fn load_external_certificate(
@@ -15,47 +15,49 @@ pub async fn load_external_certificate(
     println!("🔑 Loading external private key from: {}", key_path);
 
     // Load certificate file
-    let cert_pem = tokio::fs::read_to_string(cert_path).await
-        .map_err(|e| CertificateError::ExternalCertificateLoad {
+    let cert_pem = tokio::fs::read_to_string(cert_path).await.map_err(|e| {
+        CertificateError::ExternalCertificateLoad {
             path: cert_path.to_string(),
             source: e,
-        })?;
+        }
+    })?;
 
-    // Load private key file  
-    let key_pem = tokio::fs::read_to_string(key_path).await
-        .map_err(|e| CertificateError::ExternalCertificateLoad {
+    // Load private key file
+    let key_pem = tokio::fs::read_to_string(key_path).await.map_err(|e| {
+        CertificateError::ExternalCertificateLoad {
             path: key_path.to_string(),
             source: e,
-        })?;
+        }
+    })?;
 
     // Parse certificate from PEM
     let cert_der = rustls_pemfile::certs(&mut cert_pem.as_bytes())
         .collect::<Result<Vec<_>, _>>()
-        .map_err(|e| CertificateError::CertificateParsing { 
-            source: Box::new(e) 
+        .map_err(|e| CertificateError::CertificateParsing {
+            source: Box::new(e),
         })?;
 
     if cert_der.is_empty() {
-        return Err(CertificateError::CertificateParsing { 
-            source: "No certificates found in PEM file".into() 
+        return Err(CertificateError::CertificateParsing {
+            source: "No certificates found in PEM file".into(),
         });
     }
 
-    // Parse private key from PEM  
+    // Parse private key from PEM
     let private_key = rustls_pemfile::private_key(&mut key_pem.as_bytes())
-        .map_err(|e| CertificateError::CertificateParsing { 
-            source: Box::new(e) 
+        .map_err(|e| CertificateError::CertificateParsing {
+            source: Box::new(e),
         })?
-        .ok_or_else(|| CertificateError::CertificateParsing { 
-            source: "No private key found in PEM file".into() 
+        .ok_or_else(|| CertificateError::CertificateParsing {
+            source: "No private key found in PEM file".into(),
         })?;
 
     // Create TLS configuration
     let config = rustls::ServerConfig::builder()
         .with_no_client_auth()
         .with_single_cert(cert_der, private_key)
-        .map_err(|e| CertificateError::TlsConfigCreation { 
-            source: Box::new(e) 
+        .map_err(|e| CertificateError::TlsConfigCreation {
+            source: Box::new(e),
         })?;
 
     println!("🔐 External certificate loaded successfully");
@@ -71,36 +73,32 @@ pub async fn validate_external_certificate_paths(
     if !Path::new(cert_path).exists() {
         return Err(CertificateError::ExternalCertificateLoad {
             path: cert_path.to_string(),
-            source: std::io::Error::new(
-                std::io::ErrorKind::NotFound,
-                "Certificate file not found"
-            ),
+            source: std::io::Error::new(std::io::ErrorKind::NotFound, "Certificate file not found"),
         });
     }
 
     // Check private key file
     if !Path::new(key_path).exists() {
         return Err(CertificateError::ExternalCertificateLoad {
-            path: key_path.to_string(), 
-            source: std::io::Error::new(
-                std::io::ErrorKind::NotFound,
-                "Private key file not found"
-            ),
+            path: key_path.to_string(),
+            source: std::io::Error::new(std::io::ErrorKind::NotFound, "Private key file not found"),
         });
     }
 
     // Try to read both files to check permissions
-    let _ = tokio::fs::read_to_string(cert_path).await
-        .map_err(|e| CertificateError::ExternalCertificateLoad {
+    let _ = tokio::fs::read_to_string(cert_path).await.map_err(|e| {
+        CertificateError::ExternalCertificateLoad {
             path: cert_path.to_string(),
             source: e,
-        })?;
+        }
+    })?;
 
-    let _ = tokio::fs::read_to_string(key_path).await
-        .map_err(|e| CertificateError::ExternalCertificateLoad {
+    let _ = tokio::fs::read_to_string(key_path).await.map_err(|e| {
+        CertificateError::ExternalCertificateLoad {
             path: key_path.to_string(),
             source: e,
-        })?;
+        }
+    })?;
 
     println!("✅ External certificate files validated");
     Ok(())
@@ -110,21 +108,23 @@ pub async fn validate_external_certificate_paths(
 pub async fn get_external_certificate_info(
     cert_path: &str,
 ) -> Result<(String, i64), CertificateError> {
-    let cert_pem = tokio::fs::read_to_string(cert_path).await
-        .map_err(|e| CertificateError::ExternalCertificateLoad {
+    let cert_pem = tokio::fs::read_to_string(cert_path).await.map_err(|e| {
+        CertificateError::ExternalCertificateLoad {
             path: cert_path.to_string(),
             source: e,
-        })?;
+        }
+    })?;
 
     // Parse certificate to extract subject and expiry
     // This is a simplified implementation - in production you might want
     // to use x509-parser for more detailed certificate inspection
-    
+
     let subject = "External Certificate".to_string(); // TODO: Parse actual subject
     let expires_at = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .unwrap()
-        .as_secs() as i64 + (365 * 24 * 60 * 60); // TODO: Parse actual expiry
+        .as_secs() as i64
+        + (365 * 24 * 60 * 60); // TODO: Parse actual expiry
 
     Ok((subject, expires_at))
 }
@@ -139,31 +139,31 @@ pub async fn create_tls_config_from_pem_strings(
     // Parse certificate from PEM string
     let cert_der = rustls_pemfile::certs(&mut cert_pem.as_bytes())
         .collect::<Result<Vec<_>, _>>()
-        .map_err(|e| CertificateError::CertificateParsing { 
-            source: Box::new(e) 
+        .map_err(|e| CertificateError::CertificateParsing {
+            source: Box::new(e),
         })?;
 
     if cert_der.is_empty() {
-        return Err(CertificateError::CertificateParsing { 
-            source: "No certificates found in PEM content".into() 
+        return Err(CertificateError::CertificateParsing {
+            source: "No certificates found in PEM content".into(),
         });
     }
 
     // Parse private key from PEM string
     let private_key = rustls_pemfile::private_key(&mut key_pem.as_bytes())
-        .map_err(|e| CertificateError::CertificateParsing { 
-            source: Box::new(e) 
+        .map_err(|e| CertificateError::CertificateParsing {
+            source: Box::new(e),
         })?
-        .ok_or_else(|| CertificateError::CertificateParsing { 
-            source: "No private key found in PEM content".into() 
+        .ok_or_else(|| CertificateError::CertificateParsing {
+            source: "No private key found in PEM content".into(),
         })?;
 
     // Create TLS configuration
     let config = rustls::ServerConfig::builder()
         .with_no_client_auth()
         .with_single_cert(cert_der, private_key)
-        .map_err(|e| CertificateError::TlsConfigCreation { 
-            source: Box::new(e) 
+        .map_err(|e| CertificateError::TlsConfigCreation {
+            source: Box::new(e),
         })?;
 
     println!("🔐 TLS configuration created from automerge certificate content");

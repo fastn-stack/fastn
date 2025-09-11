@@ -1,4 +1,4 @@
-use crate::{ComponentRenderer, LayoutConstraints, ComponentLayout, Canvas, Position, Rect};
+use crate::{Canvas, ComponentLayout, ComponentRenderer, LayoutConstraints, Position, Rect};
 
 /// Text component ASCII renderer
 #[derive(Debug, Clone)]
@@ -85,7 +85,10 @@ impl ComponentRenderer for TextRenderer {
         // Draw text with wrapping if width is constrained
         let wrap_width = self.width.map(|w| w);
         canvas.draw_text(
-            Position { x: text_x, y: text_y },
+            Position {
+                x: text_x,
+                y: text_y,
+            },
             &self.text,
             wrap_width,
         );
@@ -104,7 +107,7 @@ impl TextRenderer {
 
         for word in words {
             let word_length = word.len();
-            
+
             if current_line_length + word_length + 1 <= width {
                 // Word fits on current line
                 if current_line_length > 0 {

@@ -117,7 +117,7 @@ pub enum Commands {
     },
 
     /// IMAP client commands with dual verification
-    
+
     /// Connect to IMAP server and test basic functionality
     ImapConnect {
         /// IMAP server hostname
@@ -146,7 +146,7 @@ pub enum Commands {
         #[arg(long, default_value = "localhost")]
         host: String,
         /// IMAP server port
-        #[arg(long, default_value = "1143")]  
+        #[arg(long, default_value = "1143")]
         port: u16,
         /// Username for authentication
         #[arg(long)]
@@ -281,31 +281,33 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Commands::SendMail { direct, smtp, .. } => {
             // Validate conflicting usage
             if *direct && smtp.is_some() {
-                eprintln!("❌ ERROR: Cannot use both --direct (server mode) and --smtp (client mode)");
+                eprintln!(
+                    "❌ ERROR: Cannot use both --direct (server mode) and --smtp (client mode)"
+                );
                 eprintln!("💡 Use --direct for local testing OR --smtp for network client mode");
                 std::process::exit(1);
             }
-            
+
             // Note: Allow --account-path with --smtp for testing scenarios
             // Real-world usage should prefer --smtp without --account-path
-            
+
             // Only need Store for direct mode, not SMTP client mode
             *direct
         }
-        Commands::ListMails { .. } | 
-        Commands::ListFolders | 
-        Commands::ShowMail { .. } |
-        Commands::PendingDeliveries |
-        Commands::GetEmailsForPeer { .. } |
-        Commands::MarkDelivered { .. } |
-        Commands::AcceptP2pMail { .. } => true,  // These always need Store
-        
-        Commands::ImapConnect { .. } => false,  // Pure IMAP client command
-        Commands::ImapList { verify_folders, .. } => *verify_folders,  // Needs Store for verification
-        Commands::ImapFetch { verify_content, .. } => *verify_content,  // Needs Store for verification  
-        Commands::ImapUidFetch { .. } => false,  // Pure IMAP client command
-        Commands::ImapStatus { .. } => false,    // Pure IMAP client command
-        Commands::ImapTestPipeline { .. } => true,  // Pipeline test needs Store
+        Commands::ListMails { .. }
+        | Commands::ListFolders
+        | Commands::ShowMail { .. }
+        | Commands::PendingDeliveries
+        | Commands::GetEmailsForPeer { .. }
+        | Commands::MarkDelivered { .. }
+        | Commands::AcceptP2pMail { .. } => true, // These always need Store
+
+        Commands::ImapConnect { .. } => false, // Pure IMAP client command
+        Commands::ImapList { verify_folders, .. } => *verify_folders, // Needs Store for verification
+        Commands::ImapFetch { verify_content, .. } => *verify_content, // Needs Store for verification
+        Commands::ImapUidFetch { .. } => false,                        // Pure IMAP client command
+        Commands::ImapStatus { .. } => false,                          // Pure IMAP client command
+        Commands::ImapTestPipeline { .. } => true,                     // Pipeline test needs Store
     };
 
     // Only load Store if needed
@@ -314,16 +316,21 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         match fastn_mail::Store::load(account_path).await {
             Ok(store) => Some(store),
             Err(e) => {
-                eprintln!("❌ FATAL: No email store found at path: {}", account_path.display());
+                eprintln!(
+                    "❌ FATAL: No email store found at path: {}",
+                    account_path.display()
+                );
                 eprintln!("❌ Error: {}", e);
-                eprintln!("💡 Solution: Use --account-path to specify valid fastn account directory");
+                eprintln!(
+                    "💡 Solution: Use --account-path to specify valid fastn account directory"
+                );
                 eprintln!("💡 Example: --account-path /path/to/fastn_home/accounts/account_id52");
                 eprintln!("🔧 Debug: Check if 'fastn-rig init' was run and account exists");
                 std::process::exit(1);
             }
         }
     } else {
-        None  // Don't load Store for pure client commands
+        None // Don't load Store for pure client commands
     };
 
     match cli.command {
@@ -342,8 +349,19 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             verify_all,
         } => {
             send_mail_command(
-                store.as_ref(), to, cc, bcc, subject, body, from, smtp, direct, password, starttls,
-                verify_sent, verify_all,
+                store.as_ref(),
+                to,
+                cc,
+                bcc,
+                subject,
+                body,
+                from,
+                smtp,
+                direct,
+                password,
+                starttls,
+                verify_sent,
+                verify_all,
             )
             .await?;
         }
@@ -382,7 +400,15 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             starttls,
             test_operations,
         } => {
-            crate::imap::imap_connect_command(&host, port, &username, &password, starttls, test_operations).await?;
+            crate::imap::imap_connect_command(
+                &host,
+                port,
+                &username,
+                &password,
+                starttls,
+                test_operations,
+            )
+            .await?;
         }
         Commands::ImapList {
             host,
@@ -393,7 +419,17 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             starttls,
             verify_folders,
         } => {
-            crate::imap::imap_list_command(store.as_ref(), &host, port, &username, &password, &pattern, starttls, verify_folders).await?;
+            crate::imap::imap_list_command(
+                store.as_ref(),
+                &host,
+                port,
+                &username,
+                &password,
+                &pattern,
+                starttls,
+                verify_folders,
+            )
+            .await?;
         }
         Commands::ImapFetch {
             host,
@@ -407,7 +443,20 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             starttls,
             verify_content,
         } => {
-            crate::imap::imap_fetch_command(store.as_ref(), &host, port, &username, &password, &folder, &sequence, &items, uid, starttls, verify_content).await?;
+            crate::imap::imap_fetch_command(
+                store.as_ref(),
+                &host,
+                port,
+                &username,
+                &password,
+                &folder,
+                &sequence,
+                &items,
+                uid,
+                starttls,
+                verify_content,
+            )
+            .await?;
         }
         Commands::ImapUidFetch {
             host,
@@ -419,7 +468,10 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             items,
             starttls,
         } => {
-            crate::imap::imap_uid_fetch_command(&host, port, &username, &password, &folder, &sequence, &items, starttls).await?;
+            crate::imap::imap_uid_fetch_command(
+                &host, port, &username, &password, &folder, &sequence, &items, starttls,
+            )
+            .await?;
         }
         Commands::ImapStatus {
             host,
@@ -429,7 +481,8 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             folder,
             starttls,
         } => {
-            crate::imap::imap_status_command(&host, port, &username, &password, &folder, starttls).await?;
+            crate::imap::imap_status_command(&host, port, &username, &password, &folder, starttls)
+                .await?;
         }
         Commands::ImapTestPipeline {
             host,
@@ -440,7 +493,17 @@ pub async fn run_command(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             include_smtp,
             smtp_port,
         } => {
-            crate::imap::imap_test_pipeline_command(store.as_ref().unwrap(), &host, port, &username, &password, starttls, include_smtp, smtp_port).await?;
+            crate::imap::imap_test_pipeline_command(
+                store.as_ref().unwrap(),
+                &host,
+                port,
+                &username,
+                &password,
+                starttls,
+                include_smtp,
+                smtp_port,
+            )
+            .await?;
         }
     }
 
@@ -463,8 +526,8 @@ async fn send_mail_command(
     direct: bool,
     #[cfg_attr(not(feature = "net"), allow(unused_variables))] password: Option<String>,
     #[cfg_attr(not(feature = "net"), allow(unused_variables))] starttls: bool,
-    _verify_sent: bool,  // TODO: Implement verification
-    _verify_all: bool,   // TODO: Implement verification
+    _verify_sent: bool, // TODO: Implement verification
+    _verify_all: bool,  // TODO: Implement verification
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("📧 Composing email...");
 

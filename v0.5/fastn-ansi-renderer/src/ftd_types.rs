@@ -7,10 +7,10 @@ pub struct SimpleFtdComponent {
     pub text: Option<String>,
     pub width: Option<FtdSize>,
     pub height: Option<FtdSize>,
-    pub padding: Option<u32>,  // Simplified to px only for Week 1
-    pub margin: Option<u32>,   // Simplified to px only for Week 1  
+    pub padding: Option<u32>, // Simplified to px only for Week 1
+    pub margin: Option<u32>,  // Simplified to px only for Week 1
     pub border_width: Option<u32>,
-    pub spacing: Option<u32>,  // For containers
+    pub spacing: Option<u32>, // For containers
     pub children: Vec<SimpleFtdComponent>,
 }
 

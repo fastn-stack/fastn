@@ -35,7 +35,7 @@ impl AuthCredentials {
     ///
     /// Supports ONLY secure .fastn format to prevent domain hijacking:
     /// - user@<id52>.fastn (secure format - no purchasable domains)
-    /// 
+    ///
     /// Security: Rejects .com/.org/.net domains to prevent attack where
     /// someone buys {id52}.com and intercepts emails meant for P2P delivery.
     pub fn extract_account_id52(&self) -> Option<fastn_id52::PublicKey> {
@@ -43,7 +43,7 @@ impl AuthCredentials {
         if let Some(at_pos) = self.username.find('@') {
             let domain = &self.username[at_pos + 1..];
             let domain_parts: Vec<&str> = domain.split('.').collect();
-            
+
             // Security: Only accept .fastn domains
             if domain_parts.len() == 2 && domain_parts[1] == "fastn" {
                 let potential_id52 = domain_parts[0];
@@ -244,14 +244,20 @@ mod tests {
             username: format!("user@{}.com", valid_id52),
             password: "password".to_string(),
         };
-        assert!(com_domain_creds.extract_account_id52().is_none(), "Security: .com domains should be rejected");
+        assert!(
+            com_domain_creds.extract_account_id52().is_none(),
+            "Security: .com domains should be rejected"
+        );
 
         // Test other purchasable TLDs are rejected
         let org_domain_creds = AuthCredentials {
             username: format!("user@{}.org", valid_id52),
             password: "password".to_string(),
         };
-        assert!(org_domain_creds.extract_account_id52().is_none(), "Security: .org domains should be rejected");
+        assert!(
+            org_domain_creds.extract_account_id52().is_none(),
+            "Security: .org domains should be rejected"
+        );
 
         let short_id_creds = AuthCredentials {
             username: "user@short.domain.fastn".to_string(),
