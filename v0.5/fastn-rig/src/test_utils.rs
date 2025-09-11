@@ -208,9 +208,10 @@ impl PeerHandle {
 fn extract_account_id(output: &str) -> Result<String, Box<dyn std::error::Error>> {
     for line in output.lines() {
         if line.contains("Account ID:")
-            && let Some(id) = line.split_whitespace().nth(2) {
-                return Ok(id.to_string());
-            }
+            && let Some(id) = line.split_whitespace().nth(2)
+        {
+            return Ok(id.to_string());
+        }
     }
     Err("Account ID not found in output".into())
 }
@@ -219,9 +220,10 @@ fn extract_account_id(output: &str) -> Result<String, Box<dyn std::error::Error>
 fn extract_password(output: &str) -> Result<String, Box<dyn std::error::Error>> {
     for line in output.lines() {
         if line.contains("Password:")
-            && let Some(password) = line.split_whitespace().nth(1) {
-                return Ok(password.to_string());
-            }
+            && let Some(password) = line.split_whitespace().nth(1)
+        {
+            return Ok(password.to_string());
+        }
     }
     Err("Password not found in output".into())
 }

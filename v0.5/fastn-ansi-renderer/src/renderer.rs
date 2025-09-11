@@ -86,7 +86,10 @@ impl ComponentRenderer for TextRenderer {
 
         // Draw text
         canvas.draw_text(
-            crate::Position { x: text_x, y: text_y },
+            crate::Position {
+                x: text_x,
+                y: text_y,
+            },
             &self.text,
             None, // TODO: Handle wrapping
         );

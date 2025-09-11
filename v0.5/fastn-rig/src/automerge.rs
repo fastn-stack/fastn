@@ -22,7 +22,7 @@ pub struct RigConfig {
     pub created_at: i64,
     /// The current active entity
     pub current_entity: fastn_id52::PublicKey,
-    /// Email certificate configuration 
+    /// Email certificate configuration
     pub email_certificate: EmailCertificate,
 }
 
@@ -62,12 +62,14 @@ impl RigConfig {
 }
 
 /// Email certificate configuration
-#[derive(Debug, Clone, PartialEq, serde::Serialize, fastn_automerge::Reconcile, fastn_automerge::Hydrate)]
+#[derive(
+    Debug, Clone, PartialEq, serde::Serialize, fastn_automerge::Reconcile, fastn_automerge::Hydrate,
+)]
 pub enum EmailCertificate {
     /// Self-signed certificates stored in stable filesystem location (not synced)
     /// Certificates generated per-connection IP and cached on disk
     SelfSigned,
-    
+
     /// External certificate configuration for domain owners (synced via automerge)
     External {
         /// Certificate content or file path configuration
@@ -82,19 +84,18 @@ pub enum EmailCertificate {
 }
 
 /// External certificate source - either file paths or certificate content
-#[derive(Debug, Clone, PartialEq, serde::Serialize, fastn_automerge::Reconcile, fastn_automerge::Hydrate)]
+#[derive(
+    Debug, Clone, PartialEq, serde::Serialize, fastn_automerge::Reconcile, fastn_automerge::Hydrate,
+)]
 pub enum ExternalCertificateSource {
     /// File paths to certificate and key (nginx coexistence scenario)
     FilePaths {
         cert_path: String,
         key_path: String,
-        auto_reload: bool,  // Watch for file changes
+        auto_reload: bool, // Watch for file changes
     },
     /// Certificate content stored directly in automerge (remote management scenario)
-    Content {
-        cert_pem: String,
-        key_pem: String,
-    },
+    Content { cert_pem: String, key_pem: String },
 }
 
 #[derive(

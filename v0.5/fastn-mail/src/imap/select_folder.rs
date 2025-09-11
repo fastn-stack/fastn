@@ -9,7 +9,7 @@ fn count_eml_files_recursive(dir: &std::path::Path) -> u32 {
         if !dir.exists() {
             return 0;
         }
-        
+
         let mut count = 0;
         if let Ok(entries) = std::fs::read_dir(dir) {
             for entry in entries.flatten() {
@@ -24,7 +24,7 @@ fn count_eml_files_recursive(dir: &std::path::Path) -> u32 {
         }
         count
     }
-    
+
     count_recursive(dir)
 }
 
@@ -52,20 +52,25 @@ impl fastn_mail::Store {
                 |row| row.get(0),
             )
             .map_err(|e| ImapSelectFolderError::DatabaseQueryFailed { source: e })?;
-        
+
         // Debug: Show what database returns vs filesystem reality (recursive count)
         let filesystem_count = if folder_path.exists() {
             count_eml_files_recursive(&folder_path)
         } else {
             0
         };
-        
-        println!("📊 Debug: Database count: {}, Filesystem count: {} for folder: {}", 
-            exists, filesystem_count, folder);
-        
+
+        println!(
+            "📊 Debug: Database count: {}, Filesystem count: {} for folder: {}",
+            exists, filesystem_count, folder
+        );
+
         // Use filesystem count if different from database (database might be stale)
         let exists = if filesystem_count != exists {
-            println!("⚠️ Database/filesystem mismatch - using filesystem count: {}", filesystem_count);
+            println!(
+                "⚠️ Database/filesystem mismatch - using filesystem count: {}",
+                filesystem_count
+            );
             filesystem_count
         } else {
             exists

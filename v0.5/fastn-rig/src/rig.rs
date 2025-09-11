@@ -24,11 +24,9 @@ impl fastn_rig::Rig {
 
         // Create the lock file to mark fastn_home as initialized
         let lock_path = fastn_home.join(".fastn.lock");
-        std::fs::write(&lock_path, "").map_err(|e| {
-            fastn_rig::RigCreateError::KeyFileWrite {
-                path: lock_path,
-                source: e,
-            }
+        std::fs::write(&lock_path, "").map_err(|e| fastn_rig::RigCreateError::KeyFileWrite {
+            path: lock_path,
+            source: e,
         })?;
 
         // Generate rig's secret key
@@ -295,4 +293,3 @@ impl fastn_rig::Rig {
         Ok(())
     }
 }
-

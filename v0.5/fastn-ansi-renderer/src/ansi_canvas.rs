@@ -6,8 +6,8 @@ pub struct AnsiCanvas {
     char_grid: Vec<Vec<char>>,
     fg_color_grid: Vec<Vec<AnsiColor>>,
     bg_color_grid: Vec<Vec<Option<AnsiColor>>>,
-    width: usize,   // characters
-    height: usize,  // lines
+    width: usize,  // characters
+    height: usize, // lines
 }
 
 impl AnsiCanvas {
@@ -64,7 +64,13 @@ impl AnsiCanvas {
     }
 
     /// Draw text with colors
-    pub fn draw_text(&mut self, pos: CharPos, text: &str, fg_color: AnsiColor, bg_color: Option<AnsiColor>) {
+    pub fn draw_text(
+        &mut self,
+        pos: CharPos,
+        text: &str,
+        fg_color: AnsiColor,
+        bg_color: Option<AnsiColor>,
+    ) {
         for (i, ch) in text.chars().enumerate() {
             if pos.x + i < self.width && pos.y < self.height {
                 self.set_char_with_colors(pos.x + i, pos.y, ch, fg_color, bg_color);
@@ -79,7 +85,14 @@ impl AnsiCanvas {
         }
     }
 
-    fn set_char_with_colors(&mut self, x: usize, y: usize, ch: char, fg: AnsiColor, bg: Option<AnsiColor>) {
+    fn set_char_with_colors(
+        &mut self,
+        x: usize,
+        y: usize,
+        ch: char,
+        fg: AnsiColor,
+        bg: Option<AnsiColor>,
+    ) {
         if x < self.width && y < self.height {
             self.char_grid[y][x] = ch;
             self.fg_color_grid[y][x] = fg;
@@ -116,7 +129,7 @@ impl AnsiCanvas {
 
                 result.push(ch);
             }
-            
+
             // Reset colors at end of line and add newline
             result.push_str("\x1b[0m\n");
             current_fg = AnsiColor::Default;
@@ -132,7 +145,11 @@ impl AnsiCanvas {
             (AnsiColor::Default, None) => Some("\x1b[0m".to_string()),
             (fg, None) => Some(format!("\x1b[{}m", fg.to_ansi_code())),
             (AnsiColor::Default, Some(bg)) => Some(format!("\x1b[{}m", bg.to_ansi_bg_code())),
-            (fg, Some(bg)) => Some(format!("\x1b[{};{}m", fg.to_ansi_code(), bg.to_ansi_bg_code())),
+            (fg, Some(bg)) => Some(format!(
+                "\x1b[{};{}m",
+                fg.to_ansi_code(),
+                bg.to_ansi_bg_code()
+            )),
         }
     }
 }
@@ -158,7 +175,7 @@ pub struct CharRect {
 pub enum AnsiColor {
     Default,
     Black,
-    Red, 
+    Red,
     Green,
     Yellow,
     Blue,
@@ -244,8 +261,8 @@ impl BoxChars {
 
 /// Convert Taffy pixel coordinates to character coordinates
 pub struct CoordinateConverter {
-    char_width: f32,   // pixels per character
-    line_height: f32,  // pixels per line
+    char_width: f32,  // pixels per character
+    line_height: f32, // pixels per line
 }
 
 impl CoordinateConverter {
@@ -261,7 +278,7 @@ impl CoordinateConverter {
     }
 
     pub fn px_to_lines(&self, px: f32) -> usize {
-        (px / self.line_height).round() as usize  
+        (px / self.line_height).round() as usize
     }
 
     pub fn taffy_layout_to_char_rect(&self, layout: &taffy::Layout) -> CharRect {
@@ -276,22 +293,26 @@ impl CoordinateConverter {
     /// Get content area inside padding and border
     pub fn get_content_area(&self, layout: &taffy::Layout) -> CharRect {
         let total_rect = self.taffy_layout_to_char_rect(layout);
-        
+
         // Calculate padding in characters
         let padding_left = self.px_to_chars(layout.padding.left);
         let padding_top = self.px_to_lines(layout.padding.top);
         let padding_right = self.px_to_chars(layout.padding.right);
         let padding_bottom = self.px_to_lines(layout.padding.bottom);
-        
+
         // For now, assume 1-character border if any border exists
         // TODO: Get actual border width from component style
         let border = 1; // Simplified for Week 2
-        
+
         CharRect {
             x: total_rect.x + border + padding_left,
             y: total_rect.y + border + padding_top,
-            width: total_rect.width.saturating_sub((border + padding_left) + (border + padding_right)),
-            height: total_rect.height.saturating_sub((border + padding_top) + (border + padding_bottom)),
+            width: total_rect
+                .width
+                .saturating_sub((border + padding_left) + (border + padding_right)),
+            height: total_rect
+                .height
+                .saturating_sub((border + padding_top) + (border + padding_bottom)),
         }
     }
 }

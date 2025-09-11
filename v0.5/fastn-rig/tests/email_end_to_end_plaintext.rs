@@ -2,7 +2,7 @@
 //!
 //! This is one of the most important tests in the fastn email system.
 //! Tests the complete email pipeline using plain text SMTP:
-//! 
+//!
 //! 1. ✅ Plain text SMTP server accepts email clients  
 //! 2. ✅ Email authentication and routing works
 //! 3. ✅ Email storage in Sent folder works
@@ -14,7 +14,7 @@
 //!       Companion test: email_end_to_end_starttls.rs (tests STARTTLS mode)
 
 /// 🎯 CRITICAL TEST: Complete Plain Text Email Pipeline via Bash Script
-/// 
+///
 /// This test validates the entire fastn email system using independent bash script execution.
 /// Provides redundancy with the STARTTLS Rust test using different validation approach.
 #[test]
@@ -63,6 +63,8 @@ fn email_end_to_end_plaintext() {
         {
             println!("  {}", line);
         }
-        panic!("CRITICAL: Plain text email pipeline failed - check ./tests/email_end_to_end_plaintext.sh");
+        panic!(
+            "CRITICAL: Plain text email pipeline failed - check ./tests/email_end_to_end_plaintext.sh"
+        );
     }
 }
