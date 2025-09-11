@@ -1,0 +1,26 @@
+-- ds.page: Comment Syntax
+
+Single-line and multi-line comment syntax in FTD
+
+-- ds.h1: Single-Line Comments
+
+Single-line comments begin with `;;` and continue to the end of the line.
+
+-- ds.code: Comment Examples
+lang: ftd
+
+;; This is a comment
+\-- ftd.text: Hello World ;; Inline comment
+color: red ;; Another comment
+
+-- ds.h1: Comment Placement
+
+Comments can be placed in various locations within FTD documents.
+
+-- ds.code: Comment Placement
+lang: ftd
+
+;; File-level comment
+\-- ftd.text: Content
+;; Before properties  
+color: blue ;; After values

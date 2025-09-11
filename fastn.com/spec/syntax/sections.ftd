@@ -1,0 +1,17 @@
+-- ds.page: Section Syntax
+
+Section definition syntax, nesting rules, and component invocations in FTD
+
+-- ds.h1: Basic Section Syntax
+
+A section in FTD starts with `--` followed by the section name.
+
+-- ds.code: Basic Sections
+lang: ftd
+
+\-- ftd.text: Hello World
+\-- component-name: Component with caption
+
+-- ds.h1: Section Nesting
+
+Sections can contain nested child sections using indentation.

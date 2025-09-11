@@ -1,0 +1,57 @@
+-- ds.page: Type System Specification
+
+Complete specification of FTD's type system including primitive types, derived types, records, and or-types
+
+-- ds.h1: Overview
+
+FTD has a rich type system that supports both static typing and dynamic features. The type system includes primitive types, derived types, user-defined records, and discriminated unions (or-types).
+
+-- ds.h1: Type Categories
+
+-- ds.h2: Primitive Types
+
+FTD's built-in primitive types:
+
+- `string` - Text values
+- `integer` - Whole numbers
+- `decimal` - Floating point numbers  
+- `boolean` - True/false values
+
+-- ds.h2: Derived Types
+
+Built-in structured types:
+
+- `ftd.color` - Color values (hex, rgb, named)
+- `ftd.length` - Length units (px, em, rem, %)
+- `ftd.resizing` - Sizing behavior
+- `ftd.spacing` - Spacing values
+
+-- ds.h2: User-Defined Types
+
+- `record` - Structured data with named fields
+- `or-type` - Discriminated unions with variants
+
+-- ds.h1: Type Declaration Examples
+
+-- ds.code: Basic Type Usage
+lang: ftd
+
+\-- string name: John Doe
+\-- integer age: 25
+\-- boolean active: true
+\-- ftd.color theme-color: red
+
+\-- record person:
+string name:
+integer age:
+boolean active:
+
+\-- or-type status:
+
+\-- status.loading:
+
+\-- status.success:
+string message:
+
+\-- status.error:
+string error:

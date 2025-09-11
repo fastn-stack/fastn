@@ -1,0 +1,54 @@
+-- ds.page: Functions
+
+Function definitions, calls, expressions, and built-in functions in FTD
+
+-- ds.h1: Function Definition
+
+Functions encapsulate reusable logic and can accept parameters.
+
+-- ds.code: Basic Function
+lang: ftd
+
+\-- string greeting(name):
+string name:
+
+Hello $name! Welcome to fastn.
+
+-- ds.h1: Function Calls
+
+Functions are called using standard invocation syntax.
+
+-- ds.code: Function Usage
+lang: ftd
+
+\-- ftd.text: $greeting("Alice")
+\-- ftd.text: $greeting("Bob")
+
+-- ds.h1: Function Parameters
+
+Functions can accept multiple typed parameters.
+
+-- ds.code: Multi-Parameter Function
+lang: ftd
+
+\-- string format-price(amount, currency):
+decimal amount:
+string currency:
+
+$currency $amount
+
+\-- ftd.text: $format-price(29.99, "USD")
+
+-- ds.h1: Built-in Functions
+
+FTD provides several built-in functions for common operations.
+
+-- ds.code: Built-in Function Examples
+lang: ftd
+
+\-- string upper-name: $upper($name)
+\-- string formatted: $format("{}: {}", "Name", $name)
+\-- integer length: $len($name)
+
+\-- ftd.text: $upper-name
+\-- ftd.text: Length: $length

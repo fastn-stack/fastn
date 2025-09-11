@@ -1,0 +1,35 @@
+-- ds.page: Modules
+
+Import semantics, export rules, and package system in FTD
+
+-- ds.h1: Import Statements
+
+Modules are imported at the top of files.
+
+-- ds.code: Basic Imports
+lang: ftd
+
+\-- import: some-package
+\-- import: ui-components
+\-- import: design-system as ds
+
+-- ds.h1: Import Aliases
+
+Modules can be imported with aliases.
+
+-- ds.code: Aliased Imports
+lang: ftd
+
+\-- import: long-package-name as short
+
+\-- short.component: Using alias
+
+-- ds.h1: Exports
+
+Modules expose components and functions through exports.
+
+-- ds.code: Export Examples
+lang: ftd
+
+\-- export: my-component
+\-- export: my-function
