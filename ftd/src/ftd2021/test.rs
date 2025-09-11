@@ -175,7 +175,7 @@ pub fn abrar() -> ftd::Map<ftd::PropertyValue> {
                     text: "Abrar Khan2".to_string(),
                     source: ftd::TextSource::Caption,
                 },
-            ),
+            },
         ),
         (
             s("address"),
@@ -184,7 +184,7 @@ pub fn abrar() -> ftd::Map<ftd::PropertyValue> {
                     text: "Bihar2".to_string(),
                     source: ftd::TextSource::Header,
                 },
-            ),
+            },
         ),
         (
             s("bio"),
@@ -193,7 +193,7 @@ pub fn abrar() -> ftd::Map<ftd::PropertyValue> {
                     text: "Software developer working at fifthtry2.".to_string(),
                     source: ftd::TextSource::Body,
                 },
-            ),
+            },
         ),
         (
             s("age"),
@@ -370,7 +370,7 @@ mod interpreter {
                         _ => panic!("invalid text source provided"),
                     },
                 },
-            ),
+            },
             conditions: vec![],
             flags: Default::default(),
         });
@@ -497,14 +497,14 @@ mod interpreter {
                                 text: s("hello"),
                                 source: ftd::TextSource::Header,
                             },
-                        },
+                        }),
                         conditions: vec![],
                         ..Default::default()
                     },
                 )])
                 .collect(),
                 ..Default::default()
-            },
+            }),
         );
         bag.insert(
             "foo/bar#x".to_string(),
@@ -515,7 +515,7 @@ mod interpreter {
                     value: ftd::Value::Integer { value: 10 },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         p!(
@@ -555,10 +555,10 @@ mod interpreter {
                                         name: s("ftd#color"),
                                         default: None,
                                         is_reference: false,
-                                    },
+                                    }),
                                     is_reference: false,
                                 },
-                            },
+                            }),
                             conditions: vec![
                                 (
                                     ftd::ftd2021::p2::Boolean::Equal {
@@ -577,7 +577,7 @@ mod interpreter {
                                                 name: s("ftd#color"),
                                                 default: None,
                                                 is_reference: false,
-                                            },
+                                            }),
                                             is_reference: false,
                                         },
                                     },
@@ -599,7 +599,7 @@ mod interpreter {
                                                 name: s("ftd#color"),
                                                 default: None,
                                                 is_reference: false,
-                                            },
+                                            }),
                                             is_reference: false,
                                         },
                                     },
@@ -614,7 +614,7 @@ mod interpreter {
                             default: Some(ftd::PropertyValue::Variable {
                                 name: "name".to_string(),
                                 kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                            },
+                            }),
                             conditions: vec![],
                             ..Default::default()
                         },
@@ -622,7 +622,7 @@ mod interpreter {
                 ])
                 .collect(),
                 ..Default::default()
-            },
+            }),
         );
 
         bag.insert(
@@ -657,7 +657,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         bag.insert(
@@ -692,7 +692,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         bag.insert(
@@ -727,7 +727,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         bag.insert(
@@ -742,7 +742,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -754,7 +754,7 @@ mod interpreter {
                     value: ftd::Value::Boolean { value: false },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         insert_universal_variables_by_count(1, "foo/bar", &mut bag);
@@ -772,15 +772,15 @@ mod interpreter {
                             g: 0,
                             b: 0,
                             alpha: 1.0,
-                        },
+                        }),
                         dark: ftd::ColorValue {
                             r: 255,
                             g: 0,
                             b: 0,
                             alpha: 1.0,
-                        },
+                        }),
                         reference: Some(s("foo/bar#red")),
-                    },
+                    }),
                     conditional_attribute: std::iter::IntoIterator::into_iter([(
                         s("color"),
                         ftd::ConditionalAttribute {
@@ -790,36 +790,36 @@ mod interpreter {
                                     ftd::Condition {
                                         variable: s("foo/bar#present"),
                                         value: serde_json::Value::Bool(true),
-                                    },
+                                    }),
                                     ftd::ConditionalValue {
                                         value: serde_json::from_str("{\"$kind$\":\"light\",\"dark\":\"rgba(0,128,0,1)\",\"light\":\"rgba(0,128,0,1)\"}").unwrap(),
                                         important: false,
                                         reference: Some(s("foo/bar#green")),
-                                    },
+                                    }),
                                 ),
                                 (
                                     ftd::Condition {
                                         variable: s("foo/bar#present"),
                                         value: serde_json::Value::Bool(false),
-                                    },
+                                    }),
                                     ftd::ConditionalValue {
                                         value: serde_json::from_str("{\"$kind$\":\"light\",\"dark\":\"rgba(255,0,0,1)\",\"light\":\"rgba(255,0,0,1)\"}").unwrap(),
                                         important: false,
                                         reference: Some(s("foo/bar#red")),
-                                    },
+                                    }),
                                 ),
                             ],
                             default: Some(ftd::ConditionalValue {
                                 value: serde_json::from_str("{\"$kind$\":\"light\",\"dark\":\"rgba(255,255,255,1)\",\"light\":\"rgba(255,255,255,1)\"}").unwrap(),
                                 important: false,
                                 reference: Some(s("foo/bar#white")),
-                            },
-                        },
+                            }),
+                        }),
                     )])
                         .collect(),
                     reference: Some(s("foo/bar#name@0")),
                     ..Default::default()
-                },
+                }),
                 ..Default::default()
             }));
 
@@ -874,7 +874,7 @@ mod interpreter {
                                             text: "toc_main".to_string(),
                                             source: ftd::TextSource::Header,
                                         },
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -899,7 +899,7 @@ mod interpreter {
                                             value: ftd::ftd2021::variable::Value::Boolean {
                                                 value: true,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -912,7 +912,7 @@ mod interpreter {
                                                 text: "/welcome/".to_string(),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -925,7 +925,7 @@ mod interpreter {
                                                 text: "5PM Tasks".to_string(),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -950,7 +950,7 @@ mod interpreter {
                                                 text: "/Building/".to_string(),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -963,7 +963,7 @@ mod interpreter {
                                                 text: "Log".to_string(),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -988,7 +988,7 @@ mod interpreter {
                                                 text: "/ChildBuilding/".to_string(),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -1001,7 +1001,7 @@ mod interpreter {
                                                 text: "ChildLog".to_string(),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -1029,7 +1029,7 @@ mod interpreter {
                                                 text: "/Building2/".to_string(),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -1042,7 +1042,7 @@ mod interpreter {
                                                 text: "Log2".to_string(),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -1055,7 +1055,7 @@ mod interpreter {
                 ],
                 kernel: false,
                 ..Default::default()
-            },
+            }),
         );
 
         bag.insert(
@@ -1089,7 +1089,7 @@ mod interpreter {
                                     kind: Box::new(ftd::ftd2021::p2::Kind::string()),
                                     is_reference: false,
                                 },
-                            },
+                            }),
                             conditions: vec![],
                             ..Default::default()
                         },
@@ -1099,7 +1099,7 @@ mod interpreter {
                         ftd::ftd2021::component::Property {
                             default: Some(ftd::PropertyValue::Value {
                                 value: ftd::Value::Boolean { value: true },
-                            },
+                            }),
                             conditions: vec![],
                             ..Default::default()
                         },
@@ -1112,7 +1112,7 @@ mod interpreter {
                                     text: "fill".to_string(),
                                     source: ftd::TextSource::Header,
                                 },
-                            },
+                            }),
                             conditions: vec![],
                             ..Default::default()
                         },
@@ -1133,7 +1133,7 @@ mod interpreter {
                                         is_reference: false,
                                     },
                                 },
-                            },
+                            }),
                             properties: std::iter::IntoIterator::into_iter([
                                 (
                                     s("color"),
@@ -1145,10 +1145,10 @@ mod interpreter {
                                                     name: s("ftd#color"),
                                                     default: None,
                                                     is_reference: false,
-                                                },
+                                                }),
                                                 is_reference: false,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -1159,7 +1159,7 @@ mod interpreter {
                                         default: Some(ftd::PropertyValue::Variable {
                                             name: "name".to_string(),
                                             kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -1182,7 +1182,7 @@ mod interpreter {
                                         is_reference: false,
                                     },
                                 },
-                            },
+                            }),
                             properties: std::iter::IntoIterator::into_iter([
                                 (
                                     s("color"),
@@ -1194,10 +1194,10 @@ mod interpreter {
                                                     name: s("ftd#color"),
                                                     default: None,
                                                     is_reference: false,
-                                                },
+                                                }),
                                                 is_reference: false,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -1208,7 +1208,7 @@ mod interpreter {
                                         default: Some(ftd::PropertyValue::Variable {
                                             name: "name".to_string(),
                                             kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -1221,7 +1221,7 @@ mod interpreter {
                 ],
                 kernel: false,
                 ..Default::default()
-            },
+            }),
         );
 
         bag.insert(
@@ -1239,7 +1239,7 @@ mod interpreter {
                                     text: "fill".to_string(),
                                     source: ftd::TextSource::Header,
                                 },
-                            },
+                            }),
                             conditions: vec![],
                             ..Default::default()
                         },
@@ -1253,7 +1253,7 @@ mod interpreter {
                                     kind: Box::new(ftd::ftd2021::p2::Kind::string()),
                                     is_reference: false,
                                 },
-                            },
+                            }),
                             conditions: vec![],
                             ..Default::default()
                         },
@@ -1266,7 +1266,7 @@ mod interpreter {
                                     text: "300".to_string(),
                                     source: ftd::TextSource::Header,
                                 },
-                            },
+                            }),
                             conditions: vec![],
                             ..Default::default()
                         },
@@ -1276,7 +1276,7 @@ mod interpreter {
                 instructions: vec![],
                 kernel: false,
                 ..Default::default()
-            },
+            }),
         );
 
         bag.insert(
@@ -1297,7 +1297,7 @@ mod interpreter {
                         ftd::ftd2021::component::Property {
                             default: Some(ftd::PropertyValue::Value {
                                 value: ftd::ftd2021::variable::Value::Integer { value: 16 },
-                            },
+                            }),
                             conditions: vec![],
                             ..Default::default()
                         },
@@ -1308,7 +1308,7 @@ mod interpreter {
                             default: Some(ftd::PropertyValue::Variable {
                                 name: "text".to_string(),
                                 kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                            },
+                            }),
                             conditions: vec![],
                             ..Default::default()
                         },
@@ -1316,7 +1316,7 @@ mod interpreter {
                 ])
                 .collect(),
                 ..Default::default()
-            },
+            }),
         );
 
         bag.insert(
@@ -1328,7 +1328,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#active@0,0,0,0,2"),
@@ -1342,7 +1342,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#active@0,0,0,2"),
@@ -1356,7 +1356,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#active@0,0,0,3"),
@@ -1370,7 +1370,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#name@0,0,0,2"),
@@ -1384,7 +1384,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#name@0,0,0,0,2"),
@@ -1398,7 +1398,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#name@0,0,0"),
@@ -1412,7 +1412,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#name@0,0,0,3"),
@@ -1426,7 +1426,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         bag.insert(
@@ -1461,7 +1461,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         bag.insert(
@@ -1496,7 +1496,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         let levels: Vec<String> = vec![
@@ -1530,24 +1530,24 @@ mod interpreter {
                             g: 255,
                             b: 255,
                             alpha: 1.0,
-                        },
+                        }),
                         dark: ftd::ColorValue {
                             r: 255,
                             g: 255,
                             b: 255,
                             alpha: 1.0,
-                        },
+                        }),
                         reference: Some(s("foo/bar#white")),
-                    },
+                    }),
                     reference: Some(s("foo/bar#name@0,0,0")),
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#active@0,0,0"),
                         value: serde_json::Value::String(s("$IsNotNull$")),
-                    },
+                    }),
                     ..Default::default()
                 },
                 ..Default::default()
-            },
+            }),
             ftd::Element::Markup(ftd::Markups {
                 text: ftd::ftd2021::rendered::markup_line("5PM Tasks"),
                 line: true,
@@ -1558,25 +1558,25 @@ mod interpreter {
                             g: 77,
                             b: 77,
                             alpha: 1.0,
-                        },
+                        }),
                         dark: ftd::ColorValue {
                             r: 77,
                             g: 77,
                             b: 77,
                             alpha: 1.0,
-                        },
+                        }),
                         reference: Some(s("foo/bar#4D4D4D")),
-                    },
+                    }),
                     reference: Some(s("foo/bar#name@0,0,0")),
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#active@0,0,0"),
                         value: serde_json::Value::String(s("$IsNull$")),
-                    },
+                    }),
                     is_not_visible: true,
                     ..Default::default()
                 },
                 ..Default::default()
-            },
+            }),
             ftd::Element::Column(ftd::Column {
                 spacing: None,
                 container: ftd::Container {
@@ -1591,25 +1591,25 @@ mod interpreter {
                                         g: 255,
                                         b: 255,
                                         alpha: 1.0,
-                                    },
+                                    }),
                                     dark: ftd::ColorValue {
                                         r: 255,
                                         g: 255,
                                         b: 255,
                                         alpha: 1.0,
-                                    },
+                                    }),
                                     reference: Some(s("foo/bar#white")),
-                                },
+                                }),
                                 reference: Some(s("foo/bar#name@0,0,0,2")),
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#active@0,0,0,2"),
                                     value: serde_json::Value::String(s("$IsNotNull$")),
-                                },
+                                }),
                                 is_not_visible: true,
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("Log"),
                             line: true,
@@ -1620,24 +1620,24 @@ mod interpreter {
                                         g: 77,
                                         b: 77,
                                         alpha: 1.0,
-                                    },
+                                    }),
                                     dark: ftd::ColorValue {
                                         r: 77,
                                         g: 77,
                                         b: 77,
                                         alpha: 1.0,
-                                    },
+                                    }),
                                     reference: Some(s("foo/bar#4D4D4D")),
-                                },
+                                }),
                                 reference: Some(s("foo/bar#name@0,0,0,2")),
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#active@0,0,0,2"),
                                     value: serde_json::Value::String(s("$IsNull$")),
-                                },
+                                }),
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Column(ftd::Column {
                             spacing: None,
                             container: ftd::Container {
@@ -1653,25 +1653,25 @@ mod interpreter {
                                                     g: 255,
                                                     b: 255,
                                                     alpha: 1.0,
-                                                },
+                                                }),
                                                 dark: ftd::ColorValue {
                                                     r: 255,
                                                     g: 255,
                                                     b: 255,
                                                     alpha: 1.0,
-                                                },
+                                                }),
                                                 reference: Some(s("foo/bar#white")),
-                                            },
+                                            }),
                                             reference: Some(s("foo/bar#name@0,0,0,0,2")),
                                             condition: Some(ftd::Condition {
                                                 variable: s("foo/bar#active@0,0,0,0,2"),
                                                 value: serde_json::Value::String(s("$IsNotNull$")),
-                                            },
+                                            }),
                                             is_not_visible: true,
                                             ..Default::default()
                                         },
                                         ..Default::default()
-                                    },
+                                    }),
                                     ftd::Element::Markup(ftd::Markups {
                                         text: ftd::ftd2021::rendered::markup_line("ChildLog"),
                                         line: true,
@@ -1682,24 +1682,24 @@ mod interpreter {
                                                     g: 77,
                                                     b: 77,
                                                     alpha: 1.0,
-                                                },
+                                                }),
                                                 dark: ftd::ColorValue {
                                                     r: 77,
                                                     g: 77,
                                                     b: 77,
                                                     alpha: 1.0,
-                                                },
+                                                }),
                                                 reference: Some(s("foo/bar#4D4D4D")),
-                                            },
+                                            }),
                                             reference: Some(s("foo/bar#name@0,0,0,0,2")),
                                             condition: Some(ftd::Condition {
                                                 variable: s("foo/bar#active@0,0,0,0,2"),
                                                 value: serde_json::Value::String(s("$IsNull$")),
-                                            },
+                                            }),
                                             ..Default::default()
                                         },
                                         ..Default::default()
-                                    },
+                                    }),
                                 ],
                                 open: Some(true),
                                 ..Default::default()
@@ -1709,7 +1709,7 @@ mod interpreter {
                                 width: Some(ftd::Length::Fill),
                                 ..Default::default()
                             },
-                        },
+                        }),
                     ],
                     external_children: Default::default(),
                     open: Some(true),
@@ -1720,7 +1720,7 @@ mod interpreter {
                     width: Some(ftd::Length::Fill),
                     ..Default::default()
                 },
-            ),
+            }),
             ftd::Element::Column(ftd::Column {
                 spacing: None,
                 container: ftd::Container {
@@ -1736,25 +1736,25 @@ mod interpreter {
                                         g: 255,
                                         b: 255,
                                         alpha: 1.0,
-                                    },
+                                    }),
                                     dark: ftd::ColorValue {
                                         r: 255,
                                         g: 255,
                                         b: 255,
                                         alpha: 1.0,
-                                    },
+                                    }),
                                     reference: Some(s("foo/bar#white")),
-                                },
+                                }),
                                 reference: Some(s("foo/bar#name@0,0,0,3")),
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#active@0,0,0,3"),
                                     value: serde_json::Value::String(s("$IsNotNull$")),
-                                },
+                                }),
                                 is_not_visible: true,
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("Log2"),
                             line: true,
@@ -1765,24 +1765,24 @@ mod interpreter {
                                         g: 77,
                                         b: 77,
                                         alpha: 1.0,
-                                    },
+                                    }),
                                     dark: ftd::ColorValue {
                                         r: 77,
                                         g: 77,
                                         b: 77,
                                         alpha: 1.0,
-                                    },
+                                    }),
                                     reference: Some(s("foo/bar#4D4D4D")),
-                                },
+                                }),
                                 reference: Some(s("foo/bar#name@0,0,0,3")),
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#active@0,0,0,3"),
                                     value: serde_json::Value::String(s("$IsNull$")),
-                                },
+                                }),
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                     ],
                     open: Some(true),
                     ..Default::default()
@@ -1792,7 +1792,7 @@ mod interpreter {
                     width: Some(ftd::Length::Fill),
                     ..Default::default()
                 },
-            ),
+            }),
         ];
 
         let mut main = p2::default_column();
@@ -1823,7 +1823,7 @@ mod interpreter {
                         common: Box::new(ftd::Common {
                             data_id: Some(s("toc_main")),
                             height: Some(ftd::Length::Fill),
-                            width: Some(ftd::Length::Px { value: 300 },
+                            width: Some(ftd::Length::Px { value: 300 }),
                             ..Default::default()
                         },
                     })],
@@ -1931,7 +1931,7 @@ mod interpreter {
                                             text: "toc_main".to_string(),
                                             source: ftd::TextSource::Header,
                                         },
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -1954,7 +1954,7 @@ mod interpreter {
                                             value: ftd::ftd2021::variable::Value::Boolean {
                                                 value: true,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -1967,7 +1967,7 @@ mod interpreter {
                                                 text: "/welcome/".to_string(),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -1980,7 +1980,7 @@ mod interpreter {
                                                 text: "5PM Tasks".to_string(),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -2005,7 +2005,7 @@ mod interpreter {
                                                 text: "/Building/".to_string(),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -2018,7 +2018,7 @@ mod interpreter {
                                                 text: "Log".to_string(),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -2043,7 +2043,7 @@ mod interpreter {
                                                 text: "/ChildBuilding/".to_string(),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -2056,7 +2056,7 @@ mod interpreter {
                                                 text: "ChildLog".to_string(),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -2084,7 +2084,7 @@ mod interpreter {
                                                 text: "/Building2/".to_string(),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -2097,7 +2097,7 @@ mod interpreter {
                                                 text: "Log2".to_string(),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -2110,7 +2110,7 @@ mod interpreter {
                 ],
                 kernel: false,
                 ..Default::default()
-            },
+            }),
         );
 
         bag.insert(
@@ -2145,7 +2145,7 @@ mod interpreter {
                                     kind: Box::new(ftd::ftd2021::p2::Kind::string()),
                                     is_reference: false,
                                 },
-                            },
+                            }),
                             conditions: vec![],
                             ..Default::default()
                         },
@@ -2155,7 +2155,7 @@ mod interpreter {
                         ftd::ftd2021::component::Property {
                             default: Some(ftd::PropertyValue::Value {
                                 value: ftd::Value::Boolean { value: true },
-                            },
+                            }),
                             conditions: vec![],
                             ..Default::default()
                         },
@@ -2168,7 +2168,7 @@ mod interpreter {
                                     text: "fill".to_string(),
                                     source: ftd::TextSource::Header,
                                 },
-                            },
+                            }),
                             conditions: vec![],
                             ..Default::default()
                         },
@@ -2189,7 +2189,7 @@ mod interpreter {
                                         is_reference: false,
                                     },
                                 },
-                            },
+                            }),
                             properties: std::iter::IntoIterator::into_iter([
                                 (
                                     s("color"),
@@ -2201,10 +2201,10 @@ mod interpreter {
                                                     name: s("ftd#color"),
                                                     default: None,
                                                     is_reference: false,
-                                                },
+                                                }),
                                                 is_reference: false,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -2215,7 +2215,7 @@ mod interpreter {
                                         default: Some(ftd::PropertyValue::Variable {
                                             name: "name".to_string(),
                                             kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -2238,7 +2238,7 @@ mod interpreter {
                                         is_reference: false,
                                     },
                                 },
-                            },
+                            }),
                             properties: std::iter::IntoIterator::into_iter([
                                 (
                                     s("color"),
@@ -2250,10 +2250,10 @@ mod interpreter {
                                                     name: s("ftd#color"),
                                                     default: None,
                                                     is_reference: false,
-                                                },
+                                                }),
                                                 is_reference: false,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -2264,7 +2264,7 @@ mod interpreter {
                                         default: Some(ftd::PropertyValue::Variable {
                                             name: "name".to_string(),
                                             kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -2277,7 +2277,7 @@ mod interpreter {
                 ],
                 kernel: false,
                 ..Default::default()
-            },
+            }),
         );
 
         bag.insert(
@@ -2301,7 +2301,7 @@ mod interpreter {
                                     text: "fill".to_string(),
                                     source: ftd::TextSource::Header,
                                 },
-                            },
+                            }),
                             conditions: vec![],
                             ..Default::default()
                         },
@@ -2315,7 +2315,7 @@ mod interpreter {
                                     kind: Box::new(ftd::ftd2021::p2::Kind::string()),
                                     is_reference: false,
                                 },
-                            },
+                            }),
                             conditions: vec![],
                             ..Default::default()
                         },
@@ -2328,7 +2328,7 @@ mod interpreter {
                                     text: "300".to_string(),
                                     source: ftd::TextSource::Header,
                                 },
-                            },
+                            }),
                             conditions: vec![],
                             ..Default::default()
                         },
@@ -2338,7 +2338,7 @@ mod interpreter {
                 instructions: vec![],
                 kernel: false,
                 ..Default::default()
-            },
+            }),
         );
 
         bag.insert(
@@ -2359,14 +2359,14 @@ mod interpreter {
                         default: Some(ftd::PropertyValue::Variable {
                             name: "text".to_string(),
                             kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                        },
+                        }),
                         conditions: vec![],
                         ..Default::default()
                     },
                 )])
                 .collect(),
                 ..Default::default()
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#active@0,0,0"),
@@ -2377,7 +2377,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#active@0,0,0,2"),
@@ -2391,7 +2391,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#active@0,0,0,0,2"),
@@ -2405,7 +2405,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#active@0,0,0,3"),
@@ -2419,7 +2419,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#id@0,0"),
@@ -2433,7 +2433,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#id@0,0,0"),
@@ -2447,7 +2447,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#id@0,0,0,2"),
@@ -2461,7 +2461,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#id@0,0,0,0,2"),
@@ -2475,7 +2475,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#id@0,0,0,3"),
@@ -2489,7 +2489,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#name@0,0,0,2"),
@@ -2503,7 +2503,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#name@0,0,0,0,2"),
@@ -2517,7 +2517,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#name@0,0,0"),
@@ -2531,7 +2531,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#name@0,0,0,3"),
@@ -2545,7 +2545,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("creating-a-tree#4D4D4D"),
@@ -2579,7 +2579,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         bag.insert(
@@ -2614,7 +2614,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         let levels = vec![
@@ -2648,24 +2648,24 @@ mod interpreter {
                             g: 255,
                             b: 255,
                             alpha: 1.0,
-                        },
+                        }),
                         dark: ftd::ColorValue {
                             r: 255,
                             g: 255,
                             b: 255,
                             alpha: 1.0,
-                        },
+                        }),
                         reference: Some(s("creating-a-tree#white")),
-                    },
+                    }),
                     reference: Some(s("foo/bar#name@0,0,0")),
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#active@0,0,0"),
                         value: serde_json::Value::String(s("$IsNotNull$")),
-                    },
+                    }),
                     ..Default::default()
                 },
                 ..Default::default()
-            },
+            }),
             ftd::Element::Markup(ftd::Markups {
                 text: ftd::ftd2021::rendered::markup_line("5PM Tasks"),
                 line: true,
@@ -2676,25 +2676,25 @@ mod interpreter {
                             g: 77,
                             b: 77,
                             alpha: 1.0,
-                        },
+                        }),
                         dark: ftd::ColorValue {
                             r: 77,
                             g: 77,
                             b: 77,
                             alpha: 1.0,
-                        },
+                        }),
                         reference: Some(s("creating-a-tree#4D4D4D")),
-                    },
+                    }),
                     reference: Some(s("foo/bar#name@0,0,0")),
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#active@0,0,0"),
                         value: serde_json::Value::String(s("$IsNull$")),
-                    },
+                    }),
                     is_not_visible: true,
                     ..Default::default()
                 },
                 ..Default::default()
-            },
+            }),
             ftd::Element::Column(ftd::Column {
                 spacing: None,
                 container: ftd::Container {
@@ -2709,25 +2709,25 @@ mod interpreter {
                                         g: 255,
                                         b: 255,
                                         alpha: 1.0,
-                                    },
+                                    }),
                                     dark: ftd::ColorValue {
                                         r: 255,
                                         g: 255,
                                         b: 255,
                                         alpha: 1.0,
-                                    },
+                                    }),
                                     reference: Some(s("creating-a-tree#white")),
-                                },
+                                }),
                                 reference: Some(s("foo/bar#name@0,0,0,2")),
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#active@0,0,0,2"),
                                     value: serde_json::Value::String(s("$IsNotNull$")),
-                                },
+                                }),
                                 is_not_visible: true,
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("Log"),
                             line: true,
@@ -2738,24 +2738,24 @@ mod interpreter {
                                         g: 77,
                                         b: 77,
                                         alpha: 1.0,
-                                    },
+                                    }),
                                     dark: ftd::ColorValue {
                                         r: 77,
                                         g: 77,
                                         b: 77,
                                         alpha: 1.0,
-                                    },
+                                    }),
                                     reference: Some(s("creating-a-tree#4D4D4D")),
-                                },
+                                }),
                                 reference: Some(s("foo/bar#name@0,0,0,2")),
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#active@0,0,0,2"),
                                     value: serde_json::Value::String(s("$IsNull$")),
-                                },
+                                }),
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Column(ftd::Column {
                             spacing: None,
                             container: ftd::Container {
@@ -2771,25 +2771,25 @@ mod interpreter {
                                                     g: 255,
                                                     b: 255,
                                                     alpha: 1.0,
-                                                },
+                                                }),
                                                 dark: ftd::ColorValue {
                                                     r: 255,
                                                     g: 255,
                                                     b: 255,
                                                     alpha: 1.0,
-                                                },
+                                                }),
                                                 reference: Some(s("creating-a-tree#white")),
-                                            },
+                                            }),
                                             reference: Some(s("foo/bar#name@0,0,0,0,2")),
                                             condition: Some(ftd::Condition {
                                                 variable: s("foo/bar#active@0,0,0,0,2"),
                                                 value: serde_json::Value::String(s("$IsNotNull$")),
-                                            },
+                                            }),
                                             is_not_visible: true,
                                             ..Default::default()
                                         },
                                         ..Default::default()
-                                    },
+                                    }),
                                     ftd::Element::Markup(ftd::Markups {
                                         text: ftd::ftd2021::rendered::markup_line("ChildLog"),
                                         line: true,
@@ -2800,24 +2800,24 @@ mod interpreter {
                                                     g: 77,
                                                     b: 77,
                                                     alpha: 1.0,
-                                                },
+                                                }),
                                                 dark: ftd::ColorValue {
                                                     r: 77,
                                                     g: 77,
                                                     b: 77,
                                                     alpha: 1.0,
-                                                },
+                                                }),
                                                 reference: Some(s("creating-a-tree#4D4D4D")),
-                                            },
+                                            }),
                                             reference: Some(s("foo/bar#name@0,0,0,0,2")),
                                             condition: Some(ftd::Condition {
                                                 variable: s("foo/bar#active@0,0,0,0,2"),
                                                 value: serde_json::Value::String(s("$IsNull$")),
-                                            },
+                                            }),
                                             ..Default::default()
                                         },
                                         ..Default::default()
-                                    },
+                                    }),
                                 ],
                                 open: Some(true),
                                 ..Default::default()
@@ -2827,7 +2827,7 @@ mod interpreter {
                                 width: Some(ftd::Length::Fill),
                                 ..Default::default()
                             },
-                        },
+                        }),
                     ],
                     external_children: Default::default(),
                     open: Some(true),
@@ -2838,7 +2838,7 @@ mod interpreter {
                     width: Some(ftd::Length::Fill),
                     ..Default::default()
                 },
-            ),
+            }),
             ftd::Element::Column(ftd::Column {
                 spacing: None,
                 container: ftd::Container {
@@ -2854,25 +2854,25 @@ mod interpreter {
                                         g: 255,
                                         b: 255,
                                         alpha: 1.0,
-                                    },
+                                    }),
                                     dark: ftd::ColorValue {
                                         r: 255,
                                         g: 255,
                                         b: 255,
                                         alpha: 1.0,
-                                    },
+                                    }),
                                     reference: Some(s("creating-a-tree#white")),
-                                },
+                                }),
                                 reference: Some(s("foo/bar#name@0,0,0,3")),
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#active@0,0,0,3"),
                                     value: serde_json::Value::String(s("$IsNotNull$")),
-                                },
+                                }),
                                 is_not_visible: true,
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("Log2"),
                             line: true,
@@ -2883,25 +2883,25 @@ mod interpreter {
                                         g: 77,
                                         b: 77,
                                         alpha: 1.0,
-                                    },
+                                    }),
                                     dark: ftd::ColorValue {
                                         r: 77,
                                         g: 77,
                                         b: 77,
                                         alpha: 1.0,
-                                    },
+                                    }),
                                     reference: Some(s("creating-a-tree#4D4D4D")),
-                                },
+                                }),
                                 reference: Some(s("foo/bar#name@0,0,0,3")),
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#active@0,0,0,3"),
                                     value: serde_json::Value::String(s("$IsNull$")),
-                                },
+                                }),
                                 ..Default::default()
                             },
 
                             ..Default::default()
-                        },
+                        }),
                     ],
                     open: Some(true),
                     ..Default::default()
@@ -2911,7 +2911,7 @@ mod interpreter {
                     width: Some(ftd::Length::Fill),
                     ..Default::default()
                 },
-            ),
+            }),
         ];
 
         let mut main = p2::default_column();
@@ -2942,7 +2942,7 @@ mod interpreter {
                         common: Box::new(ftd::Common {
                             data_id: Some(s("toc_main")),
                             height: Some(ftd::Length::Fill),
-                            width: Some(ftd::Length::Px { value: 300 },
+                            width: Some(ftd::Length::Px { value: 300 }),
                             ..Default::default()
                         },
                     })],
@@ -2997,7 +2997,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         bag.insert(
@@ -3009,7 +3009,7 @@ mod interpreter {
                     value: ftd::Value::Boolean { value: true },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -3024,7 +3024,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -3045,14 +3045,14 @@ mod interpreter {
                         default: Some(ftd::PropertyValue::Variable {
                             name: "body".to_string(),
                             kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                        },
+                        }),
                         conditions: vec![],
                         ..Default::default()
                     },
                 )])
                 .collect(),
                 ..Default::default()
-            },
+            }),
         );
 
         bag.insert(
@@ -3067,7 +3067,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -3087,10 +3087,10 @@ mod interpreter {
                                         name: s("ftd#color"),
                                         default: None,
                                         is_reference: false,
-                                    },
+                                    }),
                                     is_reference: false,
                                 },
-                            },
+                            }),
                             conditions: vec![],
                             ..Default::default()
                         },
@@ -3103,7 +3103,7 @@ mod interpreter {
                                     text: "200".to_string(),
                                     source: ftd::TextSource::Header,
                                 },
-                            },
+                            }),
                             conditions: vec![],
                             ..Default::default()
                         },
@@ -3122,7 +3122,7 @@ mod interpreter {
                                 default: Some(ftd::PropertyValue::Reference {
                                     name: "reference#name".to_string(),
                                     kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                                },
+                                }),
                                 conditions: vec![],
                                 ..Default::default()
                             },
@@ -3133,7 +3133,7 @@ mod interpreter {
                 }],
                 kernel: false,
                 ..Default::default()
-            },
+            }),
         );
 
         insert_universal_variables_by_count(1, "foo/bar", &mut bag);
@@ -3154,22 +3154,22 @@ mod interpreter {
             .push(ftd::Element::Column(ftd::Column {
                 spacing: None,
                 common: Box::new(ftd::Common {
-                    width: Some(ftd::Length::Px { value: 200 },
+                    width: Some(ftd::Length::Px { value: 200 }),
                     background_color: Some(ftd::Color {
                         light: ftd::ColorValue {
                             r: 243,
                             g: 243,
                             b: 243,
                             alpha: 1.0,
-                        },
+                        }),
                         dark: ftd::ColorValue {
                             r: 243,
                             g: 243,
                             b: 243,
                             alpha: 1.0,
-                        },
+                        }),
                         reference: Some(s("reference#f3f3f3")),
-                    },
+                    }),
                     ..Default::default()
                 },
                 container: ftd::Container {
@@ -3228,7 +3228,7 @@ mod interpreter {
                         default: Some(ftd::PropertyValue::Variable {
                             name: "name".to_string(),
                             kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                        },
+                        }),
                         conditions: vec![],
                         ..Default::default()
                     },
@@ -3262,7 +3262,7 @@ mod interpreter {
                 ],
                 line_number: 1,
                 ..Default::default()
-            },
+            }),
         );
         bag.insert(
             "foo/bar#name@0".to_string(),
@@ -3276,7 +3276,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#name@1".to_string(),
@@ -3290,7 +3290,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#name@2".to_string(),
@@ -3304,7 +3304,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         let mut main = p2::default_column();
@@ -3500,7 +3500,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         p!(
@@ -3528,7 +3528,7 @@ mod interpreter {
                 .collect(),
                 instances: Default::default(),
                 order: vec![s("x"), s("y")],
-            },
+            }),
         );
 
         bag.insert(
@@ -3588,7 +3588,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         p!(
@@ -3635,7 +3635,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#x".to_string(),
@@ -3646,7 +3646,7 @@ mod interpreter {
                     value: ftd::Value::Integer { value: 20 },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         p!(
@@ -3677,7 +3677,7 @@ mod interpreter {
                         (s("about"), {
                             let s = ftd::ftd2021::p2::Kind::body();
                             if about_optional { s.into_optional() } else { s }
-                        },
+                        }),
                         (s("src"), {
                             let s = ftd::ftd2021::p2::Kind::Record {
                                 name: s("ftd#image-src"),
@@ -3685,7 +3685,7 @@ mod interpreter {
                                 is_reference: false,
                             };
                             if about_optional { s.into_optional() } else { s }
-                        },
+                        }),
                         (s("title"), ftd::ftd2021::p2::Kind::caption()),
                     ],
                     universal_arguments_as_vec(),
@@ -3698,7 +3698,7 @@ mod interpreter {
                     ftd::ftd2021::component::Property {
                         default: Some(ftd::PropertyValue::Value {
                             value: ftd::Value::Integer { value: 30 },
-                        },
+                        }),
                         conditions: vec![],
                         ..Default::default()
                     },
@@ -3718,7 +3718,7 @@ mod interpreter {
                                         default: Some(ftd::PropertyValue::Variable {
                                             name: s("title"),
                                             kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -3731,7 +3731,7 @@ mod interpreter {
                                                 source: ftd::TextSource::Header,
                                                 text: s("center"),
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -3761,7 +3761,7 @@ mod interpreter {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("about"),
                                         kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -3799,7 +3799,7 @@ mod interpreter {
                                             default: None,
                                             is_reference: false,
                                         },
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -3810,7 +3810,7 @@ mod interpreter {
                     },
                 ],
                 ..Default::default()
-            },
+            }),
         );
         bag
     }
@@ -3890,7 +3890,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#src0".to_string(),
@@ -3924,7 +3924,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#src@0".to_string(),
@@ -3940,7 +3940,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#title@0".to_string(),
@@ -3954,7 +3954,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         insert_universal_variables_by_count(1, "foo/bar", &mut bag);
@@ -4030,7 +4030,7 @@ mod interpreter {
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#about@0"),
                     value: serde_json::Value::String(s("$IsNotNull$")),
-                },
+                }),
                 ..Default::default()
             },
             line: true,
@@ -4043,7 +4043,7 @@ mod interpreter {
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#about@1"),
                     value: serde_json::Value::String(s("$IsNotNull$")),
-                },
+                }),
                 is_not_visible: true,
                 ..Default::default()
             },
@@ -4060,7 +4060,7 @@ mod interpreter {
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#src@0"),
                     value: serde_json::Value::String(s("$IsNotNull$")),
-                },
+                }),
                 ..Default::default()
             },
             ..Default::default()
@@ -4072,7 +4072,7 @@ mod interpreter {
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#src@1"),
                     value: serde_json::Value::String(s("$IsNotNull$")),
-                },
+                }),
                 ..Default::default()
             },
             ..Default::default()
@@ -4147,7 +4147,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#src1".to_string(),
@@ -4181,7 +4181,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -4196,7 +4196,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#about@1".to_string(),
@@ -4210,7 +4210,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#src@0".to_string(),
@@ -4224,12 +4224,12 @@ mod interpreter {
                             name: s("ftd#image-src"),
                             default: None,
                             is_reference: false,
-                        },
+                        }),
                         is_reference: false,
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#src@1".to_string(),
@@ -4243,12 +4243,12 @@ mod interpreter {
                             name: s("ftd#image-src"),
                             default: None,
                             is_reference: false,
-                        },
+                        }),
                         is_reference: false,
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#title@0".to_string(),
@@ -4262,7 +4262,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#title@1".to_string(),
@@ -4276,7 +4276,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         insert_universal_variables_by_count(2, "foo/bar", &mut bag);
@@ -4370,7 +4370,7 @@ mod interpreter {
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#about@0"),
                     value: serde_json::Value::String(s("$IsNotNull$")),
-                },
+                }),
                 reference: Some(s("foo/bar#about@0")),
                 ..Default::default()
             },
@@ -4383,7 +4383,7 @@ mod interpreter {
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#about@1"),
                     value: serde_json::Value::String(s("$IsNotNull$")),
-                },
+                }),
                 reference: Some(s("foo/bar#about@1")),
                 is_not_visible: true,
                 ..Default::default()
@@ -4397,7 +4397,7 @@ mod interpreter {
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#about@2"),
                     value: serde_json::Value::String(s("$IsNotNull$")),
-                },
+                }),
                 reference: Some(s("foo/bar#about@2")),
                 is_not_visible: true,
                 ..Default::default()
@@ -4415,7 +4415,7 @@ mod interpreter {
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#src@0"),
                     value: serde_json::Value::String(s("$IsNotNull$")),
-                },
+                }),
                 ..Default::default()
             },
             ..Default::default()
@@ -4427,7 +4427,7 @@ mod interpreter {
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#src@1"),
                     value: serde_json::Value::String(s("$IsNotNull$")),
-                },
+                }),
                 ..Default::default()
             },
             ..Default::default()
@@ -4439,7 +4439,7 @@ mod interpreter {
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#src@2"),
                     value: serde_json::Value::String(s("$IsNotNull$")),
-                },
+                }),
                 is_not_visible: true,
                 ..Default::default()
             },
@@ -4532,7 +4532,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#src1".to_string(),
@@ -4566,7 +4566,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#about@0".to_string(),
@@ -4580,7 +4580,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#about@1".to_string(),
@@ -4594,7 +4594,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#about@2".to_string(),
@@ -4608,7 +4608,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#src@0".to_string(),
@@ -4622,12 +4622,12 @@ mod interpreter {
                             name: s("ftd#image-src"),
                             default: None,
                             is_reference: false,
-                        },
+                        }),
                         is_reference: false,
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#src@1".to_string(),
@@ -4641,12 +4641,12 @@ mod interpreter {
                             name: s("ftd#image-src"),
                             default: None,
                             is_reference: false,
-                        },
+                        }),
                         is_reference: false,
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#src@2".to_string(),
@@ -4664,7 +4664,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#title@0".to_string(),
@@ -4678,7 +4678,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#title@1".to_string(),
@@ -4692,7 +4692,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#title@2".to_string(),
@@ -4706,7 +4706,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         insert_universal_variables_by_count(3, "foo/bar", &mut bag);
@@ -4777,14 +4777,14 @@ mod interpreter {
                         default: Some(ftd::PropertyValue::Variable {
                             name: s("body"),
                             kind: ftd::ftd2021::p2::Kind::string().string_any(),
-                        },
+                        }),
                         conditions: vec![],
                         ..Default::default()
                     },
                 )])
                 .collect(),
                 ..Default::default()
-            },
+            }),
         );
         bag.insert(
             s("fifthtry/ft#dark-mode"),
@@ -4795,7 +4795,7 @@ mod interpreter {
                     value: ftd::Value::Boolean { value: true },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             s("fifthtry/ft#toc"),
@@ -4809,7 +4809,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#h0"),
@@ -4839,7 +4839,7 @@ mod interpreter {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("title"),
                                         kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -4856,7 +4856,7 @@ mod interpreter {
                                     name: s("body"),
                                     kind: ftd::ftd2021::p2::Kind::body().into_optional(),
                                 },
-                            },
+                            }),
                             root: s("fifthtry/ft#markdown"),
                             properties: std::iter::IntoIterator::into_iter([(
                                 s("body"),
@@ -4864,7 +4864,7 @@ mod interpreter {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("body"),
                                         kind: ftd::ftd2021::p2::Kind::body(),
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -4875,7 +4875,7 @@ mod interpreter {
                     },
                 ],
                 ..Default::default()
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#body@0"),
@@ -4889,7 +4889,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#body@0,1"),
@@ -4901,7 +4901,7 @@ mod interpreter {
                     kind: ftd::ftd2021::p2::Kind::body(),
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#body@1"),
@@ -4915,7 +4915,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#body@1,1"),
@@ -4927,7 +4927,7 @@ mod interpreter {
                     kind: ftd::ftd2021::p2::Kind::body(),
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#title@0"),
@@ -4941,7 +4941,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#title@1"),
@@ -4955,7 +4955,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         let levels: Vec<String> = vec![s("0"), s("0,1"), s("1"), s("1,1")];
@@ -4976,7 +4976,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("what about the body?"),
                             line: true,
@@ -4984,12 +4984,12 @@ mod interpreter {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#body@0"),
                                     value: serde_json::Value::String(s("$IsNotNull$")),
-                                },
+                                }),
                                 reference: Some(s("foo/bar#body@0,1")),
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -5009,7 +5009,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line(""),
                             line: true,
@@ -5017,13 +5017,13 @@ mod interpreter {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#body@1"),
                                     value: serde_json::Value::String(s("$IsNotNull$")),
-                                },
+                                }),
                                 reference: Some(s("foo/bar#body@1,1")),
                                 is_not_visible: true,
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -5073,7 +5073,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#src@1"),
@@ -5089,7 +5089,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#width@0"),
@@ -5103,7 +5103,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#width@1"),
@@ -5117,7 +5117,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#src0".to_string(),
@@ -5151,7 +5151,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -5186,7 +5186,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -5228,7 +5228,7 @@ mod interpreter {
                                             default: None,
                                             is_reference: false,
                                         },
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -5239,7 +5239,7 @@ mod interpreter {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("width"),
                                         kind: ftd::ftd2021::p2::Kind::string().into_optional(),
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -5250,7 +5250,7 @@ mod interpreter {
                     },
                 }],
                 ..Default::default()
-            },
+            }),
         );
 
         insert_universal_variables_by_count(2, "foo/bar", &mut bag);
@@ -5283,7 +5283,7 @@ mod interpreter {
                         src: i("bar.png", Some(s("foo/bar#src@1"))),
                         common: Box::new(ftd::Common {
                             reference: Some(s("foo/bar#src@1")),
-                            width: Some(ftd::Length::Px { value: 300 },
+                            width: Some(ftd::Length::Px { value: 300 }),
                             ..Default::default()
                         },
                         ..Default::default()
@@ -5343,7 +5343,7 @@ mod interpreter {
                                     ftd::ftd2021::component::Property {
                                         default: Some(ftd::PropertyValue::Value {
                                             value: ftd::Value::Decimal { value: 0.06 },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -5356,7 +5356,7 @@ mod interpreter {
                                                 text: s(".1f"),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -5376,7 +5376,7 @@ mod interpreter {
                                 ftd::ftd2021::component::Property {
                                     default: Some(ftd::PropertyValue::Value {
                                         value: ftd::Value::Decimal { value: 0.01 },
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -5394,7 +5394,7 @@ mod interpreter {
                 .into_iter()
                 .collect(),
                 ..Default::default()
-            },
+            }),
         );
         bag.insert(
             "foo/bar#x@0".to_string(),
@@ -5405,7 +5405,7 @@ mod interpreter {
                     value: ftd::Value::Integer { value: 10 },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         insert_universal_variables_by_count(1, "foo/bar", &mut bag);
@@ -5460,7 +5460,7 @@ mod interpreter {
                     value: ftd::Value::Integer { value: 10 },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -5480,7 +5480,7 @@ mod interpreter {
                                     ftd::ftd2021::component::Property {
                                         default: Some(ftd::PropertyValue::Value {
                                             value: ftd::Value::Integer { value: 3 },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -5493,7 +5493,7 @@ mod interpreter {
                                                 text: s("b"),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -5513,7 +5513,7 @@ mod interpreter {
                                 ftd::ftd2021::component::Property {
                                     default: Some(ftd::PropertyValue::Value {
                                         value: ftd::Value::Integer { value: 14 },
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -5531,7 +5531,7 @@ mod interpreter {
                 .into_iter()
                 .collect(),
                 ..Default::default()
-            },
+            }),
         );
 
         insert_universal_variables_by_count(1, "foo/bar", &mut bag);
@@ -5595,7 +5595,7 @@ mod interpreter {
                                     ftd::ftd2021::component::Property {
                                         default: Some(ftd::PropertyValue::Value {
                                             value: ftd::Value::Boolean { value: true },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -5608,7 +5608,7 @@ mod interpreter {
                                                 text: s("show this when value is true"),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -5621,7 +5621,7 @@ mod interpreter {
                                                 text: s("show this when value is false"),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -5642,7 +5642,7 @@ mod interpreter {
                                     ftd::ftd2021::component::Property {
                                         default: Some(ftd::PropertyValue::Value {
                                             value: ftd::Value::Boolean { value: false },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -5655,7 +5655,7 @@ mod interpreter {
                                                 text: s("show this when value is true"),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -5668,7 +5668,7 @@ mod interpreter {
                                                 text: s("show this when value is false"),
                                                 source: ftd::TextSource::Header,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -5687,7 +5687,7 @@ mod interpreter {
                 .into_iter()
                 .collect(),
                 ..Default::default()
-            },
+            }),
         );
         bag.insert(
             "foo/bar#x@0".to_string(),
@@ -5698,7 +5698,7 @@ mod interpreter {
                     value: ftd::Value::Integer { value: 10 },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         insert_universal_variables_by_count(1, "foo/bar", &mut bag);
@@ -5755,7 +5755,7 @@ mod interpreter {
                     condition: Some(ftd::Condition {
                         variable: "foo/bar#present".to_string(),
                         value: serde_json::Value::Bool(true),
-                    },
+                    }),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -5770,7 +5770,7 @@ mod interpreter {
                     condition: Some(ftd::Condition {
                         variable: "foo/bar#present".to_string(),
                         value: serde_json::Value::Bool(false),
-                    },
+                    }),
                     is_not_visible: true,
                     ..Default::default()
                 },
@@ -5786,7 +5786,7 @@ mod interpreter {
                     condition: Some(ftd::Condition {
                         variable: "fifthtry/ft#dark-mode".to_string(),
                         value: serde_json::Value::Bool(true),
-                    },
+                    }),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -5801,7 +5801,7 @@ mod interpreter {
                     condition: Some(ftd::Condition {
                         variable: "fifthtry/ft#dark-mode".to_string(),
                         value: serde_json::Value::Bool(false),
-                    },
+                    }),
                     is_not_visible: true,
                     ..Default::default()
                 },
@@ -5819,7 +5819,7 @@ mod interpreter {
                     condition: Some(ftd::Condition {
                         variable: "foo/bar#present".to_string(),
                         value: serde_json::Value::Bool(false),
-                    },
+                    }),
                     is_not_visible: true,
                     ..Default::default()
                 },
@@ -5836,7 +5836,7 @@ mod interpreter {
                     condition: Some(ftd::Condition {
                         variable: "foo/bar#present".to_string(),
                         value: serde_json::Value::Bool(true),
-                    },
+                    }),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -5855,7 +5855,7 @@ mod interpreter {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#present@5"),
                         value: serde_json::Value::Bool(false),
-                    },
+                    }),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -5870,7 +5870,7 @@ mod interpreter {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#present@5"),
                         value: serde_json::Value::Bool(true),
-                    },
+                    }),
                     is_not_visible: true,
                     ..Default::default()
                 },
@@ -5890,7 +5890,7 @@ mod interpreter {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#present@6"),
                         value: serde_json::Value::Bool(false),
-                    },
+                    }),
                     is_not_visible: true,
                     ..Default::default()
                 },
@@ -5906,7 +5906,7 @@ mod interpreter {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#present@6"),
                         value: serde_json::Value::Bool(true),
-                    },
+                    }),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -5925,7 +5925,7 @@ mod interpreter {
                     condition: Some(ftd::Condition {
                         variable: "fifthtry/ft#dark-mode".to_string(),
                         value: serde_json::Value::Bool(true),
-                    },
+                    }),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -5941,7 +5941,7 @@ mod interpreter {
                     condition: Some(ftd::Condition {
                         variable: "fifthtry/ft#dark-mode".to_string(),
                         value: serde_json::Value::Bool(false),
-                    },
+                    }),
                     is_not_visible: true,
                     ..Default::default()
                 },
@@ -6047,7 +6047,7 @@ mod interpreter {
                                             text: "r1".to_string(),
                                             source: ftd::TextSource::Header,
                                         },
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -6070,7 +6070,7 @@ mod interpreter {
                                             text: "r2".to_string(),
                                             source: ftd::TextSource::Header,
                                         },
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -6081,7 +6081,7 @@ mod interpreter {
                     },
                 ],
                 ..Default::default()
-            },
+            }),
         );
 
         insert_universal_variables_by_count(2, "foo/bar", &mut bag);
@@ -6106,12 +6106,12 @@ mod interpreter {
                                         ..Default::default()
                                     },
                                     ..Default::default()
-                                },
+                                }),
                                 ftd::Element::Markup(ftd::Markups {
                                     text: ftd::ftd2021::rendered::markup_line("hello"),
                                     line: true,
                                     ..Default::default()
-                                },
+                                }),
                             ],
                             ..Default::default()
                         },
@@ -6213,7 +6213,7 @@ mod interpreter {
                                             text: "r1".to_string(),
                                             source: ftd::TextSource::Header,
                                         },
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -6236,7 +6236,7 @@ mod interpreter {
                                             text: "r2".to_string(),
                                             source: ftd::TextSource::Header,
                                         },
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -6247,7 +6247,7 @@ mod interpreter {
                     },
                 ],
                 ..Default::default()
-            },
+            }),
         );
 
         insert_universal_variables_by_count(2, "foo/bar", &mut bag);
@@ -6272,12 +6272,12 @@ mod interpreter {
                                         ..Default::default()
                                     },
                                     ..Default::default()
-                                },
+                                }),
                                 ftd::Element::Markup(ftd::Markups {
                                     text: ftd::ftd2021::rendered::markup_line("hello"),
                                     line: true,
                                     ..Default::default()
-                                },
+                                }),
                             ],
                             ..Default::default()
                         },
@@ -6407,7 +6407,7 @@ mod interpreter {
                                     text: s("some-child"),
                                     source: ftd::TextSource::Header,
                                 },
-                            },
+                            }),
                             conditions: vec![],
                             ..Default::default()
                         },
@@ -6417,7 +6417,7 @@ mod interpreter {
                         ftd::ftd2021::component::Property {
                             default: Some(ftd::PropertyValue::Value {
                                 value: ftd::Value::Boolean { value: true },
-                            },
+                            }),
                             conditions: vec![],
                             ..Default::default()
                         },
@@ -6447,7 +6447,7 @@ mod interpreter {
                                             text: "some-child".to_string(),
                                             source: ftd::TextSource::Header,
                                         },
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -6458,7 +6458,7 @@ mod interpreter {
                     },
                 ],
                 ..Default::default()
-            },
+            }),
         );
 
         insert_universal_variables_by_count(1, "foo/bar", &mut bag);
@@ -6490,12 +6490,12 @@ mod interpreter {
                 text: ftd::ftd2021::rendered::markup_line("hello"),
                 line: true,
                 ..Default::default()
-            },
+            }),
             ftd::Element::Markup(ftd::Markups {
                 text: ftd::ftd2021::rendered::markup_line("hello1"),
                 line: true,
                 ..Default::default()
-            },
+            }),
         ];
 
         let mut main = p2::default_column();
@@ -6544,12 +6544,12 @@ mod interpreter {
                                                 condition: Some(ftd::Condition {
                                                     variable: s("foo/bar#mobile"),
                                                     value: serde_json::Value::Bool(true),
-                                                },
+                                                }),
                                                 data_id: Some(s("some-child")),
                                                 id: Some(s("foo-id:some-child")),
                                                 ..Default::default()
                                             },
-                                        },
+                                        }),
                                         ftd::Element::Column(ftd::Column {
                                             spacing: None,
                                             container: ftd::Container {
@@ -6568,13 +6568,13 @@ mod interpreter {
                                                 condition: Some(ftd::Condition {
                                                     variable: s("foo/bar#mobile"),
                                                     value: serde_json::Value::Bool(false),
-                                                },
+                                                }),
                                                 is_not_visible: true,
                                                 data_id: Some(s("some-child")),
                                                 id: Some(s("foo-id:some-child")),
                                                 ..Default::default()
                                             },
-                                        },
+                                        }),
                                     ],
                                     external_children: Some((
                                         s("some-child"),
@@ -6624,7 +6624,7 @@ mod interpreter {
                                 kind: Box::new(ftd::ftd2021::p2::Kind::string()),
                                 is_reference: false,
                             },
-                        },
+                        }),
                         conditions: vec![],
                         ..Default::default()
                     },
@@ -6644,7 +6644,7 @@ mod interpreter {
                                         text: s("Desktop Display"),
                                         source: ftd::TextSource::Caption,
                                     },
-                                },
+                                }),
                                 conditions: vec![],
                                 ..Default::default()
                             },
@@ -6654,7 +6654,7 @@ mod interpreter {
                     },
                 }],
                 ..Default::default()
-            },
+            }),
         );
 
         bag.insert(
@@ -6672,7 +6672,7 @@ mod interpreter {
                                     text: s("some-child"),
                                     source: ftd::TextSource::Header,
                                 },
-                            },
+                            }),
                             conditions: vec![],
                             ..Default::default()
                         },
@@ -6682,7 +6682,7 @@ mod interpreter {
                         ftd::ftd2021::component::Property {
                             default: Some(ftd::PropertyValue::Value {
                                 value: ftd::Value::Boolean { value: true },
-                            },
+                            }),
                             conditions: vec![],
                             ..Default::default()
                         },
@@ -6706,7 +6706,7 @@ mod interpreter {
                                 right: ftd::PropertyValue::Value {
                                     value: ftd::ftd2021::variable::Value::Boolean { value: true },
                                 },
-                            },
+                            }),
                             properties: std::iter::IntoIterator::into_iter([(
                                 s("id"),
                                 ftd::ftd2021::component::Property {
@@ -6715,7 +6715,7 @@ mod interpreter {
                                             text: s("some-child"),
                                             source: ftd::TextSource::Header,
                                         },
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -6740,7 +6740,7 @@ mod interpreter {
                                 right: ftd::PropertyValue::Value {
                                     value: ftd::ftd2021::variable::Value::Boolean { value: false },
                                 },
-                            },
+                            }),
                             properties: std::iter::IntoIterator::into_iter([(
                                 s("id"),
                                 ftd::ftd2021::component::Property {
@@ -6749,7 +6749,7 @@ mod interpreter {
                                             text: s("some-child"),
                                             source: ftd::TextSource::Header,
                                         },
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -6760,7 +6760,7 @@ mod interpreter {
                     },
                 ],
                 ..Default::default()
-            },
+            }),
         );
 
         bag.insert(
@@ -6772,7 +6772,7 @@ mod interpreter {
                     value: ftd::ftd2021::variable::Value::Boolean { value: true },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -6790,7 +6790,7 @@ mod interpreter {
                                 kind: Box::new(ftd::ftd2021::p2::Kind::string()),
                                 is_reference: false,
                             },
-                        },
+                        }),
                         conditions: vec![],
                         ..Default::default()
                     },
@@ -6811,7 +6811,7 @@ mod interpreter {
                                             text: s("mobile-display"),
                                             source: ftd::TextSource::Header,
                                         },
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -6824,7 +6824,7 @@ mod interpreter {
                                             text: s("Mobile Display"),
                                             source: ftd::TextSource::Caption,
                                         },
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -6835,7 +6835,7 @@ mod interpreter {
                     },
                 }],
                 ..Default::default()
-            },
+            }),
         );
 
         bag.insert(
@@ -6853,7 +6853,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -6871,7 +6871,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         let levels = vec![s("1,0,0"), s("1,0,0,0"), s("1,0,0,1")];
@@ -6938,12 +6938,12 @@ mod interpreter {
                 text: ftd::ftd2021::rendered::markup_line("hello"),
                 line: true,
                 ..Default::default()
-            },
+            }),
             ftd::Element::Markup(ftd::Markups {
                 text: ftd::ftd2021::rendered::markup_line("hello again"),
                 line: true,
                 ..Default::default()
-            },
+            }),
         ];
 
         let mut main = p2::default_column();
@@ -6983,12 +6983,12 @@ mod interpreter {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#is-mobile"),
                                             value: serde_json::Value::Bool(false),
-                                        },
+                                        }),
                                         is_not_visible: true,
                                         data_id: Some(s("main-container")),
                                         ..Default::default()
                                     },
-                                },
+                                }),
                                 ftd::Element::Column(ftd::Column {
                                     spacing: None,
                                     container: ftd::Container {
@@ -7013,11 +7013,11 @@ mod interpreter {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#is-mobile"),
                                             value: serde_json::Value::Bool(true),
-                                        },
+                                        }),
                                         data_id: Some(s("main-container")),
                                         ..Default::default()
                                     },
-                                },
+                                }),
                             ],
                             ..Default::default()
                         },
@@ -7097,12 +7097,12 @@ mod interpreter {
                 text: ftd::ftd2021::rendered::markup_line("hello"),
                 line: true,
                 ..Default::default()
-            },
+            }),
             ftd::Element::Markup(ftd::Markups {
                 text: ftd::ftd2021::rendered::markup_line("hello again"),
                 line: true,
                 ..Default::default()
-            },
+            }),
         ];
 
         let mut main = p2::default_column();
@@ -7130,12 +7130,12 @@ mod interpreter {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#is-mobile"),
                                     value: serde_json::Value::Bool(false),
-                                },
+                                }),
                                 is_not_visible: true,
                                 data_id: Some(s("main-container")),
                                 ..Default::default()
                             },
-                        },
+                        }),
                         ftd::Element::Column(ftd::Column {
                             spacing: None,
                             container: ftd::Container {
@@ -7153,11 +7153,11 @@ mod interpreter {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#is-mobile"),
                                     value: serde_json::Value::Bool(true),
-                                },
+                                }),
                                 data_id: Some(s("main-container")),
                                 ..Default::default()
                             },
-                        },
+                        }),
                     ],
                     external_children: Some((
                         s("foo"),
@@ -7226,12 +7226,12 @@ mod interpreter {
                 text: ftd::ftd2021::rendered::markup_line("hello"),
                 line: true,
                 ..Default::default()
-            },
+            }),
             ftd::Element::Markup(ftd::Markups {
                 text: ftd::ftd2021::rendered::markup_line("hello again"),
                 line: true,
                 ..Default::default()
-            },
+            }),
         ];
 
         let mut external_children = p2::default_column();
@@ -7309,11 +7309,11 @@ mod interpreter {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#is-mobile"),
                                     value: serde_json::Value::Bool(false),
-                                },
+                                }),
                                 data_id: Some(s("main-container")),
                                 ..Default::default()
                             },
-                        },
+                        }),
                         ftd::Element::Column(ftd::Column {
                             spacing: None,
                             container: ftd::Container {
@@ -7348,12 +7348,12 @@ mod interpreter {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#is-mobile"),
                                     value: serde_json::Value::Bool(true),
-                                },
+                                }),
                                 is_not_visible: true,
                                 data_id: Some(s("main-container")),
                                 ..Default::default()
                             },
-                        },
+                        }),
                     ],
                     external_children: Some((
                         s("foo"),
@@ -7452,12 +7452,12 @@ mod interpreter {
                 text: ftd::ftd2021::rendered::markup_line("hello"),
                 line: true,
                 ..Default::default()
-            },
+            }),
             ftd::Element::Markup(ftd::Markups {
                 text: ftd::ftd2021::rendered::markup_line("hello again"),
                 line: true,
                 ..Default::default()
-            },
+            }),
         ];
 
         let mut main = p2::default_column();
@@ -7490,11 +7490,11 @@ mod interpreter {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#is-mobile"),
                                             value: serde_json::Value::Bool(false),
-                                        },
+                                        }),
                                         is_not_visible: true,
                                         ..Default::default()
                                     },
-                                },
+                                }),
                                 ftd::Element::Column(ftd::Column {
                                     spacing: None,
                                     container: ftd::Container {
@@ -7512,10 +7512,10 @@ mod interpreter {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#is-mobile"),
                                             value: serde_json::Value::Bool(true),
-                                        },
+                                        }),
                                         ..Default::default()
                                     },
-                                },
+                                }),
                             ],
                             ..Default::default()
                         },
@@ -7732,7 +7732,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::ftd2021::rendered::markup_line("world"),
                         line: true,
@@ -7741,7 +7741,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                 ],
                 ..Default::default()
             },
@@ -7760,7 +7760,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::ftd2021::rendered::markup_line(
                             "Arpita is developer at Fifthtry",
@@ -7771,7 +7771,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                 ],
                 ..Default::default()
             },
@@ -7793,7 +7793,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::ftd2021::rendered::markup_line("Amit is CEO of FifthTry."),
                         line: true,
@@ -7802,7 +7802,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                 ],
                 ..Default::default()
             },
@@ -7842,7 +7842,7 @@ mod interpreter {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: "name".to_string(),
                                         kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -7863,7 +7863,7 @@ mod interpreter {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: "body".to_string(),
                                         kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -7874,7 +7874,7 @@ mod interpreter {
                     },
                 ],
                 ..Default::default()
-            },
+            }),
         );
 
         bag.insert(
@@ -7889,7 +7889,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -7904,7 +7904,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -7975,7 +7975,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -8008,7 +8008,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#$loop$@2".to_string(),
@@ -8042,7 +8042,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#body@0".to_string(),
@@ -8054,7 +8054,7 @@ mod interpreter {
                     kind: ftd::ftd2021::p2::Kind::string(),
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#body@1".to_string(),
@@ -8066,7 +8066,7 @@ mod interpreter {
                     kind: ftd::ftd2021::p2::Kind::body(),
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#body@2".to_string(),
@@ -8078,7 +8078,7 @@ mod interpreter {
                     kind: ftd::ftd2021::p2::Kind::body(),
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#name@0".to_string(),
@@ -8092,7 +8092,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#name@1".to_string(),
@@ -8104,7 +8104,7 @@ mod interpreter {
                     kind: ftd::ftd2021::p2::Kind::caption(),
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#name@2".to_string(),
@@ -8116,7 +8116,7 @@ mod interpreter {
                     kind: ftd::ftd2021::p2::Kind::caption(),
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -8130,7 +8130,7 @@ mod interpreter {
                 .collect(),
                 instances: Default::default(),
                 order: vec![s("name"), s("bio")],
-            },
+            }),
         );
 
         insert_universal_variables_by_count(3, "foo/bar", &mut bag);
@@ -8189,7 +8189,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::ftd2021::rendered::markup_line(
                             "Arpita is developer at Fifthtry",
@@ -8200,7 +8200,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                 ],
                 ..Default::default()
             },
@@ -8209,7 +8209,7 @@ mod interpreter {
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#$loop$@0.ceo"),
                     value: serde_json::Value::Bool(true),
-                },
+                }),
                 is_not_visible: true,
                 ..Default::default()
             },
@@ -8227,7 +8227,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::ftd2021::rendered::markup_line("Amit is CEO of FifthTry."),
                         line: true,
@@ -8236,7 +8236,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                 ],
                 ..Default::default()
             },
@@ -8244,7 +8244,7 @@ mod interpreter {
                 condition: Some(ftd::Condition {
                     variable: s("foo/bar#$loop$@1.ceo"),
                     value: serde_json::Value::Bool(true),
-                },
+                }),
                 reference: Some(s("foo/bar#people")),
                 ..Default::default()
             },
@@ -8280,7 +8280,7 @@ mod interpreter {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: "name".to_string(),
                                         kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -8301,7 +8301,7 @@ mod interpreter {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: "body".to_string(),
                                         kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -8312,7 +8312,7 @@ mod interpreter {
                     },
                 ],
                 ..Default::default()
-            },
+            }),
         );
 
         bag.insert(
@@ -8397,7 +8397,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -8412,7 +8412,7 @@ mod interpreter {
                 .collect(),
                 instances: Default::default(),
                 order: vec![s("name"), s("bio"), s("ceo")],
-            },
+            }),
         );
 
         bag.insert(
@@ -8453,7 +8453,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         bag.insert(
@@ -8494,7 +8494,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         bag.insert(
@@ -8507,7 +8507,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         bag.insert(
@@ -8520,7 +8520,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         bag.insert(
@@ -8533,7 +8533,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         bag.insert(
@@ -8546,7 +8546,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         insert_universal_variables_by_count(2, "foo/bar", &mut bag);
@@ -8653,7 +8653,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#$loop$@1".to_string(),
@@ -8667,7 +8667,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#$loop$@2".to_string(),
@@ -8681,7 +8681,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#$loop$@3".to_string(),
@@ -8695,7 +8695,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
@@ -8739,7 +8739,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         let (g_bag, g_col) = ftd::ftd2021::test::interpret(
             "foo/bar",
@@ -8783,7 +8783,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::ftd2021::rendered::markup_line(
                             "Arpita is developer at Fifthtry",
@@ -8794,7 +8794,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                 ],
                 ..Default::default()
             },
@@ -8816,7 +8816,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::ftd2021::rendered::markup_line("Amit is CEO of FifthTry."),
                         line: true,
@@ -8825,7 +8825,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                 ],
                 ..Default::default()
             },
@@ -8862,7 +8862,7 @@ mod interpreter {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: "name".to_string(),
                                         kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -8883,7 +8883,7 @@ mod interpreter {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: "body".to_string(),
                                         kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -8930,7 +8930,7 @@ mod interpreter {
                     .collect(),
                 ],
                 ..Default::default()
-            },
+            }),
         );
 
         bag.insert(
@@ -9003,7 +9003,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -9017,7 +9017,7 @@ mod interpreter {
                 .collect(),
                 instances: Default::default(),
                 order: vec![s("name"), s("bio")],
-            },
+            }),
         );
 
         let (_g_bag, g_col) = ftd::ftd2021::test::interpret(
@@ -9095,7 +9095,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         let (g_bag, g_col) = ftd::ftd2021::test::interpret(
@@ -9150,7 +9150,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         let (g_bag, g_col) = ftd::ftd2021::test::interpret(
@@ -9349,7 +9349,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -9364,7 +9364,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -9379,7 +9379,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -9394,7 +9394,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -9409,7 +9409,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#$loop$@4".to_string(),
@@ -9423,7 +9423,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#$loop$@5".to_string(),
@@ -9437,7 +9437,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#$loop$@6".to_string(),
@@ -9451,7 +9451,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#$loop$@7".to_string(),
@@ -9465,7 +9465,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#$loop$@8".to_string(),
@@ -9479,7 +9479,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
@@ -9538,7 +9538,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::ftd2021::rendered::markup_line("name"),
                         line: true,
@@ -9547,7 +9547,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                 ],
                 ..Default::default()
             },
@@ -9569,7 +9569,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::ftd2021::rendered::markup_line("version"),
                         line: true,
@@ -9578,7 +9578,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                 ],
                 ..Default::default()
             },
@@ -9600,7 +9600,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::ftd2021::rendered::markup_line("authors"),
                         line: true,
@@ -9609,7 +9609,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                 ],
                 ..Default::default()
             },
@@ -9631,7 +9631,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::ftd2021::rendered::markup_line("edition"),
                         line: true,
@@ -9640,7 +9640,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                 ],
                 ..Default::default()
             },
@@ -9664,7 +9664,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::ftd2021::rendered::markup_line("description"),
                         line: true,
@@ -9673,7 +9673,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                 ],
                 ..Default::default()
             },
@@ -9695,7 +9695,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::ftd2021::rendered::markup_line("license"),
                         line: true,
@@ -9704,7 +9704,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                 ],
                 ..Default::default()
             },
@@ -9728,7 +9728,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::ftd2021::rendered::markup_line("repository"),
                         line: true,
@@ -9737,7 +9737,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                 ],
                 ..Default::default()
             },
@@ -9759,7 +9759,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                     ftd::Element::Markup(ftd::Markups {
                         text: ftd::ftd2021::rendered::markup_line("homepage"),
                         line: true,
@@ -9768,7 +9768,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                 ],
                 ..Default::default()
             },
@@ -9791,7 +9791,7 @@ mod interpreter {
                 .collect(),
                 instances: Default::default(),
                 order: vec![s("title"), s("description")],
-            },
+            }),
         );
 
         bag.insert(
@@ -9817,7 +9817,7 @@ mod interpreter {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: "name".to_string(),
                                         kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -9838,7 +9838,7 @@ mod interpreter {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: "body".to_string(),
                                         kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -9849,7 +9849,7 @@ mod interpreter {
                     },
                 ],
                 ..Default::default()
-            },
+            }),
         );
 
         bag.insert(
@@ -10078,7 +10078,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );*/
 
         let (_g_bag, g_col) = ftd::ftd2021::test::interpret(
@@ -10128,7 +10128,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                     ftd::Element::Column(ftd::Column {
                         spacing: None,
                         container: ftd::Container {
@@ -10145,7 +10145,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                     ftd::Element::Column(ftd::Column {
                         spacing: None,
                         container: ftd::Container {
@@ -10162,7 +10162,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                 ],
                 ..Default::default()
             },
@@ -10184,7 +10184,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                     ftd::Element::Column(ftd::Column {
                         spacing: None,
                         container: ftd::Container {
@@ -10201,7 +10201,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                     ftd::Element::Column(ftd::Column {
                         spacing: None,
                         container: ftd::Container {
@@ -10218,7 +10218,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                 ],
                 ..Default::default()
             },
@@ -10334,7 +10334,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -10466,7 +10466,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -10499,7 +10499,7 @@ mod interpreter {
                                                 kind: Box::new(ftd::ftd2021::p2::Kind::string()),
                                                 is_reference: false,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -10515,7 +10515,7 @@ mod interpreter {
                                                 ),
                                                 is_reference: false,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -10542,7 +10542,7 @@ mod interpreter {
                                                 default: None,
                                                 is_reference: true,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -10557,7 +10557,7 @@ mod interpreter {
                                                 default: None,
                                                 is_reference: true,
                                             },
-                                        },
+                                        }),
                                         conditions: vec![],
                                         ..Default::default()
                                     },
@@ -10569,7 +10569,7 @@ mod interpreter {
                     },
                 ],
                 ..Default::default()
-            },
+            }),
         );
 
         let (_g_bag, g_col) = ftd::ftd2021::test::interpret(
@@ -10667,7 +10667,7 @@ mod interpreter {
                                 default: Some(ftd::PropertyValue::Reference {
                                     name: "hello-world-variable#hello-world".to_string(),
                                     kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                                },
+                                }),
                                 conditions: vec![],
                                 ..Default::default()
                             },
@@ -10678,7 +10678,7 @@ mod interpreter {
                 }],
                 invocations: vec![],
                 ..Default::default()
-            },
+            }),
         );
         bag.insert(
             s("hello-world-variable#hello-world"),
@@ -10692,7 +10692,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         insert_universal_variables_by_count(1, "foo/bar", &mut bag);
@@ -10803,10 +10803,10 @@ mod interpreter {
                                     kind: Box::from(ftd::ftd2021::p2::Kind::Integer {
                                         default: Some(s("10")),
                                         is_reference: false,
-                                    },
+                                    }),
                                     is_reference: false,
                                 },
-                            },
+                            }),
                             conditions: vec![],
                             ..Default::default()
                         },
@@ -10818,7 +10818,7 @@ mod interpreter {
                                 name: s("name"),
                                 kind: ftd::ftd2021::p2::Kind::caption_or_body()
                                     .set_default(Some(s("hello world"))),
-                            },
+                            }),
                             conditions: vec![],
                             ..Default::default()
                         },
@@ -10834,7 +10834,7 @@ mod interpreter {
                                 source: ftd::TextSource::Default,
                             },
                         ),
-                        (s("line-clamp"), ftd::Value::Integer { value: 10 },
+                        (s("line-clamp"), ftd::Value::Integer { value: 10 }),
                     ])
                     .collect(),
                     std::iter::IntoIterator::into_iter([
@@ -10845,7 +10845,7 @@ mod interpreter {
                                 source: ftd::TextSource::Caption,
                             },
                         ),
-                        (s("line-clamp"), ftd::Value::Integer { value: 10 },
+                        (s("line-clamp"), ftd::Value::Integer { value: 10 }),
                     ])
                     .collect(),
                     std::iter::IntoIterator::into_iter([
@@ -10856,13 +10856,13 @@ mod interpreter {
                                 source: ftd::TextSource::Caption,
                             },
                         ),
-                        (s("line-clamp"), ftd::Value::Integer { value: 20 },
+                        (s("line-clamp"), ftd::Value::Integer { value: 20 }),
                     ])
                     .collect(),
                 ],
                 line_number: 1,
                 ..Default::default()
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#name@0"),
@@ -10876,7 +10876,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#name@1"),
@@ -10890,7 +10890,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#name@2"),
@@ -10904,7 +10904,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#line-clamp@0"),
@@ -10915,7 +10915,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#line-clamp@1"),
@@ -10926,7 +10926,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#line-clamp@2"),
@@ -10937,7 +10937,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         let (g_bag, g_col) = ftd::ftd2021::test::interpret(
             "foo/bar",
@@ -11029,7 +11029,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#abrar-name"),
@@ -11043,7 +11043,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#default-age"),
@@ -11054,7 +11054,7 @@ mod interpreter {
                     value: ftd::ftd2021::variable::Value::Integer { value: 20 },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#person"),
@@ -11088,7 +11088,7 @@ mod interpreter {
                 .collect(),
                 instances: Default::default(),
                 order: vec![s("name"), s("address"), s("bio"), s("age"), s("size")],
-            },
+            }),
         );
 
         let mut main = p2::default_column();
@@ -11189,7 +11189,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#default-size"),
@@ -11200,7 +11200,7 @@ mod interpreter {
                     value: ftd::Value::Integer { value: 10 },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#foo"),
@@ -11242,10 +11242,10 @@ mod interpreter {
                                             kind: Box::new(ftd::ftd2021::p2::Kind::Integer {
                                                 default: Some(s("$foo/bar#default-size")),
                                                 is_reference: false,
-                                            },
+                                            }),
                                             is_reference: false,
                                         },
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -11257,7 +11257,7 @@ mod interpreter {
                                         name: s("name"),
                                         kind: ftd::ftd2021::p2::Kind::caption_or_body()
                                             .set_default(Some(s("$foo/bar#default-name"))),
-                                    },
+                                    }),
                                     conditions: vec![],
                                     ..Default::default()
                                 },
@@ -11269,7 +11269,7 @@ mod interpreter {
                 }],
                 kernel: false,
                 ..Default::default()
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#name@0"),
@@ -11282,7 +11282,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#name@1"),
@@ -11296,7 +11296,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#text-size@0"),
@@ -11309,7 +11309,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#text-size@1"),
@@ -11320,7 +11320,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         insert_universal_variables_by_count(2, "foo/bar", &mut bag);
@@ -11452,7 +11452,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#amitu"),
@@ -11486,7 +11486,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#default-phone"),
@@ -11500,7 +11500,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#lead"),
@@ -11540,7 +11540,7 @@ mod interpreter {
                         order: vec![s("name"), s("contact"), s("fax"), s("no-of-employees")],
                     },
                 ],
-            },
+            }),
         );
 
         let (g_bag, g_col) = ftd::ftd2021::test::interpret(
@@ -11675,7 +11675,7 @@ mod interpreter {
                                 id: Some(s("page-id:inside-page-id")),
                                 ..Default::default()
                             },
-                        },
+                        }),
                         ftd::Element::Row(ftd::Row {
                             spacing: None,
                             common: Box::new(ftd::Common {
@@ -11684,7 +11684,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -11787,7 +11787,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Column(ftd::Column {
                             spacing: None,
                             container: ftd::Container {
@@ -11801,7 +11801,7 @@ mod interpreter {
                                             ..Default::default()
                                         },
                                         ..Default::default()
-                                    },
+                                    }),
                                     ftd::Element::Column(ftd::Column {
                                         spacing: None,
                                         container: ftd::Container {
@@ -11817,14 +11817,14 @@ mod interpreter {
                                                         ..Default::default()
                                                     },
                                                     ..Default::default()
-                                                },
+                                                }),
                                                 ftd::Element::Markup(ftd::Markups {
                                                     text: ftd::ftd2021::rendered::markup_line(
                                                         "hello",
                                                     ),
                                                     line: true,
                                                     ..Default::default()
-                                                },
+                                                }),
                                             ],
                                             ..Default::default()
                                         },
@@ -11833,7 +11833,7 @@ mod interpreter {
                                             id: Some(s("heading-32")),
                                             ..Default::default()
                                         },
-                                    },
+                                    }),
                                 ],
                                 ..Default::default()
                             },
@@ -11842,7 +11842,7 @@ mod interpreter {
                                 id: Some(s("heading-21")),
                                 ..Default::default()
                             },
-                        },
+                        }),
                         ftd::Element::Column(ftd::Column {
                             spacing: None,
                             container: ftd::Container {
@@ -11863,7 +11863,7 @@ mod interpreter {
                                 id: Some(s("heading-22")),
                                 ..Default::default()
                             },
-                        },
+                        }),
                         ftd::Element::Column(ftd::Column {
                             spacing: None,
                             container: ftd::Container {
@@ -11884,7 +11884,7 @@ mod interpreter {
                                 id: Some(s("heading-23")),
                                 ..Default::default()
                             },
-                        },
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -11910,7 +11910,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Column(ftd::Column {
                             spacing: None,
                             container: ftd::Container {
@@ -11931,7 +11931,7 @@ mod interpreter {
                                 id: Some(s("heading-33")),
                                 ..Default::default()
                             },
-                        },
+                        }),
                         ftd::Element::Column(ftd::Column {
                             spacing: None,
                             container: ftd::Container {
@@ -11952,7 +11952,7 @@ mod interpreter {
                                 id: Some(s("heading-24")),
                                 ..Default::default()
                             },
-                        },
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -12039,11 +12039,11 @@ mod interpreter {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#mobile"),
                                     value: serde_json::Value::Bool(true),
-                                },
+                                }),
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("Desktop"),
                             line: true,
@@ -12051,12 +12051,12 @@ mod interpreter {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#mobile"),
                                     value: serde_json::Value::Bool(false),
-                                },
+                                }),
                                 is_not_visible: true,
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -12075,7 +12075,7 @@ mod interpreter {
                             action: s("toggle"),
                             target: s("foo/bar#mobile"),
                             parameters: Default::default(),
-                        },
+                        }),
                     }],
                     ..Default::default()
                 },
@@ -12122,14 +12122,14 @@ mod interpreter {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#open@0"),
                         value: serde_json::Value::Bool(true),
-                    },
+                    }),
                     events: vec![ftd::Event {
                         name: s("onclick"),
                         action: ftd::Action {
                             action: s("toggle"),
                             target: s("foo/bar#open@0"),
                             parameters: Default::default(),
-                        },
+                        }),
                     }],
                     ..Default::default()
                 },
@@ -12172,7 +12172,7 @@ mod interpreter {
                                 default: None,
                                 is_reference: false,
                             },
-                        },
+                        }),
                         ..Default::default()
                     },
                 )])
@@ -12197,7 +12197,7 @@ mod interpreter {
                     right: ftd::PropertyValue::Value {
                         value: ftd::ftd2021::variable::Value::Boolean { value: true },
                     },
-                },
+                }),
                 kernel: false,
                 invocations: vec![
                     std::iter::IntoIterator::into_iter([
@@ -12208,13 +12208,13 @@ mod interpreter {
                                 source: ftd::TextSource::Caption,
                             },
                         ),
-                        (s("open"), ftd::Value::Boolean { value: true },
+                        (s("open"), ftd::Value::Boolean { value: true }),
                     ])
                     .collect(),
                 ],
                 line_number: 1,
                 ..Default::default()
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#name@0"),
@@ -12228,7 +12228,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#open@0"),
@@ -12239,7 +12239,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         insert_universal_variables_by_count(1, "foo/bar", &mut bag);
@@ -12285,12 +12285,12 @@ mod interpreter {
                                         action: s("toggle"),
                                         target: s("foo/bar#open@0"),
                                         parameters: Default::default(),
-                                    },
+                                    }),
                                 }],
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("Open True"),
                             line: true,
@@ -12298,11 +12298,11 @@ mod interpreter {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#open@0"),
                                     value: serde_json::Value::Bool(true),
-                                },
+                                }),
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("Open False"),
                             line: true,
@@ -12310,12 +12310,12 @@ mod interpreter {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#open@0"),
                                     value: serde_json::Value::Bool(false),
-                                },
+                                }),
                                 is_not_visible: true,
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -12367,13 +12367,13 @@ mod interpreter {
                                         action: s("toggle"),
                                         target: s("foo/bar#open@0"),
                                         parameters: Default::default(),
-                                    },
+                                    }),
                                 }],
                                 reference: Some(s("foo/bar#toc@0.title")),
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Column(ftd::Column {
                             spacing: None,
                             container: ftd::Container {
@@ -12387,7 +12387,7 @@ mod interpreter {
                                                 action: s("toggle"),
                                                 target: s("foo/bar#open@0,1"),
                                                 parameters: Default::default(),
-                                            },
+                                            }),
                                         }],
                                         reference: Some(s("foo/bar#toc@0,1.title")),
                                         ..Default::default()
@@ -12400,10 +12400,10 @@ mod interpreter {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#open@0"),
                                     value: serde_json::Value::Bool(true),
-                                },
+                                }),
                                 ..Default::default()
                             },
-                        },
+                        }),
                         ftd::Element::Column(ftd::Column {
                             spacing: None,
                             container: ftd::Container {
@@ -12417,7 +12417,7 @@ mod interpreter {
                                                 action: s("toggle"),
                                                 target: s("foo/bar#open@0,2"),
                                                 parameters: Default::default(),
-                                            },
+                                            }),
                                         }],
                                         reference: Some(s("foo/bar#toc@0,2.title")),
                                         ..Default::default()
@@ -12430,10 +12430,10 @@ mod interpreter {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#open@0"),
                                     value: serde_json::Value::Bool(true),
-                                },
+                                }),
                                 ..Default::default()
                             },
-                        },
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -12517,22 +12517,22 @@ mod interpreter {
                                                             action: s("toggle"),
                                                             target: s("foo/bar#open@0"),
                                                             parameters: Default::default(),
-                                                        },
+                                                        }),
                                                     }],
                                                     ..Default::default()
                                                 },
                                                 ..Default::default()
-                                            },
+                                            }),
                                             ftd::Element::Markup(ftd::Markups {
                                                 text: ftd::ftd2021::rendered::markup_line("Hello"),
                                                 line: true,
                                                 ..Default::default()
-                                            },
+                                            }),
                                         ],
                                         ..Default::default()
                                     },
                                     ..Default::default()
-                                },
+                                }),
                                 ftd::Element::Column(ftd::Column {
                                     spacing: None,
                                     container: ftd::Container {
@@ -12547,10 +12547,10 @@ mod interpreter {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#open@0"),
                                             value: serde_json::Value::Bool(true),
-                                        },
+                                        }),
                                         ..Default::default()
                                     },
-                                },
+                                }),
                             ],
                             ..Default::default()
                         },
@@ -12735,15 +12735,15 @@ mod interpreter {
                             g: 0,
                             b: 0,
                             alpha: 1.0,
-                        },
+                        }),
                         dark: ftd::ColorValue {
                             r: 255,
                             g: 0,
                             b: 0,
                             alpha: 1.0,
-                        },
+                        }),
                         reference: Some(s("foo/bar#red")),
-                    },
+                    }),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -12762,15 +12762,15 @@ mod interpreter {
                                 g: 128,
                                 b: 0,
                                 alpha: 1.0,
-                            },
+                            }),
                             dark: ftd::ColorValue {
                                 r: 0,
                                 g: 128,
                                 b: 0,
                                 alpha: 1.0,
-                            },
+                            }),
                             reference: Some(s("foo/bar#green")),
-                        },
+                        }),
                         ..Default::default()
                     },
                     ..Default::default()
@@ -12868,7 +12868,7 @@ mod interpreter {
                                             ..Default::default()
                                         },
                                         ..Default::default()
-                                    },
+                                    }),
                                     ftd::Element::Markup(ftd::Markups {
                                         text: ftd::ftd2021::rendered::markup_line("Hello"),
                                         line: true,
@@ -12877,17 +12877,17 @@ mod interpreter {
                                             ..Default::default()
                                         },
                                         ..Default::default()
-                                    },
+                                    }),
                                 ],
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("foo says hello"),
                             line: true,
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("Hello"),
                             line: true,
@@ -12896,7 +12896,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -12957,7 +12957,7 @@ mod interpreter {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#count"),
                         value: serde_json::Value::from(8),
-                    },
+                    }),
                     is_not_visible: true,
                     ..Default::default()
                 },
@@ -12976,7 +12976,7 @@ mod interpreter {
                             action: s("increment"),
                             target: s("foo/bar#count"),
                             parameters: Default::default(),
-                        },
+                        }),
                     }],
                     ..Default::default()
                 },
@@ -12995,7 +12995,7 @@ mod interpreter {
                             action: s("decrement"),
                             target: s("foo/bar#count"),
                             parameters: Default::default(),
-                        },
+                        }),
                     }],
                     ..Default::default()
                 },
@@ -13021,7 +13021,7 @@ mod interpreter {
                                 }],
                             )])
                             .collect(),
-                        },
+                        }),
                     }],
                     ..Default::default()
                 },
@@ -13053,16 +13053,16 @@ mod interpreter {
                                         ftd::ftd2021::event::ParameterData {
                                             value: serde_json::Value::from(2),
                                             reference: None,
-                                        },
+                                        }),
                                         ftd::ftd2021::event::ParameterData {
                                             value: serde_json::Value::from(10),
                                             reference: None,
-                                        },
+                                        }),
                                     ],
                                 ),
                             ])
                             .collect(),
-                        },
+                        }),
                     }],
                     ..Default::default()
                 },
@@ -13086,15 +13086,15 @@ mod interpreter {
                                     ftd::ftd2021::event::ParameterData {
                                         value: serde_json::Value::from(2),
                                         reference: None,
-                                    },
+                                    }),
                                     ftd::ftd2021::event::ParameterData {
                                         value: serde_json::Value::from(10),
                                         reference: None,
-                                    },
+                                    }),
                                 ],
                             )])
                             .collect(),
-                        },
+                        }),
                     }],
                     ..Default::default()
                 },
@@ -13151,7 +13151,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("increment counter"),
                             line: true,
@@ -13169,12 +13169,12 @@ mod interpreter {
                                             }],
                                         )])
                                         .collect(),
-                                    },
+                                    }),
                                 }],
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("decrement counter"),
                             line: true,
@@ -13192,12 +13192,12 @@ mod interpreter {
                                             }],
                                         )])
                                         .collect(),
-                                    },
+                                    }),
                                 }],
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -13290,7 +13290,7 @@ mod interpreter {
                         ftd::Condition {
                             variable: s("foo/bar#count"),
                             value: serde_json::Value::from(0),
-                        },
+                        }),
                     ),
                     is_not_visible: false,
                     events: vec![
@@ -13307,8 +13307,8 @@ mod interpreter {
                                     reference: None,
                                 }])])
                                     .collect(),
-                            },
-                        },
+                            }),
+                        }),
                     ],
                     reference: Some(s("foo/bar#src@0")),
                     ..Default::default()
@@ -13327,7 +13327,7 @@ mod interpreter {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#count"),
                         value: serde_json::Value::from(1),
-                    },
+                    }),
                     is_not_visible: true,
                     events: vec![ftd::Event {
                         name: s("onclick"),
@@ -13340,15 +13340,15 @@ mod interpreter {
                                     ftd::ftd2021::event::ParameterData {
                                         value: serde_json::Value::from(0),
                                         reference: None,
-                                    },
+                                    }),
                                     ftd::ftd2021::event::ParameterData {
                                         value: serde_json::Value::from(1),
                                         reference: None,
-                                    },
+                                    }),
                                 ],
                             )])
                             .collect(),
-                        },
+                        }),
                     }],
                     reference: Some(s("foo/bar#src@1")),
                     ..Default::default()
@@ -13410,7 +13410,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("Ayushi"),
                             line: true,
@@ -13419,7 +13419,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("AmitU"),
                             line: true,
@@ -13428,7 +13428,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -13491,19 +13491,19 @@ mod interpreter {
                                         ..Default::default()
                                     },
                                     ..Default::default()
-                                },
+                                }),
                                 ftd::Element::Column(ftd::Column {
                                     spacing: None,
                                     common: Box::new(ftd::Common {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#visible@0,0,2"),
                                             value: serde_json::Value::Bool(true),
-                                        },
+                                        }),
                                         data_id: Some(s("some-child")),
                                         ..Default::default()
                                     },
                                     ..Default::default()
-                                },
+                                }),
                             ],
                             external_children: Some((s("some-child"), vec![vec![1]], vec![])),
                             open: Some(true),
@@ -13511,7 +13511,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                     ftd::Element::Column(ftd::Column {
                         spacing: None,
                         container: ftd::Container {
@@ -13532,19 +13532,19 @@ mod interpreter {
                                         ..Default::default()
                                     },
                                     ..Default::default()
-                                },
+                                }),
                                 ftd::Element::Column(ftd::Column {
                                     spacing: None,
                                     common: Box::new(ftd::Common {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#visible@0,0,3"),
                                             value: serde_json::Value::Bool(true),
-                                        },
+                                        }),
                                         data_id: Some(s("some-child")),
                                         ..Default::default()
                                     },
                                     ..Default::default()
-                                },
+                                }),
                             ],
                             external_children: Some((
                                 s("some-child"),
@@ -13578,7 +13578,7 @@ mod interpreter {
                                                             ..Default::default()
                                                         },
                                                         ..Default::default()
-                                                    },
+                                                    }),
                                                     ftd::Element::Column(ftd::Column {
                                                         spacing: None,
                                                         common: Box::new(ftd::Common {
@@ -13589,12 +13589,12 @@ mod interpreter {
                                                                 value: serde_json::Value::Bool(
                                                                     true,
                                                                 ),
-                                                            },
+                                                            }),
                                                             data_id: Some(s("some-child")),
                                                             ..Default::default()
                                                         },
                                                         ..Default::default()
-                                                    },
+                                                    }),
                                                 ],
                                                 external_children: Some((
                                                     s("some-child"),
@@ -13622,7 +13622,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    },
+                    }),
                 ],
                 ..Default::default()
             },
@@ -13659,20 +13659,20 @@ mod interpreter {
                                         ..Default::default()
                                     },
                                     ..Default::default()
-                                },
+                                }),
                                 ftd::Element::Column(ftd::Column {
                                     spacing: None,
                                     common: Box::new(ftd::Common {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#visible@0,0"),
                                             value: serde_json::Value::Bool(true),
-                                        },
+                                        }),
                                         data_id: Some(s("some-child")),
                                         id: Some(s("beverage:some-child")),
                                         ..Default::default()
                                     },
                                     ..Default::default()
-                                },
+                                }),
                             ],
                             external_children: Some((
                                 s("some-child"),
@@ -13753,7 +13753,7 @@ mod interpreter {
                             text: ftd::ftd2021::rendered::markup_line("$hello"),
                             line: true,
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("hello"),
                             line: true,
@@ -13762,7 +13762,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("hello"),
                             line: true,
@@ -13771,12 +13771,12 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("hello"),
                             line: true,
                             ..Default::default()
-                        },
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -13872,7 +13872,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("Heading 00 body"),
                             line: true,
@@ -13883,11 +13883,11 @@ mod interpreter {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#body@0"),
                                     value: serde_json::Value::String(s("$IsNotNull$")),
-                                },
+                                }),
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -13915,7 +13915,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("Heading 01 body"),
                             line: true,
@@ -13924,12 +13924,12 @@ mod interpreter {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#body@1"),
                                     value: serde_json::Value::String(s("$IsNotNull$")),
-                                },
+                                }),
                                 reference: Some(s("foo/bar#body@1,1")),
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -14072,7 +14072,7 @@ mod interpreter {
                             text: ftd::ftd2021::rendered::markup_line("Hello empty list"),
                             line: true,
                             ..Default::default()
-                        },
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -14089,7 +14089,7 @@ mod interpreter {
                             text: ftd::ftd2021::rendered::markup_line("Hello list"),
                             line: true,
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Null,
                     ],
                     ..Default::default()
@@ -14298,7 +14298,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Column(ftd::Column {
                             spacing: None,
                             container: ftd::Container {
@@ -14314,7 +14314,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Column(ftd::Column {
                             spacing: None,
                             container: ftd::Container {
@@ -14330,7 +14330,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Column(ftd::Column {
                             spacing: None,
                             container: ftd::Container {
@@ -14346,7 +14346,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -14441,7 +14441,7 @@ mod interpreter {
                             ..Default::default()
                         },
                         ..Default::default()
-                    }, ftd::Element::Markup(ftd::Markups {
+                    }), ftd::Element::Markup(ftd::Markups {
                         text: ftd::ftd2021::rendered::markup_line("World"),
                         line: true,
                         common: Box::new(ftd::Common {
@@ -14462,7 +14462,7 @@ mod interpreter {
                     width: Some(
                         ftd::Length::Px {
                             value: 1000,
-                        },
+                        }),
                     ),
                     background_image: Some(
                         i("https://image.shutterstock.com/z/stock-&lt;!&ndash;&ndash;&gt;vector-vector-illustration-of-a-beautiful-summer-landscape-143054302.jpg", Some(s("foo/bar#bg-src"))),
@@ -14516,7 +14516,7 @@ mod interpreter {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#current"),
                         value: serde_json::Value::String(s("some value")),
-                    },
+                    }),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -14551,15 +14551,15 @@ mod interpreter {
                                     ftd::ftd2021::event::ParameterData {
                                         value: serde_json::Value::String(s("hello world")),
                                         reference: None,
-                                    },
+                                    }),
                                     ftd::ftd2021::event::ParameterData {
                                         value: serde_json::Value::String(s("string")),
                                         reference: None,
-                                    },
+                                    }),
                                 ],
                             )])
                             .collect(),
-                        },
+                        }),
                     }],
                     ..Default::default()
                 },
@@ -14583,15 +14583,15 @@ mod interpreter {
                                     ftd::ftd2021::event::ParameterData {
                                         value: serde_json::Value::String(s("good bye")),
                                         reference: Some(s("foo/bar#msg")),
-                                    },
+                                    }),
                                     ftd::ftd2021::event::ParameterData {
                                         value: serde_json::Value::String(s("string")),
                                         reference: None,
-                                    },
+                                    }),
                                 ],
                             )])
                             .collect(),
-                        },
+                        }),
                     }],
                     ..Default::default()
                 },
@@ -14716,12 +14716,12 @@ mod interpreter {
                                     ..Default::default()
                                 },
                                 ..Default::default()
-                            },
+                            }),
                             ftd::Element::Markup(ftd::Markups {
                                 text: ftd::ftd2021::rendered::markup_line("Swapnil Sharma"),
                                 line: true,
                                 ..Default::default()
-                            },
+                            }),
                         ],
                         ..Default::default()
                     },
@@ -14787,15 +14787,15 @@ mod interpreter {
                                 ftd::Condition {
                                     variable: s("foo/bar#MOUSE-IN@0"),
                                     value: serde_json::Value::Bool(true),
-                                },
+                                }),
                                 ftd::ConditionalValue {
                                     value: serde_json::from_str("{\"$kind$\":\"light\",\"dark\":\"rgba(255,0,0,1)\",\"light\":\"rgba(255,0,0,1)\"}").unwrap(),
                                     important: false,
                                     reference: Some(s("foo/bar#red")),
-                                },
+                                }),
                             )],
                             default: None,
-                        },
+                        }),
                     )])
                         .collect(),
                     events: vec![
@@ -14810,16 +14810,16 @@ mod interpreter {
                                         ftd::ftd2021::event::ParameterData {
                                             value: serde_json::Value::from(true),
                                             reference: None,
-                                        },
+                                        }),
                                         ftd::ftd2021::event::ParameterData {
                                             value: serde_json::Value::String(s("boolean")),
                                             reference: None,
-                                        },
+                                        }),
                                     ],
                                 )])
                                     .collect(),
-                            },
-                        },
+                            }),
+                        }),
                         ftd::Event {
                             name: s("onmouseleave"),
                             action: ftd::Action {
@@ -14831,16 +14831,16 @@ mod interpreter {
                                         ftd::ftd2021::event::ParameterData {
                                             value: serde_json::Value::from(false),
                                             reference: None,
-                                        },
+                                        }),
                                         ftd::ftd2021::event::ParameterData {
                                             value: serde_json::Value::String(s("boolean")),
                                             reference: None,
-                                        },
+                                        }),
                                     ],
                                 )])
                                     .collect(),
-                            },
-                        },
+                            }),
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -14883,11 +14883,11 @@ mod interpreter {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#open@0"),
                                     value: serde_json::Value::Bool(true),
-                                },
+                                }),
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Column(ftd::Column {
                             spacing: None,
                             container: ftd::Container {
@@ -14898,7 +14898,7 @@ mod interpreter {
                                         condition: Some(ftd::Condition {
                                             variable: s("foo/bar#open@0,1"),
                                             value: serde_json::Value::Bool(true),
-                                        },
+                                        }),
                                         ..Default::default()
                                     },
                                     ..Default::default()
@@ -14913,20 +14913,20 @@ mod interpreter {
                                             action: s("toggle"),
                                             target: s("foo/bar#open@0,1"),
                                             parameters: Default::default(),
-                                        },
-                                    },
+                                        }),
+                                    }),
                                     ftd::Event {
                                         name: s("onclick"),
                                         action: ftd::Action {
                                             action: s("stop-propagation"),
                                             target: s(""),
                                             parameters: Default::default(),
-                                        },
-                                    },
+                                        }),
+                                    }),
                                 ],
                                 ..Default::default()
                             },
-                        },
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -14937,7 +14937,7 @@ mod interpreter {
                             action: s("toggle"),
                             target: s("foo/bar#open@0"),
                             parameters: Default::default(),
-                        },
+                        }),
                     }],
                     ..Default::default()
                 },
@@ -14993,27 +14993,27 @@ mod interpreter {
                                         ftd::Condition {
                                             variable: s("foo/bar#b@0"),
                                             value: serde_json::Value::Bool(true),
-                                        },
+                                        }),
                                         ftd::ConditionalValue {
                                             value: serde_json::from_str("{\"$kind$\":\"light\",\"dark\":\"rgba(0,0,0,1)\",\"light\":\"rgba(0,0,0,1)\"}").unwrap(),
                                             important: false,
                                             reference: Some(s("foo/bar#black")),
-                                        },
+                                        }),
                                     ),
                                     (
                                         ftd::Condition {
                                             variable: s("foo/bar#a@0"),
                                             value: serde_json::Value::from(30),
-                                        },
+                                        }),
                                         ftd::ConditionalValue {
                                             value: serde_json::from_str("{\"$kind$\":\"light\",\"dark\":\"rgba(255,0,0,1)\",\"light\":\"rgba(255,0,0,1)\"}").unwrap(),
                                             important: false,
                                             reference: Some(s("foo/bar#red")),
-                                        },
+                                        }),
                                     ),
                                 ],
                                 default: None,
-                            },
+                            }),
                         )])
                             .collect(),
                         reference: Some(s("foo/bar#a@0")),
@@ -15031,8 +15031,8 @@ mod interpreter {
                             action: s("toggle"),
                             target: s("foo/bar#b@0"),
                             parameters: Default::default(),
-                        },
-                    },
+                        }),
+                    }),
                     ftd::Event {
                         name: s("onclick"),
                         action: ftd::Action {
@@ -15046,8 +15046,8 @@ mod interpreter {
                                 }],
                             )])
                                 .collect(),
-                        },
-                    },
+                        }),
+                    }),
                 ],
                 ..Default::default()
             },
@@ -15100,7 +15100,7 @@ mod interpreter {
                                 condition: Some(ftd::Condition {
                                     variable: s("foo/bar#b@0,0"),
                                     value: serde_json::Value::Bool(true),
-                                },
+                                }),
                                 is_not_visible: true,
                                 ..Default::default()
                             },
@@ -15112,7 +15112,7 @@ mod interpreter {
                         condition: Some(ftd::Condition {
                             variable: s("foo/bar#b@0"),
                             value: serde_json::Value::Bool(true),
-                        },
+                        }),
                         ..Default::default()
                     },
                 })],
@@ -15170,22 +15170,22 @@ mod interpreter {
                                             ftd::Condition {
                                                 variable: s("foo/bar#b@0"),
                                                 value: serde_json::Value::Bool(true),
-                                            },
+                                            }),
                                             ftd::ConditionalValue {
                                                 value: serde_json::from_str("{\"$kind$\":\"light\",\"dark\":\"rgba(0,0,0,1)\",\"light\":\"rgba(0,0,0,1)\"}").unwrap(),
                                                 important: false,
                                                 reference: Some(s("foo/bar#black")),
-                                            },
+                                            }),
                                         )],
                                         default: None,
-                                    },
+                                    }),
                                 )])
                                     .collect(),
                                 reference: Some(s("foo/bar#a@0")),
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("whatever"),
                             line: true,
@@ -15194,7 +15194,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -15206,16 +15206,16 @@ mod interpreter {
                                 action: s("toggle"),
                                 target: s("foo/bar#b@0"),
                                 parameters: Default::default(),
-                            },
-                        },
+                            }),
+                        }),
                         ftd::Event {
                             name: s("onclick"),
                             action: ftd::Action {
                                 action: s("increment"),
                                 target: s("foo/bar#a@0"),
                                 parameters: Default::default(),
-                            },
-                        },
+                            }),
+                        }),
                         ftd::Event {
                             name: s("onclick"),
                             action: ftd::Action {
@@ -15227,16 +15227,16 @@ mod interpreter {
                                         ftd::ftd2021::event::ParameterData {
                                             value: serde_json::Value::String(s("hello")),
                                             reference: Some(s("foo/bar#current")),
-                                        },
+                                        }),
                                         ftd::ftd2021::event::ParameterData {
                                             value: serde_json::Value::String(s("string")),
                                             reference: None,
-                                        },
+                                        }),
                                     ],
                                 )])
                                     .collect(),
-                            },
-                        },
+                            }),
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -15257,15 +15257,15 @@ mod interpreter {
                                     ftd::Condition {
                                         variable: s("foo/bar#foo@1"),
                                         value: serde_json::Value::Bool(true),
-                                    },
+                                    }),
                                     ftd::ConditionalValue {
                                         value: serde_json::from_str("{\"$kind$\":\"light\",\"dark\":\"rgba(255,0,0,1)\",\"light\":\"rgba(255,0,0,1)\"}").unwrap(),
                                         important: false,
                                         reference: Some(s("foo/bar#red")),
-                                    },
+                                    }),
                                 )],
                                 default: None,
-                            },
+                            }),
                         )])
                             .collect(),
                         ..Default::default()
@@ -15281,7 +15281,7 @@ mod interpreter {
                         action: s("toggle"),
                         target: s("foo/bar#foo@1"),
                         parameters: Default::default(),
-                    },
+                    }),
                 }],
                 ..Default::default()
             },
@@ -15348,15 +15348,15 @@ mod interpreter {
                                 ftd::Condition {
                                     variable: s("foo/bar#t@0"),
                                     value: serde_json::Value::Bool(true),
-                                },
+                                }),
                                 ftd::ConditionalValue {
                                     value: serde_json::from_str("{\"$kind$\":\"light\",\"dark\":\"rgba(255,0,0,1)\",\"light\":\"rgba(255,0,0,1)\"}").unwrap(),
                                     important: false,
                                     reference: Some(s("foo/bar#red")),
-                                },
+                                }),
                             )],
                             default: None,
-                        },
+                        }),
                     )])
                         .collect(),
                     reference: Some(s("foo/bar#bar")),
@@ -15366,15 +15366,15 @@ mod interpreter {
                             g: 0,
                             b: 0,
                             alpha: 1.0,
-                        },
+                        }),
                         dark: ftd::ColorValue {
                             r: 255,
                             g: 0,
                             b: 0,
                             alpha: 1.0,
-                        },
+                        }),
                         reference: Some(s("foo/bar#red")),
-                    },
+                    }),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -15394,7 +15394,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Integer(ftd::Text {
                             text: ftd::ftd2021::rendered::markup_line("20"),
                             common: Box::new(ftd::Common {
@@ -15402,7 +15402,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -15510,7 +15510,7 @@ mod interpreter {
                             text: ftd::ftd2021::rendered::markup_line("amitu"),
                             line: true,
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("hello"),
                             line: true,
@@ -15521,20 +15521,20 @@ mod interpreter {
                                         g: 0,
                                         b: 0,
                                         alpha: 1.0,
-                                    },
+                                    }),
                                     dark: ftd::ColorValue {
                                         r: 255,
                                         g: 0,
                                         b: 0,
                                         alpha: 1.0,
-                                    },
+                                    }),
                                     reference: Some(s("foo/bar#red")),
-                                },
+                                }),
                                 ..Default::default()
                             },
                             line_clamp: Some(10),
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Column(ftd::Column {
                             spacing: None,
                             container: ftd::Container {
@@ -15547,7 +15547,7 @@ mod interpreter {
                                             ..Default::default()
                                         },
                                         ..Default::default()
-                                    },
+                                    }),
                                     ftd::Element::Markup(ftd::Markups {
                                         text: ftd::ftd2021::rendered::markup_line("hello world!"),
                                         line: true,
@@ -15556,7 +15556,7 @@ mod interpreter {
                                             ..Default::default()
                                         },
                                         ..Default::default()
-                                    },
+                                    }),
                                     ftd::Element::Markup(ftd::Markups {
                                         text: ftd::ftd2021::rendered::markup_line("hello"),
                                         line: true,
@@ -15567,20 +15567,20 @@ mod interpreter {
                                                     g: 0,
                                                     b: 0,
                                                     alpha: 1.0,
-                                                },
+                                                }),
                                                 dark: ftd::ColorValue {
                                                     r: 255,
                                                     g: 0,
                                                     b: 0,
                                                     alpha: 1.0,
-                                                },
+                                                }),
                                                 reference: Some(s("foo/bar#red")),
-                                            },
+                                            }),
                                             ..Default::default()
                                         },
                                         line_clamp: Some(20),
                                         ..Default::default()
-                                    },
+                                    }),
                                     ftd::Element::Markup(ftd::Markups {
                                         text: ftd::ftd2021::rendered::markup_line("hello amitu!"),
                                         line: true,
@@ -15591,27 +15591,27 @@ mod interpreter {
                                                     g: 0,
                                                     b: 0,
                                                     alpha: 1.0,
-                                                },
+                                                }),
                                                 dark: ftd::ColorValue {
                                                     r: 255,
                                                     g: 0,
                                                     b: 0,
                                                     alpha: 1.0,
-                                                },
+                                                }),
                                                 reference: Some(s("foo/bar#red")),
-                                            },
+                                            }),
                                             ..Default::default()
                                         },
                                         line_clamp: Some(10),
                                         ..Default::default()
-                                    },
+                                    }),
                                 ],
                                 ..Default::default()
                             },
                             common: Box::new(ftd::Common {
                                 ..Default::default()
                             },
-                        },
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -15684,7 +15684,7 @@ mod interpreter {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#active"),
                         value: serde_json::Value::String(s("$IsNotNull$")),
-                    },
+                    }),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -15698,7 +15698,7 @@ mod interpreter {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#active"),
                         value: serde_json::Value::String(s("$IsNull$")),
-                    },
+                    }),
                     is_not_visible: true,
                     ..Default::default()
                 },
@@ -15714,7 +15714,7 @@ mod interpreter {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#flags"),
                         value: serde_json::Value::String(s("$IsNotNull$")),
-                    },
+                    }),
                     is_not_visible: true,
                     ..Default::default()
                 },
@@ -15729,7 +15729,7 @@ mod interpreter {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#flags"),
                         value: serde_json::Value::String(s("$IsNull$")),
-                    },
+                    }),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -15794,7 +15794,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#foo"),
@@ -15819,7 +15819,7 @@ mod interpreter {
                                         text: s("Data"),
                                         source: ftd::TextSource::Caption,
                                     },
-                                },
+                                }),
                                 conditions: vec![],
                                 nested_properties: Default::default(),
                             },
@@ -15829,7 +15829,7 @@ mod interpreter {
                     },
                 }],
                 ..Default::default()
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#obj"),
@@ -15865,7 +15865,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#o@0"),
@@ -15877,7 +15877,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         insert_universal_variables_by_count(1, "foo/bar", &mut bag);
@@ -15918,7 +15918,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -15955,7 +15955,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         main.container
@@ -15974,16 +15974,16 @@ mod interpreter {
                                         ftd::ftd2021::event::ParameterData {
                                             value: serde_json::Value::String(s("$VALUE")),
                                             reference: None,
-                                        },
+                                        }),
                                         ftd::ftd2021::event::ParameterData {
                                             value: serde_json::Value::String(s("string")),
                                             reference: None,
-                                        },
+                                        }),
                                     ],
                                 )])
                                 .collect(),
-                            },
-                        },
+                            }),
+                        }),
                         ftd::Event {
                             name: s("onchange"),
                             action: ftd::Action {
@@ -16000,8 +16000,8 @@ mod interpreter {
                                 }],
                                 )])
                                 .collect(),
-                            },
-                        },
+                            }),
+                        }),
                     ],
                     ..Default::default()
                 },
@@ -16199,7 +16199,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -16213,7 +16213,7 @@ mod interpreter {
                 .collect(),
                 instances: Default::default(),
                 order: vec![s("name")],
-            },
+            }),
         );
 
         bag.insert(
@@ -16231,7 +16231,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -16246,7 +16246,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -16262,7 +16262,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -16274,7 +16274,7 @@ mod interpreter {
                     value: ftd::Value::Integer { value: 1 },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -16290,13 +16290,13 @@ mod interpreter {
                             body: false,
                             default: None,
                             is_reference: false,
-                        },
+                        }),
                         default: None,
                         is_reference: false,
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -16341,7 +16341,7 @@ mod interpreter {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -16354,7 +16354,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#$loop$@3"),
@@ -16366,7 +16366,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#$loop$@4"),
@@ -16380,7 +16380,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#$loop$@5"),
@@ -16394,7 +16394,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         bag.insert(
@@ -16407,7 +16407,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#$loop$@7"),
@@ -16419,7 +16419,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#$loop$@8"),
@@ -16433,7 +16433,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#$loop$@9"),
@@ -16447,7 +16447,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         insert_update_integer_by_root("foo/bar#CHILDREN-COUNT-MINUS-ONE@0", -1, &mut bag);
@@ -16542,7 +16542,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#active@0"),
@@ -16553,7 +16553,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#active@1"),
@@ -16564,7 +16564,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#bar"),
@@ -16604,7 +16604,7 @@ mod interpreter {
                                     kind: Box::new(ftd::ftd2021::p2::Kind::integer()),
                                     is_reference: false,
                                 },
-                            },
+                            }),
                             conditions: vec![],
                             nested_properties: Default::default(),
                         },
@@ -16619,10 +16619,10 @@ mod interpreter {
                                         name: s("ftd#color"),
                                         default: None,
                                         is_reference: false,
-                                    },
+                                    }),
                                     is_reference: false,
                                 },
-                            },
+                            }),
                             conditions: vec![],
                             nested_properties: Default::default(),
                         },
@@ -16640,7 +16640,7 @@ mod interpreter {
                                     default: Some(ftd::PropertyValue::Variable {
                                         name: s("title"),
                                         kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                                    },
+                                    }),
                                     conditions: vec![],
                                     nested_properties: Default::default(),
                                 },
@@ -16660,7 +16660,7 @@ mod interpreter {
                                         name: s("subtitle"),
                                         kind: ftd::ftd2021::p2::Kind::caption_or_body()
                                             .set_default(Some(s("$foo/bar#foo"))),
-                                    },
+                                    }),
                                     conditions: vec![],
                                     nested_properties: Default::default(),
                                 },
@@ -16680,7 +16680,7 @@ mod interpreter {
                                         name: s("bio"),
                                         kind: ftd::ftd2021::p2::Kind::caption_or_body()
                                             .set_default(Some(s("$subtitle"))),
-                                    },
+                                    }),
                                     conditions: vec![],
                                     nested_properties: Default::default(),
                                 },
@@ -16700,7 +16700,7 @@ mod interpreter {
                                         name: s("active"),
                                         kind: ftd::ftd2021::p2::Kind::boolean()
                                             .set_default(Some(s("false"))),
-                                    },
+                                    }),
                                     conditions: vec![],
                                     nested_properties: Default::default(),
                                 },
@@ -16715,7 +16715,7 @@ mod interpreter {
                 kernel: false,
                 invocations: vec![],
                 line_number: 0,
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#bar1"),
@@ -16731,7 +16731,7 @@ mod interpreter {
                 kernel: false,
                 invocations: vec![],
                 line_number: 0,
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#bio@0"),
@@ -16743,7 +16743,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#bio@1"),
@@ -16755,7 +16755,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#foo"),
@@ -16769,7 +16769,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#foo"),
@@ -16783,7 +16783,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#gg@0"),
@@ -16794,7 +16794,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#subtitle@0"),
@@ -16806,7 +16806,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#subtitle@1"),
@@ -16818,7 +16818,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#title@0"),
@@ -16830,7 +16830,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#title@1"),
@@ -16842,7 +16842,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#w@0"),
@@ -16853,7 +16853,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#w@1"),
@@ -16864,7 +16864,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#green"),
@@ -16898,7 +16898,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         insert_universal_variables_by_count(2, "foo/bar", &mut bag);
@@ -16919,7 +16919,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("Foo"),
                             line: true,
@@ -16928,7 +16928,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("Foo"),
                             line: true,
@@ -16937,7 +16937,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Boolean(ftd::Text {
                             text: ftd::ftd2021::rendered::markup_line("false"),
                             common: Box::new(ftd::Common {
@@ -16945,7 +16945,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Integer(ftd::Text {
                             text: ftd::ftd2021::rendered::markup_line("1"),
                             common: Box::new(ftd::Common {
@@ -16953,7 +16953,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                     ],
                     external_children: None,
                     wrap: false,
@@ -16967,15 +16967,15 @@ mod interpreter {
                             g: 128,
                             b: 0,
                             alpha: 1.0,
-                        },
+                        }),
                         dark: ftd::ColorValue {
                             r: 0,
                             g: 128,
                             b: 0,
                             alpha: 1.0,
-                        },
+                        }),
                         reference: Some(s("foo/bar#green")),
-                    },
+                    }),
                     id: Some(s("bar-id")),
                     data_id: Some(s("bar-id")),
                     border_width: 2,
@@ -16983,7 +16983,7 @@ mod interpreter {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#active"),
                         value: serde_json::Value::Bool(true),
-                    },
+                    }),
                     ..Default::default()
                 },
             }));
@@ -17001,7 +17001,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("Foo"),
                             line: true,
@@ -17010,7 +17010,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Markup(ftd::Markups {
                             text: ftd::ftd2021::rendered::markup_line("Foo"),
                             line: true,
@@ -17019,7 +17019,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                         ftd::Element::Boolean(ftd::Text {
                             text: ftd::ftd2021::rendered::markup_line("false"),
                             common: Box::new(ftd::Common {
@@ -17027,7 +17027,7 @@ mod interpreter {
                                 ..Default::default()
                             },
                             ..Default::default()
-                        },
+                        }),
                     ],
                     external_children: None,
                     wrap: false,
@@ -17041,15 +17041,15 @@ mod interpreter {
                             g: 128,
                             b: 0,
                             alpha: 1.0,
-                        },
+                        }),
                         dark: ftd::ColorValue {
                             r: 0,
                             g: 128,
                             b: 0,
                             alpha: 1.0,
-                        },
+                        }),
                         reference: Some(s("foo/bar#green")),
-                    },
+                    }),
                     border_width: 1,
                     ..Default::default()
                 },
@@ -17120,7 +17120,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         let mut main = p2::default_column();
@@ -17132,7 +17132,7 @@ mod interpreter {
                     condition: Some(ftd::Condition {
                         variable: s("foo/bar#bar"),
                         value: serde_json::Value::String(s("Something")),
-                    },
+                    }),
                     reference: Some(s("foo/bar#bar")),
                     ..Default::default()
                 },
@@ -17189,7 +17189,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         let mut main = p2::default_column();
@@ -17206,15 +17206,15 @@ mod interpreter {
                             g: 201,
                             b: 181,
                             alpha: 0.1,
-                        },
+                        }),
                         dark: ftd::ColorValue {
                             r: 44,
                             g: 201,
                             b: 181,
                             alpha: 0.1,
-                        },
+                        }),
                         reference: Some(s("foo/bar#hex-color")),
-                    },
+                    }),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -17246,7 +17246,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         bag.insert(
@@ -17273,7 +17273,7 @@ mod interpreter {
                                     text: s("col-id"),
                                     source: ftd::TextSource::Header,
                                 },
-                            },
+                            }),
                             ..Default::default()
                         },
                     ),
@@ -17282,7 +17282,7 @@ mod interpreter {
                         ftd::ftd2021::component::Property {
                             default: Some(ftd::PropertyValue::Value {
                                 value: ftd::Value::Boolean { value: true },
-                            },
+                            }),
                             ..Default::default()
                         },
                     ),
@@ -17299,7 +17299,7 @@ mod interpreter {
                                         text: s("col-id"),
                                         source: ftd::TextSource::Header,
                                     },
-                                },
+                                }),
                                 ..Default::default()
                             },
                         )])
@@ -17308,7 +17308,7 @@ mod interpreter {
                     },
                 }],
                 ..Default::default()
-            },
+            }),
         );
 
         bag.insert(
@@ -17329,7 +17329,7 @@ mod interpreter {
                         default: Some(ftd::PropertyValue::Variable {
                             name: s("title"),
                             kind: ftd::ftd2021::p2::Kind::caption_or_body(),
-                        },
+                        }),
                         ..Default::default()
                     },
                 )])
@@ -17367,9 +17367,9 @@ mod interpreter {
                         name: s("SIBLING-INDEX"),
                         kind: ftd::ftd2021::p2::Kind::Element,
                     },
-                },
+                }),
                 ..Default::default()
-            },
+            }),
         );
 
         bag.insert(
@@ -17384,7 +17384,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         bag.insert(
@@ -17399,7 +17399,7 @@ mod interpreter {
                 },
                 conditions: vec![],
                 flags: Default::default(),
-            },
+            }),
         );
 
         let levels = vec![s("0"), s("0,0"), s("0,1")];
@@ -17429,7 +17429,7 @@ mod interpreter {
                                             condition: Some(ftd::Condition {
                                                 variable: s("foo/bar#current@0"),
                                                 value: serde_json::Value::from(1),
-                                            },
+                                            }),
                                             events: vec![ftd::Event {
                                                 name: s("onclick"),
                                                 action: ftd::Action {
@@ -17442,23 +17442,23 @@ mod interpreter {
                                                         ftd::ftd2021::event::ParameterData {
                                                             value: serde_json::json!(1),
                                                             reference: None,
-                                                        },
+                                                        }),
                                                         ftd::ftd2021::event::ParameterData {
                                                             value: serde_json::json!(2),
                                                             reference: None,
-                                                        },
+                                                        }),
                                                     ],
                                                         )],
                                                     )
                                                     .collect(),
-                                                },
+                                                }),
                                             }],
                                             reference: Some(s("foo/bar#title@0,0")),
                                             ..Default::default()
                                         },
                                         line: true,
                                         ..Default::default()
-                                    },
+                                    }),
                                     ftd::Element::Markup(ftd::Markups {
                                         text: ftd::ftd2021::rendered::markup_line("Second"),
                                         line: true,
@@ -17466,7 +17466,7 @@ mod interpreter {
                                             condition: Some(ftd::Condition {
                                                 variable: s("foo/bar#current@0"),
                                                 value: serde_json::json!(2),
-                                            },
+                                            }),
                                             is_not_visible: true,
                                             events: vec![ftd::Event {
                                                 name: s("onclick"),
@@ -17480,22 +17480,22 @@ mod interpreter {
                                                         ftd::ftd2021::event::ParameterData {
                                                             value: serde_json::json!(1),
                                                             reference: None,
-                                                        },
+                                                        }),
                                                         ftd::ftd2021::event::ParameterData {
                                                             value: serde_json::json!(2),
                                                             reference: None,
-                                                        },
+                                                        }),
                                                     ],
                                                         )],
                                                     )
                                                     .collect(),
-                                                },
+                                                }),
                                             }],
                                             reference: Some(s("foo/bar#title@0,1")),
                                             ..Default::default()
                                         },
                                         ..Default::default()
-                                    },
+                                    }),
                                 ],
                                 ..Default::default()
                             },
@@ -17742,7 +17742,7 @@ mod component {
                                 text: s("hello"),
                                 source: ftd::TextSource::Header
                             }
-                        },
+                        }),
                         conditions: vec![],
                         ..Default::default()
                     }
@@ -17782,7 +17782,7 @@ mod component {
                                 text: s("hello"),
                                 source: ftd::TextSource::Header
                             }
-                        },
+                        }),
                         conditions: vec![],
                         ..Default::default()
                     }
@@ -17934,7 +17934,7 @@ mod component {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         let mut main = default_column();
         main.container
@@ -17991,7 +17991,7 @@ mod component {
                 fields: person_fields(),
                 instances: Default::default(),
                 order: vec![s("name"), s("address"), s("bio"), s("age")],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#x".to_string(),
@@ -18002,7 +18002,7 @@ mod component {
                     value: ftd::Value::Integer { value: 20 },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#abrar".to_string(),
@@ -18016,7 +18016,7 @@ mod component {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         let mut main = default_column();
@@ -18107,7 +18107,7 @@ mod record {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#person".to_string(),
@@ -18120,7 +18120,7 @@ mod record {
                 )])
                 .collect(),
                 order: vec![s("name"), s("address"), s("bio"), s("age")],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#x".to_string(),
@@ -18131,7 +18131,7 @@ mod record {
                     value: ftd::Value::Integer { value: 20 },
                 },
                 conditions: vec![],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#employee".to_string(),
@@ -18151,7 +18151,7 @@ mod record {
                 .collect(),
                 instances: Default::default(),
                 order: vec![s("eid"), s("who")],
-            },
+            }),
         );
         bag.insert(
             "foo/bar#abrar_e".to_string(),
@@ -18187,7 +18187,7 @@ mod record {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         bag.insert(
@@ -18222,7 +18222,7 @@ mod record {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         p!(
@@ -18308,7 +18308,7 @@ mod record {
                     .collect(),
                     instances: Default::default(),
                     order: vec![s("name"), s("friends")],
-                },
+                }),
             );
 
             bag.insert(
@@ -18362,7 +18362,7 @@ mod record {
                         },
                     },
                     conditions: vec![],
-                },
+                }),
             );
             bag
         };
@@ -18412,7 +18412,7 @@ mod record {
                 .collect(),
                 instances: Default::default(),
                 order: vec![s("x"), s("y")],
-            },
+            }),
         );
 
         bag.insert(
@@ -18428,7 +18428,7 @@ mod record {
                                 name: s("foo/bar#point"),
                                 default: None,
                                 is_reference: false,
-                            },
+                            }),
                             default: None,
                             is_reference: false,
                         },
@@ -18437,7 +18437,7 @@ mod record {
                 .collect(),
                 instances: Default::default(),
                 order: vec![s("name"), s("points")],
-            },
+            }),
         );
 
         bag.insert(
@@ -18549,7 +18549,7 @@ mod record {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         p!(
@@ -18596,7 +18596,7 @@ mod record {
                             kind: Box::new(ftd::ftd2021::p2::Kind::OrType {
                                 name: s("foo/bar#entity"),
                                 is_reference: false,
-                            },
+                            }),
                             default: None,
                             is_reference: false,
                         },
@@ -18606,7 +18606,7 @@ mod record {
                 .collect(),
                 instances: Default::default(),
                 order: vec![s("party"), s("value")],
-            },
+            }),
         );
         bag.insert(
             s("foo/bar#jan"),
@@ -18706,7 +18706,7 @@ mod record {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         p!(
@@ -18885,7 +18885,7 @@ mod variable {
                 .collect(),
                 instances: Default::default(),
                 order: vec![s("title"), s("about")],
-            },
+            }),
         );
 
         bag.insert(
@@ -18929,7 +18929,7 @@ mod variable {
                     },
                 },
                 conditions: vec![],
-            },
+            }),
         );
 
         p!(
