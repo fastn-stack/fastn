@@ -174,9 +174,7 @@ fn main() {
 }
 
 fn print_help() {
-    eprintln!(
-        "fastn-id52 - Entity identity generation and DNS resolution for fastn peer-to-peer network"
-    );
+    eprintln!("fastn-id52 - Entity identity generation and DNS resolution for fastn peer-to-peer network");
     eprintln!();
     eprintln!("Usage:");
     eprintln!("  fastn-id52 <COMMAND>");
@@ -313,12 +311,9 @@ fn save_to_keyring(secret_key: &fastn_id52::SecretKey, short_output: bool) {
 #[cfg(feature = "dns")]
 async fn handle_resolve(options: ResolveOptions) {
     use fastn_id52::PublicKey;
-
-    println!(
-        "Resolving public key for scope '{}' on domain '{}'...",
-        options.scope, options.domain
-    );
-
+    
+    println!("Resolving public key for scope '{}' on domain '{}'...", options.scope, options.domain);
+    
     match PublicKey::resolve(&options.domain, &options.scope).await {
         Ok(public_key) => {
             println!();
@@ -331,34 +326,19 @@ async fn handle_resolve(options: ResolveOptions) {
             println!("{}", e);
             println!();
             println!("How to fix this:");
-            println!(
-                "1. Make sure the domain '{}' has a DNS TXT record",
-                options.domain
-            );
-            println!(
-                "2. The TXT record should be in format: \"{}=<52-character-public-key>\"",
-                options.scope
-            );
-            println!(
-                "3. Example TXT record: \"{}=i66fo538lfl5ombdf6tcdbrabp4hmp9asv7nrffuc2im13ct4q60\"",
-                options.scope
-            );
+            println!("1. Make sure the domain '{}' has a DNS TXT record", options.domain);
+            println!("2. The TXT record should be in format: \"{}=<52-character-public-key>\"", options.scope);
+            println!("3. Example TXT record: \"{}=i66fo538lfl5ombdf6tcdbrabp4hmp9asv7nrffuc2im13ct4q60\"", options.scope);
             println!();
             println!("To add a TXT record:");
             println!("• If using a DNS provider (Cloudflare, Route53, etc.):");
             println!("  - Add a new TXT record for domain '{}'", options.domain);
-            println!(
-                "  - Set the value to: {}=<your-public-key-id52>",
-                options.scope
-            );
+            println!("  - Set the value to: {}=<your-public-key-id52>", options.scope);
             println!("• If managing DNS yourself:");
-            println!(
-                "  - Add to your zone file: {} IN TXT \"{}=<your-public-key-id52>\"",
-                options.domain, options.scope
-            );
+            println!("  - Add to your zone file: {} IN TXT \"{}=<your-public-key-id52>\"", options.domain, options.scope);
             println!();
             println!("Note: DNS changes can take a few minutes to propagate.");
-
+            
             std::process::exit(1);
         }
     }

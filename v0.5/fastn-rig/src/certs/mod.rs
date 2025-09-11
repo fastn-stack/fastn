@@ -39,7 +39,7 @@ impl CertificateManager {
     }
 
     /// Get or create TLS configuration for STARTTLS server
-    ///
+    /// 
     /// This is the main entry point - it handles:
     /// - Loading existing certificate from RigConfig
     /// - Generating new self-signed certificate if needed  
@@ -48,30 +48,27 @@ impl CertificateManager {
     pub async fn get_or_create_tls_config(&self) -> Result<rustls::ServerConfig, CertificateError> {
         // Load current rig config
         let rig_config = crate::automerge::RigConfig::load(&self.automerge_db, &self.rig_id52)
-            .map_err(|e| CertificateError::ConfigLoad {
-                source: Box::new(e),
+            .map_err(|e| CertificateError::ConfigLoad { 
+                source: Box::new(e) 
             })?;
 
         match &rig_config.email_certificate {
             EmailCertificate::SelfSigned => {
                 // For self-signed mode, certificates are generated per-connection
                 // and stored in stable filesystem location
-                return Err(CertificateError::ConfigLoad {
-                    source: "Self-signed certificates should use per-connection lookup, not global TLS config".into()
+                return Err(CertificateError::ConfigLoad { 
+                    source: "Self-signed certificates should use per-connection lookup, not global TLS config".into() 
                 });
             }
             EmailCertificate::External { certificate, .. } => {
                 // Load external certificate (domain-based)
                 match certificate {
-                    ExternalCertificateSource::FilePaths {
-                        cert_path,
-                        key_path,
-                        ..
-                    } => self.load_external_certificate(cert_path, key_path).await,
+                    ExternalCertificateSource::FilePaths { cert_path, key_path, .. } => {
+                        self.load_external_certificate(cert_path, key_path).await
+                    }
                     ExternalCertificateSource::Content { cert_pem, key_pem } => {
                         // Load certificate from content stored in automerge
-                        self.create_tls_config_from_pem_content(cert_pem, key_pem)
-                            .await
+                        self.create_tls_config_from_pem_content(cert_pem, key_pem).await
                     }
                 }
             }
@@ -79,11 +76,12 @@ impl CertificateManager {
     }
 
     /// Generate new self-signed certificate and store in RigConfig
-    async fn generate_and_store_self_signed_certificate(
-        &self,
-    ) -> Result<rustls::ServerConfig, CertificateError> {
+    async fn generate_and_store_self_signed_certificate(&self) -> Result<rustls::ServerConfig, CertificateError> {
         // Implementation in self_signed.rs
-        self_signed::generate_and_store_certificate(&self.automerge_db, &self.rig_id52).await
+        self_signed::generate_and_store_certificate(
+            &self.automerge_db,
+            &self.rig_id52,
+        ).await
     }
 
     /// Create TLS config from existing self-signed certificate

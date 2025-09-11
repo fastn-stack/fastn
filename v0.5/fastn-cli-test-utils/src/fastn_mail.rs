@@ -33,7 +33,7 @@ impl FastnMailCommand {
     /// fastn-mail send-mail command with fluent parameter building
     pub fn send_mail(self) -> FastnMailSendBuilder {
         FastnMailSendBuilder {
-            base: self, // Don't add send-mail yet - will be added in send() with account-path
+            base: self,  // Don't add send-mail yet - will be added in send() with account-path
             from: None,
             to: None,
             subject: "Test Email".to_string(),
@@ -155,12 +155,12 @@ impl FastnMailSendBuilder {
 
         // Clear existing args and build in correct order
         self.base.args.clear();
-
+        
         // SMTP mode: don't use --account-path (network client connects to server)
         println!("🔍 DEBUG: SMTP mode - not using --account-path (network client)");
 
         self.base.args.extend([
-            "send-mail".to_string(), // subcommand after global flags
+            "send-mail".to_string(),  // subcommand after global flags
             "--smtp".to_string(),
             self.smtp_port.to_string(),
             "--password".to_string(),

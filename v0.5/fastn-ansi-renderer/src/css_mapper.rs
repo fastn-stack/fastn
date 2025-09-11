@@ -1,5 +1,5 @@
-use crate::ftd_types::{ComponentType, FtdSize, SimpleFtdComponent};
-use taffy::{Dimension, FlexDirection, LengthPercentage, LengthPercentageAuto, Rect, Size, Style};
+use crate::ftd_types::{SimpleFtdComponent, FtdSize, ComponentType};
+use taffy::{Style, Size, Dimension, FlexDirection, Rect, LengthPercentage, LengthPercentageAuto};
 
 /// Maps FTD properties to Taffy CSS styles
 pub struct FtdToCssMapper;
@@ -59,7 +59,7 @@ impl FtdToCssMapper {
         match component.component_type {
             ComponentType::Column => {
                 style.flex_direction = FlexDirection::Column;
-
+                
                 // Map spacing to gap for columns
                 if let Some(spacing_px) = component.spacing {
                     style.gap = Size {
@@ -67,10 +67,10 @@ impl FtdToCssMapper {
                         height: LengthPercentage::Length((spacing_px as f32).into()),
                     };
                 }
-            }
+            },
             ComponentType::Row => {
                 style.flex_direction = FlexDirection::Row;
-
+                
                 // Map spacing to gap for rows
                 if let Some(spacing_px) = component.spacing {
                     style.gap = Size {
@@ -78,7 +78,7 @@ impl FtdToCssMapper {
                         height: LengthPercentage::Length(0.0.into()),
                     };
                 }
-            }
+            },
             ComponentType::Text | ComponentType::Container => {
                 // Text and container don't have specific flex direction
             }
@@ -116,7 +116,7 @@ mod tests {
             .with_padding(8);
 
         let style = mapper.component_to_style(&component);
-
+        
         assert_eq!(style.size.width, Dimension::Length(100.0.into()));
         assert_eq!(style.padding.left, LengthPercentage::Length(8.0.into()));
     }
@@ -124,10 +124,11 @@ mod tests {
     #[test]
     fn test_column_layout_mapping() {
         let mapper = FtdToCssMapper::new();
-        let component = SimpleFtdComponent::column().with_spacing(16);
+        let component = SimpleFtdComponent::column()
+            .with_spacing(16);
 
         let style = mapper.component_to_style(&component);
-
+        
         assert_eq!(style.flex_direction, FlexDirection::Column);
         assert_eq!(style.gap.height, LengthPercentage::Length(16.0.into()));
     }
@@ -135,10 +136,11 @@ mod tests {
     #[test]
     fn test_fill_container_mapping() {
         let mapper = FtdToCssMapper::new();
-        let component = SimpleFtdComponent::text("Test").with_width(FtdSize::FillContainer);
+        let component = SimpleFtdComponent::text("Test")
+            .with_width(FtdSize::FillContainer);
 
         let style = mapper.component_to_style(&component);
-
+        
         assert_eq!(style.size.width, Dimension::Percent(1.0));
     }
 }

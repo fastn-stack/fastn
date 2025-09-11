@@ -2,9 +2,9 @@
 //!
 //! Provides IMAP4rev1 server functionality with STARTTLS support.
 
-pub mod protocol;
 pub mod server;
 pub mod session;
+pub mod protocol;
 
 pub use server::start_imap_server;
 
@@ -17,7 +17,7 @@ pub struct ImapConfig {
 impl Default for ImapConfig {
     fn default() -> Self {
         Self {
-            port: 1143, // Unprivileged default
+            port: 1143,  // Unprivileged default
             max_connections: 100,
         }
     }

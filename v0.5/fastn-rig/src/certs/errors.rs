@@ -6,39 +6,39 @@ use thiserror::Error;
 #[derive(Error, Debug)]
 pub enum CertificateError {
     #[error("Failed to load rig config from automerge")]
-    ConfigLoad {
+    ConfigLoad { 
         #[source]
-        source: Box<dyn std::error::Error + Send + Sync>,
+        source: Box<dyn std::error::Error + Send + Sync> 
     },
 
     #[error("Failed to save rig config to automerge")]
-    ConfigSave {
+    ConfigSave { 
         #[source]
-        source: Box<dyn std::error::Error + Send + Sync>,
+        source: Box<dyn std::error::Error + Send + Sync> 
     },
 
     #[error("Failed to generate self-signed certificate")]
-    CertificateGeneration {
+    CertificateGeneration { 
         #[source]
-        source: Box<dyn std::error::Error + Send + Sync>,
+        source: Box<dyn std::error::Error + Send + Sync> 
     },
 
     #[error("Failed to load rig secret key")]
-    RigKeyLoad {
+    RigKeyLoad { 
         #[source]
-        source: Box<dyn std::error::Error + Send + Sync>,
+        source: Box<dyn std::error::Error + Send + Sync> 
     },
 
     #[error("Failed to convert Ed25519 key for certificate use")]
-    KeyConversion {
+    KeyConversion { 
         #[source]
-        source: Box<dyn std::error::Error + Send + Sync>,
+        source: Box<dyn std::error::Error + Send + Sync> 
     },
 
     #[error("Failed to create rustls TLS configuration")]
-    TlsConfigCreation {
+    TlsConfigCreation { 
         #[source]
-        source: Box<dyn std::error::Error + Send + Sync>,
+        source: Box<dyn std::error::Error + Send + Sync> 
     },
 
     #[error("Failed to load external certificate: {path}")]
@@ -49,17 +49,19 @@ pub enum CertificateError {
     },
 
     #[error("Failed to parse certificate PEM data")]
-    CertificateParsing {
+    CertificateParsing { 
         #[source]
-        source: Box<dyn std::error::Error + Send + Sync>,
+        source: Box<dyn std::error::Error + Send + Sync> 
     },
 
     #[error("Certificate has expired")]
-    CertificateExpired { expired_at: i64 },
+    CertificateExpired {
+        expired_at: i64,
+    },
 
     #[error("Public IP detection failed")]
-    PublicIpDetection {
+    PublicIpDetection { 
         #[source]
-        source: Box<dyn std::error::Error + Send + Sync>,
+        source: Box<dyn std::error::Error + Send + Sync> 
     },
 }

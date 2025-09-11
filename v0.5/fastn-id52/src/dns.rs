@@ -37,21 +37,18 @@ use std::str::FromStr;
 pub async fn resolve(domain: &str, scope: &str) -> Result<PublicKey, ResolveError> {
     let resolver = TokioAsyncResolver::tokio(ResolverConfig::default(), ResolverOpts::default());
 
-    let response = resolver
-        .txt_lookup(domain)
-        .await
-        .map_err(|e| ResolveError {
-            domain: domain.to_string(),
-            scope: scope.to_string(),
-            reason: format!("DNS TXT lookup failed: {}", e),
-        })?;
+    let response = resolver.txt_lookup(domain).await.map_err(|e| ResolveError {
+        domain: domain.to_string(),
+        scope: scope.to_string(),
+        reason: format!("DNS TXT lookup failed: {}", e),
+    })?;
 
     let scope_prefix = format!("{}=", scope);
 
     for record in response.iter() {
         for txt_data in record.iter() {
             let txt_string = String::from_utf8_lossy(txt_data);
-
+            
             if let Some(id52_part) = txt_string.strip_prefix(&scope_prefix) {
                 return PublicKey::from_str(id52_part).map_err(|e| ResolveError {
                     domain: domain.to_string(),
@@ -77,7 +74,7 @@ mod tests {
     async fn test_resolve_nonexistent_domain() {
         let result = resolve("nonexistent-domain-12345.com", "test").await;
         assert!(result.is_err());
-
+        
         let err = result.unwrap_err();
         assert_eq!(err.domain, "nonexistent-domain-12345.com");
         assert_eq!(err.scope, "test");
@@ -89,15 +86,13 @@ mod tests {
         // Using a real domain that likely doesn't have our specific TXT record
         let result = resolve("google.com", "fastn-test-nonexistent").await;
         assert!(result.is_err());
-
+        
         let err = result.unwrap_err();
         assert_eq!(err.domain, "google.com");
         assert_eq!(err.scope, "fastn-test-nonexistent");
         // Could be either no TXT records or no matching scope
-        assert!(
-            err.reason.contains("No TXT record found with prefix")
-                || err.reason.contains("DNS TXT lookup failed")
-        );
+        assert!(err.reason.contains("No TXT record found with prefix") || 
+                err.reason.contains("DNS TXT lookup failed"));
     }
 
     // Note: We can't easily test successful resolution without setting up a real DNS record

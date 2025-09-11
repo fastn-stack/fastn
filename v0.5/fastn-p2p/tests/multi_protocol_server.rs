@@ -407,9 +407,17 @@ mod tests {
                 Result::<(), Box<dyn std::error::Error + Send + Sync>>::Ok(())
             })
         };
+<<<<<<< Updated upstream
 
         // Give server time to start listening
         tokio::time::sleep(std::time::Duration::from_millis(100)).await;
+
+=======
+        
+        // Give server time to start listening (match CLI timing)
+        tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+        
+>>>>>>> Stashed changes
         // Send one message from client to server
         let client_task = {
             let server_public_clone = server_public;
