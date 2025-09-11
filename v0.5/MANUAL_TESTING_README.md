@@ -8,14 +8,16 @@ This guide provides a comprehensive testing framework for FASTN email functional
 # 1. Setup fresh testing environment
 ./manual-testing/setup-fastn-email.sh
 
-# 2. Run automated CLI tests
+# 2. Run automated CLI tests  
 ./manual-testing/test-smtp-imap-cli.sh
 
-# 3. Test email delivery between rigs
-./manual-testing/test-p2p-delivery.sh
+# 3. Start servers and test Apple Mail automation
+cd manual-testing/apple-mail
+./start-servers.sh
+osascript setup-apple-mail.scpt
 
-# 4. Configure real email clients (manual step)
-# Follow instructions in ~/fastn-email/SETUP_SUMMARY.md
+# 4. Run comprehensive Apple Mail testing
+osascript automated-mail-test.scpt
 ```
 
 ## Directory Structure
@@ -46,10 +48,13 @@ This guide provides a comprehensive testing framework for FASTN email functional
 - Monitors delivery times and success rates
 - Validates filesystem and database consistency
 
-### 4. Email Client Automation (Future)
-- `test-apple-mail.sh` - Automates Apple Mail configuration and testing
-- `test-thunderbird.sh` - Automates Thunderbird testing
-- Uses AppleScript/osascript for macOS integration
+### 4. Apple Mail Automation (Implemented)
+- `apple-mail/setup-apple-mail.scpt` - Guided account setup for Alice
+- `apple-mail/setup-apple-mail-bob.scpt` - Guided account setup for Bob  
+- `apple-mail/automated-mail-test.scpt` - Comprehensive bidirectional testing
+- `apple-mail/check-mail-status.scpt` - Folder status and message counts
+- `apple-mail/send-test-email.scpt` - Send test emails between accounts
+- Uses AppleScript for native macOS Mail.app integration
 
 ## Manual Testing Workflow
 
@@ -59,11 +64,11 @@ This guide provides a comprehensive testing framework for FASTN email functional
 3. Test P2P delivery to confirm core functionality
 4. Review `SETUP_SUMMARY.md` for client configuration
 
-### Phase 2: Email Client Testing
-1. Configure Thunderbird/Apple Mail using summary file
-2. Send test emails through client SMTP
-3. Verify IMAP folder sync and message retrieval
-4. Test bidirectional communication
+### Phase 2: Apple Mail Testing (Automated)
+1. Run Apple Mail setup scripts for guided account configuration
+2. Use automated testing scripts for comprehensive validation
+3. Verify P2P delivery with timing analysis
+4. Test bidirectional communication with detailed reporting
 
 ### Phase 3: Multi-Device Testing
 1. Copy account configs to other devices
