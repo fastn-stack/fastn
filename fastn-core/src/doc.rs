@@ -1,25 +1,54 @@
+fn generate_dependency_aware_hash(source: &str, dependencies: &[String]) -> String {
+    use std::collections::hash_map::DefaultHasher;
+    use std::hash::{Hash, Hasher};
+    
+    let mut hasher = DefaultHasher::new();
+    source.hash(&mut hasher);
+    
+    // Include all dependency file contents in the hash
+    for dep_path in dependencies {
+        if let Ok(dep_content) = std::fs::read_to_string(dep_path) {
+            dep_content.hash(&mut hasher);
+        } else {
+            // If dependency file doesn't exist, include its path in hash
+            // This ensures cache invalidation if file appears/disappears
+            dep_path.hash(&mut hasher);
+        }
+    }
+    
+    format!("{:x}", hasher.finish())
+}
+
 fn cached_parse(
     id: &str,
     source: &str,
     line_number: usize,
     enable_cache: bool,
+    dependencies: Option<&[String]>, // Dependencies from previous compilation if available
 ) -> ftd::interpreter::Result<ftd::interpreter::ParsedDocument> {
     #[derive(serde::Deserialize, serde::Serialize)]
     struct C {
         hash: String,
+        dependencies: Vec<String>,
         doc: ftd::interpreter::ParsedDocument,
     }
-
-    let hash = fastn_core::utils::generate_hash(source);
 
     // Only use cache if explicitly enabled via --enable-cache flag
     if enable_cache {
         if let Some(c) = fastn_core::utils::get_cached::<C>(id) {
-            if c.hash == hash {
-                eprintln!("🚀 PERF: CACHE HIT for: {}", id);
+            // Use dependency-aware hash if dependencies available, otherwise simple hash
+            let current_hash = if let Some(deps) = dependencies {
+                generate_dependency_aware_hash(source, deps)
+            } else {
+                // For compatibility: check against previous cached dependencies
+                generate_dependency_aware_hash(source, &c.dependencies)
+            };
+            
+            if c.hash == current_hash {
+                eprintln!("🚀 PERF: CACHE HIT (dependency-aware) for: {}", id);
                 return Ok(c.doc);
             }
-            eprintln!("🔥 PERF: Cache hash mismatch for: {}", id);
+            eprintln!("🔥 PERF: Cache invalidated (dependency changed) for: {}", id);
         } else {
             eprintln!("🔥 PERF: Cache miss for: {}", id);
         }
@@ -29,12 +58,48 @@ fn cached_parse(
 
     let doc = ftd::interpreter::ParsedDocument::parse_with_line_number(id, source, line_number)?;
     
-    // Only cache if enabled
+    // Cache with empty dependencies for now (will be updated later with real dependencies)
     if enable_cache {
-        fastn_core::utils::cache_it(id, C { doc, hash }).map(|v| v.doc)
+        let initial_hash = fastn_core::utils::generate_hash(source);
+        fastn_core::utils::cache_it(id, C { 
+            doc, 
+            hash: initial_hash,
+            dependencies: vec![] // Will be updated after compilation with real dependencies
+        }).map(|v| v.doc)
     } else {
         Ok(doc)
     }
+}
+
+// Update cache with dependency information after compilation
+pub fn update_cache_with_dependencies(
+    id: &str,
+    source: &str, 
+    dependencies: &[String],
+    doc: &ftd::interpreter::ParsedDocument,
+    enable_cache: bool,
+) -> ftd::interpreter::Result<()> {
+    if !enable_cache {
+        return Ok(());
+    }
+    
+    #[derive(serde::Deserialize, serde::Serialize)]
+    struct C {
+        hash: String,
+        dependencies: Vec<String>,
+        doc: ftd::interpreter::ParsedDocument,
+    }
+    
+    let dependency_aware_hash = generate_dependency_aware_hash(source, dependencies);
+    
+    fastn_core::utils::cache_it(id, C {
+        hash: dependency_aware_hash,
+        dependencies: dependencies.to_vec(),
+        doc: doc.clone(),
+    })?;
+    
+    eprintln!("🔥 PERF: Updated cache with {} dependencies for: {}", dependencies.len(), id);
+    Ok(())
 }
 
 pub fn package_dependent_builtins(
