@@ -36,21 +36,16 @@ fn cached_parse(
     // Only use cache if explicitly enabled via --enable-cache flag
     if enable_cache {
         if let Some(c) = fastn_core::utils::get_cached::<C>(id) {
-            // Use dependency-aware hash if dependencies available, otherwise simple hash
-            let current_hash = if let Some(deps) = dependencies {
-                generate_dependency_aware_hash(source, deps)
-            } else {
-                // For compatibility: check against previous cached dependencies
-                generate_dependency_aware_hash(source, &c.dependencies)
-            };
+            // Check if main content OR any cached dependency changed
+            let current_hash = generate_dependency_aware_hash(source, &c.dependencies);
             
             if c.hash == current_hash {
-                eprintln!("🚀 PERF: CACHE HIT (dependency-aware) for: {}", id);
+                eprintln!("🚀 PERF: CACHE HIT (all {} dependencies unchanged) for: {}", c.dependencies.len(), id);
                 return Ok(c.doc);
             }
-            eprintln!("🔥 PERF: Cache invalidated (dependency changed) for: {}", id);
+            eprintln!("🔥 PERF: Cache invalidated (main file or dependency changed) for: {}", id);
         } else {
-            eprintln!("🔥 PERF: Cache miss for: {}", id);
+            eprintln!("🔥 PERF: Cache miss (no previous cache) for: {}", id);
         }
     } else {
         eprintln!("🔥 PERF: Caching DISABLED (use --enable-cache to enable)");
