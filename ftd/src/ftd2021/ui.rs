@@ -64,6 +64,7 @@ pub enum IText {
 }
 
 impl Element {
+    #[allow(clippy::only_used_in_recursion)]
     pub(crate) fn set_children_count_variable(
         elements: &mut [ftd::Element],
         local_variables: &ftd::Map<ftd::ftd2021::p2::Thing>,
@@ -522,6 +523,7 @@ impl Element {
         }
     }
 
+    #[allow(clippy::only_used_in_recursion)]
     pub fn get_external_children_condition(
         &self,
         external_open_id: &Option<String>,
