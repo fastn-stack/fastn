@@ -123,7 +123,7 @@ pub async fn interpret_helper(
     line_number: usize,
     preview_session_id: &Option<String>,
 ) -> ftd::interpreter::Result<ftd::interpreter::Document> {
-    let doc = cached_parse(name, source, line_number, lib.config.enable_cache)?;
+    let doc = cached_parse(name, source, line_number, lib.config.enable_cache, None)?;
 
     let builtin_overrides = package_dependent_builtins(&lib.config, lib.request.path());
     let mut s = ftd::interpreter::interpret_with_line_number(name, doc, Some(builtin_overrides))?;
@@ -168,7 +168,7 @@ pub async fn interpret_helper(
                     .await?;
                 tracing::info!("import resolved: {module} -> {path}");
                 lib.dependencies_during_render.push(path);
-                let doc = cached_parse(module.as_str(), source.as_str(), ignore_line_numbers, lib.config.enable_cache)?;
+                let doc = cached_parse(module.as_str(), source.as_str(), ignore_line_numbers, lib.config.enable_cache, None)?;
                 s = st.continue_after_import(
                     module.as_str(),
                     doc,
@@ -224,6 +224,17 @@ pub async fn interpret_helper(
             }
         }
     }
+    
+    // Update cache with collected dependencies for always-correct future caching
+    // Note: We don't have access to original source here, which is a limitation
+    // For now, log the dependencies that were collected
+    if lib.config.enable_cache && !lib.dependencies_during_render.is_empty() {
+        eprintln!("🔥 PERF: Collected {} dependencies for future cache invalidation", lib.dependencies_during_render.len());
+        for dep in &lib.dependencies_during_render {
+            eprintln!("  📁 Dependency: {}", dep);
+        }
+    }
+    
     Ok(document)
 }
 
