@@ -857,14 +857,14 @@ pub fn image_from_properties(
             doc.name,
             0,
         )?,
-        common: common_from_properties(
+        common: Box::new(common_from_properties(
             unresolved_properties,
             doc,
             condition,
             is_child,
             events,
             reference,
-        )?,
+        )?),
         loading: ftd::Loading::from(
             ftd::ftd2021::p2::utils::string_with_default(
                 "loading", "lazy", properties, doc.name, 0,
@@ -911,14 +911,14 @@ pub fn row_from_properties(
 ) -> ftd::ftd2021::p1::Result<ftd::Row> {
     let properties = &ftd::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Row {
-        common: common_from_properties(
+        common: Box::new(common_from_properties(
             unresolved_properties,
             doc,
             condition,
             is_child,
             events,
             None,
-        )?,
+        )?),
         container: container_from_properties(properties, doc)?,
         spacing: ftd::Spacing::from(ftd::ftd2021::p2::utils::string_optional(
             "spacing", properties, doc.name, 0,
@@ -961,14 +961,14 @@ pub fn column_from_properties(
 ) -> ftd::ftd2021::p1::Result<ftd::Column> {
     let properties = &ftd::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Column {
-        common: common_from_properties(
+        common: Box::new(common_from_properties(
             unresolved_properties,
             doc,
             condition,
             is_child,
             events,
             None,
-        )?,
+        )?),
         container: container_from_properties(properties, doc)?,
         spacing: ftd::Spacing::from(ftd::ftd2021::p2::utils::string_optional(
             "spacing", properties, doc.name, 0,
@@ -1100,14 +1100,14 @@ pub fn iframe_from_properties(
             .as_str(),
             doc.name,
         )?,
-        common: common_from_properties(
+        common: Box::new(common_from_properties(
             unresolved_properties,
             doc,
             condition,
             is_child,
             events,
             None,
-        )?,
+        )?),
     })
 }
 
@@ -1142,14 +1142,14 @@ pub fn text_block_from_properties(
         } else {
             ftd::ftd2021::rendered::markup_line(text.as_str())
         },
-        common: common_from_properties(
+        common: Box::new(common_from_properties(
             unresolved_properties,
             doc,
             condition,
             is_child,
             events,
             reference,
-        )?,
+        )?),
         text_align: ftd::TextAlign::from(
             ftd::ftd2021::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
             doc.name,
@@ -1216,14 +1216,14 @@ pub fn code_from_properties(
             .as_str(),
             doc.name,
         )?,
-        common: common_from_properties(
+        common: Box::new(common_from_properties(
             unresolved_properties,
             doc,
             condition,
             is_child,
             events,
             reference,
-        )?,
+        )?),
         text_align: ftd::TextAlign::from(
             ftd::ftd2021::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
             doc.name,
@@ -1285,14 +1285,14 @@ pub fn integer_from_properties(
     Ok(ftd::Text {
         text: ftd::ftd2021::rendered::markup_line(text.as_str()),
         line: false,
-        common: common_from_properties(
+        common: Box::new(common_from_properties(
             unresolved_properties,
             doc,
             condition,
             is_child,
             events,
             reference,
-        )?,
+        )?),
         text_align: ftd::TextAlign::from(
             ftd::ftd2021::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
             doc.name,
@@ -1353,14 +1353,14 @@ pub fn decimal_from_properties(
     Ok(ftd::Text {
         text: ftd::ftd2021::rendered::markup_line(text.as_str()),
         line: false,
-        common: common_from_properties(
+        common: Box::new(common_from_properties(
             unresolved_properties,
             doc,
             condition,
             is_child,
             events,
             reference,
-        )?,
+        )?),
         text_align: ftd::TextAlign::from(
             ftd::ftd2021::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
             doc.name,
@@ -1482,14 +1482,14 @@ pub fn boolean_from_properties(
     Ok(ftd::Text {
         text: ftd::ftd2021::rendered::markup_line(text.as_str()),
         line: false,
-        common: common_from_properties(
+        common: Box::new(common_from_properties(
             unresolved_properties,
             doc,
             condition,
             is_child,
             events,
             reference,
-        )?,
+        )?),
         text_align: ftd::TextAlign::from(
             ftd::ftd2021::p2::utils::string_optional("text-align", properties, doc.name, 0)?,
             doc.name,
@@ -1962,14 +1962,14 @@ pub fn input_from_properties(
     })?;
 
     Ok(ftd::Input {
-        common: common_from_properties(
+        common: Box::new(common_from_properties(
             unresolved_properties,
             doc,
             condition,
             is_child,
             events,
             reference,
-        )?,
+        )?),
         placeholder: ftd::ftd2021::p2::utils::string_optional(
             "placeholder",
             properties,
@@ -1998,14 +1998,14 @@ pub fn scene_from_properties(
 ) -> ftd::ftd2021::p1::Result<ftd::Scene> {
     let properties = &ftd::ftd2021::component::resolve_properties(0, unresolved_properties, doc)?;
     Ok(ftd::Scene {
-        common: common_from_properties(
+        common: Box::new(common_from_properties(
             unresolved_properties,
             doc,
             condition,
             is_child,
             events,
             None,
-        )?,
+        )?),
         container: container_from_properties(properties, doc)?,
         spacing: ftd::Spacing::from(ftd::ftd2021::p2::utils::string_optional(
             "spacing", properties, doc.name, 0,
@@ -2051,14 +2051,14 @@ pub fn grid_from_properties(
             doc.name,
             0,
         )?,
-        common: common_from_properties(
+        common: Box::new(common_from_properties(
             unresolved_properties,
             doc,
             condition,
             is_child,
             events,
             None,
-        )?,
+        )?),
         container: container_from_properties(properties, doc)?,
         inline: ftd::ftd2021::p2::utils::bool_with_default(
             "inline", false, properties, doc.name, 0,
@@ -2100,14 +2100,14 @@ pub fn markup_from_properties(
 
     Ok(ftd::Markups {
         text: ftd::ftd2021::rendered::markup_line(value.as_str()),
-        common: common_from_properties(
+        common: Box::new(common_from_properties(
             unresolved_properties,
             doc,
             condition,
             is_child,
             events,
             reference,
-        )?,
+        )?),
         children: vec![],
         line: source != ftd::TextSource::Body,
         text_align: ftd::TextAlign::from(

@@ -2322,12 +2322,12 @@ pub fn default_aliases() -> ftd::Map<String> {
 
 pub fn default_column() -> ftd::Column {
     ftd::Column {
-        common: ftd::Common {
+        common: Box::new(ftd::Common {
             width: Some(ftd::Length::Fill),
             height: Some(ftd::Length::Fill),
             position: Some(ftd::Position::Center),
             ..Default::default()
-        },
+        }),
         spacing: None,
         ..Default::default()
     }
