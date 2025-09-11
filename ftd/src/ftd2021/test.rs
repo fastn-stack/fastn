@@ -108,23 +108,38 @@ pub fn s(s: &str) -> String {
 pub fn entity() -> ftd::ftd2021::p2::Thing {
     ftd::ftd2021::p2::Thing::OrType(crate::ftd2021::or_type::OrType {
         name: "foo/bar#entity".to_string(),
-        variants: vec![ftd::ftd2021::p2::Record {
-            name: "foo/bar#entity.person".to_string(),
-            fields: std::iter::IntoIterator::into_iter([
-                ("name".to_string(), ftd::ftd2021::p2::Kind::caption()),
-                ("address".to_string(), ftd::ftd2021::p2::Kind::string()),
-                ("bio".to_string(), ftd::ftd2021::p2::Kind::body()),
-                ("age".to_string(), ftd::ftd2021::p2::Kind::integer()),
-            ])
-            .collect(),
-            instances: Default::default(),
-            order: vec![
-                "name".to_string(),
-                "address".to_string(),
-                "bio".to_string(),
-                "age".to_string(),
-            ],
-        }],
+        variants: vec![
+            ftd::ftd2021::p2::Record {
+                name: "foo/bar#entity.person".to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ("name".to_string(), ftd::ftd2021::p2::Kind::caption()),
+                    ("address".to_string(), ftd::ftd2021::p2::Kind::string()),
+                    ("bio".to_string(), ftd::ftd2021::p2::Kind::body()),
+                    ("age".to_string(), ftd::ftd2021::p2::Kind::integer()),
+                ])
+                .collect(),
+                instances: Default::default(),
+                order: vec![
+                    "name".to_string(),
+                    "address".to_string(),
+                    "bio".to_string(),
+                    "age".to_string(),
+                ],
+            },
+            ftd::ftd2021::p2::Record {
+                name: "foo/bar#entity.company".to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ("name".to_string(), ftd::ftd2021::p2::Kind::caption()),
+                    ("industry".to_string(), ftd::ftd2021::p2::Kind::string()),
+                ])
+                .collect(),
+                instances: Default::default(),
+                order: vec![
+                    "name".to_string(),
+                    "industry".to_string(),
+                ],
+            }
+        ],
     })
 }
 
