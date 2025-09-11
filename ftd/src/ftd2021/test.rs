@@ -8,7 +8,6 @@ fn get_name() {
     )
 }
 
-
 pub fn interpret_helper(
     name: &str,
     source: &str,
@@ -98,11 +97,9 @@ macro_rules! p {
     };
 }
 
-
 pub fn s(s: &str) -> String {
     s.to_string()
 }
-
 
 // Stub function for or_type.rs tests
 pub fn entity() -> ftd::ftd2021::p2::Thing {
@@ -134,11 +131,8 @@ pub fn entity() -> ftd::ftd2021::p2::Thing {
                 ])
                 .collect(),
                 instances: Default::default(),
-                order: vec![
-                    "name".to_string(),
-                    "industry".to_string(),
-                ],
-            }
+                order: vec!["name".to_string(), "industry".to_string()],
+            },
         ],
     })
 }
