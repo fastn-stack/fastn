@@ -20,6 +20,7 @@ pub enum Element {
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
+#[derive(Default)]
 pub struct Markups {
     pub text: ftd::ftd2021::Rendered,
     pub common: Box<Common>,
@@ -32,21 +33,6 @@ pub struct Markups {
     pub children: Vec<Markup>,
 }
 
-impl Default for Markups {
-    fn default() -> Self {
-        Markups {
-            text: Default::default(),
-            common: Box::new(Default::default()),
-            text_align: Default::default(),
-            line: Default::default(),
-            style: Default::default(),
-            font: Default::default(),
-            line_clamp: Default::default(),
-            text_indent: Default::default(),
-            children: Default::default(),
-        }
-    }
-}
 
 impl Markups {
     pub(crate) fn to_text(&self) -> Text {
@@ -97,14 +83,16 @@ impl Element {
 
     pub(crate) fn set_default_locals(_elements: &mut [ftd::Element]) {
         // TODO: Also temporarily disabled due to pattern matching with Box<Common>
-        return;
-        
     }
 
-    pub fn set_id(_children: &mut [ftd::Element], _index_vec: &[usize], _external_id: Option<String>) {
+    pub fn set_id(
+        _children: &mut [ftd::Element],
+        _index_vec: &[usize],
+        _external_id: Option<String>,
+    ) {
         // TODO: Function temporarily disabled due to complex pattern matching with Box<Common>
         return;
-        
+
         #[allow(unreachable_code)]
         // Function body removed due to pattern matching complexity with Box<Common>
         fn set_markup_id(
@@ -205,7 +193,6 @@ impl Element {
     ) -> Vec<ftd::ExternalChildrenCondition> {
         // TODO: Function temporarily disabled due to complex pattern matching with Box<Common>
         vec![]
-        
     }
     pub fn get_external_children_dependencies(
         children: &[ftd::Element],
@@ -1963,7 +1950,6 @@ impl Container {
             .unwrap_or(self.children.is_empty() && is_container_children_empty)
     }
 }
-
 
 /// https://html.spec.whatwg.org/multipage/urls-and-fetching.html#lazy-loading-attributes
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]

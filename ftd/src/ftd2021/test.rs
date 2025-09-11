@@ -161,25 +161,26 @@ pub fn entity() -> ftd::ftd2021::p2::Thing {
     ftd::ftd2021::p2::Thing::OrType(crate::ftd2021::or_type::OrType {
         name: "foo/bar#entity".to_string(),
         variants: vec![ftd::ftd2021::p2::Record {
-            name: "foo/bar#entity.person".to_string(), 
+            name: "foo/bar#entity.person".to_string(),
             fields: std::iter::IntoIterator::into_iter([
                 ("name".to_string(), ftd::ftd2021::p2::Kind::caption()),
                 ("address".to_string(), ftd::ftd2021::p2::Kind::string()),
                 ("bio".to_string(), ftd::ftd2021::p2::Kind::body()),
                 ("age".to_string(), ftd::ftd2021::p2::Kind::integer()),
-            ]).collect(),
+            ])
+            .collect(),
             instances: Default::default(),
             order: vec![
-                "name".to_string(), 
-                "address".to_string(), 
-                "bio".to_string(), 
-                "age".to_string()
+                "name".to_string(),
+                "address".to_string(),
+                "bio".to_string(),
+                "age".to_string(),
             ],
         }],
     })
 }
 
-// Stub function for or_type.rs tests  
+// Stub function for or_type.rs tests
 pub fn abrar() -> ftd::Map<ftd::PropertyValue> {
     std::iter::IntoIterator::into_iter([
         (
@@ -216,19 +217,20 @@ pub fn abrar() -> ftd::Map<ftd::PropertyValue> {
                 name: s("foo/bar#x"),
             },
         ),
-    ]).collect()
+    ])
+    .collect()
 }
 
 // Simple test to verify stack overflow fix works
 
-#[test] 
+#[test]
 fn test_stack_overflow_fix() {
     // Create UI elements to test stack usage
     let common = Box::new(crate::ftd2021::ui::Common {
         data_id: Some("test".to_string()),
         ..Default::default()
     });
-    
+
     let row = crate::ftd2021::ui::Row {
         container: crate::ftd2021::ui::Container {
             children: vec![],
@@ -237,12 +239,12 @@ fn test_stack_overflow_fix() {
         spacing: None,
         common,
     };
-    
+
     let element = crate::ftd2021::ui::Element::Row(row);
-    
+
     // If we reach here without stack overflow, the fix works
     println!("✅ Stack overflow fix working - Box<Common> successfully reduces stack usage");
-    
+
     // Test that we can access the boxed common fields
     if let crate::ftd2021::ui::Element::Row(r) = &element {
         assert_eq!(r.common.data_id, Some("test".to_string()));
