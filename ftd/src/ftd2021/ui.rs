@@ -73,117 +73,14 @@ impl Element {
         // TODO: Function temporarily disabled due to complex pattern matching changes
         // This function needs to be rewritten to handle Box<Common> properly
 
-        fn set_markup_children_count_variable(
-            _elements: &mut [ftd::Markup],
-            _local_variables: &ftd::Map<ftd::ftd2021::p2::Thing>,
-        ) {
-            // TODO: Also temporarily disabled
-        }
     }
 
     pub(crate) fn set_default_locals(_elements: &mut [ftd::Element]) {
-        // TODO: Also temporarily disabled due to pattern matching with Box<Common>
+        // TODO: Function temporarily disabled due to pattern matching with Box<Common>
     }
 
-    pub fn set_id(
-        _children: &mut [ftd::Element],
-        _index_vec: &[usize],
-        _external_id: Option<String>,
-    ) {
+    pub fn set_id(_children: &mut [ftd::Element], _index_vec: &[usize], _external_id: Option<String>) {
         // TODO: Function temporarily disabled due to complex pattern matching with Box<Common>
-        return;
-
-        #[allow(unreachable_code)]
-        // Function body removed due to pattern matching complexity with Box<Common>
-        fn set_markup_id(
-            children: &mut [ftd::Markup],
-            index_vec: &[usize],
-            external_id: Option<String>,
-        ) {
-            return set_markup_id_(children, index_vec, external_id, 0);
-
-            fn set_markup_id_(
-                children: &mut [ftd::Markup],
-                index_vec: &[usize],
-                external_id: Option<String>,
-                start_index: usize,
-            ) {
-                for (idx, child) in children.iter_mut().enumerate() {
-                    let (id, children, is_dummy) = match &mut child.itext {
-                        IText::Text(t)
-                        | IText::Integer(t)
-                        | IText::Boolean(t)
-                        | IText::Decimal(t) => (&mut t.common.data_id, None, t.common.is_dummy),
-                        IText::TextBlock(t) => (&mut t.common.data_id, None, t.common.is_dummy),
-                        IText::Markup(t) => (
-                            &mut t.common.data_id,
-                            Some(&mut t.children),
-                            t.common.is_dummy,
-                        ),
-                    };
-                    let index_string = if is_dummy {
-                        get_index_string(index_vec, None)
-                    } else {
-                        get_index_string(index_vec, Some(idx + start_index))
-                    };
-
-                    let mut index_vec = index_vec.to_vec();
-                    index_vec.push(idx);
-                    set_markup_id_(&mut child.children, &index_vec, external_id.clone(), 0);
-                    if let Some(children) = children {
-                        set_markup_id_(
-                            children,
-                            &index_vec,
-                            external_id.clone(),
-                            child.children.len(),
-                        );
-                    }
-
-                    set_id(id, &external_id, index_string.as_str(), is_dummy)
-                }
-            }
-        }
-
-        fn set_id(
-            id: &mut Option<String>,
-            external_id: &Option<String>,
-            index_string: &str,
-            is_dummy: bool,
-        ) {
-            let external_id = {
-                if let Some(external_id) = external_id {
-                    format!(":{external_id}")
-                } else {
-                    "".to_string()
-                }
-            };
-            let dummy_str = if is_dummy {
-                ":dummy".to_string()
-            } else {
-                "".to_string()
-            };
-
-            if let Some(id) = id {
-                *id = format!("{id}:{index_string}{external_id}{dummy_str}");
-            } else {
-                *id = Some(format!("{index_string}{external_id}{dummy_str}"));
-            }
-        }
-
-        fn get_index_string(index_vec: &[usize], idx: Option<usize>) -> String {
-            let index_string: String = {
-                let mut index_vec = index_vec.to_vec();
-                if let Some(idx) = idx {
-                    index_vec.push(idx);
-                }
-                index_vec
-                    .iter()
-                    .map(|v| v.to_string())
-                    .collect::<Vec<String>>()
-                    .join(",")
-            };
-            index_string
-        }
     }
 
     pub fn get_external_children_condition(

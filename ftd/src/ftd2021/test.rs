@@ -8,17 +8,6 @@ fn get_name() {
     )
 }
 
-/// returns the universal arguments map from component.rs as vector
-fn universal_arguments_as_vec() -> Vec<(String, ftd::ftd2021::p2::Kind)> {
-    ftd::ftd2021::component::universal_arguments()
-        .into_iter()
-        .collect::<Vec<(String, ftd::ftd2021::p2::Kind)>>()
-}
-
-/// returns the universal argumnts map from component.rs
-fn universal_arguments_as_map() -> ftd::Map<ftd::ftd2021::p2::Kind> {
-    ftd::ftd2021::component::universal_arguments()
-}
 
 pub fn interpret_helper(
     name: &str,
@@ -109,52 +98,11 @@ macro_rules! p {
     };
 }
 
-macro_rules! intf {
-    ($s:expr, $m: expr,) => {
-        intf!($s, $m)
-    };
-    ($s:expr, $m: expr) => {
-        match ftd::ftd2021::test::interpret(
-            "foo",
-            indoc::indoc!($s),
-            &ftd::ftd2021::p2::TestLibrary {},
-        ) {
-            Ok(some_value) => panic!("expected failure {:?}, found: {:?}", $m, some_value),
-            Err(e) => {
-                let expected_error = $m.trim();
-                let err_found = e.to_string();
-                let found = err_found.trim();
-                if expected_error != found {
-                    let patch = diffy::create_patch(expected_error, found);
-                    let f = diffy::PatchFormatter::new().with_color();
-                    print!(
-                        "{}",
-                        f.fmt_patch(&patch)
-                            .to_string()
-                            .replace("\\ No newline at end of file", "")
-                    );
-                    println!(
-                        "expected error:\n{}\nfound:\n{}\n",
-                        expected_error, err_found
-                    );
-                    panic!("test failed")
-                }
-            }
-        }
-    };
-}
 
 pub fn s(s: &str) -> String {
     s.to_string()
 }
 
-pub fn i(p: &str, reference: Option<String>) -> ftd::ImageSrc {
-    ftd::ImageSrc {
-        light: s(p),
-        dark: s(p),
-        reference,
-    }
-}
 
 // Stub function for or_type.rs tests
 pub fn entity() -> ftd::ftd2021::p2::Thing {
