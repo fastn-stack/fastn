@@ -112,7 +112,9 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     let account_manager_clone = account_manager.clone();
 
     let _poller_handle = fastn_p2p::spawn(async move {
-        if let Err(e) = crate::email_poller_p2p::start_email_delivery_poller(account_manager_clone).await {
+        if let Err(e) =
+            crate::email_poller_p2p::start_email_delivery_poller(account_manager_clone).await
+        {
             tracing::error!("Email delivery poller failed: {e}");
         }
     });
@@ -122,26 +124,35 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     let smtp_port = std::env::var("FASTN_SMTP_PORT")
         .ok()
         .and_then(|p| p.parse().ok())
-        .unwrap_or(587);  // Default to port 587 (standard email submission port)
-    println!("📮 SMTP server listening on port {smtp_port} (supports both plain text and STARTTLS)");
+        .unwrap_or(587); // Default to port 587 (standard email submission port)
+    println!(
+        "📮 SMTP server listening on port {smtp_port} (supports both plain text and STARTTLS)"
+    );
 
     // Create SMTP server with STARTTLS support (MUST succeed)
     let smtp_server = crate::smtp::SmtpServer::new(
-        account_manager.clone(), 
+        account_manager.clone(),
         ([0, 0, 0, 0], smtp_port).into(),
         &fastn_home,
         rig.secret_key().clone(),
-    ).map_err(|e| {
+    )
+    .map_err(|e| {
         eprintln!("❌ CRITICAL: Failed to create SMTP server: {e}");
         eprintln!("   This indicates a serious problem that must be fixed:");
         eprintln!("   - Certificate storage creation failed");
-        eprintln!("   - Directory permissions issues");  
+        eprintln!("   - Directory permissions issues");
         eprintln!("   - TLS/crypto library problems");
         eprintln!("   fastn_home: {}", fastn_home.display());
-        eprintln!("   Certificate dir would be: {}", fastn_home.parent().map(|p| p.join("certs").display().to_string()).unwrap_or_else(|| "UNKNOWN".to_string()));
+        eprintln!(
+            "   Certificate dir would be: {}",
+            fastn_home
+                .parent()
+                .map(|p| p.join("certs").display().to_string())
+                .unwrap_or_else(|| "UNKNOWN".to_string())
+        );
         fastn_rig::RunError::FastnHomeResolution // Stop execution to force debugging
     })?;
-    
+
     println!("✅ SMTP server created with STARTTLS certificate support");
     let _smtp_handle = fastn_p2p::spawn(async move {
         if let Err(e) = smtp_server.start().await {
@@ -149,21 +160,23 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         }
     });
 
-    // Start IMAP server  
+    // Start IMAP server
     let imap_port = std::env::var("FASTN_IMAP_PORT")
         .ok()
         .and_then(|p| p.parse().ok())
-        .unwrap_or(1143);  // Default to unprivileged port 1143
+        .unwrap_or(1143); // Default to unprivileged port 1143
     println!("📨 Starting IMAP server on port {imap_port}...");
-    
+
     let imap_account_manager = account_manager.clone();
     let imap_fastn_home = fastn_home.clone();
     let _imap_handle = fastn_p2p::spawn(async move {
-        if let Err(e) = crate::imap::start_imap_server(imap_account_manager, imap_port, imap_fastn_home).await {
+        if let Err(e) =
+            crate::imap::start_imap_server(imap_account_manager, imap_port, imap_fastn_home).await
+        {
             tracing::error!("IMAP server error: {}", e);
         }
     });
-    
+
     println!("✅ IMAP server started on port {imap_port}");
 
     // Start HTTP server

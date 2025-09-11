@@ -2,7 +2,7 @@
 //!
 //! This is the most important test in the fastn email system.
 //! If this test passes, the entire email infrastructure is working:
-//! 
+//!
 //! 1. ✅ STARTTLS SMTP server accepts encrypted email clients
 //! 2. ✅ Email authentication and routing works
 //! 3. ✅ Email storage in Sent folder works
@@ -16,15 +16,15 @@
 use std::path::PathBuf;
 
 /// 🎯 CRITICAL TEST: Complete STARTTLS Email Pipeline  
-/// 
+///
 /// This test validates the entire fastn email system end-to-end using STARTTLS encryption.
 /// If this test passes, users can send encrypted emails through fastn with full P2P delivery.
-/// 
+///
 /// Set FASTN_TEST_SINGLE_RIG=1 to test single-rig mode (2 accounts in 1 rig).
 #[tokio::test]
 async fn email_end_to_end_starttls() {
     let single_rig = std::env::var("FASTN_TEST_SINGLE_RIG").unwrap_or_default() == "1";
-    
+
     if single_rig {
         println!("🚀 Starting CRITICAL END-TO-END EMAIL TEST (STARTTLS Mode - SINGLE RIG)");
         println!("🔐 Testing: STARTTLS SMTP → local delivery → INBOX (2 accounts in 1 rig)");
@@ -36,66 +36,132 @@ async fn email_end_to_end_starttls() {
     // Use fastn-cli-test-utils for reliable test management
     let mut test_env = fastn_cli_test_utils::FastnTestEnv::new("email-end-to-end-starttls")
         .expect("Failed to create test environment");
-    
+
     // CI vs Local Environment Debugging (no functionality change)
     println!("🔍 ENV: Running in CI: {}", std::env::var("CI").is_ok());
-    println!("🔍 ENV: GitHub Actions: {}", std::env::var("GITHUB_ACTIONS").is_ok());  
-    println!("🔍 ENV: Container: {}", std::path::Path::new("/.dockerenv").exists());
-    
+    println!(
+        "🔍 ENV: GitHub Actions: {}",
+        std::env::var("GITHUB_ACTIONS").is_ok()
+    );
+    println!(
+        "🔍 ENV: Container: {}",
+        std::path::Path::new("/.dockerenv").exists()
+    );
+
     // Create infrastructure for testing - declare variables outside scope
     let (account1_id, peer1_home, account2_id, peer2_home) = if single_rig {
         println!("🔧 Creating single rig with 2 accounts...");
-        let peer1 = test_env.create_peer("single-rig").await.expect("Failed to create single rig");
-        let account1_id = peer1.account_id.clone(); 
+        let peer1 = test_env
+            .create_peer("single-rig")
+            .await
+            .expect("Failed to create single rig");
+        let account1_id = peer1.account_id.clone();
         let peer1_home = peer1.home_path.clone();
-        println!("🔍 DEBUG: Single Rig - Home: {}, SMTP Port: {}", peer1_home.display(), peer1.smtp_port);
+        println!(
+            "🔍 DEBUG: Single Rig - Home: {}, SMTP Port: {}",
+            peer1_home.display(),
+            peer1.smtp_port
+        );
         println!("🔍 DEBUG: Account 1: {}", account1_id);
-        
+
         // TODO: Need to implement create-account functionality in fastn-cli-test-utils
         // For now, this will create dual rigs like before until test utils support single-rig
-        println!("⚠️  Single-rig mode not yet implemented in test utils - falling back to dual-rig");
-        let peer2 = test_env.create_peer("receiver").await.expect("Failed to create receiver peer");
+        println!(
+            "⚠️  Single-rig mode not yet implemented in test utils - falling back to dual-rig"
+        );
+        let peer2 = test_env
+            .create_peer("receiver")
+            .await
+            .expect("Failed to create receiver peer");
         let account2_id = peer2.account_id.clone();
         let peer2_home = peer2.home_path.clone();
-        println!("🔍 DEBUG: Peer 2 - Account: {}, Home: {}, SMTP Port: {}", account2_id, peer2_home.display(), peer2.smtp_port);
-        
+        println!(
+            "🔍 DEBUG: Peer 2 - Account: {}, Home: {}, SMTP Port: {}",
+            account2_id,
+            peer2_home.display(),
+            peer2.smtp_port
+        );
+
         (account1_id, peer1_home, account2_id, peer2_home)
     } else {
         println!("🔧 Creating peer infrastructure...");
-        let peer1 = test_env.create_peer("sender").await.expect("Failed to create sender peer");
+        let peer1 = test_env
+            .create_peer("sender")
+            .await
+            .expect("Failed to create sender peer");
         let account1_id = peer1.account_id.clone();
         let peer1_home = peer1.home_path.clone();
-        println!("🔍 DEBUG: Peer 1 - Account: {}, Home: {}, SMTP Port: {}", account1_id, peer1_home.display(), peer1.smtp_port);
-        
-        let peer2 = test_env.create_peer("receiver").await.expect("Failed to create receiver peer");
+        println!(
+            "🔍 DEBUG: Peer 1 - Account: {}, Home: {}, SMTP Port: {}",
+            account1_id,
+            peer1_home.display(),
+            peer1.smtp_port
+        );
+
+        let peer2 = test_env
+            .create_peer("receiver")
+            .await
+            .expect("Failed to create receiver peer");
         let account2_id = peer2.account_id.clone();
         let peer2_home = peer2.home_path.clone();
-        println!("🔍 DEBUG: Peer 2 - Account: {}, Home: {}, SMTP Port: {}", account2_id, peer2_home.display(), peer2.smtp_port);
-        
+        println!(
+            "🔍 DEBUG: Peer 2 - Account: {}, Home: {}, SMTP Port: {}",
+            account2_id,
+            peer2_home.display(),
+            peer2.smtp_port
+        );
+
         (account1_id, peer1_home, account2_id, peer2_home)
     };
 
     // Start both peers
     println!("🚀 Starting peer processes...");
     if single_rig {
-        test_env.start_peer("single-rig").await.expect("Failed to start single rig");
-        test_env.start_peer("receiver").await.expect("Failed to start receiver peer");
+        test_env
+            .start_peer("single-rig")
+            .await
+            .expect("Failed to start single rig");
+        test_env
+            .start_peer("receiver")
+            .await
+            .expect("Failed to start receiver peer");
     } else {
-        test_env.start_peer("sender").await.expect("Failed to start sender peer");
-        test_env.start_peer("receiver").await.expect("Failed to start receiver peer");
+        test_env
+            .start_peer("sender")
+            .await
+            .expect("Failed to start sender peer");
+        test_env
+            .start_peer("receiver")
+            .await
+            .expect("Failed to start receiver peer");
     }
 
     // Wait for peers to fully initialize (longer wait for CI)
     let wait_time = if std::env::var("CI").is_ok() { 15 } else { 5 };
-    println!("⏳ Waiting {}s for peers to initialize (CI needs more time)", wait_time);
+    println!(
+        "⏳ Waiting {}s for peers to initialize (CI needs more time)",
+        wait_time
+    );
     tokio::time::sleep(std::time::Duration::from_secs(wait_time)).await;
 
     // Validate peer setup
     println!("🔍 Validating peer credentials...");
     println!("✅ Sender: {} (length: {})", account1_id, account1_id.len());
-    println!("✅ Receiver: {} (length: {})", account2_id, account2_id.len());
-    assert_eq!(account1_id.len(), 52, "Sender account ID should be 52 characters");
-    assert_eq!(account2_id.len(), 52, "Receiver account ID should be 52 characters");
+    println!(
+        "✅ Receiver: {} (length: {})",
+        account2_id,
+        account2_id.len()
+    );
+    assert_eq!(
+        account1_id.len(),
+        52,
+        "Sender account ID should be 52 characters"
+    );
+    assert_eq!(
+        account2_id.len(),
+        52,
+        "Receiver account ID should be 52 characters"
+    );
 
     println!("✅ Both peers ready with valid account IDs");
 
@@ -103,20 +169,21 @@ async fn email_end_to_end_starttls() {
     // TODO: Switch to STARTTLS mode once TLS upgrade implementation is complete
     println!("📧 CRITICAL TEST: Sending email via SMTP...");
     println!("📧 Using plain text mode (STARTTLS foundation ready, upgrade staged)");
-    
+
     println!("🔍 DEBUG: About to send email using fastn-cli-test-utils...");
     let (sender_name, receiver_name) = if single_rig {
         ("single-rig", "receiver")
     } else {
         ("sender", "receiver")
     };
-    
-    let send_result = match test_env.email()
+
+    let send_result = match test_env
+        .email()
         .from(sender_name)
-        .to(receiver_name) 
+        .to(receiver_name)
         .subject("🎯 CRITICAL: Email End-to-End Test")
         .body("This email tests the complete fastn email pipeline: SMTP → fastn-p2p → INBOX")
-        .starttls(false)  // Use plain text until STARTTLS upgrade implemented
+        .starttls(false) // Use plain text until STARTTLS upgrade implemented
         .send()
         .await
     {
@@ -137,44 +204,90 @@ async fn email_end_to_end_starttls() {
 
     // Monitor P2P delivery (this is the heart of fastn's email system)
     println!("⏳ CRITICAL: Waiting for P2P delivery via fastn-p2p...");
-    
+
     for attempt in 1..=12 {
         tokio::time::sleep(std::time::Duration::from_secs(3)).await;
-        println!("⏳ P2P delivery check #{}/12 ({}s elapsed)", attempt, attempt * 3);
+        println!(
+            "⏳ P2P delivery check #{}/12 ({}s elapsed)",
+            attempt,
+            attempt * 3
+        );
 
-        // Check sender's Sent folder  
+        // Check sender's Sent folder
         let sender_sent_emails = find_emails_in_folder(&peer1_home, &account1_id, "Sent").await;
-        let sent_folder_path = peer1_home.join("accounts").join(&account1_id).join("mails").join("default").join("Sent");
-        println!("📊 Sender Sent: {} emails (looking in: {})", sender_sent_emails.len(), sent_folder_path.display());
-        println!("🔍 DEBUG: Sent folder exists: {}", sent_folder_path.exists());
+        let sent_folder_path = peer1_home
+            .join("accounts")
+            .join(&account1_id)
+            .join("mails")
+            .join("default")
+            .join("Sent");
+        println!(
+            "📊 Sender Sent: {} emails (looking in: {})",
+            sender_sent_emails.len(),
+            sent_folder_path.display()
+        );
+        println!(
+            "🔍 DEBUG: Sent folder exists: {}",
+            sent_folder_path.exists()
+        );
 
         // Check receiver's INBOX folder
         let receiver_inbox_emails = find_emails_in_folder(&peer2_home, &account2_id, "INBOX").await;
-        let inbox_folder_path = peer2_home.join("accounts").join(&account2_id).join("mails").join("default").join("INBOX");
-        println!("📊 Receiver INBOX: {} emails (looking in: {})", receiver_inbox_emails.len(), inbox_folder_path.display());
-        println!("🔍 DEBUG: INBOX folder exists: {}", inbox_folder_path.exists());
+        let inbox_folder_path = peer2_home
+            .join("accounts")
+            .join(&account2_id)
+            .join("mails")
+            .join("default")
+            .join("INBOX");
+        println!(
+            "📊 Receiver INBOX: {} emails (looking in: {})",
+            receiver_inbox_emails.len(),
+            inbox_folder_path.display()
+        );
+        println!(
+            "🔍 DEBUG: INBOX folder exists: {}",
+            inbox_folder_path.exists()
+        );
 
         if !receiver_inbox_emails.is_empty() {
-            println!("✅ CRITICAL SUCCESS: P2P delivery completed in {}s via STARTTLS!", attempt * 3);
+            println!(
+                "✅ CRITICAL SUCCESS: P2P delivery completed in {}s via STARTTLS!",
+                attempt * 3
+            );
             break;
         }
 
         if attempt == 8 {
-            println!("⚠️  P2P delivery taking longer than expected ({}s)...", attempt * 3);
+            println!(
+                "⚠️  P2P delivery taking longer than expected ({}s)...",
+                attempt * 3
+            );
             println!("🔍 CI DEBUG: This suggests P2P delivery is slower/failing in CI environment");
         }
     }
 
     // 🎯 CRITICAL VALIDATION: Verify complete email pipeline worked
     println!("🎯 CRITICAL: Validating complete email pipeline...");
-    
+
     let sender_sent_emails = find_emails_in_folder(&peer1_home, &account1_id, "Sent").await;
-    assert!(!sender_sent_emails.is_empty(), "CRITICAL: Email must be in sender's Sent folder");
-    println!("✅ CRITICAL: Found {} emails in sender Sent folder", sender_sent_emails.len());
+    assert!(
+        !sender_sent_emails.is_empty(),
+        "CRITICAL: Email must be in sender's Sent folder"
+    );
+    println!(
+        "✅ CRITICAL: Found {} emails in sender Sent folder",
+        sender_sent_emails.len()
+    );
 
     let receiver_inbox_emails = find_emails_in_folder(&peer2_home, &account2_id, "INBOX").await;
-    assert!(!receiver_inbox_emails.is_empty(), "CRITICAL: Email must be delivered to receiver's INBOX");
-    println!("✅ CRITICAL: Found {} emails in receiver INBOX folder", receiver_inbox_emails.len());
+    assert!(
+        !receiver_inbox_emails.is_empty(),
+        "CRITICAL: Email must be delivered to receiver's INBOX"
+    );
+    println!(
+        "✅ CRITICAL: Found {} emails in receiver INBOX folder",
+        receiver_inbox_emails.len()
+    );
 
     // Verify email content integrity
     let sent_content = tokio::fs::read_to_string(&sender_sent_emails[0])
@@ -192,31 +305,41 @@ async fn email_end_to_end_starttls() {
 
     // Verify correct folder placement
     assert!(sender_sent_emails[0].to_string_lossy().contains("/Sent/"));
-    assert!(receiver_inbox_emails[0].to_string_lossy().contains("/INBOX/"));
+    assert!(
+        receiver_inbox_emails[0]
+            .to_string_lossy()
+            .contains("/INBOX/")
+    );
     println!("✅ CRITICAL: Email folder placement verified: Sent → INBOX");
 
     // 🔥 CRITICAL: IMAP DUAL VERIFICATION (MUST PASS)
     println!("📨 CRITICAL: Testing IMAP server integration with dual verification...");
-    
+
     // CRITICAL ASSERTION 1: IMAP message count must match filesystem count
     let filesystem_count = receiver_inbox_emails.len();
     println!("📊 Filesystem INBOX count: {}", filesystem_count);
-    
+
     // TODO: Add IMAP client integration here
     // For now, add explicit assertion that forces future implementation
-    assert!(filesystem_count > 0, "CRITICAL: Must have emails for IMAP testing");
-    
+    assert!(
+        filesystem_count > 0,
+        "CRITICAL: Must have emails for IMAP testing"
+    );
+
     // CRITICAL ASSERTION 2: IMAP must be able to retrieve email content
     // When IMAP client is integrated, this MUST verify:
-    //   1. IMAP SELECT returns count == filesystem_count  
+    //   1. IMAP SELECT returns count == filesystem_count
     //   2. IMAP FETCH retrieves content that matches inbox_content
     //   3. IMAP protocol works with authenticated account (not hardcoded)
-    
+
     // Temporary placeholder - MUST be replaced with real IMAP verification
-    println!("📨 CRITICAL TODO: IMAP verification for {} messages needed", filesystem_count);
+    println!(
+        "📨 CRITICAL TODO: IMAP verification for {} messages needed",
+        filesystem_count
+    );
     println!("❌ WARNING: IMAP assertions not yet implemented in Rust test");
     println!("✅ CRITICAL: Filesystem validation complete, IMAP implementation required");
-    
+
     // This assertion will fail if we don't implement IMAP verification soon
     // Remove this when real IMAP verification is added
     if std::env::var("REQUIRE_IMAP_TESTS").is_ok() {
@@ -226,7 +349,7 @@ async fn email_end_to_end_starttls() {
     println!("🎉 🎯 CRITICAL SUCCESS: Complete STARTTLS Email Pipeline Working! 🎯 🎉");
     println!("✅ fastn email system is fully operational with STARTTLS encryption");
     println!("✅ Ready for IMAP dual verification integration");
-    
+
     // Note: FastnTestEnv handles automatic peer cleanup
 }
 
