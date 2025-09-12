@@ -28,7 +28,7 @@ impl CacheKey {
 }
 
 /// Generate unique project identifier
-fn generate_project_id() -> String {
+pub fn generate_project_id() -> String {
     let current_dir = std::env::current_dir()
         .expect("Cannot read current directory");
     let fastn_ftd_path = current_dir.join("FASTN.ftd");
