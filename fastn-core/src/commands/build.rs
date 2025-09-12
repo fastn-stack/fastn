@@ -694,9 +694,8 @@ async fn handle_file_(
 
             match (resp, ignore_failed) {
                 (Ok(r), _) => {
-                    // TODO: what to do with dependencies?
-                    // let dependencies = req_config.dependencies_during_render;
-                    let dependencies = vec![];
+                    // Use collected dependencies for proper incremental build cache invalidation
+                    let dependencies = req_config.dependencies_during_render;
                     if let Some(cache) = cache {
                         cache.documents.insert(
                             remove_extension(doc.id.as_str()),
