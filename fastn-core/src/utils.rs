@@ -52,11 +52,10 @@ pub fn get_cache_file(id: &str) -> Option<std::path::PathBuf> {
     let fastn_ftd_path = current_dir.join("FASTN.ftd");
     
     let project_cache_dir = if fastn_ftd_path.exists() {
-        // Use package name + FASTN.ftd content hash for optimal cache sharing
         let fastn_content = std::fs::read_to_string(&fastn_ftd_path)
             .unwrap_or_else(|_| "".to_string());
         
-        // Extract package name for human-readable cache directories
+        // Extract package name for base cache directory
         let package_name = fastn_content
             .lines()
             .find(|line| line.trim_start().starts_with("-- fastn.package:"))
@@ -64,13 +63,46 @@ pub fn get_cache_file(id: &str) -> Option<std::path::PathBuf> {
             .map(|name| name.trim())
             .unwrap_or("unnamed");
         
-        // Combine package name + content hash for uniqueness + readability
-        let content_hash = fastn_core::utils::generate_hash(fastn_content.as_bytes());
-        format!("{}-{}", package_name, &content_hash[..8])
+        // Try to get git repository name for stable identification
+        let git_repo_name = std::process::Command::new("git")
+            .args(["remote", "get-url", "origin"])
+            .current_dir(&current_dir)
+            .output()
+            .ok()
+            .and_then(|output| {
+                if output.status.success() {
+                    let url = String::from_utf8_lossy(&output.stdout);
+                    // Extract repo name from git URL (e.g., fastn-stack/fastn → fastn)
+                    url.trim()
+                        .split('/')
+                        .last()?
+                        .trim_end_matches(".git")
+                        .to_string()
+                        .into()
+                } else {
+                    None
+                }
+            });
+        
+        // Use git repo name if available, otherwise use directory name
+        let project_identifier = git_repo_name
+            .unwrap_or_else(|| {
+                current_dir
+                    .file_name()
+                    .unwrap_or_default()
+                    .to_string_lossy()
+                    .to_string()
+            });
+        
+        // Format: {git-repo-or-dirname}-{package-name}
+        format!("{}-{}", project_identifier, package_name)
     } else {
-        // Fallback to directory path if no FASTN.ftd (edge case)
-        let dir_hash = fastn_core::utils::generate_hash(current_dir.to_string_lossy().as_bytes());
-        format!("no-config-{}", &dir_hash[..8])
+        // Fallback to directory name if no FASTN.ftd
+        let dir_name = current_dir
+            .file_name()
+            .unwrap_or_default()
+            .to_string_lossy();
+        format!("no-config-{}", dir_name)
     };
     
     let base_path = cache_dir.join(project_cache_dir);
