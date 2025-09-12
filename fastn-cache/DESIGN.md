@@ -4,7 +4,48 @@
 
 This section tracks day-by-day progress on caching implementation and testing for production confidence.
 
-### 2025-09-11 - Complete Performance & Caching Implementation Journey
+### Journal Instructions
+
+**Format for entries:**
+```
+### YYYY-MM-DD - [Branch: branch-name] - Entry Title
+**Branch**: branch-name (PR #xxxx)
+**Status**: [Development/Testing/Review/Merged]
+
+**Work Done:**
+- ✅ Completed items
+- ⏳ In progress items  
+- ❌ Issues found
+- 📋 Next steps
+
+**Testing Results:**
+- Test scenarios passed/failed
+- Performance measurements
+- Real-world validation results
+
+**Branch Management:**
+- Branch created/switched/merged
+- PR status updates
+- Merge to main tracking
+```
+
+**Branch Lifecycle Tracking:**
+- **Branch creation**: Document new branch for caching work
+- **PR creation**: Link to PR and describe changes
+- **PR updates**: Major changes or testing results
+- **PR merge**: Document features added to main branch
+- **Cross-PR coordination**: Track when multiple PRs affect caching
+
+**Usage Examples:**
+- "journal it" → Add current progress entry
+- "journal merge" → Document PR merge to main
+- "journal branch switch" → Document switching to different caching branch
+- "journal test results" → Document systematic test outcomes
+
+### 2025-09-11 - [Branch: optimize-page-load-performance] - Complete Performance & Caching Implementation Journey
+
+**Branch**: optimize-page-load-performance (PR #2199)  
+**Status**: Review (ready for testing and validation)
 
 **Phase 1: Performance Investigation (Commits 1-3)**
 - ✅ **Root cause identified**: fastn serve taking 5+ seconds per request due to disabled caching
@@ -61,10 +102,18 @@ This section tracks day-by-day progress on caching implementation and testing fo
 **Critical Insight:**
 Cache-related bugs are **silent and dangerous** for production environments. While performance gains are dramatic, we need **absolute confidence** through comprehensive testing before affecting live fastn 0.4 installations.
 
+**Branch Management:**
+- ✅ **Branch created**: optimize-page-load-performance from main  
+- ✅ **PR created**: #2199 - "feat: implement comprehensive FTD caching system"
+- ✅ **Commits**: 20 focused commits from investigation → implementation → design
+- ⏳ **PR status**: Ready for review, awaiting systematic testing
+- 📋 **Merge plan**: Will update journal when PR merges to main
+
 **Immediate Next Steps:**
 - Implement 10 critical test scenarios
 - Verify cache correctness under all edge cases
 - Build systematic confidence for production deployment
+- Update journal with "journal merge" when PR is merged to main
 
 ---
 
