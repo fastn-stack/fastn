@@ -2,50 +2,63 @@
 
 ## Journal
 
-This section tracks day-by-day progress on caching implementation and testing for production confidence.
+This section tracks **reportable findings** during caching implementation and testing for production confidence. Entries are created based on significant discoveries, milestones, or test results rather than daily progress.
 
 ### Journal Instructions
 
+**Entry Triggers (Reportable Findings):**
+- **Major discovery**: Root cause identified, critical bug found
+- **Implementation milestone**: Key feature completed, API designed
+- **Test results**: Test scenario passed/failed, performance measured
+- **Production event**: PR merged, feature deployed, regression found
+- **Architecture decision**: Design change, approach pivot, safety measure
+
 **Format for entries:**
 ```
-### YYYY-MM-DD - [Branch: branch-name] - Entry Title
+### YYYY-MM-DD - [Branch: branch-name] - Reportable Finding Title
 **Branch**: branch-name (PR #xxxx)
 **Status**: [Development/Testing/Review/Merged]
+**Finding Type**: [Discovery/Milestone/Test Result/Production Event/Decision]
 
-**Work Done:**
-- ✅ Completed items
-- ⏳ In progress items  
-- ❌ Issues found
-- 📋 Next steps
+**What Happened:**
+- Key discovery or accomplishment
+- Test results and implications
+- Decisions made and rationale
 
-**Testing Results:**
-- Test scenarios passed/failed
-- Performance measurements
-- Real-world validation results
+**Impact:**
+- Performance implications
+- Safety considerations  
+- Production readiness changes
 
 **Branch Management:**
-- Branch created/switched/merged
-- PR status updates
-- Merge to main tracking
+- Branch status changes
+- PR lifecycle updates
+- Merge tracking when applicable
 ```
 
-**Branch Lifecycle Tracking:**
-- **Branch creation**: Document new branch for caching work
-- **PR creation**: Link to PR and describe changes
-- **PR updates**: Major changes or testing results
-- **PR merge**: Document features added to main branch
-- **Cross-PR coordination**: Track when multiple PRs affect caching
+**Branch Lifecycle Events:**
+- **Branch creation**: Document purpose and relationship to other work
+- **PR creation**: Capture scope and changes made
+- **Major PR updates**: Significant changes or scope evolution  
+- **PR merge**: Document what features are now live in main
+- **Cross-PR impact**: When work affects or builds on other caching PRs
 
-**Usage Examples:**
-- "journal it" → Add current progress entry
-- "journal merge" → Document PR merge to main
-- "journal branch switch" → Document switching to different caching branch
-- "journal test results" → Document systematic test outcomes
+**Usage Commands:**
+- **"journal it"** → Add current reportable finding
+- **"journal merge"** → Document PR merge and features added to main
+- **"journal test results"** → Document test scenario outcomes
+- **"journal discovery"** → Document major findings or insights
 
 ### 2025-09-11 - [Branch: optimize-page-load-performance] - Complete Performance & Caching Implementation Journey
 
 **Branch**: optimize-page-load-performance (PR #2199)  
 **Status**: Review (ready for testing and validation)
+**Finding Type**: Implementation Milestone
+
+**What Happened:**
+Complete end-to-end caching system implemented from performance investigation through architectural solution.
+
+**Implementation Phases:**
 
 **Phase 1: Performance Investigation (Commits 1-3)**
 - ✅ **Root cause identified**: fastn serve taking 5+ seconds per request due to disabled caching
