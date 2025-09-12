@@ -1,6 +1,7 @@
 //! Dependency tracking for cache invalidation
 
 use std::collections::{HashMap, HashSet};
+use std::time::SystemTime;
 
 /// Tracks file dependencies for intelligent cache invalidation
 pub struct DependencyTracker {
@@ -50,24 +51,81 @@ impl DependencyTracker {
         affected.into_iter().collect()
     }
     
-    /// Check if any dependencies of a file have changed
-    pub fn dependencies_changed(&self, file_id: &str) -> bool {
+    /// Check if any dependencies of a file have changed since given time
+    pub fn dependencies_changed_since(&self, file_id: &str, cache_time: SystemTime) -> bool {
         if let Some(deps) = self.dependencies.get(file_id) {
             for dep_path in deps {
-                if file_changed_since_cache(dep_path) {
+                if file_changed_since_cache(dep_path, cache_time) {
                     return true;
                 }
             }
         }
         false
     }
+    
+    /// Generate dependency-aware hash for cache validation
+    pub fn generate_cache_hash(&self, file_id: &str, source: &str) -> String {
+        let dependencies = self.dependencies.get(file_id)
+            .map(|deps| deps.as_slice())
+            .unwrap_or(&[]);
+        
+        generate_dependency_hash(source, dependencies)
+    }
 }
 
-/// Check if a file has changed since it was cached
-fn file_changed_since_cache(file_path: &str) -> bool {
-    // TODO: Implement file modification time checking
-    // Compare against cached modification time
-    false
+/// Check if a file has changed by comparing modification times
+fn file_changed_since_cache(file_path: &str, cached_time: SystemTime) -> bool {
+    match std::fs::metadata(file_path) {
+        Ok(metadata) => {
+            match metadata.modified() {
+                Ok(current_time) => current_time > cached_time,
+                Err(_) => true, // If we can't get time, assume changed
+            }
+        }
+        Err(_) => true, // If file doesn't exist, assume changed
+    }
+}
+
+/// Generate hash that includes all dependency file contents
+pub fn generate_dependency_hash(source: &str, dependencies: &[String]) -> String {
+    use std::collections::hash_map::DefaultHasher;
+    use std::hash::{Hash, Hasher};
+    
+    let mut hasher = DefaultHasher::new();
+    source.hash(&mut hasher);
+    
+    // Include all dependency file contents in the hash
+    for dep_path in dependencies {
+        if let Ok(dep_content) = std::fs::read_to_string(dep_path) {
+            dep_content.hash(&mut hasher);
+        } else {
+            // If dependency file doesn't exist, include its path in hash
+            // This ensures cache invalidation if file appears/disappears
+            dep_path.hash(&mut hasher);
+        }
+    }
+    
+    // CRITICAL: Include .packages directory state for fastn update resilience
+    if let Ok(packages_dir) = std::fs::read_dir(".packages") {
+        for entry in packages_dir.flatten() {
+            let path = entry.path();
+            if path.is_dir() {
+                // Include package directory modification time
+                if let Ok(metadata) = entry.metadata() {
+                    if let Ok(modified) = metadata.modified() {
+                        format!("{:?}", modified).hash(&mut hasher);
+                    }
+                }
+            }
+        }
+    }
+    
+    // Include FASTN.ftd content for configuration changes
+    if let Ok(fastn_content) = std::fs::read_to_string("FASTN.ftd") {
+        fastn_content.hash(&mut hasher);
+    }
+    
+    format!("{:x}", hasher.finish())
 }
 
 #[cfg(test)]
