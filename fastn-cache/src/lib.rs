@@ -156,16 +156,59 @@ impl FtdCache {
         })
     }
     
-    /// Parse FTD file with caching (placeholder - will integrate with actual FTD parser)
-    pub fn parse_cached(
-        &mut self, 
+    /// Check if cached parse result is available and valid
+    pub fn get_cached_parse(&self, file_id: &str, source: &str) -> Result<Option<CachedParse>> {
+        if !self.config.enabled {
+            return Ok(None);
+        }
+        
+        match self.storage.get::<CachedParse>(file_id)? {
+            Some(cached) => {
+                // Validate cache using dependency-aware hash
+                let current_hash = dependency::generate_dependency_hash(source, &cached.dependencies);
+                
+                if cached.hash == current_hash {
+                    eprintln!("🚀 PERF: CACHE HIT (all {} dependencies unchanged) for: {}", cached.dependencies.len(), file_id);
+                    Ok(Some(cached))
+                } else {
+                    eprintln!("🔥 PERF: Cache invalidated (file or dependency changed) for: {}", file_id);
+                    Ok(None)
+                }
+            }
+            None => {
+                eprintln!("🔥 PERF: Cache miss (no previous cache) for: {}", file_id);
+                Ok(None)
+            }
+        }
+    }
+    
+    /// Cache parse result with dependencies
+    pub fn cache_parse_result(
+        &mut self,
         file_id: &str, 
         source: &str,
-        line_number: usize
+        dependencies: &[String],
     ) -> Result<()> {
-        // TODO: Implement with actual FTD types
-        // This is the main entry point for FTD compilation caching
-        todo!("Integrate with ftd::interpreter::ParsedDocument")
+        if !self.config.enabled {
+            return Ok(());
+        }
+        
+        // Generate dependency-aware hash
+        let hash = dependency::generate_dependency_hash(source, dependencies);
+        
+        let cached_parse = CachedParse {
+            hash,
+            dependencies: dependencies.to_vec(),
+            created_at: SystemTime::now(),
+        };
+        
+        self.storage.set(file_id, &cached_parse)?;
+        
+        // Update dependency tracker
+        self.dependency_tracker.record_dependencies(file_id, dependencies);
+        
+        eprintln!("🔥 PERF: Cached parse result with {} dependencies for: {}", dependencies.len(), file_id);
+        Ok(())
     }
     
     /// Update cache with collected dependencies after compilation
