@@ -45,11 +45,33 @@ pub fn get_ftd_hash(path: &str) -> fastn_core::Result<String> {
 pub fn get_cache_file(id: &str) -> Option<std::path::PathBuf> {
     let cache_dir = dirs::cache_dir()?;
     
-    // Use project-specific cache directory to avoid cross-project pollution
+    // Use FASTN.ftd path as stable project identifier
+    // This allows multiple clones of same repo to share cache efficiently
     let current_dir = std::env::current_dir()
         .expect("cant read current dir");
-    let project_hash = fastn_core::utils::generate_hash(current_dir.to_string_lossy().as_bytes());
-    let project_cache_dir = format!("fastn-{}", &project_hash[..12]); // Use first 12 chars of hash
+    let fastn_ftd_path = current_dir.join("FASTN.ftd");
+    
+    let project_cache_dir = if fastn_ftd_path.exists() {
+        // Use package name + FASTN.ftd content hash for optimal cache sharing
+        let fastn_content = std::fs::read_to_string(&fastn_ftd_path)
+            .unwrap_or_else(|_| "".to_string());
+        
+        // Extract package name for human-readable cache directories
+        let package_name = fastn_content
+            .lines()
+            .find(|line| line.trim_start().starts_with("-- fastn.package:"))
+            .and_then(|line| line.split(':').nth(1))
+            .map(|name| name.trim())
+            .unwrap_or("unnamed");
+        
+        // Combine package name + content hash for uniqueness + readability
+        let content_hash = fastn_core::utils::generate_hash(fastn_content.as_bytes());
+        format!("{}-{}", package_name, &content_hash[..8])
+    } else {
+        // Fallback to directory path if no FASTN.ftd (edge case)
+        let dir_hash = fastn_core::utils::generate_hash(current_dir.to_string_lossy().as_bytes());
+        format!("no-config-{}", &dir_hash[..8])
+    };
     
     let base_path = cache_dir.join(project_cache_dir);
 
