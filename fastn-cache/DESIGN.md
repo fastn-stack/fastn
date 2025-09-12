@@ -260,27 +260,50 @@ let cache_config = CacheConfig {
 2. **fastn/test2/** → Cache: `fastn+test2_FASTN.ftd+test/`
 3. **Isolation** → Tests don't affect each other
 
-## Migration Strategy
+## Implementation Status
 
-### Phase 1: Create fastn-cache crate
-- Extract storage utilities
-- Create clean API
-- Add comprehensive tests
+### ✅ Completed (Current State)
+- **fastn-cache crate created**: Complete architecture with DESIGN.md
+- **Storage module**: Disk I/O operations with corruption handling
+- **Dependency tracking**: File change detection and transitive invalidation
+- **Cache key strategy**: Git-aware, multi-project safe naming
+- **fastn-core integration**: Dependency added and basic integration
+- **--enable-cache flag**: Optional caching for production use
+- **Incremental build fix**: Re-enabled existing dependency collection
 
-### Phase 2: Migrate FTD parse caching
-- Move cached_parse to fastn-cache
-- Update fastn-core to use new API
-- Verify performance maintained
+### 🚧 In Progress  
+- **Full API migration**: Replace fastn-core caching with fastn-cache API
+- **Test suite implementation**: Comprehensive correctness verification
+- **Performance benchmarking**: Automated measurement and regression detection
 
-### Phase 3: Migrate incremental build
-- Move build cache system
-- Update build command integration
-- Test incremental build functionality
+### 📋 Remaining Work
+- **Complete fastn-core cleanup**: Remove old caching utilities
+- **Advanced features**: Cache size limits, monitoring, compression
+- **Documentation**: User guides and operational procedures
 
-### Phase 4: Cleanup
-- Remove old caching code from fastn-core
-- Update documentation
-- Performance verification
+## Migration Strategy (Updated)
+
+### Phase 1: Foundation ✅ COMPLETE
+- ✅ Create fastn-cache crate with comprehensive design
+- ✅ Implement storage and dependency tracking modules  
+- ✅ Add fastn-cache dependency to fastn-core
+- ✅ Enable optional caching with --enable-cache flag
+
+### Phase 2: Testing & Validation 🚧 IN PROGRESS
+- 🚧 Implement comprehensive test suite (10 critical scenarios)
+- 🚧 Verify cache correctness under all conditions
+- 🚧 Performance benchmarking and regression testing
+- 🚧 Real-world validation with fastn.com
+
+### Phase 3: Full Migration (Future)
+- Replace all fastn-core caching with fastn-cache API
+- Remove old caching utilities from fastn-core
+- Enable caching by default when proven safe
+
+### Phase 4: Advanced Features (Future)
+- Cache size management and cleanup
+- Performance monitoring and metrics
+- Distributed cache for CI/CD systems
 
 ## Success Metrics
 
@@ -299,19 +322,195 @@ let cache_config = CacheConfig {
 - Clear error messages for cache issues
 - Easy debugging with cache statistics
 
-## Future Enhancements
+## Production Safety & Testing Strategy
 
-### Advanced Features
-- Cache size limits with LRU eviction
-- Distributed cache for CI/CD systems
-- Cache warming for faster cold starts
-- Cache compression for space efficiency
+### Critical Risk Assessment
+**fastn 0.4 is used in production environments. Cache-related bugs are hard to debug and can cause:**
+- Wrong content served (cache pollution between projects)
+- Stale content after file changes (dependency tracking failures)  
+- Build failures (incremental build regressions)
+- Silent performance degradation
 
-### Monitoring
-- Cache hit/miss metrics
-- Performance tracking
-- Cache corruption detection and auto-repair
+### Test Plan for Production Confidence
+
+#### Phase 1: Cache Correctness Tests (CRITICAL)
+
+**Test 1: Basic Cache Invalidation**
+```bash
+# Scenario: File change invalidates cache
+1. Create test project: index.ftd imports hero.ftd  
+2. Build with --enable-cache (measure performance)
+3. Modify hero.ftd content
+4. Request index.ftd 
+5. VERIFY: Returns updated content (not stale cache)
+6. VERIFY: Performance still good after invalidation
+```
+
+**Test 2: Dependency Chain Invalidation**
+```bash
+# Scenario: Deep dependency change propagates correctly
+1. Create chain: index.ftd → hero.ftd → common.ftd → base.ftd
+2. Cache all files (verify cache hits)
+3. Modify base.ftd (root dependency)
+4. Request index.ftd
+5. VERIFY: Entire chain recompiled correctly
+6. VERIFY: No files missed in invalidation
+```
+
+**Test 3: Multi-Project Cache Isolation**
+```bash
+# Scenario: Projects with same package name don't interfere  
+1. Create project A: package "hello-world", content "A"
+2. Create project B: package "hello-world", content "B"
+3. Build both with caching
+4. Modify project A files
+5. Request project B content
+6. VERIFY: Project B unaffected by A's changes
+7. VERIFY: Project B serves correct content
+```
+
+**Test 4: Package Update Resilience**
+```bash
+# Scenario: fastn update invalidates affected caches
+1. Create project with external dependencies
+2. Cache all content
+3. Simulate package update (touch .packages/*/files)
+4. Request cached content
+5. VERIFY: Cache invalidated and content recompiled
+6. VERIFY: New package changes reflected
+```
+
+**Test 5: Configuration Change Detection**
+```bash
+# Scenario: FASTN.ftd changes invalidate cache appropriately
+1. Cache project content
+2. Modify FASTN.ftd (change imports, settings)
+3. Request content
+4. VERIFY: Cache invalidated due to config change
+5. VERIFY: New configuration applied correctly
+```
+
+#### Phase 2: Build System Tests
+
+**Test 6: Incremental Build Correctness**
+```bash
+# Scenario: Only affected files rebuilt
+1. Create project with 10+ interconnected FTD files
+2. Run fastn build (record all files built)
+3. Modify one file
+4. Run fastn build again
+5. VERIFY: Only modified file + dependents rebuilt
+6. VERIFY: Build output identical to full rebuild
+```
+
+**Test 7: Build Cache Persistence**
+```bash
+# Scenario: Build cache survives restarts
+1. Run fastn build (populate cache)
+2. Restart/simulate clean environment
+3. Run fastn build again  
+4. VERIFY: Cache used appropriately
+5. VERIFY: Build time significantly reduced
+```
+
+#### Phase 3: Stress & Edge Case Tests
+
+**Test 8: Concurrent Access**
+```bash
+# Scenario: Multiple fastn instances don't corrupt cache
+1. Start multiple fastn serve instances
+2. Concurrent requests to same files
+3. VERIFY: No cache corruption
+4. VERIFY: All responses correct
+```
+
+**Test 9: Cache Directory Behavior**
+```bash
+# Scenario: Verify cache directory naming works correctly
+1. Test in git repo → verify repo-based naming
+2. Test outside git → verify fallback naming
+3. Test subdirectory projects → verify relative paths
+4. VERIFY: Each scenario gets correct, isolated cache
+```
+
+**Test 10: Error Recovery**
+```bash  
+# Scenario: Recovery from cache corruption
+1. Create valid cache
+2. Corrupt cache files (invalid JSON, truncated files)
+3. Request content
+4. VERIFY: Graceful fallback to compilation
+5. VERIFY: New valid cache created
+```
+
+### Testing Implementation Strategy
+
+#### Option A: Shell-Based Test Suite (Recommended)
+```bash
+tests/
+├── cache-correctness/
+│   ├── run-all-tests.sh
+│   ├── test-basic-invalidation.sh
+│   ├── test-dependency-chain.sh
+│   ├── test-multi-project.sh
+│   └── test-package-updates.sh
+└── build-tests/
+    ├── test-incremental-build.sh
+    └── test-build-cache.sh
+```
+
+**Benefits:**
+- Fast to implement and debug
+- Tests real fastn binary behavior
+- Easy to run locally and in CI
+- Clear pass/fail results
+
+#### Test Project Structure
+```
+test-fixtures/
+├── basic-project/         # Simple index.ftd + hero.ftd
+├── dependency-chain/      # Complex dependency tree
+├── multi-package/         # Multiple test projects  
+└── large-project/         # Performance testing
+```
+
+### Production Safety Measures
+
+#### Default Behavior: SAFE
+- **Caching disabled by default** (--enable-cache opt-in)
+- **Incremental build enabled** (low risk, high benefit)
+- **Cache isolation ensures** no cross-project issues
+
+#### Rollback Strategy
+- **Feature flag**: Can disable caching via environment variable
+- **Cache clearing**: fastn clean command for troubleshooting  
+- **Monitoring**: Performance and correctness metrics
+
+#### Staged Rollout Plan
+1. **Internal testing**: Comprehensive test suite
+2. **Beta users**: Optional caching with monitoring
+3. **Gradual enable**: Once confidence established
+4. **Full deployment**: Default caching when proven safe
+
+### Success Criteria for Production Release
+
+#### Functional Correctness
+- [ ] All 10 test scenarios pass consistently
+- [ ] No stale content served in any test case
+- [ ] Cache invalidation works for all dependency types
+- [ ] Multi-project isolation verified
+
+#### Performance Verification  
+- [ ] 100x+ performance improvement maintained
+- [ ] No performance regression in edge cases
+- [ ] Incremental build reduces build time by >90%
+
+#### Production Readiness
+- [ ] fastn.com builds and serves correctly with caching
+- [ ] No regressions in existing fastn 0.4 functionality
+- [ ] Clear error messages for cache issues
+- [ ] Documentation updated for operations teams
 
 ---
 
-This design provides the foundation for a world-class FTD caching system that prioritizes correctness while delivering massive performance improvements.
+**Only when ALL tests pass should we consider this ready for production fastn 0.4 users.**
