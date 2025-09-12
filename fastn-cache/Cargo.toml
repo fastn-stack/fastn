@@ -1,0 +1,15 @@
+[package]
+name = "fastn-cache"
+version = "0.1.0"
+edition = "2021"
+description = "High-performance caching system for FTD compilation and incremental builds"
+license = "BSD-3-Clause"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+dirs = "5"
+thiserror = "1"
+
+[dev-dependencies]
+tempfile = "3"

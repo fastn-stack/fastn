@@ -3,6 +3,7 @@ members = [
     "clift",
     "fastn",
     "fastn-builtins",
+    "fastn-cache",
     "fastn-core",
     "fastn-ds",
     "fastn-expr",
