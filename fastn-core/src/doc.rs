@@ -1,43 +1,4 @@
-fn generate_dependency_aware_hash(source: &str, dependencies: &[String]) -> String {
-    use std::collections::hash_map::DefaultHasher;
-    use std::hash::{Hash, Hasher};
-    
-    let mut hasher = DefaultHasher::new();
-    source.hash(&mut hasher);
-    
-    // Include all dependency file contents in the hash
-    for dep_path in dependencies {
-        if let Ok(dep_content) = std::fs::read_to_string(dep_path) {
-            dep_content.hash(&mut hasher);
-        } else {
-            // If dependency file doesn't exist, include its path in hash
-            // This ensures cache invalidation if file appears/disappears
-            dep_path.hash(&mut hasher);
-        }
-    }
-    
-    // CRITICAL: Include .packages directory state for fastn update resilience
-    if let Ok(packages_dir) = std::fs::read_dir(".packages") {
-        for entry in packages_dir.flatten() {
-            let path = entry.path();
-            if path.is_dir() {
-                // Include package directory modification time
-                if let Ok(metadata) = entry.metadata() {
-                    if let Ok(modified) = metadata.modified() {
-                        format!("{:?}", modified).hash(&mut hasher);
-                    }
-                }
-            }
-        }
-    }
-    
-    // Include FASTN.ftd content for configuration changes
-    if let Ok(fastn_content) = std::fs::read_to_string("FASTN.ftd") {
-        fastn_content.hash(&mut hasher);
-    }
-    
-    format!("{:x}", hasher.finish())
-}
+// NOTE: Dependency-aware hash generation moved to fastn-cache crate
 
 fn cached_parse(
     id: &str,
@@ -56,14 +17,14 @@ fn cached_parse(
     // Only use cache if explicitly enabled via --enable-cache flag
     if enable_cache {
         if let Some(c) = fastn_core::utils::get_cached::<C>(id) {
-            // Check if main content OR any cached dependency changed
-            let current_hash = generate_dependency_aware_hash(source, &c.dependencies);
+            // Simple content hash check for now (dependency-aware logic in fastn-cache)
+            let current_hash = fastn_core::utils::generate_hash(source);
             
             if c.hash == current_hash {
-                eprintln!("🚀 PERF: CACHE HIT (all {} dependencies unchanged) for: {}", c.dependencies.len(), id);
+                eprintln!("🚀 PERF: CACHE HIT (simple hash) for: {}", id);
                 return Ok(c.doc);
             }
-            eprintln!("🔥 PERF: Cache invalidated (main file or dependency changed) for: {}", id);
+            eprintln!("🔥 PERF: Cache invalidated (content changed) for: {}", id);
         } else {
             eprintln!("🔥 PERF: Cache miss (no previous cache) for: {}", id);
         }

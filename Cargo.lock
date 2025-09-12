@@ -1402,6 +1402,7 @@ dependencies = [
  "diffy",
  "dirs 6.0.0",
  "env_logger",
+ "fastn-cache",
  "fastn-ds",
  "fastn-expr",
  "fastn-js",
