@@ -218,3 +218,4 @@ mod tests {
         }
     }
 }
+use fastn_cache as _;

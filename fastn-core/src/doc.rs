@@ -47,36 +47,8 @@ fn cached_parse(
     }
 }
 
-// Update cache with dependency information after compilation
-pub fn update_cache_with_dependencies(
-    id: &str,
-    source: &str, 
-    dependencies: &[String],
-    doc: &ftd::interpreter::ParsedDocument,
-    enable_cache: bool,
-) -> ftd::interpreter::Result<()> {
-    if !enable_cache {
-        return Ok(());
-    }
-    
-    #[derive(serde::Deserialize, serde::Serialize)]
-    struct C {
-        hash: String,
-        dependencies: Vec<String>,
-        doc: ftd::interpreter::ParsedDocument,
-    }
-    
-    let dependency_aware_hash = generate_dependency_aware_hash(source, dependencies);
-    
-    fastn_core::utils::cache_it(id, C {
-        hash: dependency_aware_hash,
-        dependencies: dependencies.to_vec(),
-        doc: doc.clone(),
-    })?;
-    
-    eprintln!("🔥 PERF: Updated cache with {} dependencies for: {}", dependencies.len(), id);
-    Ok(())
-}
+// NOTE: Cache dependency updates will be handled by fastn-cache crate
+// This function is temporarily simplified during migration
 
 pub fn package_dependent_builtins(
     config: &fastn_core::Config,
