@@ -1,5 +1,4 @@
 {
-  "package": {
-    "name": "cache-test-basic"
-  }
+  "package": "cache-test-basic",
+  "all_packages": {}
 }
