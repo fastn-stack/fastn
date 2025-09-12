@@ -16,6 +16,26 @@ fn generate_dependency_aware_hash(source: &str, dependencies: &[String]) -> Stri
         }
     }
     
+    // CRITICAL: Include .packages directory state for fastn update resilience
+    if let Ok(packages_dir) = std::fs::read_dir(".packages") {
+        for entry in packages_dir.flatten() {
+            let path = entry.path();
+            if path.is_dir() {
+                // Include package directory modification time
+                if let Ok(metadata) = entry.metadata() {
+                    if let Ok(modified) = metadata.modified() {
+                        format!("{:?}", modified).hash(&mut hasher);
+                    }
+                }
+            }
+        }
+    }
+    
+    // Include FASTN.ftd content for configuration changes
+    if let Ok(fastn_content) = std::fs::read_to_string("FASTN.ftd") {
+        fastn_content.hash(&mut hasher);
+    }
+    
     format!("{:x}", hasher.finish())
 }
 
