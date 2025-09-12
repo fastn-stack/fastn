@@ -63,39 +63,72 @@ pub fn get_cache_file(id: &str) -> Option<std::path::PathBuf> {
             .map(|name| name.trim())
             .unwrap_or("unnamed");
         
-        // Try to get git repository name for stable identification
-        let git_repo_name = std::process::Command::new("git")
-            .args(["remote", "get-url", "origin"])
+        // Get git repository root and relative path to FASTN.ftd
+        let (git_repo_name, relative_path) = std::process::Command::new("git")
+            .args(["rev-parse", "--show-toplevel"])
             .current_dir(&current_dir)
             .output()
             .ok()
             .and_then(|output| {
                 if output.status.success() {
-                    let url = String::from_utf8_lossy(&output.stdout);
-                    // Extract repo name from git URL (e.g., fastn-stack/fastn → fastn)
-                    url.trim()
-                        .split('/')
-                        .last()?
-                        .trim_end_matches(".git")
-                        .to_string()
-                        .into()
+                    let git_root = String::from_utf8_lossy(&output.stdout).trim().to_string();
+                    let git_root_path = std::path::Path::new(&git_root);
+                    
+                    // Get repo name from git remote
+                    let repo_name = std::process::Command::new("git")
+                        .args(["remote", "get-url", "origin"])
+                        .current_dir(&current_dir)
+                        .output()
+                        .ok()
+                        .and_then(|output| {
+                            if output.status.success() {
+                                let url = String::from_utf8_lossy(&output.stdout);
+                                url.trim()
+                                    .split('/')
+                                    .last()?
+                                    .trim_end_matches(".git")
+                                    .to_string()
+                                    .into()
+                            } else {
+                                None
+                            }
+                        })
+                        .unwrap_or_else(|| {
+                            git_root_path
+                                .file_name()
+                                .unwrap_or_default()
+                                .to_string_lossy()
+                                .to_string()
+                        });
+                    
+                    // Calculate relative path from git root to FASTN.ftd
+                    let relative_fastn_path = current_dir
+                        .strip_prefix(git_root_path)
+                        .map(|rel| rel.join("FASTN.ftd"))
+                        .unwrap_or_else(|_| std::path::Path::new("FASTN.ftd").to_path_buf());
+                    
+                    Some((repo_name, relative_fastn_path.to_string_lossy().to_string()))
                 } else {
                     None
                 }
-            });
-        
-        // Use git repo name if available, otherwise use directory name
-        let project_identifier = git_repo_name
+            })
             .unwrap_or_else(|| {
-                current_dir
+                // Not a git repo - use directory name and current path
+                let dir_name = current_dir
                     .file_name()
                     .unwrap_or_default()
                     .to_string_lossy()
-                    .to_string()
+                    .to_string();
+                (dir_name, "FASTN.ftd".to_string())
             });
         
-        // Format: {git-repo-or-dirname}-{package-name}
-        format!("{}-{}", project_identifier, package_name)
+        // Format: {repo-name}+{relative-path-to-fastn}+{package-name}
+        // This handles multiple test packages within same repo
+        format!("{}+{}+{}", 
+            git_repo_name.replace(['/', '\\'], "_"), 
+            relative_path.replace(['/', '\\'], "_"),
+            package_name
+        )
     } else {
         // Fallback to directory name if no FASTN.ftd
         let dir_name = current_dir
