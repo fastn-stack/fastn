@@ -44,7 +44,14 @@ pub fn get_ftd_hash(path: &str) -> fastn_core::Result<String> {
 
 pub fn get_cache_file(id: &str) -> Option<std::path::PathBuf> {
     let cache_dir = dirs::cache_dir()?;
-    let base_path = cache_dir.join("fastn.com");
+    
+    // Use project-specific cache directory to avoid cross-project pollution
+    let current_dir = std::env::current_dir()
+        .expect("cant read current dir");
+    let project_hash = fastn_core::utils::generate_hash(current_dir.to_string_lossy().as_bytes());
+    let project_cache_dir = format!("fastn-{}", &project_hash[..12]); // Use first 12 chars of hash
+    
+    let base_path = cache_dir.join(project_cache_dir);
 
     if !base_path.exists()
         && let Err(err) = std::fs::create_dir_all(&base_path)
@@ -53,15 +60,7 @@ pub fn get_cache_file(id: &str) -> Option<std::path::PathBuf> {
         return None;
     }
 
-    Some(
-        base_path
-            .join(id_to_cache_key(
-                &std::env::current_dir()
-                    .expect("cant read current dir")
-                    .to_string_lossy(),
-            ))
-            .join(id_to_cache_key(id)),
-    )
+    Some(base_path.join(id_to_cache_key(id)))
 }
 
 pub fn get_cached<T>(id: &str) -> Option<T>
@@ -69,14 +68,20 @@ where
     T: serde::de::DeserializeOwned,
 {
     let cache_file = get_cache_file(id)?;
-    serde_json::from_str(
-        std::fs::read_to_string(cache_file)
-            .inspect_err(|e| tracing::debug!("file read error: {}", e.to_string()))
-            .ok()?
-            .as_str(),
-    )
-    .inspect_err(|e| tracing::debug!("not valid json: {}", e.to_string()))
-    .ok()
+    // Robust cache reading with better error handling
+    let cache_content = std::fs::read_to_string(cache_file)
+        .inspect_err(|e| tracing::debug!("cache file read error: {}", e.to_string()))
+        .ok()?;
+    
+    serde_json::from_str(&cache_content)
+        .inspect_err(|e| {
+            // If cache is corrupted, log and remove it
+            eprintln!("Warning: Corrupted cache file for '{}', removing: {}", id, e);
+            if let Some(cache_path) = get_cache_file(id) {
+                std::fs::remove_file(cache_path).ok();
+            }
+        })
+        .ok()
 }
 
 pub fn cache_it<T>(id: &str, d: T) -> ftd::interpreter::Result<T>
