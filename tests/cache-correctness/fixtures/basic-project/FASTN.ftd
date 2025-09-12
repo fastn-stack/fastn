@@ -1,0 +1,6 @@
+-- import: fastn
+
+-- fastn.package: cache-test-basic
+name: cache-test-basic
+
+-- fastn.dependency: fastn

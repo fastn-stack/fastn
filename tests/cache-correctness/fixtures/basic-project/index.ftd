@@ -1,0 +1,8 @@
+-- import: fastn
+-- import: cache-test-basic/hero
+
+-- fastn.page: Test Page
+
+-- hero.main: This is the main content
+
+This page imports hero.ftd to test cache invalidation.
