@@ -674,13 +674,13 @@ async fn handle_file_(
                 return Ok(());
             }
 
-            let resp = {
+            let (resp, dependencies) = {
                 let req = fastn_core::http::Request::default();
                 let mut req_config =
                     fastn_core::RequestConfig::new(config, &req, doc.id.as_str(), base_url);
                 req_config.current_document = Some(document.get_id().to_string());
 
-                fastn_core::package::package_doc::process_ftd(
+                let result = fastn_core::package::package_doc::process_ftd(
                     &mut req_config,
                     doc,
                     base_url,
@@ -689,13 +689,16 @@ async fn handle_file_(
                     file_path.as_str(),
                     preview_session_id,
                 )
-                .await
+                .await;
+                
+                // Extract dependencies before the scope ends
+                (result, req_config.dependencies_during_render)
             };
 
             match (resp, ignore_failed) {
                 (Ok(r), _) => {
                     // Use collected dependencies for proper incremental build cache invalidation
-                    let dependencies = req_config.dependencies_during_render;
+                    // Dependencies were extracted from req_config scope above
                     if let Some(cache) = cache {
                         cache.documents.insert(
                             remove_extension(doc.id.as_str()),
