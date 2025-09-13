@@ -378,7 +378,7 @@ async fn incremental_build(
                     }
                     unresolved_dependencies.push(dep.to_string());
                 }
-                
+
                 // Sort after adding new dependencies for deterministic processing
                 unresolved_dependencies.sort();
 
