@@ -99,7 +99,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             eprintln!(
                 "   Use only in production environments where files don't change frequently."
             );
-            eprintln!("");
+            eprintln!();
         }
 
         if cfg!(feature = "use-config-json") && !offline {

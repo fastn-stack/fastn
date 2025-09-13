@@ -47,21 +47,13 @@ pub use storage::CacheStorage;
 
 /// Configuration for FTD caching system
 #[derive(Debug, Clone)]
+#[derive(Default)]
 pub struct CacheConfig {
     pub enabled: bool,
     pub cache_dir: Option<PathBuf>,
     pub max_cache_size: Option<u64>,
 }
 
-impl Default for CacheConfig {
-    fn default() -> Self {
-        Self {
-            enabled: false,       // Disabled by default for safety
-            cache_dir: None,      // Use system cache directory
-            max_cache_size: None, // Unlimited
-        }
-    }
-}
 
 impl CacheConfig {
     pub fn enable(mut self, enabled: bool) -> Self {
@@ -277,7 +269,7 @@ mod tests {
     #[test]
     fn test_cache_creation() {
         let config = CacheConfig::default();
-        let result = FtdCache::new(config);
+        let _result = FtdCache::new(config);
         // Will implement once storage module exists
     }
 }

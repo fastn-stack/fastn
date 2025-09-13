@@ -112,7 +112,7 @@ fn get_git_repo_name(current_dir: &std::path::Path) -> Option<String> {
         return url
             .trim()
             .split('/')
-            .last()?
+            .next_back()?
             .trim_end_matches(".git")
             .to_string()
             .into();

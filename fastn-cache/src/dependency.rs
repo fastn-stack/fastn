@@ -11,6 +11,12 @@ pub struct DependencyTracker {
     dependents: HashMap<String, HashSet<String>>,
 }
 
+impl Default for DependencyTracker {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl DependencyTracker {
     pub fn new() -> Self {
         Self {
@@ -139,10 +145,10 @@ mod tests {
         let mut tracker = DependencyTracker::new();
 
         // index.ftd depends on hero.ftd and banner.ftd
-        tracker.record_dependencies("index.ftd", &["hero.ftd", "banner.ftd"]);
+        tracker.record_dependencies("index.ftd", &["hero.ftd".to_string(), "banner.ftd".to_string()]);
 
         // hero.ftd depends on common.ftd
-        tracker.record_dependencies("hero.ftd", &["common.ftd"]);
+        tracker.record_dependencies("hero.ftd", &["common.ftd".to_string()]);
 
         // If common.ftd changes, both hero.ftd and index.ftd are affected
         let affected = tracker.get_affected_files("common.ftd");
