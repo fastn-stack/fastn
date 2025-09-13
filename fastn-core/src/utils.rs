@@ -44,7 +44,101 @@ pub fn get_ftd_hash(path: &str) -> fastn_core::Result<String> {
 
 pub fn get_cache_file(id: &str) -> Option<std::path::PathBuf> {
     let cache_dir = dirs::cache_dir()?;
-    let base_path = cache_dir.join("fastn.com");
+
+    // Use FASTN.ftd path as stable project identifier
+    // This allows multiple clones of same repo to share cache efficiently
+    let current_dir = std::env::current_dir().expect("cant read current dir");
+    let fastn_ftd_path = current_dir.join("FASTN.ftd");
+
+    let project_cache_dir = if fastn_ftd_path.exists() {
+        let fastn_content =
+            std::fs::read_to_string(&fastn_ftd_path).unwrap_or_else(|_| "".to_string());
+
+        // Extract package name for base cache directory
+        let package_name = fastn_content
+            .lines()
+            .find(|line| line.trim_start().starts_with("-- fastn.package:"))
+            .and_then(|line| line.split(':').nth(1))
+            .map(|name| name.trim())
+            .unwrap_or("unnamed");
+
+        // Get git repository root and relative path to FASTN.ftd
+        let (git_repo_name, relative_path) = std::process::Command::new("git")
+            .args(["rev-parse", "--show-toplevel"])
+            .current_dir(&current_dir)
+            .output()
+            .ok()
+            .and_then(|output| {
+                if output.status.success() {
+                    let git_root = String::from_utf8_lossy(&output.stdout).trim().to_string();
+                    let git_root_path = std::path::Path::new(&git_root);
+
+                    // Get repo name from git remote
+                    let repo_name = std::process::Command::new("git")
+                        .args(["remote", "get-url", "origin"])
+                        .current_dir(&current_dir)
+                        .output()
+                        .ok()
+                        .and_then(|output| {
+                            if output.status.success() {
+                                let url = String::from_utf8_lossy(&output.stdout);
+                                url.trim()
+                                    .split('/')
+                                    .next_back()?
+                                    .trim_end_matches(".git")
+                                    .to_string()
+                                    .into()
+                            } else {
+                                None
+                            }
+                        })
+                        .unwrap_or_else(|| {
+                            git_root_path
+                                .file_name()
+                                .unwrap_or_default()
+                                .to_string_lossy()
+                                .to_string()
+                        });
+
+                    // Calculate relative path from git root to FASTN.ftd
+                    let relative_fastn_path = current_dir
+                        .strip_prefix(git_root_path)
+                        .map(|rel| rel.join("FASTN.ftd"))
+                        .unwrap_or_else(|_| std::path::Path::new("FASTN.ftd").to_path_buf());
+
+                    Some((repo_name, relative_fastn_path.to_string_lossy().to_string()))
+                } else {
+                    None
+                }
+            })
+            .unwrap_or_else(|| {
+                // Not a git repo - use directory name and current path
+                let dir_name = current_dir
+                    .file_name()
+                    .unwrap_or_default()
+                    .to_string_lossy()
+                    .to_string();
+                (dir_name, "FASTN.ftd".to_string())
+            });
+
+        // Format: {repo-name}+{relative-path-to-fastn}+{package-name}
+        // This handles multiple test packages within same repo
+        format!(
+            "{}+{}+{}",
+            git_repo_name.replace(['/', '\\'], "_"),
+            relative_path.replace(['/', '\\'], "_"),
+            package_name
+        )
+    } else {
+        // Fallback to directory name if no FASTN.ftd
+        let dir_name = current_dir
+            .file_name()
+            .unwrap_or_default()
+            .to_string_lossy();
+        format!("no-config-{}", dir_name)
+    };
+
+    let base_path = cache_dir.join(project_cache_dir);
 
     if !base_path.exists()
         && let Err(err) = std::fs::create_dir_all(&base_path)
@@ -53,15 +147,7 @@ pub fn get_cache_file(id: &str) -> Option<std::path::PathBuf> {
         return None;
     }
 
-    Some(
-        base_path
-            .join(id_to_cache_key(
-                &std::env::current_dir()
-                    .expect("cant read current dir")
-                    .to_string_lossy(),
-            ))
-            .join(id_to_cache_key(id)),
-    )
+    Some(base_path.join(id_to_cache_key(id)))
 }
 
 pub fn get_cached<T>(id: &str) -> Option<T>
@@ -69,14 +155,23 @@ where
     T: serde::de::DeserializeOwned,
 {
     let cache_file = get_cache_file(id)?;
-    serde_json::from_str(
-        std::fs::read_to_string(cache_file)
-            .inspect_err(|e| tracing::debug!("file read error: {}", e.to_string()))
-            .ok()?
-            .as_str(),
-    )
-    .inspect_err(|e| tracing::debug!("not valid json: {}", e.to_string()))
-    .ok()
+    // Robust cache reading with better error handling
+    let cache_content = std::fs::read_to_string(cache_file)
+        .inspect_err(|e| tracing::debug!("cache file read error: {}", e.to_string()))
+        .ok()?;
+
+    serde_json::from_str(&cache_content)
+        .inspect_err(|e| {
+            // If cache is corrupted, log and remove it
+            eprintln!(
+                "Warning: Corrupted cache file for '{}', removing: {}",
+                id, e
+            );
+            if let Some(cache_path) = get_cache_file(id) {
+                std::fs::remove_file(cache_path).ok();
+            }
+        })
+        .ok()
 }
 
 pub fn cache_it<T>(id: &str, d: T) -> ftd::interpreter::Result<T>

@@ -38,6 +38,7 @@ pub struct Config {
     pub ftd_external_css: Vec<String>,
     pub ftd_inline_css: Vec<String>,
     pub test_command_running: bool,
+    pub enable_cache: bool,
 }
 
 #[derive(Debug, Clone)]
@@ -1043,6 +1044,12 @@ impl Config {
         config
     }
 
+    pub fn set_enable_cache(self, enable_cache: bool) -> Self {
+        let mut config = self;
+        config.enable_cache = enable_cache;
+        config
+    }
+
     /// `read()` is the way to read a Config.
     #[tracing::instrument(name = "Config::read", skip_all)]
     pub async fn read(
@@ -1068,6 +1075,7 @@ impl Config {
             ftd_external_css: Default::default(),
             ftd_inline_css: Default::default(),
             test_command_running: false,
+            enable_cache: false,
             ds,
         };
         // Update global_ids map from the current package files

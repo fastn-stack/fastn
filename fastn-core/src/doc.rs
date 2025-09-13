@@ -1,29 +1,58 @@
+// NOTE: Dependency-aware hash generation moved to fastn-cache crate
+
 fn cached_parse(
     id: &str,
     source: &str,
     line_number: usize,
+    enable_cache: bool,
+    _dependencies: Option<&[String]>, // Dependencies from previous compilation if available
 ) -> ftd::interpreter::Result<ftd::interpreter::ParsedDocument> {
     #[derive(serde::Deserialize, serde::Serialize)]
     struct C {
         hash: String,
+        dependencies: Vec<String>,
         doc: ftd::interpreter::ParsedDocument,
     }
 
-    let hash = fastn_core::utils::generate_hash(source);
+    // Only use cache if explicitly enabled via --enable-cache flag
+    if enable_cache {
+        if let Some(c) = fastn_core::utils::get_cached::<C>(id) {
+            // Simple content hash check for now (dependency-aware logic in fastn-cache)
+            let current_hash = fastn_core::utils::generate_hash(source);
 
-    /* if let Some(c) = fastn_core::utils::get_cached::<C>(id) {
-        if c.hash == hash {
-            tracing::debug!("cache hit");
-            return Ok(c.doc);
+            if c.hash == current_hash {
+                eprintln!("🚀 PERF: CACHE HIT (simple hash) for: {}", id);
+                return Ok(c.doc);
+            }
+            // eprintln!("🔥 PERF: Cache invalidated (content changed) for: {}", id);
+        } else {
+            // eprintln!("🔥 PERF: Cache miss (no previous cache) for: {}", id);
         }
-        tracing::debug!("cached hash mismatch");
     } else {
-        tracing::debug!("cached miss");
-    }*/
+        // eprintln!("🔥 PERF: Caching DISABLED (use --enable-cache to enable)");
+    }
 
     let doc = ftd::interpreter::ParsedDocument::parse_with_line_number(id, source, line_number)?;
-    fastn_core::utils::cache_it(id, C { doc, hash }).map(|v| v.doc)
+
+    // Cache with empty dependencies for now (will be updated later with real dependencies)
+    if enable_cache {
+        let initial_hash = fastn_core::utils::generate_hash(source);
+        fastn_core::utils::cache_it(
+            id,
+            C {
+                doc,
+                hash: initial_hash,
+                dependencies: vec![], // Will be updated after compilation with real dependencies
+            },
+        )
+        .map(|v| v.doc)
+    } else {
+        Ok(doc)
+    }
 }
+
+// NOTE: Cache dependency updates will be handled by fastn-cache crate
+// This function is temporarily simplified during migration
 
 pub fn package_dependent_builtins(
     config: &fastn_core::Config,
@@ -46,7 +75,7 @@ pub async fn interpret_helper(
     line_number: usize,
     preview_session_id: &Option<String>,
 ) -> ftd::interpreter::Result<ftd::interpreter::Document> {
-    let doc = cached_parse(name, source, line_number)?;
+    let doc = cached_parse(name, source, line_number, lib.config.enable_cache, None)?;
 
     let builtin_overrides = package_dependent_builtins(&lib.config, lib.request.path());
     let mut s = ftd::interpreter::interpret_with_line_number(name, doc, Some(builtin_overrides))?;
@@ -91,7 +120,13 @@ pub async fn interpret_helper(
                     .await?;
                 tracing::info!("import resolved: {module} -> {path}");
                 lib.dependencies_during_render.push(path);
-                let doc = cached_parse(module.as_str(), source.as_str(), ignore_line_numbers)?;
+                let doc = cached_parse(
+                    module.as_str(),
+                    source.as_str(),
+                    ignore_line_numbers,
+                    lib.config.enable_cache,
+                    None,
+                )?;
                 s = st.continue_after_import(
                     module.as_str(),
                     doc,
@@ -147,6 +182,20 @@ pub async fn interpret_helper(
             }
         }
     }
+
+    // Update cache with collected dependencies for always-correct future caching
+    // Note: We don't have access to original source here, which is a limitation
+    // For now, log the dependencies that were collected
+    if lib.config.enable_cache && !lib.dependencies_during_render.is_empty() {
+        eprintln!(
+            "🔥 PERF: Collected {} dependencies for future cache invalidation",
+            lib.dependencies_during_render.len()
+        );
+        for dep in &lib.dependencies_during_render {
+            eprintln!("  📁 Dependency: {}", dep);
+        }
+    }
+
     Ok(document)
 }
 

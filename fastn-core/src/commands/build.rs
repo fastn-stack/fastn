@@ -332,7 +332,11 @@ async fn incremental_build(
         let mut resolved_dependencies: Vec<String> = vec![];
         let mut resolving_dependencies: Vec<String> = vec![];
 
-        for file in documents.values() {
+        // Sort documents by ID for deterministic processing order
+        let mut sorted_documents: Vec<_> = documents.values().collect();
+        sorted_documents.sort_by_key(|doc| doc.get_id());
+
+        for file in sorted_documents {
             // copy static files
             if file.is_static() {
                 handle_file(
@@ -351,6 +355,9 @@ async fn incremental_build(
 
             unresolved_dependencies.push(remove_extension(file.get_id()));
         }
+
+        // Sort dependencies for deterministic processing order (stable test output)
+        unresolved_dependencies.sort();
 
         while let Some(unresolved_dependency) = unresolved_dependencies.pop() {
             // println!("Current UR: {}", unresolved_dependency.as_str());
@@ -375,6 +382,9 @@ async fn incremental_build(
                     }
                     unresolved_dependencies.push(dep.to_string());
                 }
+
+                // Sort after adding new dependencies for deterministic processing
+                unresolved_dependencies.sort();
 
                 // println!(
                 //     "[INCREMENTAL] [R]: {} [RV]: {} [UR]: {} [ORD]: {}",
@@ -447,7 +457,11 @@ async fn incremental_build(
 
         remove_deleted_documents(config, &mut c, documents).await?;
     } else {
-        for document in documents.values() {
+        // Sort documents by ID for deterministic processing order (stable test output)
+        let mut sorted_documents: Vec<_> = documents.values().collect();
+        sorted_documents.sort_by_key(|doc| doc.get_id());
+        
+        for document in sorted_documents {
             let id = document.get_id().to_string();
             if processed.contains(&id) {
                 continue;
@@ -674,13 +688,13 @@ async fn handle_file_(
                 return Ok(());
             }
 
-            let resp = {
+            let (resp, dependencies) = {
                 let req = fastn_core::http::Request::default();
                 let mut req_config =
                     fastn_core::RequestConfig::new(config, &req, doc.id.as_str(), base_url);
                 req_config.current_document = Some(document.get_id().to_string());
 
-                fastn_core::package::package_doc::process_ftd(
+                let result = fastn_core::package::package_doc::process_ftd(
                     &mut req_config,
                     doc,
                     base_url,
@@ -689,14 +703,16 @@ async fn handle_file_(
                     file_path.as_str(),
                     preview_session_id,
                 )
-                .await
+                .await;
+
+                // Extract dependencies before the scope ends
+                (result, req_config.dependencies_during_render)
             };
 
             match (resp, ignore_failed) {
                 (Ok(r), _) => {
-                    // TODO: what to do with dependencies?
-                    // let dependencies = req_config.dependencies_during_render;
-                    let dependencies = vec![];
+                    // Use collected dependencies for proper incremental build cache invalidation
+                    // Dependencies were extracted from req_config scope above
                     if let Some(cache) = cache {
                         cache.documents.insert(
                             remove_extension(doc.id.as_str()),
