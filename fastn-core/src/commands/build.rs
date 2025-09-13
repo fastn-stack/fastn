@@ -332,7 +332,11 @@ async fn incremental_build(
         let mut resolved_dependencies: Vec<String> = vec![];
         let mut resolving_dependencies: Vec<String> = vec![];
 
-        for file in documents.values() {
+        // Sort documents by ID for deterministic processing order
+        let mut sorted_documents: Vec<_> = documents.values().collect();
+        sorted_documents.sort_by_key(|doc| doc.get_id());
+        
+        for file in sorted_documents {
             // copy static files
             if file.is_static() {
                 handle_file(
