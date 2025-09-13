@@ -87,6 +87,15 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let offline = serve.get_flag("offline");
         let enable_cache = serve.get_flag("enable-cache");
 
+        // Warn about experimental caching feature
+        if enable_cache {
+            eprintln!("⚠️  EXPERIMENTAL: --enable-cache is experimental and may have issues.");
+            eprintln!("   Please report any problems or feedback to: https://github.com/fastn-stack/fastn/issues");
+            eprintln!("   Caching improves performance but may serve stale content if dependencies change.");
+            eprintln!("   Use only in production environments where files don't change frequently.");
+            eprintln!("");
+        }
+
         if cfg!(feature = "use-config-json") && !offline {
             fastn_update::update(&ds, false).await?;
         }
