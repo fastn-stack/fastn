@@ -3,10 +3,12 @@
 use crate::{BuildCache, DocumentMetadata, PackagesState, Result};
 
 /// Handles incremental build cache operations
+#[allow(dead_code)]
 pub struct BuildCacheManager {
     cache: BuildCache,
 }
 
+#[allow(dead_code)]
 impl BuildCacheManager {
     pub fn new() -> Result<Self> {
         // TODO: Load existing build cache

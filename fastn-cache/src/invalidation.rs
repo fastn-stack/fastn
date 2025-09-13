@@ -1,10 +1,12 @@
 //! Cache invalidation logic - ensures caches are always correct
 
 /// Handles cache invalidation based on file changes
+#[allow(dead_code)]
 pub struct CacheInvalidator {
     // TODO: Track file modification times, dependency changes
 }
 
+#[allow(dead_code)]
 impl CacheInvalidator {
     pub fn new() -> Self {
         Self {
