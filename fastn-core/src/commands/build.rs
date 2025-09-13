@@ -352,6 +352,9 @@ async fn incremental_build(
             unresolved_dependencies.push(remove_extension(file.get_id()));
         }
 
+        // Sort dependencies for deterministic processing order (stable test output)
+        unresolved_dependencies.sort();
+
         while let Some(unresolved_dependency) = unresolved_dependencies.pop() {
             // println!("Current UR: {}", unresolved_dependency.as_str());
             if let Some(doc) = c.documents.get(unresolved_dependency.as_str()) {
@@ -375,6 +378,9 @@ async fn incremental_build(
                     }
                     unresolved_dependencies.push(dep.to_string());
                 }
+                
+                // Sort after adding new dependencies for deterministic processing
+                unresolved_dependencies.sort();
 
                 // println!(
                 //     "[INCREMENTAL] [R]: {} [RV]: {} [UR]: {} [ORD]: {}",
