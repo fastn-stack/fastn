@@ -215,13 +215,13 @@ impl FtdCache {
     }
 
     /// Update cache with collected dependencies after compilation
-    pub fn update_dependencies(&mut self, file_id: &str, dependencies: &[String]) -> Result<()> {
+    pub fn update_dependencies(&mut self, _file_id: &str, _dependencies: &[String]) -> Result<()> {
         // TODO: Implement dependency-aware cache updates
         todo!("Update cache with real dependency information")
     }
 
     /// Check if build is needed for incremental builds
-    pub fn is_build_needed(&self, doc_id: &str) -> bool {
+    pub fn is_build_needed(&self, _doc_id: &str) -> bool {
         // TODO: Implement build need detection
         todo!("Check if document needs rebuilding")
     }
@@ -229,9 +229,9 @@ impl FtdCache {
     /// Mark document as built with metadata
     pub fn mark_built(
         &mut self,
-        doc_id: &str,
-        html_checksum: &str,
-        dependencies: &[String],
+        _doc_id: &str,
+        _html_checksum: &str,
+        _dependencies: &[String],
     ) -> Result<()> {
         // TODO: Implement build completion tracking
         todo!("Mark document as successfully built")

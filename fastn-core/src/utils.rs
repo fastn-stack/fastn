@@ -84,7 +84,7 @@ pub fn get_cache_file(id: &str) -> Option<std::path::PathBuf> {
                                 let url = String::from_utf8_lossy(&output.stdout);
                                 url.trim()
                                     .split('/')
-                                    .last()?
+                                    .next_back()?
                                     .trim_end_matches(".git")
                                     .to_string()
                                     .into()

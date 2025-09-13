@@ -5,7 +5,7 @@ fn cached_parse(
     source: &str,
     line_number: usize,
     enable_cache: bool,
-    dependencies: Option<&[String]>, // Dependencies from previous compilation if available
+    _dependencies: Option<&[String]>, // Dependencies from previous compilation if available
 ) -> ftd::interpreter::Result<ftd::interpreter::ParsedDocument> {
     #[derive(serde::Deserialize, serde::Serialize)]
     struct C {
