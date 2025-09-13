@@ -24,12 +24,12 @@ fn cached_parse(
                 eprintln!("🚀 PERF: CACHE HIT (simple hash) for: {}", id);
                 return Ok(c.doc);
             }
-            eprintln!("🔥 PERF: Cache invalidated (content changed) for: {}", id);
+            // eprintln!("🔥 PERF: Cache invalidated (content changed) for: {}", id);
         } else {
-            eprintln!("🔥 PERF: Cache miss (no previous cache) for: {}", id);
+            // eprintln!("🔥 PERF: Cache miss (no previous cache) for: {}", id);
         }
     } else {
-        eprintln!("🔥 PERF: Caching DISABLED (use --enable-cache to enable)");
+        // eprintln!("🔥 PERF: Caching DISABLED (use --enable-cache to enable)");
     }
 
     let doc = ftd::interpreter::ParsedDocument::parse_with_line_number(id, source, line_number)?;

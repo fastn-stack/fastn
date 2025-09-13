@@ -457,7 +457,11 @@ async fn incremental_build(
 
         remove_deleted_documents(config, &mut c, documents).await?;
     } else {
-        for document in documents.values() {
+        // Sort documents by ID for deterministic processing order (stable test output)
+        let mut sorted_documents: Vec<_> = documents.values().collect();
+        sorted_documents.sort_by_key(|doc| doc.get_id());
+        
+        for document in sorted_documents {
             let id = document.get_id().to_string();
             if processed.contains(&id) {
                 continue;
