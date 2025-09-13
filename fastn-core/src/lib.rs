@@ -209,6 +209,8 @@ pub(crate) fn assert_error<T>(message: String) -> Result<T> {
     Err(Error::AssertError { message })
 }
 
+use fastn_cache as _;
+
 #[cfg(test)]
 mod tests {
     #[test]

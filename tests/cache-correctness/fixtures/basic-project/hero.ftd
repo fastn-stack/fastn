@@ -1,0 +1,19 @@
+-- import: fastn
+
+-- component main:
+caption title:
+
+-- ftd.column:
+spacing.fixed.px: 20
+
+-- ftd.text: $main.title
+role: $inherited.types.heading-large
+color: $inherited.colors.text-strong
+
+-- ftd.text: Original hero content - Version 1
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- end: ftd.column
+
+-- end: main

@@ -27,6 +27,7 @@ deadpool.workspace = true
 diffy.workspace = true
 dirs.workspace = true
 env_logger.workspace = true
+fastn-cache = { path = "../fastn-cache" }
 fastn-ds.workspace = true
 fastn-expr.workspace = true
 fastn-js.workspace = true
