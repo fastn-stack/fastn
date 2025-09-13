@@ -19,7 +19,7 @@ fn cached_parse(
         if let Some(c) = fastn_core::utils::get_cached::<C>(id) {
             // Simple content hash check for now (dependency-aware logic in fastn-cache)
             let current_hash = fastn_core::utils::generate_hash(source);
-            
+
             if c.hash == current_hash {
                 eprintln!("🚀 PERF: CACHE HIT (simple hash) for: {}", id);
                 return Ok(c.doc);
@@ -33,15 +33,19 @@ fn cached_parse(
     }
 
     let doc = ftd::interpreter::ParsedDocument::parse_with_line_number(id, source, line_number)?;
-    
+
     // Cache with empty dependencies for now (will be updated later with real dependencies)
     if enable_cache {
         let initial_hash = fastn_core::utils::generate_hash(source);
-        fastn_core::utils::cache_it(id, C { 
-            doc, 
-            hash: initial_hash,
-            dependencies: vec![] // Will be updated after compilation with real dependencies
-        }).map(|v| v.doc)
+        fastn_core::utils::cache_it(
+            id,
+            C {
+                doc,
+                hash: initial_hash,
+                dependencies: vec![], // Will be updated after compilation with real dependencies
+            },
+        )
+        .map(|v| v.doc)
     } else {
         Ok(doc)
     }
@@ -116,7 +120,13 @@ pub async fn interpret_helper(
                     .await?;
                 tracing::info!("import resolved: {module} -> {path}");
                 lib.dependencies_during_render.push(path);
-                let doc = cached_parse(module.as_str(), source.as_str(), ignore_line_numbers, lib.config.enable_cache, None)?;
+                let doc = cached_parse(
+                    module.as_str(),
+                    source.as_str(),
+                    ignore_line_numbers,
+                    lib.config.enable_cache,
+                    None,
+                )?;
                 s = st.continue_after_import(
                     module.as_str(),
                     doc,
@@ -172,17 +182,20 @@ pub async fn interpret_helper(
             }
         }
     }
-    
+
     // Update cache with collected dependencies for always-correct future caching
     // Note: We don't have access to original source here, which is a limitation
     // For now, log the dependencies that were collected
     if lib.config.enable_cache && !lib.dependencies_during_render.is_empty() {
-        eprintln!("🔥 PERF: Collected {} dependencies for future cache invalidation", lib.dependencies_during_render.len());
+        eprintln!(
+            "🔥 PERF: Collected {} dependencies for future cache invalidation",
+            lib.dependencies_during_render.len()
+        );
         for dep in &lib.dependencies_during_render {
             eprintln!("  📁 Dependency: {}", dep);
         }
     }
-    
+
     Ok(document)
 }
 

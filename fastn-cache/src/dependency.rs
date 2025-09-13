@@ -18,12 +18,12 @@ impl DependencyTracker {
             dependents: HashMap::new(),
         }
     }
-    
+
     /// Record that a file depends on other files
     pub fn record_dependencies(&mut self, file_id: &str, deps: &[String]) {
         // Store forward dependencies
         self.dependencies.insert(file_id.to_string(), deps.to_vec());
-        
+
         // Update reverse dependencies (dependents)
         for dep in deps {
             self.dependents
@@ -32,12 +32,12 @@ impl DependencyTracker {
                 .insert(file_id.to_string());
         }
     }
-    
+
     /// Get all files that depend on the given file (directly or indirectly)
     pub fn get_affected_files(&self, changed_file: &str) -> Vec<String> {
         let mut affected = HashSet::new();
         let mut to_check = vec![changed_file.to_string()];
-        
+
         while let Some(file) = to_check.pop() {
             if let Some(dependents) = self.dependents.get(&file) {
                 for dependent in dependents {
@@ -47,10 +47,10 @@ impl DependencyTracker {
                 }
             }
         }
-        
+
         affected.into_iter().collect()
     }
-    
+
     /// Check if any dependencies of a file have changed since given time
     pub fn dependencies_changed_since(&self, file_id: &str, cache_time: SystemTime) -> bool {
         if let Some(deps) = self.dependencies.get(file_id) {
@@ -62,13 +62,15 @@ impl DependencyTracker {
         }
         false
     }
-    
+
     /// Generate dependency-aware hash for cache validation
     pub fn generate_cache_hash(&self, file_id: &str, source: &str) -> String {
-        let dependencies = self.dependencies.get(file_id)
+        let dependencies = self
+            .dependencies
+            .get(file_id)
             .map(|deps| deps.as_slice())
             .unwrap_or(&[]);
-        
+
         generate_dependency_hash(source, dependencies)
     }
 }
@@ -90,10 +92,10 @@ fn file_changed_since_cache(file_path: &str, cached_time: SystemTime) -> bool {
 pub fn generate_dependency_hash(source: &str, dependencies: &[String]) -> String {
     use std::collections::hash_map::DefaultHasher;
     use std::hash::{Hash, Hasher};
-    
+
     let mut hasher = DefaultHasher::new();
     source.hash(&mut hasher);
-    
+
     // Include all dependency file contents in the hash
     for dep_path in dependencies {
         if let Ok(dep_content) = std::fs::read_to_string(dep_path) {
@@ -104,7 +106,7 @@ pub fn generate_dependency_hash(source: &str, dependencies: &[String]) -> String
             dep_path.hash(&mut hasher);
         }
     }
-    
+
     // CRITICAL: Include .packages directory state for fastn update resilience
     if let Ok(packages_dir) = std::fs::read_dir(".packages") {
         for entry in packages_dir.flatten() {
@@ -119,29 +121,29 @@ pub fn generate_dependency_hash(source: &str, dependencies: &[String]) -> String
             }
         }
     }
-    
+
     // Include FASTN.ftd content for configuration changes
     if let Ok(fastn_content) = std::fs::read_to_string("FASTN.ftd") {
         fastn_content.hash(&mut hasher);
     }
-    
+
     format!("{:x}", hasher.finish())
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
     fn test_dependency_tracking() {
         let mut tracker = DependencyTracker::new();
-        
+
         // index.ftd depends on hero.ftd and banner.ftd
         tracker.record_dependencies("index.ftd", &["hero.ftd", "banner.ftd"]);
-        
+
         // hero.ftd depends on common.ftd
         tracker.record_dependencies("hero.ftd", &["common.ftd"]);
-        
+
         // If common.ftd changes, both hero.ftd and index.ftd are affected
         let affected = tracker.get_affected_files("common.ftd");
         assert!(affected.contains(&"hero.ftd".to_string()));

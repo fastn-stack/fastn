@@ -11,16 +11,16 @@ impl CacheInvalidator {
             // TODO: Initialize invalidation tracking
         }
     }
-    
+
     /// Check if cache entry is still valid
     pub fn is_valid(&self, _cache_key: &str, _dependencies: &[String]) -> bool {
         // TODO: Implement validation logic:
         // - Check file modification times
-        // - Verify .packages directory state  
+        // - Verify .packages directory state
         // - Check FASTN.ftd changes
         true
     }
-    
+
     /// Invalidate caches affected by file change
     pub fn invalidate_affected(&mut self, _changed_file: &str) -> Vec<String> {
         // TODO: Return list of cache keys to invalidate

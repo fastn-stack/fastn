@@ -690,7 +690,7 @@ async fn handle_file_(
                     preview_session_id,
                 )
                 .await;
-                
+
                 // Extract dependencies before the scope ends
                 (result, req_config.dependencies_during_render)
             };
