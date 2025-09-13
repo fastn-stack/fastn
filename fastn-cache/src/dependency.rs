@@ -145,7 +145,10 @@ mod tests {
         let mut tracker = DependencyTracker::new();
 
         // index.ftd depends on hero.ftd and banner.ftd
-        tracker.record_dependencies("index.ftd", &["hero.ftd".to_string(), "banner.ftd".to_string()]);
+        tracker.record_dependencies(
+            "index.ftd",
+            &["hero.ftd".to_string(), "banner.ftd".to_string()],
+        );
 
         // hero.ftd depends on common.ftd
         tracker.record_dependencies("hero.ftd", &["common.ftd".to_string()]);

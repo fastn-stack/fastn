@@ -46,14 +46,12 @@ pub use keys::CacheKey;
 pub use storage::CacheStorage;
 
 /// Configuration for FTD caching system
-#[derive(Debug, Clone)]
-#[derive(Default)]
+#[derive(Debug, Clone, Default)]
 pub struct CacheConfig {
     pub enabled: bool,
     pub cache_dir: Option<PathBuf>,
     pub max_cache_size: Option<u64>,
 }
-
 
 impl CacheConfig {
     pub fn enable(mut self, enabled: bool) -> Self {
