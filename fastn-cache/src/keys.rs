@@ -30,7 +30,9 @@ impl CacheKey {
 
 impl std::fmt::Display for CacheKey {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}+{}", 
+        write!(
+            f,
+            "{}+{}",
             sanitize_for_filesystem(&self.project_id),
             sanitize_for_filesystem(&self.file_id)
         )
