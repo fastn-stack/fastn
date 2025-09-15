@@ -10,3 +10,4 @@ homepage.workspace = true
 rust-version.workspace = true
 
 [dependencies]
+fastn-id52.workspace = true

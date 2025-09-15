@@ -2079,6 +2079,9 @@ dependencies = [
 [[package]]
 name = "fastn-ssh"
 version = "0.1.0"
+dependencies = [
+ "fastn-id52",
+]
 
 [[package]]
 name = "fastn-update"
