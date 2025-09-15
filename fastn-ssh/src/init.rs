@@ -5,6 +5,12 @@
 pub async fn init(fastn_home: &std::path::Path) {
     let ssh_dir = fastn_home.join("ssh");
 
+    // Check if SSH is already initialized
+    if ssh_dir.exists() {
+        eprintln!("Error: SSH already initialized at {}", ssh_dir.display());
+        std::process::exit(1);
+    }
+
     // Create ssh directory
     if let Err(e) = std::fs::create_dir_all(&ssh_dir) {
         eprintln!(
@@ -12,15 +18,6 @@ pub async fn init(fastn_home: &std::path::Path) {
             ssh_dir.display(),
             e
         );
-        std::process::exit(1);
-    }
-
-    let config_path = ssh_dir.join("config.toml");
-
-    // Check if SSH is already initialized by trying to load existing key
-    if let Ok((_id52, _existing_key)) = fastn_id52::SecretKey::load_from_dir(&ssh_dir, "ssh") {
-        eprintln!("Error: SSH already initialized at {}", ssh_dir.display());
-        eprintln!("SSH key already exists in directory");
         std::process::exit(1);
     }
 
@@ -32,6 +29,8 @@ pub async fn init(fastn_home: &std::path::Path) {
         eprintln!("Error: Failed to save SSH secret key: {}", e);
         std::process::exit(1);
     }
+
+    let config_path = ssh_dir.join("config.toml");
 
     // Create default config.toml
     let default_config = r#"# fastn SSH Configuration
@@ -64,7 +63,7 @@ pub async fn init(fastn_home: &std::path::Path) {
 
     println!("SSH configuration initialized successfully!");
     println!("SSH directory: {}", ssh_dir.display());
-    println!("SSH ID52 (public key): {}", public_key);
+    println!("SSH ID52 (public key): {public_key}");
     println!(
         "Secret key stored at: {}",
         ssh_dir.join("ssh.private-key").display()
@@ -73,8 +72,7 @@ pub async fn init(fastn_home: &std::path::Path) {
     println!();
     println!("Next steps:");
     println!(
-        "1. Share your SSH ID52 with remote machines: {}",
-        public_key
+        "1. Share your SSH ID52 with remote machines: {public_key}",
     );
     println!("2. Configure allowed remotes in: {}", config_path.display());
     println!("3. Run 'fastn daemon' to start the SSH service");
