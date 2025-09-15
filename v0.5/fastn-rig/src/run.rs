@@ -199,7 +199,7 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     println!("\n📨 fastn is running with fastn-p2p. Press Ctrl+C to stop.");
 
     // Wait for graceful shutdown
-    fastn_p2p::globals::graceful()
+    fastn_p2p::graceful()
         .shutdown()
         .await
         .map_err(|e| fastn_rig::RunError::Shutdown {
