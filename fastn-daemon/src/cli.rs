@@ -59,10 +59,7 @@ pub fn add_subcommands(app: clap::Command) -> clap::Command {
             .about("Connect to remote machines via SSH")
             .arg(clap::arg!(target: <TARGET> "Remote machine alias or id52").required(true)),
     )
-    .arg(
-        clap::arg!(--"home" <HOME> "Override the default FASTN_HOME directory")
-            .global(true),
-    )
+    .arg(clap::arg!(--"home" <HOME> "Override the default FASTN_HOME directory").global(true))
 }
 
 pub async fn handle_daemon_commands(
