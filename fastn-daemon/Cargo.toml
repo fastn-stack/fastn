@@ -12,3 +12,4 @@ rust-version.workspace = true
 [dependencies]
 clap = { workspace = true, features = ["derive", "env"] }
 tokio.workspace = true
+dirs.workspace = true

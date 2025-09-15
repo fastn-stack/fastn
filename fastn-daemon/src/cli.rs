@@ -15,7 +15,7 @@ pub enum Commands {
     /// Initialize fastn daemon (creates SSH folder in FASTN_HOME)
     Init,
     /// Run the fastn daemon service in foreground
-    Daemon,
+    Run,
     /// Show daemon operational status and machine info
     Status,
     /// Connect to remote machines via SSH
@@ -25,8 +25,22 @@ pub enum Commands {
     },
 }
 
-pub async fn handle_cli(_cli: fastn_daemon::Cli) -> Result<(), Box<dyn std::error::Error>> {
-    // TODO: Implement CLI handling
+pub async fn handle_cli(cli: fastn_daemon::Cli) -> Result<(), Box<dyn std::error::Error>> {
+    let fastn_home = cli.fastn_home.unwrap_or_else(|| {
+        dirs::data_dir()
+            .expect("Failed to get data directory")
+            .join("fastn")
+    });
+
+    println!("Using FASTN_HOME: {fastn_home:?}");
+
+    match cli.command {
+        Commands::Init => fastn_daemon::init(&fastn_home).await,
+        Commands::Run => fastn_daemon::run(&fastn_home).await,
+        Commands::Status => fastn_daemon::status(&fastn_home).await,
+        Commands::Ssh { target } => fastn_daemon::ssh(&fastn_home, &target).await,
+    };
+
     Ok(())
 }
 
@@ -63,7 +77,7 @@ pub async fn handle_daemon_commands(
         let command = if matches.subcommand_matches("init").is_some() {
             Commands::Init
         } else if matches.subcommand_matches("daemon").is_some() {
-            Commands::Daemon
+            Commands::Run
         } else if matches.subcommand_matches("status").is_some() {
             Commands::Status
         } else if let Some(ssh_matches) = matches.subcommand_matches("ssh") {

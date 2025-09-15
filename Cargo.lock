@@ -1427,6 +1427,7 @@ name = "fastn-daemon"
 version = "0.1.0"
 dependencies = [
  "clap",
+ "dirs",
  "tokio",
 ]
 
