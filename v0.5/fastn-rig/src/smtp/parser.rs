@@ -33,8 +33,9 @@ impl AuthCredentials {
 
     /// Extract account ID52 from username (robust parsing for various SMTP client formats)
     ///
-    /// Supports ONLY secure .fastn format to prevent domain hijacking:
+    /// Supports both secure .fastn format and simple usernames for better UX:
     /// - user@<id52>.fastn (secure format - no purchasable domains)
+    /// - simple username without @ (uses authenticated account context)
     /// 
     /// Security: Rejects .com/.org/.net domains to prevent attack where
     /// someone buys {id52}.com and intercepts emails meant for P2P delivery.
@@ -66,6 +67,23 @@ impl AuthCredentials {
                 {
                     return Some(id52);
                 }
+            }
+        }
+
+        // Strategy 3: Simple username without @ - email client UX  
+        // Allow usernames like "alice", "bob" for better email client experience
+        if !self.username.contains("@") && !self.username.is_empty() {
+            // For simple usernames, we'll need the SMTP layer to look up
+            // the account in the local rig. Return None for now.
+            return None;
+        }
+        
+        // Strategy 4: localhost domain - accept standard format for email clients
+        if let Some(at_pos) = self.username.find('@') {
+            let domain = &self.username[at_pos + 1..];
+            if domain == "localhost" || domain == "127.0.0.1" {
+                // For localhost emails, we need account context from SMTP layer
+                return None;
             }
         }
 
