@@ -4,6 +4,7 @@ members = [
     "fastn",
     "fastn-builtins",
     "fastn-core",
+    "fastn-daemon",
     "fastn-ds",
     "fastn-expr",
     "fastn-issues",
