@@ -3,7 +3,9 @@
 
 extern crate self as fastn_daemon;
 
+use fastn_p2p as _; // used by main for macro
 use tokio as _; // only main uses this for now
+use tracing_subscriber as _; // used by main macro for logging
 
 mod cli;
 mod init;
