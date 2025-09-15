@@ -1,6 +1,6 @@
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::{parse_macro_input, ItemFn};
+use syn::{parse_macro_input, parse::Parse, parse::ParseStream, ItemFn, Expr, ExprLit, Lit, Meta, MetaNameValue, Token};
 
 /// Main function attribute macro that eliminates boilerplate for fastn applications
 ///
@@ -14,11 +14,18 @@ use syn::{parse_macro_input, ItemFn};
 /// }
 /// ```
 #[proc_macro_attribute]
-pub fn main(_args: TokenStream, input: TokenStream) -> TokenStream {
+pub fn main(args: TokenStream, input: TokenStream) -> TokenStream {
     let input_fn = parse_macro_input!(input as ItemFn);
     
-    // For now, just implement the basic case - TODO: parse configuration
-    let config = MacroConfig::default();
+    // Parse configuration from attributes
+    let config = if args.is_empty() {
+        MacroConfig::default()
+    } else {
+        match syn::parse::<MacroArgs>(args) {
+            Ok(args) => args.into_config(),
+            Err(err) => return err.to_compile_error().into(),
+        }
+    };
     
     // Generate the expanded main function
     expand_main(config, input_fn).into()
@@ -57,7 +64,100 @@ impl Default for ShutdownMode {
     }
 }
 
-// TODO: Implement configuration parsing for syn 2.0 API
+/// Parse macro arguments in syn 2.0 style
+struct MacroArgs {
+    args: syn::punctuated::Punctuated<Meta, Token![,]>,
+}
+
+impl Parse for MacroArgs {
+    fn parse(input: ParseStream) -> syn::Result<Self> {
+        Ok(MacroArgs {
+            args: input.parse_terminated(Meta::parse, Token![,])?,
+        })
+    }
+}
+
+impl MacroArgs {
+    fn into_config(self) -> MacroConfig {
+        let mut config = MacroConfig::default();
+        config.shutdown_timeout = "30s".to_string();
+        config.double_ctrl_c_window = "2s".to_string();
+        
+        for meta in self.args {
+            match meta {
+                Meta::NameValue(MetaNameValue { path, value, .. }) if path.is_ident("logging") => {
+                    match value {
+                        Expr::Lit(ExprLit { lit: Lit::Bool(b), .. }) => {
+                            config.logging = LoggingConfig::Enabled(b.value);
+                        }
+                        Expr::Lit(ExprLit { lit: Lit::Str(s), .. }) => {
+                            config.logging = LoggingConfig::Level(s.value());
+                        }
+                        _ => {
+                            // Invalid type - will be caught during validation
+                        }
+                    }
+                }
+                Meta::NameValue(MetaNameValue { path, value, .. }) if path.is_ident("shutdown_mode") => {
+                    if let Expr::Lit(ExprLit { lit: Lit::Str(s), .. }) = value {
+                        match s.value().as_str() {
+                            "single_ctrl_c" => config.shutdown_mode = ShutdownMode::SingleCtrlC,
+                            "double_ctrl_c" => config.shutdown_mode = ShutdownMode::DoubleCtrlC,
+                            _ => {
+                                // Invalid value - will be caught during validation
+                            }
+                        }
+                    }
+                }
+                Meta::NameValue(MetaNameValue { path, value, .. }) if path.is_ident("shutdown_timeout") => {
+                    if let Expr::Lit(ExprLit { lit: Lit::Str(s), .. }) = value {
+                        config.shutdown_timeout = s.value();
+                    }
+                }
+                Meta::NameValue(MetaNameValue { path, value, .. }) if path.is_ident("double_ctrl_c_window") => {
+                    if let Expr::Lit(ExprLit { lit: Lit::Str(s), .. }) = value {
+                        config.double_ctrl_c_window = s.value();
+                    }
+                }
+                Meta::NameValue(MetaNameValue { path, value, .. }) if path.is_ident("status_fn") => {
+                    if let Expr::Lit(ExprLit { lit: Lit::Str(s), .. }) = value {
+                        if let Ok(path) = syn::parse_str::<syn::Path>(&s.value()) {
+                            config.status_fn = Some(path);
+                        }
+                    }
+                }
+                _ => {
+                    // Unknown attribute - will be caught during validation
+                }
+            }
+        }
+        
+        // Validate configuration
+        if let Err(e) = validate_config(&config) {
+            panic!("Configuration error: {}", e);
+        }
+        
+        config
+    }
+}
+
+fn validate_config(config: &MacroConfig) -> Result<(), String> {
+    // Validate that status_fn is provided for double_ctrl_c mode
+    if matches!(config.shutdown_mode, ShutdownMode::DoubleCtrlC) && config.status_fn.is_none() {
+        return Err("status_fn is required when shutdown_mode is 'double_ctrl_c'".to_string());
+    }
+    
+    // Validate timeout format (basic check)
+    if !config.shutdown_timeout.ends_with('s') && !config.shutdown_timeout.ends_with("ms") {
+        return Err(format!("shutdown_timeout '{}' must end with 's' or 'ms'", config.shutdown_timeout));
+    }
+    
+    if !config.double_ctrl_c_window.ends_with('s') && !config.double_ctrl_c_window.ends_with("ms") {
+        return Err(format!("double_ctrl_c_window '{}' must end with 's' or 'ms'", config.double_ctrl_c_window));
+    }
+    
+    Ok(())
+}
 
 fn expand_main(config: MacroConfig, input_fn: ItemFn) -> proc_macro2::TokenStream {
     let user_fn_name = syn::Ident::new("__fastn_user_main", proc_macro2::Span::call_site());
@@ -89,7 +189,7 @@ fn expand_main(config: MacroConfig, input_fn: ItemFn) -> proc_macro2::TokenStrea
                     let result = #user_fn_name().await;
                     
                     // Trigger graceful shutdown after user main completes
-                    fastn_p2p::coordination::shutdown().await?;
+                    fastn_p2p::shutdown().await?;
                     
                     result
                 })
@@ -111,9 +211,14 @@ fn generate_logging_setup(logging: &LoggingConfig) -> proc_macro2::TokenStream {
                 .with_env_filter(filter)
                 .init();
         },
-        LoggingConfig::Level(_level) => {
+        LoggingConfig::Level(level) => {
+            let level_str = level.as_str();
             quote! {
-                // TODO: Logging setup with custom level and RUST_LOG override
+                // Logging setup with custom level and RUST_LOG override
+                let filter = std::env::var("RUST_LOG").unwrap_or_else(|_| #level_str.to_string());
+                tracing_subscriber::fmt()
+                    .with_env_filter(filter)
+                    .init();
             }
         }
     }
@@ -130,7 +235,7 @@ fn generate_shutdown_setup(config: &MacroConfig) -> proc_macro2::TokenStream {
                     println!("Received Ctrl+C, shutting down gracefully...");
                     
                     // Trigger graceful shutdown
-                    if let Err(e) = fastn_p2p::coordination::shutdown().await {
+                    if let Err(e) = fastn_p2p::shutdown().await {
                         eprintln!("Graceful shutdown failed: {e}");
                         std::process::exit(1);
                     }
