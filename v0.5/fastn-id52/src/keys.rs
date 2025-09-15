@@ -361,6 +361,55 @@ impl SecretKey {
         }
     }
 
+    /// Saves a secret key to a directory using the format expected by load_from_dir.
+    ///
+    /// Creates a `{prefix}.private-key` file containing the secret key in hex format.
+    /// This format is compatible with `load_from_dir` and follows the strict mode rules.
+    ///
+    /// # Arguments
+    ///
+    /// * `dir` - Directory to save the key file
+    /// * `prefix` - File prefix (e.g., "ssh" for "ssh.private-key")
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if:
+    /// - Directory cannot be created
+    /// - File cannot be written
+    /// - Key already exists (to prevent accidental overwrites)
+    pub fn save_to_dir(
+        &self,
+        dir: &std::path::Path,
+        prefix: &str,
+    ) -> Result<(), crate::KeyringError> {
+        let private_key_file = dir.join(format!("{prefix}.private-key"));
+        let id52_file = dir.join(format!("{prefix}.id52"));
+
+        // Check if any key file already exists (prevent overwrites)
+        if private_key_file.exists() || id52_file.exists() {
+            return Err(crate::KeyringError::InvalidKey(format!(
+                "Key files already exist in {}. Use a different prefix or remove existing files.",
+                dir.display()
+            )));
+        }
+
+        // Create directory if it doesn't exist
+        std::fs::create_dir_all(dir).map_err(|e| {
+            crate::KeyringError::Access(format!(
+                "Failed to create directory {}: {e}",
+                dir.display()
+            ))
+        })?;
+
+        // Write secret key to file
+        let key_string = self.to_string();
+        std::fs::write(&private_key_file, &key_string).map_err(|e| {
+            crate::KeyringError::Access(format!("Failed to write {prefix}.private-key file: {e}"))
+        })?;
+
+        Ok(())
+    }
+
     /// Loads a secret key for the given ID52 with fallback logic.
     ///
     /// Attempts to load the key in the following order:
