@@ -31,11 +31,11 @@
 
 extern crate self as fastn_p2p;
 
-pub mod client;
-pub mod coordination;
-pub mod globals;
-pub mod macros;
-pub mod server;
+mod client;
+mod coordination;
+mod globals;
+mod macros;
+mod server;
 
 // Re-export essential types from fastn-net that users need
 pub use fastn_net::{Graceful, Protocol};
@@ -45,8 +45,8 @@ pub use fastn_net::{Graceful, Protocol};
 pub use fastn_p2p_macros::main;
 
 // Global singleton access - graceful is completely encapsulated in coordination module
-pub use coordination::{cancelled, spawn};
-pub use globals::pool;
+pub use coordination::{cancelled, shutdown, spawn};
+pub use globals::{graceful, pool};
 
 // Client API - clean, simple naming (only expose simple version)
 pub use client::{CallError, call};

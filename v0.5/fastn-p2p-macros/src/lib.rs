@@ -88,8 +88,8 @@ fn expand_main(config: MacroConfig, input_fn: ItemFn) -> proc_macro2::TokenStrea
                     // Call user's main function
                     let result = #user_fn_name().await;
                     
-                    // TODO: Trigger graceful shutdown
-                    // fastn_p2p::coordination::trigger_shutdown().await?;
+                    // Trigger graceful shutdown after user main completes
+                    fastn_p2p::coordination::shutdown().await?;
                     
                     result
                 })
@@ -124,7 +124,19 @@ fn generate_shutdown_setup(config: &MacroConfig) -> proc_macro2::TokenStream {
         ShutdownMode::SingleCtrlC => {
             let _timeout = &config.shutdown_timeout;
             quote! {
-                // TODO: Single Ctrl+C mode - immediate graceful shutdown
+                // Single Ctrl+C mode - immediate graceful shutdown
+                tokio::spawn(async {
+                    tokio::signal::ctrl_c().await.ok();
+                    println!("Received Ctrl+C, shutting down gracefully...");
+                    
+                    // Trigger graceful shutdown
+                    if let Err(e) = fastn_p2p::coordination::shutdown().await {
+                        eprintln!("Graceful shutdown failed: {e}");
+                        std::process::exit(1);
+                    }
+                    
+                    std::process::exit(0);
+                });
             }
         }
         ShutdownMode::DoubleCtrlC => {

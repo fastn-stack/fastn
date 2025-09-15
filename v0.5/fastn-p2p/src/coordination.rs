@@ -27,6 +27,14 @@ pub async fn cancelled() {
     GRACEFUL.cancelled().await
 }
 
+/// Trigger graceful shutdown of all spawned tasks
+///
+/// This is used by the main macro to initiate shutdown after user main completes
+/// or when signal handlers are triggered.
+pub async fn shutdown() -> eyre::Result<()> {
+    GRACEFUL.shutdown().await
+}
+
 /// Internal P2P call implementation with localized graceful access
 ///
 /// This function contains the ONLY internal access to graceful for fastn_net compatibility.
