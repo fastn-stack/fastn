@@ -12,6 +12,7 @@ members = [
     "fastn-mail",
     "fastn-net",
     "fastn-p2p",
+    "fastn-p2p-macros",
     "fastn-package",
     "fastn-rig",
     "fastn-router",
