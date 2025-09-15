@@ -289,9 +289,55 @@ let public_id52 = fs::read_to_string("public.id52") ?;
 let public_key = PublicKey::from_str( & public_id52) ?;
 ```
 
+### Directory-Based Key Management (Recommended Pattern)
+
+For most fastn applications, use the directory-based pattern for consistent key storage:
+
+```rust
+use fastn_id52::SecretKey;
+use std::path::Path;
+
+// Generate and save a new key
+let secret_key = SecretKey::generate();
+let key_dir = Path::new("/app/config");
+
+// Save key to directory (creates {prefix}.private-key file)
+secret_key.save_to_dir(key_dir, "ssh")?;
+// Creates: /app/config/ssh.private-key
+
+// Later, load the key back
+let (id52, loaded_key) = SecretKey::load_from_dir(key_dir, "ssh")?;
+// Loads from: /app/config/ssh.private-key or /app/config/ssh.id52
+
+println!("Loaded key for ID52: {}", id52);
+```
+
+#### Directory Pattern Features
+
+- **Consistent file naming**: `{prefix}.private-key` or `{prefix}.id52` format
+- **Automatic detection**: `load_from_dir()` finds the right file type
+- **Strict mode**: Prevents conflicts - won't load if both file types exist
+- **Overwrite protection**: `save_to_dir()` won't overwrite existing keys
+- **Directory creation**: Automatically creates directories if needed
+
+#### Typical Usage in fastn Applications
+
+```rust
+// fastn-daemon SSH initialization
+let ssh_dir = fastn_home.join("ssh");
+let secret_key = SecretKey::generate();
+secret_key.save_to_dir(&ssh_dir, "ssh")?;
+// Creates: FASTN_HOME/ssh/ssh.private-key
+
+// Later, loading the SSH key
+let (ssh_id52, ssh_key) = SecretKey::load_from_dir(&ssh_dir, "ssh")?;
+```
+
+This pattern is used throughout the fastn ecosystem for consistent key management.
+
 ### Advanced Key Loading with Fallback
 
-The crate provides comprehensive key loading with automatic fallback:
+The crate also provides comprehensive key loading with automatic fallback:
 
 ```rust
 use fastn_id52::SecretKey;
