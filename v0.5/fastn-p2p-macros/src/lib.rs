@@ -245,8 +245,52 @@ fn generate_shutdown_setup(config: &MacroConfig) -> proc_macro2::TokenStream {
             }
         }
         ShutdownMode::DoubleCtrlC => {
+            let status_fn = config.status_fn.as_ref().expect("status_fn validated during config parsing");
+            let window = &config.double_ctrl_c_window;
+            
             quote! {
-                // TODO: Double Ctrl+C mode - status on first, shutdown on second
+                // Double Ctrl+C mode - status on first, shutdown on second
+                tokio::spawn(async {
+                    // Wait for first Ctrl+C
+                    tokio::signal::ctrl_c().await.ok();
+                    println!("Received first Ctrl+C, showing status...");
+                    
+                    // Call user's status function
+                    #status_fn().await;
+                    
+                    println!("Press Ctrl+C again within {} to shutdown, or continue running...", #window);
+                    
+                    // Parse timeout window (basic implementation)
+                    let timeout_duration = if #window.ends_with("ms") {
+                        let ms: u64 = #window.trim_end_matches("ms").parse().unwrap_or(2000);
+                        tokio::time::Duration::from_millis(ms)
+                    } else {
+                        let s: u64 = #window.trim_end_matches("s").parse().unwrap_or(2);
+                        tokio::time::Duration::from_secs(s)
+                    };
+                    
+                    // Wait for second Ctrl+C within timeout window
+                    let second_ctrl_c = tokio::time::timeout(
+                        timeout_duration,
+                        tokio::signal::ctrl_c()
+                    ).await;
+                    
+                    if second_ctrl_c.is_ok() {
+                        println!("Received second Ctrl+C, shutting down gracefully...");
+                        
+                        // Trigger graceful shutdown
+                        if let Err(e) = fastn_p2p::shutdown().await {
+                            eprintln!("Graceful shutdown failed: {e}");
+                            std::process::exit(1);
+                        }
+                        
+                        std::process::exit(0);
+                    } else {
+                        println!("No second Ctrl+C received within {}, continuing to run...", #window);
+                        // Continue running - spawn another signal handler for future Ctrl+C
+                        // TODO: This creates a recursive pattern - might need better design
+                    }
+                });
             }
         }
     }
