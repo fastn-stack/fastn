@@ -12,6 +12,7 @@ rust-version.workspace = true
 default = ["fifthtry", "use-config-json"]
 fifthtry = ["clift"]
 use-config-json = []
+ssh = ["fastn-daemon"]
 
 [dependencies]
 clift = { workspace = true, optional = true }
@@ -19,6 +20,7 @@ clap.workspace = true
 fastn-observer.workspace = true
 fastn-update.workspace = true
 fastn-core.workspace = true
+fastn-daemon = { workspace = true, optional = true }
 futures.workspace = true
 reqwest.workspace = true
 serde.workspace = true

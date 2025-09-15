@@ -1344,6 +1344,7 @@ dependencies = [
  "deadpool-postgres",
  "dotenvy",
  "fastn-core",
+ "fastn-daemon",
  "fastn-ds",
  "fastn-observer",
  "fastn-update",

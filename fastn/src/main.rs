@@ -33,12 +33,18 @@ async fn async_main() -> Result<(), Error> {
         app = clift::attach_cmd(app);
     }
 
+    #[cfg(feature = "ssh")]
+    {
+        app = fastn_daemon::add_subcommands(app);
+    }
+
     let matches = app.get_matches();
 
     set_env_vars(matches.subcommand_matches("test").is_some());
 
     futures::try_join!(
         fastn_core_commands(&matches),
+        handle_ssh_commands(&matches),
         check_for_update_cmd(&matches)
     )?;
 
@@ -205,6 +211,18 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return fastn_core::post_build_check(&config).await;
     }
 
+    Ok(())
+}
+
+#[cfg(feature = "ssh")]
+async fn handle_ssh_commands(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
+    fastn_daemon::handle_daemon_commands(matches)
+        .await
+        .map_err(|e| fastn_core::Error::Generic(format!("SSH error: {e:?}")))
+}
+
+#[cfg(not(feature = "ssh"))]
+async fn handle_ssh_commands(_matches: &clap::ArgMatches) -> fastn_core::Result<()> {
     Ok(())
 }
 
