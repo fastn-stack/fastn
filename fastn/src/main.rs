@@ -218,7 +218,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
 async fn handle_ssh_commands(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
     fastn_daemon::handle_daemon_commands(matches)
         .await
-        .map_err(|e| fastn_core::Error::Generic(format!("SSH error: {e:?}")))
+        .map_err(|e| fastn_core::Error::generic(format!("SSH error: {e:?}")))
 }
 
 #[cfg(not(feature = "ssh"))]

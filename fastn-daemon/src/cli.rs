@@ -1,6 +1,7 @@
 #[derive(clap::Parser, Debug)]
 #[command(author, version, about, long_about = None)]
-#[command(name = "fastn")]
+#[command(name = "fastn-daemon")]
+#[command(arg_required_else_help = true)]
 pub struct Cli {
     #[command(subcommand)]
     pub command: Commands,
