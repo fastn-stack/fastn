@@ -23,7 +23,8 @@ pub async fn init(fastn_home: &std::path::Path) {
         std::process::exit(1);
     }
 
-    // TODO: Call fastn-ssh::init() here when fastn-ssh crate is ready
+    // Call fastn-ssh::init() to set up SSH configuration
+    fastn_ssh::init(fastn_home).await;
 
     println!("fastn daemon initialized successfully!");
     println!("Home directory: {}", fastn_home.display());

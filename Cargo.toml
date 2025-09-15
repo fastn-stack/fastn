@@ -12,6 +12,7 @@ members = [
     "fastn-lang",
     "fastn-package",
     "fastn-runtime",
+    "fastn-ssh",
     "fastn-update",
     "fastn-utils",
     "fastn-xtask",
@@ -97,6 +98,7 @@ fastn-js.path = "fastn-js"
 fastn-package.path = "fastn-package"
 fastn-resolved = { path = "fastn-resolved" }
 fastn-runtime = { path = "fastn-runtime", features = ["owned-tdoc"] }
+fastn-ssh.path = "fastn-ssh"
 fastn-update.path = "fastn-update"
 fastn-utils.path = "fastn-utils"
 fastn-wasm.path = "v0.5/fastn-wasm"

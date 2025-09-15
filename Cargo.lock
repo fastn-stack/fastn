@@ -1892,6 +1892,7 @@ dependencies = [
  "clap",
  "dirs",
  "fastn-p2p",
+ "fastn-ssh",
  "tokio",
  "tracing-subscriber",
 ]
@@ -2074,6 +2075,10 @@ dependencies = [
  "serde",
  "sha2",
 ]
+
+[[package]]
+name = "fastn-ssh"
+version = "0.1.0"
 
 [[package]]
 name = "fastn-update"

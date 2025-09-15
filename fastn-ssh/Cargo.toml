@@ -1,0 +1,12 @@
+[package]
+name = "fastn-ssh"
+version = "0.1.0"
+authors.workspace = true
+edition.workspace = true
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+rust-version.workspace = true
+
+[dependencies]

@@ -41,7 +41,8 @@ pub async fn run(fastn_home: &std::path::Path) {
 
     // TODO: Handle cleanup on exit (signals, graceful shutdown, etc.)
 
-    // TODO: Call fastn-ssh::run() here when fastn-ssh crate is ready
+    // Call fastn-ssh::run() to start SSH services
+    fastn_ssh::run(fastn_home).await;
 
     // Main daemon loop - keep running until interrupted
     // Note: lock_file_handle must stay alive to maintain the lock

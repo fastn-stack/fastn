@@ -14,4 +14,5 @@ clap = { workspace = true, features = ["derive", "env"] }
 tokio.workspace = true
 dirs.workspace = true
 fastn-p2p = { path = "../v0.5/fastn-p2p" }
+fastn-ssh.workspace = true
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
