@@ -7,7 +7,7 @@ pub struct Cli {
     pub command: Commands,
 
     /// Override the default FASTN_HOME directory
-    #[arg(long, global = true, env = "FASTN_HOME")]
+    #[arg(long = "home", global = true, env = "FASTN_HOME")]
     pub fastn_home: Option<std::path::PathBuf>,
 }
 
@@ -60,7 +60,7 @@ pub fn add_subcommands(app: clap::Command) -> clap::Command {
             .arg(clap::arg!(target: <TARGET> "Remote machine alias or id52").required(true)),
     )
     .arg(
-        clap::arg!(--"fastn-home" <FASTN_HOME> "Override the default FASTN_HOME directory")
+        clap::arg!(--"home" <HOME> "Override the default FASTN_HOME directory")
             .global(true),
     )
 }
@@ -73,7 +73,7 @@ pub async fn handle_daemon_commands(
         || matches.subcommand_matches("status").is_some()
         || matches.subcommand_matches("ssh").is_some()
     {
-        let fastn_home = matches.get_one::<std::path::PathBuf>("fastn-home").cloned();
+        let fastn_home = matches.get_one::<std::path::PathBuf>("home").cloned();
 
         let command = if matches.subcommand_matches("init").is_some() {
             Commands::Init
