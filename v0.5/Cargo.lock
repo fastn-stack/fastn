@@ -2119,6 +2119,7 @@ dependencies = [
  "eyre",
  "fastn-id52",
  "fastn-net",
+ "fastn-p2p-macros",
  "futures-core",
  "futures-util",
  "iroh",
@@ -2129,6 +2130,15 @@ dependencies = [
  "tokio-test",
  "tokio-util",
  "tracing",
+]
+
+[[package]]
+name = "fastn-p2p-macros"
+version = "0.1.0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.106",
 ]
 
 [[package]]

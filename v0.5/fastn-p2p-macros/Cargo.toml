@@ -1,0 +1,16 @@
+[package]
+name = "fastn-p2p-macros"
+version = "0.1.0"
+edition.workspace = true
+description = "Procedural macros for fastn-p2p"
+homepage.workspace = true
+license.workspace = true
+
+[lib]
+proc-macro = true
+
+[dependencies]
+# Procedural macro dependencies
+proc-macro2 = "1"
+quote = "1"
+syn = { version = "2", features = ["full", "extra-traits"] }
