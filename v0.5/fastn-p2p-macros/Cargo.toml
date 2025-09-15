@@ -14,3 +14,11 @@ proc-macro = true
 proc-macro2 = "1"
 quote = "1"
 syn = { version = "2", features = ["full", "extra-traits"] }
+
+# Dependencies for generated code
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+[dev-dependencies]
+fastn-p2p = { path = "../fastn-p2p" }
+tokio = "1"
+eyre = "0.6"

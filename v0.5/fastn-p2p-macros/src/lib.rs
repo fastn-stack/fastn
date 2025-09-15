@@ -60,7 +60,7 @@ impl Default for ShutdownMode {
 // TODO: Implement configuration parsing for syn 2.0 API
 
 fn expand_main(config: MacroConfig, input_fn: ItemFn) -> proc_macro2::TokenStream {
-    let fn_name = &input_fn.sig.ident;
+    let user_fn_name = syn::Ident::new("__fastn_user_main", proc_macro2::Span::call_site());
     let fn_block = &input_fn.block;
     let fn_attrs = &input_fn.attrs;
     let fn_vis = &input_fn.vis;
@@ -81,13 +81,12 @@ fn expand_main(config: MacroConfig, input_fn: ItemFn) -> proc_macro2::TokenStrea
                 .block_on(async {
                     #logging_setup
                     
-                    // TODO: Initialize global graceful singleton
-                    // fastn_p2p::coordination::init_global_graceful();
+                    // Initialize global graceful singleton (automatically done via LazyLock)
                     
                     #shutdown_setup
                     
                     // Call user's main function
-                    let result = #fn_name().await;
+                    let result = #user_fn_name().await;
                     
                     // TODO: Trigger graceful shutdown
                     // fastn_p2p::coordination::trigger_shutdown().await?;
@@ -96,7 +95,7 @@ fn expand_main(config: MacroConfig, input_fn: ItemFn) -> proc_macro2::TokenStrea
                 })
         }
         
-        async fn #fn_name() -> std::result::Result<(), Box<dyn std::error::Error>> #fn_block
+        async fn #user_fn_name() -> std::result::Result<(), Box<dyn std::error::Error>> #fn_block
     }
 }
 
@@ -106,8 +105,11 @@ fn generate_logging_setup(logging: &LoggingConfig) -> proc_macro2::TokenStream {
             // Logging disabled
         },
         LoggingConfig::Enabled(true) => quote! {
-            // TODO: Simple logging setup with RUST_LOG override
-            // tracing_subscriber::fmt().init();
+            // Simple logging setup with RUST_LOG override
+            let filter = std::env::var("RUST_LOG").unwrap_or_else(|_| "info".to_string());
+            tracing_subscriber::fmt()
+                .with_env_filter(filter)
+                .init();
         },
         LoggingConfig::Level(_level) => {
             quote! {
