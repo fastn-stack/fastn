@@ -2136,9 +2136,13 @@ dependencies = [
 name = "fastn-p2p-macros"
 version = "0.1.0"
 dependencies = [
+ "eyre",
+ "fastn-p2p",
  "proc-macro2",
  "quote",
  "syn 2.0.106",
+ "tokio",
+ "tracing-subscriber",
 ]
 
 [[package]]
