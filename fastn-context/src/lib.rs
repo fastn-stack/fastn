@@ -4,8 +4,6 @@
 extern crate self as fastn_context;
 
 use tokio as _; // used by main macro
-use eyre as _; // used by main macro
-use tokio_util as _; // used for cancellation tokens
 
 /// Hierarchical context for task management and cancellation
 pub struct Context {
@@ -18,8 +16,8 @@ pub struct Context {
     /// Child contexts
     children: std::sync::Arc<std::sync::Mutex<Vec<std::sync::Arc<Context>>>>,
     
-    /// Cancellation token for this context and children
-    cancellation: tokio_util::sync::CancellationToken,
+    /// Simple cancellation flag
+    cancelled: std::sync::Arc<std::sync::atomic::AtomicBool>,
 }
 
 impl Context {
@@ -29,7 +27,7 @@ impl Context {
             name: name.to_string(),
             parent: None,
             children: std::sync::Arc::new(std::sync::Mutex::new(Vec::new())),
-            cancellation: tokio_util::sync::CancellationToken::new(),
+            cancelled: std::sync::Arc::new(std::sync::atomic::AtomicBool::new(false)),
         })
     }
     
@@ -39,7 +37,7 @@ impl Context {
             name: name.to_string(),
             parent: Some(std::sync::Arc::new(self.clone())),
             children: std::sync::Arc::new(std::sync::Mutex::new(Vec::new())),
-            cancellation: self.cancellation.child_token(),
+            cancelled: std::sync::Arc::new(std::sync::atomic::AtomicBool::new(false)),
         });
         
         // Add to parent's children list
@@ -74,12 +72,31 @@ impl Context {
     
     /// Wait for cancellation signal
     pub async fn wait(&self) {
-        self.cancellation.cancelled().await;
+        // Simple polling approach for now
+        loop {
+            if self.is_cancelled() {
+                break;
+            }
+            tokio::time::sleep(tokio::time::Duration::from_millis(10)).await;
+        }
+    }
+    
+    /// Check if this context is cancelled
+    pub fn is_cancelled(&self) -> bool {
+        self.cancelled.load(std::sync::atomic::Ordering::Relaxed) ||
+        self.parent.as_ref().map_or(false, |p| p.is_cancelled())
     }
     
     /// Cancel this context and all children recursively
     pub fn cancel(&self) {
-        self.cancellation.cancel();
+        self.cancelled.store(true, std::sync::atomic::Ordering::Relaxed);
+        
+        // Cancel all children
+        if let Ok(children) = self.children.lock() {
+            for child in children.iter() {
+                child.cancel();
+            }
+        }
     }
 }
 
@@ -89,7 +106,7 @@ impl Clone for Context {
             name: self.name.clone(),
             parent: self.parent.clone(),
             children: self.children.clone(),
-            cancellation: self.cancellation.clone(),
+            cancelled: self.cancelled.clone(),
         }
     }
 }
