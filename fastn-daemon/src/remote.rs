@@ -8,13 +8,14 @@ pub async fn rshell(fastn_home: &std::path::Path, target: &str, command: Option<
         std::process::exit(1);
     }
 
-    let (our_id52, our_key) = match fastn_id52::SecretKey::load_from_dir(&remote_dir, "remote") {
-        Ok((id52, key)) => (id52, key),
-        Err(e) => {
-            eprintln!("Error: Failed to load remote key: {}", e);
-            std::process::exit(1);
-        }
-    };
+    let (our_id52, our_key) =
+        match fastn_id52::SecretKey::load_from_dir(&remote_dir, fastn_remote::SERVER_KEY_PREFIX) {
+            Ok((id52, key)) => (id52, key),
+            Err(e) => {
+                eprintln!("Error: Failed to load remote key: {}", e);
+                std::process::exit(1);
+            }
+        };
 
     // TODO: Parse config.toml to resolve target (alias → ID52)
     // TODO: Validate target is in allowed list
@@ -47,13 +48,14 @@ pub async fn rexec(fastn_home: &std::path::Path, target: &str, command: &str) {
         std::process::exit(1);
     }
 
-    let (our_id52, our_key) = match fastn_id52::SecretKey::load_from_dir(&remote_dir, "remote") {
-        Ok((id52, key)) => (id52, key),
-        Err(e) => {
-            eprintln!("Error: Failed to load remote key: {}", e);
-            std::process::exit(1);
-        }
-    };
+    let (our_id52, our_key) =
+        match fastn_id52::SecretKey::load_from_dir(&remote_dir, fastn_remote::SERVER_KEY_PREFIX) {
+            Ok((id52, key)) => (id52, key),
+            Err(e) => {
+                eprintln!("Error: Failed to load remote key: {}", e);
+                std::process::exit(1);
+            }
+        };
 
     // TODO: Parse config.toml to resolve target (alias → ID52)
     // TODO: Validate target is in allowed list

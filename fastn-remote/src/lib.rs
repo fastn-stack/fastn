@@ -3,6 +3,9 @@
 
 extern crate self as fastn_remote;
 
+/// Key prefix for server keys (our identity when acting as server)
+pub const SERVER_KEY_PREFIX: &str = "server";
+
 use clap as _; // used by main for CLI
 use fastn_p2p as _; // used by main for macro
 use tokio as _; // used by main for macro

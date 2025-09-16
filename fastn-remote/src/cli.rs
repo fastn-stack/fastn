@@ -52,7 +52,7 @@ pub async fn rshell_cli(private_key: &str, target: &str, command: Option<&str>) 
     let secret_key = match fastn_id52::SecretKey::from_str(private_key.trim()) {
         Ok(key) => key,
         Err(e) => {
-            eprintln!("Error: Invalid private key format: {}", e);
+            eprintln!("Error: Invalid private key format: {e}");
             std::process::exit(1);
         }
     };
@@ -60,7 +60,7 @@ pub async fn rshell_cli(private_key: &str, target: &str, command: Option<&str>) 
     let target_key = match fastn_id52::PublicKey::from_str(target.trim()) {
         Ok(key) => key,
         Err(e) => {
-            eprintln!("Error: Invalid target ID52 '{}': {}", target, e);
+            eprintln!("Error: Invalid target ID52 '{target}': {e}");
             std::process::exit(1);
         }
     };
@@ -75,7 +75,7 @@ pub async fn rexec_cli(private_key: &str, target: &str, command: &str) {
     let secret_key = match fastn_id52::SecretKey::from_str(private_key.trim()) {
         Ok(key) => key,
         Err(e) => {
-            eprintln!("Error: Invalid private key format: {}", e);
+            eprintln!("Error: Invalid private key format: {e}");
             std::process::exit(1);
         }
     };
@@ -83,7 +83,7 @@ pub async fn rexec_cli(private_key: &str, target: &str, command: &str) {
     let target_key = match fastn_id52::PublicKey::from_str(target.trim()) {
         Ok(key) => key,
         Err(e) => {
-            eprintln!("Error: Invalid target ID52 '{}': {}", target, e);
+            eprintln!("Error: Invalid target ID52 '{target}': {e}");
             std::process::exit(1);
         }
     };

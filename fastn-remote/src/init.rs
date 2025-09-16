@@ -7,17 +7,13 @@ pub async fn init(fastn_home: &std::path::Path) {
 
     // Check if SSH is already initialized
     if remote_dir.exists() {
-        eprintln!("Error: SSH already initialized at {}", remote_dir.display());
+        eprintln!("Error: SSH already initialized at {remote_dir}");
         std::process::exit(1);
     }
 
     // Create ssh directory
     if let Err(e) = std::fs::create_dir_all(&remote_dir) {
-        eprintln!(
-            "Error: Failed to create SSH directory {}: {}",
-            remote_dir.display(),
-            e
-        );
+        eprintln!("Error: Failed to create SSH directory {remote_dir}: {e}");
         std::process::exit(1);
     }
 
@@ -25,8 +21,8 @@ pub async fn init(fastn_home: &std::path::Path) {
     let secret_key = fastn_id52::SecretKey::generate();
 
     // Store secret key using the standard format
-    if let Err(e) = secret_key.save_to_dir(&remote_dir, "remote") {
-        eprintln!("Error: Failed to save SSH secret key: {}", e);
+    if let Err(e) = secret_key.save_to_dir(&remote_dir, fastn_remote::SERVER_KEY_PREFIX) {
+        eprintln!("Error: Failed to save SSH secret key: {e}");
         std::process::exit(1);
     }
 
@@ -50,11 +46,7 @@ pub async fn init(fastn_home: &std::path::Path) {
 "#;
 
     if let Err(e) = std::fs::write(&config_path, default_config) {
-        eprintln!(
-            "Error: Failed to write SSH config to {}: {}",
-            config_path.display(),
-            e
-        );
+        eprintln!("Error: Failed to write SSH config to {config_path}: {e}",);
         std::process::exit(1);
     }
 
@@ -62,16 +54,13 @@ pub async fn init(fastn_home: &std::path::Path) {
     let public_key = secret_key.public_key();
 
     println!("SSH configuration initialized successfully!");
-    println!("SSH directory: {}", remote_dir.display());
+    println!("SSH directory: {remote_dir}");
     println!("SSH ID52 (public key): {public_key}");
-    println!(
-        "Secret key stored at: {}",
-        remote_dir.join("remote.private-key").display()
-    );
-    println!("Configuration file: {}", config_path.display());
+    println!("Secret key stored in: {remote_dir}");
+    println!("Configuration file: {config_path}");
     println!();
     println!("Next steps:");
     println!("1. Share your SSH ID52 with remote machines: {public_key}");
-    println!("2. Configure allowed remotes in: {}", config_path.display());
+    println!("2. Configure allowed remotes in: {config_path}");
     println!("3. Run 'fastn daemon' to start the SSH service");
 }
