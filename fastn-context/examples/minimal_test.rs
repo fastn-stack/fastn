@@ -4,16 +4,17 @@
 #[fastn_context::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Testing minimal fastn-context API...");
-    
+
     // Global context should be automatically available
     let global_ctx = fastn_context::global();
     println!("Global context created: {}", global_ctx.name);
-    
+
     // Test basic child creation with builder
-    global_ctx.child("test-service")
+    global_ctx
+        .child("test-service")
         .spawn(|service_ctx| async move {
             println!("Service context created: {}", service_ctx.name);
-            
+
             // Test cancellation
             tokio::select! {
                 _ = service_ctx.wait() => {
@@ -24,18 +25,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
         });
-    
+
     // Test global context functionality
     println!("Global context is cancelled: {}", global_ctx.is_cancelled());
-    
+
     // Give tasks time to run and build tree
     tokio::time::sleep(tokio::time::Duration::from_millis(200)).await;
-    
+
     // Test status display
     println!("\n=== Context Tree Status ===");
     let status = fastn_context::status();
     println!("{}", status);
-    
+
     println!("Basic API test completed!");
     Ok(())
 }
