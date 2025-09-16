@@ -142,3 +142,73 @@ pub fn global() -> std::sync::Arc<Context> {
 
 // Re-export main macro
 pub use fastn_context_macros::main;
+
+/// Status snapshot of the context tree
+#[derive(Debug, Clone)]
+pub struct Status {
+    pub global_context: ContextStatus,
+    pub timestamp: std::time::SystemTime,
+}
+
+/// Status information for a single context
+#[derive(Debug, Clone)]
+pub struct ContextStatus {
+    pub name: String,
+    pub is_cancelled: bool,
+    pub children: Vec<ContextStatus>,
+}
+
+impl Context {
+    /// Get status information for this context and all children
+    pub fn status(&self) -> ContextStatus {
+        let children = if let Ok(children_lock) = self.children.lock() {
+            children_lock.iter().map(|child| child.status()).collect()
+        } else {
+            Vec::new()
+        };
+        
+        ContextStatus {
+            name: self.name.clone(),
+            is_cancelled: self.is_cancelled(),
+            children,
+        }
+    }
+}
+
+/// Get current status snapshot of entire context tree
+pub fn status() -> Status {
+    Status {
+        global_context: global().status(),
+        timestamp: std::time::SystemTime::now(),
+    }
+}
+
+impl std::fmt::Display for Status {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        writeln!(f, "fastn Context Status")?;
+        writeln!(f, "Snapshot: {:?}", self.timestamp)?;
+        writeln!(f)?;
+        
+        self.display_context(&self.global_context, f, 0)
+    }
+}
+
+impl Status {
+    fn display_context(&self, ctx: &ContextStatus, f: &mut std::fmt::Formatter<'_>, depth: usize) -> std::fmt::Result {
+        let indent = "  ".repeat(depth);
+        let status_icon = if ctx.is_cancelled { "❌" } else { "✅" };
+        
+        writeln!(f, "{}{} {} ({})", 
+            indent, 
+            status_icon,
+            ctx.name,
+            if ctx.is_cancelled { "cancelled" } else { "active" }
+        )?;
+        
+        for child in &ctx.children {
+            self.display_context(child, f, depth + 1)?;
+        }
+        
+        Ok(())
+    }
+}
