@@ -1,39 +1,114 @@
-# fastn-context: Hierarchical Application Context (Minimal Implementation)
+# fastn-context: Hierarchical Application Context for Debugging and Operations
 
-This crate provides basic hierarchical context system for fastn applications, enabling tree-based cancellation and task management. This is the minimal implementation needed for fastn-p2p integration.
+This crate provides a hierarchical context system for fastn applications, enabling tree-based cancellation, metrics collection, and operational visibility. It forms the operational backbone for all fastn services.
 
 ## Design Philosophy
 
-- **Hierarchical Structure**: Applications form trees of operations
-- **Automatic Inheritance**: Child contexts inherit cancellation from parents
+- **Hierarchical Structure**: Applications naturally form trees of operations
+- **Automatic Inheritance**: Child contexts inherit cancellation and settings from parents
 - **Zero Boilerplate**: Context trees build themselves as applications run
-- **Minimal Surface**: Only essential features for P2P integration
+- **Production Ready**: Status trees enable debugging of stuck/slow operations
+- **Bounded Complexity**: Simple spawn vs detailed child creation as needed
 
-## Current API (Minimal)
+## Core Concepts
+
+### Context Tree Structure
+
+Every fastn application forms a natural hierarchy:
+
+```
+Global Context (application level)
+├── Service Context (e.g., "remote-access-listener")
+│   ├── Session Context (e.g., "alice@bv478gen")
+│   │   ├── Task Context (e.g., "stdout-handler") 
+│   │   └── Task Context (e.g., "stderr-stream")
+│   └── Session Context (e.g., "bob@p2nd7avq")
+├── Service Context (e.g., "http-proxy")
+└── Service Context (e.g., "chat-service")
+```
+
+### Automatic Context Creation
+
+fastn-context integrates seamlessly with fastn ecosystem:
+
+```rust
+// 1. Global context created by main macro
+#[fastn_context::main]
+async fn main() -> eyre::Result<()> {
+    // Global context automatically available
+}
+
+// 2. Service contexts created by operations  
+let listener = fastn_p2p::server::listen(key, protocols).await?;
+// Creates child context: "p2p-listener" under global
+
+// 3. Session contexts created per connection
+// Each incoming connection gets child context: "session-{peer_id}"
+
+// 4. Task contexts created by spawn operations
+session_ctx.child("shell-handler").spawn(handle_shell);
+```
+
+## API Reference
 
 ### Core Context
 
 ```rust
 pub struct Context {
+    /// Context name for debugging/status
     pub name: String,
-    // private: parent, children, cancellation_token
+    
+    /// When this context was created
+    pub created_at: std::time::Instant,
+    
+    // Private: parent, children, cancellation, metrics, data
 }
 
 impl Context {
-    /// Create new root context (used by main macro)
+    /// Create new root context (typically only used by main macro)
     pub fn new(name: &str) -> std::sync::Arc<Context>;
     
-    /// Create child context
-    pub fn child(&self, name: &str) -> std::sync::Arc<Context>;
+    /// Create child context with given name
+    pub fn child(&self, name: &str) -> ContextBuilder;
     
-    /// Spawn task with context inheritance
-    pub fn spawn<F>(&self, task: F) -> tokio::task::JoinHandle<F::Output>;
+    /// Simple spawn (inherits current context, no child creation)
+    pub fn spawn<F>(&self, task: F) -> tokio::task::JoinHandle<F::Output>
+    where F: std::future::Future + Send + 'static;
     
     /// Wait for cancellation signal
     pub async fn wait(&self);
     
-    /// Cancel this context and all children
+    /// Cancel this context and all children recursively
     pub fn cancel(&self);
+    
+    /// Add metric data for status reporting
+    pub fn add_metric(&self, key: &str, value: MetricValue);
+    
+    /// Store arbitrary data on this context
+    pub fn set_data(&self, key: &str, value: serde_json::Value);
+    
+    /// Get stored data
+    pub fn get_data(&self, key: &str) -> Option<serde_json::Value>;
+}
+```
+
+### Context Builder
+
+```rust
+pub struct ContextBuilder {
+    // Pre-created child context ready for configuration
+}
+
+impl ContextBuilder {
+    /// Add initial data to context
+    pub fn with_data(self, key: &str, value: serde_json::Value) -> Self;
+    
+    /// Add initial metric to context
+    pub fn with_metric(self, key: &str, value: MetricValue) -> Self;
+    
+    /// Spawn task with this configured child context
+    pub fn spawn<F>(self, task: F) -> tokio::task::JoinHandle<F::Output>
+    where F: FnOnce(std::sync::Arc<Context>) -> Fut + Send + 'static;
 }
 ```
 
@@ -43,51 +118,142 @@ impl Context {
 /// Get the global application context
 pub fn global() -> std::sync::Arc<Context>;
 
-/// Get current task's context
+/// Get current task's context (thread-local or task-local)
 pub fn current() -> std::sync::Arc<Context>;
 ```
 
-### Main Function Macro
+### Metric Types
 
 ```rust
-/// Main function with automatic context setup
+#[derive(Debug, Clone)]
+pub enum MetricValue {
+    Counter(u64),
+    Gauge(f64), 
+    Duration(std::time::Duration),
+    Text(String),
+    Bytes(u64),
+}
+```
+
+## Usage Patterns
+
+### Simple Task Spawning
+
+```rust
+// Inherit current context (no child creation)
+let ctx = fastn_context::current();
+ctx.spawn(async {
+    // Simple background task
+});
+```
+
+### Detailed Task Spawning  
+
+```rust
+// Create child context with debugging info
+ctx.child("remote-shell-handler")
+    .with_data("peer", alice_id52)
+    .with_data("shell", "bash")
+    .with_metric("commands_executed", 0)
+    .spawn(|task_ctx| async move {
+        // Task can update its own context
+        task_ctx.add_metric("commands_executed", cmd_count);
+        task_ctx.set_data("last_command", "ls -la");
+        
+        // Task waits for its own cancellation
+        tokio::select! {
+            _ = task_ctx.wait() => {
+                println!("Shell handler cancelled");
+            }
+            _ = handle_shell_session() => {
+                println!("Shell session completed");
+            }
+        }
+    });
+```
+
+## Integration with fastn-p2p
+
+fastn-p2p depends on fastn-context and automatically creates context hierarchies:
+
+```rust
+// fastn-p2p sessions provide access to their context
+async fn handle_remote_shell(session: fastn_p2p::server::Session<RemoteShellProtocol>) {
+    let ctx = session.context(); // Auto-created by fastn-p2p
+    
+    // Simple spawn (inherits session context)
+    ctx.spawn(pipe_stdout(session.send));
+    
+    // Detailed spawn (creates child for debugging)
+    ctx.child("command-executor")
+        .with_data("command", session.protocol.command)
+        .spawn(|task_ctx| async move {
+            let result = execute_command(&session.protocol.command).await;
+            task_ctx.set_data("exit_code", result.code);
+        });
+}
+```
+
+## Main Function Integration
+
+The main macro sets up the global context and provides comprehensive configuration:
+
+```rust
 #[fastn_context::main]
 async fn main() -> eyre::Result<()> {
     // Global context automatically created and available
-    let ctx = fastn_context::global();
     
-    ctx.spawn(async {
-        // Task inherits global context cancellation
-    });
+    let ctx = fastn_context::global();
+    ctx.child("startup")
+        .with_data("version", env!("CARGO_PKG_VERSION"))
+        .spawn(|_| async {
+            // Application initialization
+        });
 }
 ```
 
-## Usage for fastn-p2p Integration
+### Configuration Options
 
 ```rust
-// fastn-p2p sessions will provide context access
-async fn handle_remote_shell(session: fastn_p2p::server::Session<RemoteShellProtocol>) {
-    let ctx = session.context(); // Context provided by fastn-p2p
+#[fastn_context::main(
+    // Logging configuration
+    logging = true,                    // Default: true - simple logging setup
     
-    // Spawn tasks with inherited cancellation
-    ctx.spawn(handle_stdout(session.send));
-    ctx.spawn(handle_stdin(session.recv));
+    // Shutdown behavior  
+    shutdown_mode = "single_ctrl_c",   // Default: "single_ctrl_c"
+    shutdown_timeout = "30s",          // Default: "30s" - graceful shutdown timeout
     
-    // Tasks automatically cancelled when session context cancelled
+    // Double Ctrl+C specific (only when shutdown_mode = "double_ctrl_c")
+    double_ctrl_c_window = "2s",       // Default: "2s" - time window for second Ctrl+C
+    status_fn = my_status_printer,     // Required for double_ctrl_c mode
+)]
+async fn main() -> eyre::Result<()> {
+    // Your application code
+}
+
+// Status function (required for double_ctrl_c mode)
+async fn my_status_printer() {
+    println!("=== Application Status ===");
+    // Custom status logic - access global registries, counters, etc.
+    println!("Active services: {}", get_active_service_count());
 }
 ```
 
-## Scope
+## Design Benefits
 
-This minimal implementation provides:
-- ✅ Basic context tree structure
-- ✅ Hierarchical cancellation 
-- ✅ Task spawning with inheritance
-- ✅ Integration points for fastn-p2p
+1. **Names Required for Debugging** - Every important operation has a name in status tree
+2. **Selective Complexity** - Simple spawn vs detailed child creation as needed  
+3. **Automatic Tree Building** - Context hierarchy builds as application runs
+4. **Production Debugging** - Status trees show exactly where system is stuck
+5. **Clean Separation** - Context concerns separate from networking concerns
+6. **Ecosystem Wide** - All fastn crates can use the same context infrastructure
 
-**Not included** (see NEXT-*.md files):
-- Detailed metrics and counters
-- Named locks and deadlock detection
-- System monitoring
-- Status trees and HTTP dashboard
-- Advanced timing and monitoring
+**Key Insight**: Names aren't optional - they're essential for production debugging and operational visibility.
+
+## Future Features
+
+See NEXT-*.md files for planned enhancements:
+- **NEXT-monitoring.md**: Status trees, timing, system metrics monitoring
+- **NEXT-locks.md**: Named locks and deadlock detection
+- **NEXT-counters.md**: Global counter storage with dotted paths
+- **NEXT-status-distribution.md**: P2P distributed status access
