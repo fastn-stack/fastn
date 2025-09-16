@@ -4,11 +4,27 @@ This crate provides a high-level, type-safe API for P2P communication in the fas
 
 ## Design Philosophy
 
-- **Type Safety First**: All communication uses strongly-typed REQUEST/RESPONSE/ERROR contracts
+- **Type Safety First**: All communication uses strongly-typed protocol contracts
 - **Minimal Surface Area**: Only essential APIs are exposed to reduce complexity  
 - **Bug Prevention**: API design makes common mistakes impossible or unlikely
 - **Ergonomic**: High-level APIs handle boilerplate automatically
 - **Zero Boilerplate**: Main functions are clean with automatic setup/teardown
+
+## Core API Patterns
+
+fastn-p2p provides three main communication patterns:
+
+### 1. **Simple Request/Response** - `client::call()`
+
+For simple RPC-style communication with typed request/response.
+
+### 2. **Streaming Sessions** - `client::connect()`
+
+For complex interactions requiring bidirectional streaming with optional side channels.
+
+### 3. **Server Listening** - `server::listen()`
+
+For accepting incoming connections and handling both patterns.
 
 ## Quick Start
 
@@ -23,7 +39,7 @@ async fn main() -> eyre::Result<()> {
     
     match cli.command {
         Command::Serve { port } => {
-            fastn_p2p::spawn(start_server(port));
+            fastn_p2p::spawn(start_server());
         }
         Command::Client { target } => {
             fastn_p2p::spawn(run_client(target));
@@ -82,6 +98,7 @@ The `logging` parameter supports multiple formats:
 ```
 
 **Logging Examples:**
+
 - **Production**: `logging = true` or `logging = "info"` 
 - **Development**: `logging = "debug"`
 - **Deep debugging**: `logging = "fastn_p2p=trace,fastn_net=trace"`
@@ -106,34 +123,146 @@ cargo run                                   # Uses macro parameter as fallback
 ```
 
 **Priority Order:**
+
 1. **`RUST_LOG` environment variable** (highest priority)
 2. **Macro `logging` parameter** (fallback)  
 3. **Default `"info"`** (lowest priority)
 
 **Special Cases:**
+
 ```rust
 // Even logging = false can be overridden for debugging
 #[fastn_p2p::main(logging = false)]
 ```
+
 ```bash
 RUST_LOG=debug cargo run  # Still enables logging despite logging = false
 ```
 
 This design allows developers to debug any application by setting `RUST_LOG` without modifying source code.
 
+## API Reference
+
+### 1. Simple Request/Response - `client::call()`
+
+For RPC-style communication with typed request/response patterns:
+
+```rust
+#[derive(serde::Serialize, serde::Deserialize, Debug)]
+struct EchoRequest {
+    message: String,
+}
+
+#[derive(serde::Serialize, serde::Deserialize, Debug)]
+struct EchoResponse {
+    reply: String,
+}
+
+#[derive(serde::Serialize, serde::Deserialize, Debug)]
+struct EchoError {
+    reason: String,
+}
+
+// Client side - must specify protocol (same as server)
+let response: Result<EchoResponse, EchoError> = fastn_p2p::client::call(
+    my_key,
+    target_id52,
+    EchoProtocol,  // Must match server's protocol
+    EchoRequest { message: "Hello!".to_string() }
+).await?;
+
+match response {
+    Ok(resp) => println!("Got reply: {}", resp.reply),
+    Err(err) => println!("Server error: {}", err.reason),
+}
+```
+
+### 2. Streaming Sessions - `client::connect()`
+
+For complex interactions requiring persistent bidirectional communication with optional side channels:
+
+```rust
+#[derive(serde::Serialize, serde::Deserialize, Debug)]
+struct RemoteShellProtocol {
+    shell: String,
+    args: Vec<String>,
+}
+
+// Client side - establish streaming session
+let mut session = fastn_p2p::client::connect(
+    my_key,
+    target_id52, 
+    RemoteShellProtocol {
+        shell: "bash".to_string(),
+        args: vec![],
+    }
+).await?;
+
+// Direct access to main streams
+fastn_p2p::spawn(pipe_stdin_to_remote(session.stdin));
+fastn_p2p::spawn(pipe_stdout_from_remote(session.stdout));
+
+// Optional: accept side channels back from server (iroh terminology)
+if let Ok(stderr_stream) = session.accept_uni().await {
+    fastn_p2p::spawn(pipe_stderr_from_remote(stderr_stream));
+}
+```
+
+### 3. Server Listening - `server::listen()`
+
+For accepting both call() and connect() patterns with unified Session handling:
+
+```rust
+// Server side - listen for incoming connections
+let mut listener = fastn_p2p::server::listen!(my_key, &[
+    EchoProtocol,
+    RemoteShellProtocol::default(),
+]).await?;
+
+while let Some(session) = listener.next().await {
+    match session.protocol {
+        EchoProtocol => {
+            // RPC pattern - convert Session to Request
+            let request = session.into_request();
+            request.handle(|input: EchoRequest| async move {
+                Ok::<EchoResponse, EchoError>(EchoResponse { 
+                    reply: format!("Echo: {}", input.message) 
+                })
+            }).await?;
+        }
+        RemoteShellProtocol { .. } => {
+            // Streaming pattern - use Session directly
+            let mut shell_session = session;
+            
+            // Direct access to streams (public fields)
+            fastn_p2p::spawn(handle_stdin(shell_session.recv));
+            fastn_p2p::spawn(handle_stdout(shell_session.send));
+            
+            // Optional: open stderr channel back to client
+            if let Ok(stderr) = shell_session.open_uni().await {
+                fastn_p2p::spawn(handle_stderr(stderr));
+            }
+        }
+    }
+}
+```
+
 #### Shutdown Modes
 
 **Single Ctrl+C Mode (Default):**
+
 ```rust
 #[fastn_p2p::main(shutdown_mode = "single_ctrl_c")]
 async fn main() -> eyre::Result<()> { ... }
 ```
+
 - Ctrl+C immediately triggers graceful shutdown
 - Wait `shutdown_timeout` for tasks to complete  
 - Force exit if timeout exceeded
 - Simple and predictable for most applications
 
 **Double Ctrl+C Mode:**
+
 ```rust
 #[fastn_p2p::main(
     shutdown_mode = "double_ctrl_c",
@@ -147,6 +276,7 @@ async fn print_status() {
     println!("Services: {} active", get_service_count());
 }
 ```
+
 - First Ctrl+C calls `status_fn` and waits for second Ctrl+C
 - Second Ctrl+C within `double_ctrl_c_window` triggers shutdown
 - If no second Ctrl+C, continues running normally
@@ -387,3 +517,115 @@ See the `/tests` directory for complete working examples:
 For advanced use cases that need direct access to `fastn_net::Graceful`, you can still access it through `fastn_p2p::globals`, but this is discouraged for most applications.
 
 The `#[fastn_p2p::main]` approach handles 99% of use cases while providing excellent ergonomics and maintainability.
+
+## Complete API Reference
+
+### Client API
+
+```rust
+pub mod client {
+    /// Simple request/response communication
+    pub async fn call<PROTOCOL, REQUEST, RESPONSE, ERROR>(
+        our_key: fastn_id52::SecretKey,
+        target: fastn_id52::PublicKey,
+        protocol: PROTOCOL,
+        request: REQUEST
+    ) -> Result<Result<RESPONSE, ERROR>, CallError>;
+    
+    /// Establish streaming session 
+    pub async fn connect<PROTOCOL>(
+        our_key: fastn_id52::SecretKey,
+        target: fastn_id52::PublicKey,
+        protocol: PROTOCOL
+    ) -> Result<Session, ConnectionError>;
+    
+    /// Client-side streaming session
+    pub struct Session {
+        pub stdin: iroh::endpoint::SendStream,    // To server
+        pub stdout: iroh::endpoint::RecvStream,   // From server
+    }
+    
+    impl Session {
+        /// Accept unidirectional stream back from server (e.g., stderr)
+        pub async fn accept_uni(&mut self) -> Result<iroh::endpoint::RecvStream, ConnectionError>;
+        
+        /// Accept bidirectional stream back from server
+        pub async fn accept_bi(&mut self) -> Result<(iroh::endpoint::RecvStream, iroh::endpoint::SendStream), ConnectionError>;
+    }
+}
+```
+
+### Server API
+
+```rust
+pub mod server {
+    /// Listen for incoming connections
+    pub async fn listen<PROTOCOL>(
+        our_key: fastn_id52::SecretKey,
+        protocols: &[PROTOCOL]
+    ) -> impl futures_core::stream::Stream<Item = Session<PROTOCOL>>;
+    
+    /// Server-side session (handles both RPC and streaming)
+    pub struct Session<PROTOCOL> {
+        pub protocol: PROTOCOL,                   // Protocol negotiated
+        pub send: iroh::endpoint::SendStream,     // To client (stdout)
+        pub recv: iroh::endpoint::RecvStream,     // From client (stdin)
+        // private: peer
+    }
+    
+    impl<PROTOCOL> Session<PROTOCOL> {
+        /// Get the peer's public key
+        pub fn peer(&self) -> &fastn_id52::PublicKey;
+        
+        /// Convert to Request for RPC handling (consumes Session)
+        pub fn into_request(self) -> Request<PROTOCOL>;
+        
+        /// Open unidirectional stream back to the client (e.g., stderr)
+        pub async fn open_uni(&mut self) -> Result<iroh::endpoint::SendStream, ConnectionError>;
+        
+        /// Open bidirectional stream to back to the client
+        pub async fn open_bi(&mut self) -> Result<(iroh::endpoint::SendStream, iroh::endpoint::RecvStream), ConnectionError>;
+    }
+    
+    /// Request handle for RPC-style communication
+    pub struct Request<PROTOCOL> {
+        pub protocol: PROTOCOL,
+        // private: peer, send, recv
+    }
+    
+    impl<PROTOCOL> Request<PROTOCOL> {
+        /// Get the peer's public key
+        pub fn peer(&self) -> &fastn_id52::PublicKey;
+        
+        /// Read and deserialize JSON request, get response handle
+        pub async fn get_input<INPUT>(self) -> Result<(INPUT, ResponseHandle), GetInputError>;
+        
+        /// Handle request with async closure (automatic serialization)
+        pub async fn handle<INPUT, OUTPUT, ERROR, F, Fut>(
+            self, 
+            handler: F
+        ) -> Result<(), HandleRequestError>;
+    }
+}
+```
+
+### Global Coordination
+
+```rust
+/// Spawn task with graceful shutdown tracking
+pub fn spawn<F>(task: F) -> tokio::task::JoinHandle<F::Output>;
+
+/// Check for graceful shutdown signal  
+pub async fn cancelled();
+
+/// Trigger graceful shutdown
+pub async fn shutdown() -> eyre::Result<()>;
+```
+
+### Macros
+
+```rust
+/// Main function macro with automatic setup
+#[fastn_p2p::main]
+#[fastn_p2p::main(logging = "debug", shutdown_mode = "double_ctrl_c")]
+```
