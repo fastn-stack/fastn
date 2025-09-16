@@ -21,13 +21,12 @@ async fn main() -> eyre::Result<()> {
         tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
         println!("Task 1 completed");
         
-        // Context explicitly available
-        task_ctx.add_metric("task1_completed", fastn_context::MetricValue::Counter(1));
+        // Context explicitly available for basic operations
+        println!("Task context available: {}", task_ctx.name);
     });
     
     // Test builder pattern with explicit context passing
     service_ctx.child("test-session")
-        .with_data("session_type", serde_json::Value::String("test".to_string()))
         .spawn(|task_ctx| async move {
             println!("Task 2 running with explicit context: {}", task_ctx.name);
             
@@ -38,7 +37,6 @@ async fn main() -> eyre::Result<()> {
                 }
                 _ = tokio::time::sleep(tokio::time::Duration::from_millis(200)) => {
                     println!("Task 2 completed normally");
-                    task_ctx.set_data("completion_status", serde_json::Value::String("success".to_string()));
                 }
             }
         });

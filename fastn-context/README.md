@@ -58,10 +58,7 @@ pub struct Context {
     /// Context name for debugging/status
     pub name: String,
     
-    /// When this context was created
-    pub created_at: std::time::Instant,
-    
-    // Private: parent, children, cancellation, metrics, data
+    // Private: parent, children, cancellation_token
 }
 
 impl Context {
@@ -86,15 +83,6 @@ impl Context {
     
     /// Cancel this context and all children recursively
     pub fn cancel(&self);
-    
-    /// Add metric data for status reporting
-    pub fn add_metric(&self, key: &str, value: MetricValue);
-    
-    /// Store arbitrary data on this context
-    pub fn set_data(&self, key: &str, value: serde_json::Value);
-    
-    /// Get stored data
-    pub fn get_data(&self, key: &str) -> Option<serde_json::Value>;
 }
 ```
 
@@ -102,17 +90,11 @@ impl Context {
 
 ```rust
 pub struct ContextBuilder {
-    // Pre-created child context ready for configuration
+    // Pre-created child context ready for spawning
 }
 
 impl ContextBuilder {
-    /// Add initial data to context
-    pub fn with_data(self, key: &str, value: serde_json::Value) -> Self;
-    
-    /// Add initial metric to context
-    pub fn with_metric(self, key: &str, value: MetricValue) -> Self;
-    
-    /// Spawn task with this configured child context
+    /// Spawn task with this child context
     pub fn spawn<F>(self, task: F) -> tokio::task::JoinHandle<F::Output>
     where F: FnOnce(std::sync::Arc<Context>) -> Fut + Send + 'static;
 }
@@ -125,18 +107,6 @@ impl ContextBuilder {
 pub fn global() -> std::sync::Arc<Context>;
 ```
 
-### Metric Types
-
-```rust
-#[derive(Debug, Clone)]
-pub enum MetricValue {
-    Counter(u64),
-    Gauge(f64), 
-    Duration(std::time::Duration),
-    Text(String),
-    Bytes(u64),
-}
-```
 
 ## Usage Patterns
 
@@ -147,40 +117,34 @@ pub enum MetricValue {
 let ctx = fastn_context::global(); // or passed as parameter
 ctx.spawn_child("background-task", |task_ctx| async move {
     // Simple background task with explicit context
-    task_ctx.add_metric("task_completed", fastn_context::MetricValue::Counter(1));
+    println!("Running in context: {}", task_ctx.name);
 });
 
 // Alternative: builder pattern for simple case
 ctx.child("background-task")
     .spawn(|task_ctx| async move {
         // Same result, different syntax
-        task_ctx.add_metric("task_completed", fastn_context::MetricValue::Counter(1));
+        println!("Running in context: {}", task_ctx.name);
     });
 ```
 
-### Detailed Task Spawning  
+### Cancellation Handling
 
 ```rust
-// Create child context with debugging info
-ctx.child("remote-shell-handler")
-    .with_data("peer", alice_id52)
-    .with_data("shell", "bash")
-    .with_metric("commands_executed", 0)
-    .spawn(|task_ctx| async move {
-        // Task can update its own context
-        task_ctx.add_metric("commands_executed", cmd_count);
-        task_ctx.set_data("last_command", "ls -la");
-        
-        // Task waits for its own cancellation
-        tokio::select! {
-            _ = task_ctx.wait() => {
-                println!("Shell handler cancelled");
-            }
-            _ = handle_shell_session() => {
-                println!("Shell session completed");
-            }
+// Task waits for context cancellation
+ctx.spawn_child("shell-handler", |task_ctx| async move {
+    println!("Shell handler starting: {}", task_ctx.name);
+    
+    // Task waits for its own cancellation
+    tokio::select! {
+        _ = task_ctx.wait() => {
+            println!("Shell handler cancelled");
         }
-    });
+        _ = handle_shell_session() => {
+            println!("Shell session completed");
+        }
+    }
+});
 ```
 
 ## Integration with fastn-p2p
@@ -195,13 +159,12 @@ async fn handle_remote_shell(session: fastn_p2p::server::Session<RemoteShellProt
     // Simple spawn (inherits session context)
     ctx.spawn(pipe_stdout(session.send));
     
-    // Detailed spawn (creates child for debugging)
-    ctx.child("command-executor")
-        .with_data("command", session.protocol.command)
-        .spawn(|task_ctx| async move {
-            let result = execute_command(&session.protocol.command).await;
-            task_ctx.set_data("exit_code", result.code);
-        });
+    // Named child spawn for debugging
+    ctx.spawn_child("command-executor", |task_ctx| async move {
+        println!("Executing command in context: {}", task_ctx.name);
+        let result = execute_command(&session.protocol.command).await;
+        println!("Command completed with: {:?}", result);
+    });
 }
 ```
 
@@ -215,11 +178,10 @@ async fn main() -> eyre::Result<()> {
     // Global context automatically created and available
     
     let ctx = fastn_context::global();
-    ctx.child("startup")
-        .with_data("version", env!("CARGO_PKG_VERSION"))
-        .spawn(|_| async {
-            // Application initialization
-        });
+    ctx.spawn_child("startup", |startup_ctx| async move {
+        println!("Application starting: {}", startup_ctx.name);
+        // Application initialization
+    });
 }
 ```
 
@@ -264,6 +226,8 @@ async fn my_status_printer() {
 ## Future Features
 
 See NEXT-*.md files for planned enhancements:
+
+- **NEXT-metrics-and-data.md**: Metric storage and arbitrary data on contexts
 - **NEXT-monitoring.md**: Status trees, timing, system metrics monitoring
 - **NEXT-locks.md**: Named locks and deadlock detection
 - **NEXT-counters.md**: Global counter storage with dotted paths
