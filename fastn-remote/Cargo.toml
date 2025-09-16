@@ -1,5 +1,5 @@
 [package]
-name = "fastn-ssh"
+name = "fastn-remote"
 version = "0.1.0"
 authors.workspace = true
 edition.workspace = true
@@ -10,7 +10,7 @@ homepage.workspace = true
 rust-version.workspace = true
 
 [[bin]]
-name = "fastn-ssh"
+name = "fastn-remote"
 path = "src/main.rs"
 
 [dependencies]

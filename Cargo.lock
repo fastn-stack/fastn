@@ -1891,8 +1891,9 @@ version = "0.1.0"
 dependencies = [
  "clap",
  "dirs",
+ "fastn-id52",
  "fastn-p2p",
- "fastn-ssh",
+ "fastn-remote",
  "tokio",
  "tracing-subscriber",
 ]
@@ -2054,6 +2055,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "fastn-remote"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "fastn-id52",
+ "fastn-p2p",
+ "tokio",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "fastn-resolved"
 version = "0.1.1"
 dependencies = [
@@ -2074,17 +2086,6 @@ dependencies = [
  "once_cell",
  "serde",
  "sha2",
-]
-
-[[package]]
-name = "fastn-ssh"
-version = "0.1.0"
-dependencies = [
- "clap",
- "fastn-id52",
- "fastn-p2p",
- "tokio",
- "tracing-subscriber",
 ]
 
 [[package]]
