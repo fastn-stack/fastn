@@ -1,5 +1,5 @@
 [package]
-name = "fastn-context"
+name = "fastn-context-macros"
 version = "0.1.0"
 authors.workspace = true
 edition.workspace = true
@@ -9,6 +9,10 @@ repository.workspace = true
 homepage.workspace = true
 rust-version.workspace = true
 
+[lib]
+proc-macro = true
+
 [dependencies]
-tokio.workspace = true
-fastn-context-macros = { path = "../fastn-context-macros" }
+proc-macro2 = "1"
+quote = "1"
+syn = { version = "2", features = ["full", "extra-traits"] }

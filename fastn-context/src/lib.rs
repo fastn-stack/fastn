@@ -139,3 +139,6 @@ static GLOBAL_CONTEXT: std::sync::LazyLock<std::sync::Arc<Context>> =
 pub fn global() -> std::sync::Arc<Context> {
     GLOBAL_CONTEXT.clone()
 }
+
+// Re-export main macro
+pub use fastn_context_macros::main;
