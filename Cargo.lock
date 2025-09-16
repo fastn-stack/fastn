@@ -1830,6 +1830,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "fastn-context"
+version = "0.1.0"
+dependencies = [
+ "tokio",
+]
+
+[[package]]
 name = "fastn-core"
 version = "0.1.0"
 dependencies = [
