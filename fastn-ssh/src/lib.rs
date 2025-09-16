@@ -9,19 +9,13 @@ use tokio as _; // used by main for macro
 use tracing_subscriber as _; // used by main macro for logging
 
 mod cli;
+mod connect;
 mod init;
+mod listen;
 mod run;
 
 pub use cli::{Cli, handle_cli};
+pub use connect::{connect, connect_cli};
 pub use init::init;
+pub use listen::{listen, listen_cli};
 pub use run::run;
-
-/// Start SSH listener (for developer testing)
-pub async fn listen(private_key_path: &std::path::Path, allowed: &str) {
-    todo!("Start SSH listener with key {private_key_path:?} and allowed {allowed}");
-}
-
-/// Connect to SSH server (for developer testing)
-pub async fn connect(private_key_path: &std::path::Path, target: &str) {
-    todo!("Connect to {target} using key {private_key_path:?}");
-}

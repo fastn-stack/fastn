@@ -11,9 +11,9 @@ pub struct Cli {
 pub enum Commands {
     /// Start SSH listener for incoming connections
     Listen {
-        /// Path to private key file
+        /// Private key content (hex string)
         #[arg(long = "private-key", required = true)]
-        private_key: std::path::PathBuf,
+        private_key: String,
 
         /// Comma-separated list of allowed ID52s
         #[arg(long = "allowed", required = true)]
@@ -21,9 +21,9 @@ pub enum Commands {
     },
     /// Connect to remote SSH server
     Connect {
-        /// Path to private key file
+        /// Private key content (hex string)
         #[arg(long = "private-key", required = true)]
-        private_key: std::path::PathBuf,
+        private_key: String,
 
         /// Target server ID52
         target: String,
@@ -36,13 +36,13 @@ pub async fn handle_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             private_key,
             allowed,
         } => {
-            fastn_ssh::listen(&private_key, &allowed).await;
+            fastn_ssh::listen_cli(&private_key, &allowed).await;
         }
         Commands::Connect {
             private_key,
             target,
         } => {
-            fastn_ssh::connect(&private_key, &target).await;
+            fastn_ssh::connect_cli(&private_key, &target).await;
         }
     }
 
