@@ -33,7 +33,7 @@ async fn async_main() -> Result<(), Error> {
         app = clift::attach_cmd(app);
     }
 
-    #[cfg(feature = "ssh")]
+    #[cfg(feature = "remote-access")]
     {
         app = fastn_daemon::add_subcommands(app);
     }
@@ -214,14 +214,14 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
     Ok(())
 }
 
-#[cfg(feature = "ssh")]
+#[cfg(feature = "remote-access")]
 async fn handle_ssh_commands(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
     fastn_daemon::handle_daemon_commands(matches)
         .await
-        .map_err(|e| fastn_core::Error::generic(format!("SSH error: {e:?}")))
+        .map_err(|e| fastn_core::Error::generic(format!("Remote access error: {e:?}")))
 }
 
-#[cfg(not(feature = "ssh"))]
+#[cfg(not(feature = "remote-access"))]
 async fn handle_ssh_commands(_matches: &clap::ArgMatches) -> fastn_core::Result<()> {
     Ok(())
 }

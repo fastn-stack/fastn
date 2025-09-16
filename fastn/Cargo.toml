@@ -12,7 +12,7 @@ rust-version.workspace = true
 default = ["fifthtry", "use-config-json"]
 fifthtry = ["clift"]
 use-config-json = []
-ssh = ["fastn-daemon"]
+remote-access = ["fastn-daemon"]
 
 [dependencies]
 clift = { workspace = true, optional = true }
