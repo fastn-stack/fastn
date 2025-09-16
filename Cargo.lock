@@ -2080,7 +2080,11 @@ dependencies = [
 name = "fastn-ssh"
 version = "0.1.0"
 dependencies = [
+ "clap",
  "fastn-id52",
+ "fastn-p2p",
+ "tokio",
+ "tracing-subscriber",
 ]
 
 [[package]]

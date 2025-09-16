@@ -9,5 +9,13 @@ repository.workspace = true
 homepage.workspace = true
 rust-version.workspace = true
 
+[[bin]]
+name = "fastn-ssh"
+path = "src/main.rs"
+
 [dependencies]
 fastn-id52.workspace = true
+clap = { workspace = true, features = ["derive"] }
+tokio.workspace = true
+fastn-p2p.workspace = true
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }

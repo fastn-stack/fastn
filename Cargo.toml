@@ -103,6 +103,7 @@ fastn-update.path = "fastn-update"
 fastn-utils.path = "fastn-utils"
 fastn-id52.path = "v0.5/fastn-id52"
 fastn-wasm.path = "v0.5/fastn-wasm"
+fastn-p2p = { path = "v0.5/fastn-p2p" }
 fbt-lib.path = "fbt_lib"
 format_num = "0.1"
 ft-sys-shared = { version = "0.2.1", features = ["rusqlite", "host-only"] }

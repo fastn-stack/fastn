@@ -71,9 +71,7 @@ pub async fn init(fastn_home: &std::path::Path) {
     println!("Configuration file: {}", config_path.display());
     println!();
     println!("Next steps:");
-    println!(
-        "1. Share your SSH ID52 with remote machines: {public_key}",
-    );
+    println!("1. Share your SSH ID52 with remote machines: {public_key}");
     println!("2. Configure allowed remotes in: {}", config_path.display());
     println!("3. Run 'fastn daemon' to start the SSH service");
 }
