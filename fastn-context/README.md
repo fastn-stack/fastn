@@ -75,6 +75,12 @@ impl Context {
     pub fn spawn<F>(&self, task: F) -> tokio::task::JoinHandle<F::Output>
     where F: std::future::Future + Send + 'static;
     
+    /// Spawn task with named child context (common case shortcut)
+    pub fn spawn_child<F, Fut>(&self, name: &str, task: F) -> tokio::task::JoinHandle<Fut::Output>
+    where 
+        F: FnOnce(std::sync::Arc<Context>) -> Fut + Send + 'static,
+        Fut: std::future::Future + Send + 'static;
+    
     /// Wait for cancellation signal
     pub async fn wait(&self);
     
@@ -137,13 +143,19 @@ pub enum MetricValue {
 ### Simple Task Spawning
 
 ```rust
-// Use explicit context (no child creation)
+// Simple named task spawning (common case)
 let ctx = fastn_context::global(); // or passed as parameter
-let ctx_clone = ctx.clone();
-ctx.spawn(async move {
+ctx.spawn_child("background-task", |task_ctx| async move {
     // Simple background task with explicit context
-    ctx_clone.add_metric("task_completed", fastn_context::MetricValue::Counter(1));
+    task_ctx.add_metric("task_completed", fastn_context::MetricValue::Counter(1));
 });
+
+// Alternative: builder pattern for simple case
+ctx.child("background-task")
+    .spawn(|task_ctx| async move {
+        // Same result, different syntax
+        task_ctx.add_metric("task_completed", fastn_context::MetricValue::Counter(1));
+    });
 ```
 
 ### Detailed Task Spawning  
