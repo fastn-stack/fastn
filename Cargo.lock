@@ -1833,7 +1833,17 @@ dependencies = [
 name = "fastn-context"
 version = "0.1.0"
 dependencies = [
+ "fastn-context-macros",
  "tokio",
+]
+
+[[package]]
+name = "fastn-context-macros"
+version = "0.1.0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.106",
 ]
 
 [[package]]

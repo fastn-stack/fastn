@@ -1,7 +1,8 @@
 /// Test the minimal fastn-context API needed for fastn-p2p integration
 /// This validates our basic Context design before implementation
 
-fn main() {
+#[fastn_context::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Testing minimal fastn-context API...");
     
     // Global context should be automatically available
@@ -28,4 +29,5 @@ fn main() {
     println!("Global context is cancelled: {}", global_ctx.is_cancelled());
     
     println!("Basic API test completed!");
+    Ok(())
 }
