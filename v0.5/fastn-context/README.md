@@ -2,6 +2,8 @@
 
 This crate provides a hierarchical context system for fastn applications, enabling tree-based cancellation, metrics collection, and operational visibility. It forms the operational backbone for all fastn services.
 
+> **Note**: This README documents the complete design iteratively. Some sections may overlap as features build on each other. The design is internally consistent - later sections refine and extend earlier concepts.
+
 ## Design Philosophy
 
 - **Hierarchical Structure**: Applications naturally form trees of operations

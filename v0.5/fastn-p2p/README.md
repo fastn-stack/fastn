@@ -629,3 +629,182 @@ pub async fn shutdown() -> eyre::Result<()>;
 #[fastn_p2p::main]
 #[fastn_p2p::main(logging = "debug", shutdown_mode = "double_ctrl_c")]
 ```
+
+## Use Cases Analysis
+
+This section analyzes various future use cases to validate the API design and identify areas needing additional consideration.
+
+### ✅ **Remote Shell/Command Execution**
+**Pattern**: Streaming sessions with optional stderr  
+**Implementation**: 
+- `client::connect(target, RemoteShellProtocol)` establishes session
+- Use `stdin`/`stdout` for main interaction
+- Server calls `session.open_uni()` for stderr when needed
+- **Status**: Fully supported by current design
+
+### ✅ **Audio/Video/Text Chat**  
+**Pattern**: Single connection with multiple stream types  
+**Implementation**:
+- `client::connect(target, ChatProtocol)` establishes base session
+- Use `session.stdin`/`stdout` for text messages
+- Server/client use `open_bi()` for audio streams, `open_uni()` for video
+- Protocol negotiates capabilities (audio/video support)
+- **Status**: Well supported - unlimited side channels enable this
+
+### ✅ **TCP Proxy (Port Forwarding)**
+**Pattern**: Bridge local TCP socket to P2P session  
+**Implementation**:
+- `client::connect(target, TcpProxyProtocol { port: 8080 })`
+- Bridge local TCP socket ↔ `session.stdin`/`stdout`
+- Server bridges session streams ↔ local TCP socket to target port
+- **Status**: Trivial - direct stream bridging
+
+### 🤔 **HTTP Proxy (Multiple Requests per Connection)**
+**Pattern**: Reuse connection for multiple HTTP requests  
+**Implementation Options**:
+1. **New session per request** - High overhead but simple
+2. **Session reuse** - `open_bi()` for each HTTP request within same session
+3. **Request multiplexing** - Send multiple HTTP requests over same streams
+
+**Considerations Needed**:
+- Session reuse patterns in API design
+- Request correlation/multiplexing within sessions
+- Connection pooling for efficiency
+
+### ✅ **KVM (Remote Desktop/Input)**
+**Pattern**: Multiple unidirectional event streams  
+**Implementation**:
+- `client::connect(target, KvmProtocol)` establishes session
+- Server uses `open_uni()` for screen updates (high bandwidth)
+- Client uses `open_uni()` for mouse/keyboard events (low latency)
+- Multiple streams allow prioritization (input vs display)
+- **Status**: Well supported - side channels handle different data types
+
+### 🤔 **File Transfer (SCP-like)**
+**Pattern**: Large file transfers with progress  
+**Implementation**:
+- `client::connect(target, FileTransferProtocol)` 
+- Use `stdin`/`stdout` for file data
+- Use `open_uni()` for progress updates, metadata
+- **Considerations**: Large stream handling, resume capability
+
+## Design Gaps Identified
+
+### 1. **Hierarchical Cancellation** ⚠️
+**Current**: Global `fastn_p2p::cancelled()` affects entire application  
+**Need**: Tree-based cancellation to shut down specific features
+```rust
+// Proposed
+let cancellation_token = fastn_p2p::CancellationToken::new();
+let listener = fastn_p2p::server::listen(key, protocols)
+    .with_cancellation(cancellation_token.clone()).await?;
+
+// Later: cancel just this listener
+cancellation_token.cancel();
+```
+
+### 2. **Hierarchical Status/Metrics** ⚠️
+**Current**: Basic connection counting  
+**Need**: Tree-based status with timing and nested metrics
+```rust
+// Proposed
+fastn_p2p::status() -> StatusTree
+├── Application (45.2s uptime)
+├── Remote Access (32.1s active)
+│   ├── alice connection (12.3s, 2 streams)
+│   └── bob connection (5.7s, 1 stream)
+├── HTTP Proxy (45.2s active, 234 requests handled)
+```
+
+### 3. **Session Reuse Patterns** ⚠️
+**Current**: Each `connect()` creates new session  
+**Need**: Patterns for reusing sessions for multiple operations (HTTP-like)
+```rust
+// May need
+session.create_request_channel().await?  // For HTTP-like patterns
+```
+
+## Context: Hierarchical Cancellation and Metrics
+
+To address the hierarchical gaps, fastn-p2p will include a `Context` system that provides tree-based cancellation, metrics, and status tracking.
+
+### Context API
+
+```rust
+pub struct Context {
+    // Identity and timing
+    name: String,
+    created_at: std::time::Instant,
+    
+    // Tree structure
+    children: std::sync::Arc<std::sync::Mutex<Vec<std::sync::Arc<Context>>>>,
+    
+    // Functionality
+    cancellation: tokio_util::sync::CancellationToken,
+    metrics: std::sync::Arc<std::sync::Mutex<std::collections::HashMap<String, MetricValue>>>,
+    data: std::sync::Arc<std::sync::Mutex<std::collections::HashMap<String, serde_json::Value>>>,
+}
+
+impl Context {
+    /// Create new child context with given name
+    pub fn create_child(&self, name: &str) -> std::sync::Arc<Context>;
+    
+    /// Wait for cancellation signal
+    pub async fn wait(&self);
+    
+    /// Cancel this context and all children recursively
+    pub fn cancel(&self);
+    
+    /// Spawn task that inherits this context's cancellation
+    pub fn spawn<F>(&self, task: F) -> tokio::task::JoinHandle<F::Output>;
+    
+    /// Add metric data for status reporting
+    pub fn add_metric(&self, key: &str, value: MetricValue);
+    
+    /// Store arbitrary data on this context
+    pub fn set_data(&self, key: &str, value: serde_json::Value);
+}
+
+/// Global status function - prints context tree
+pub fn status() -> StatusTree;
+```
+
+### Automatic Context Creation
+
+```rust
+// Contexts are auto-created and passed to handlers:
+
+// 1. Global context (created by #[fastn_p2p::main])
+// 2. Listener context (created by server::listen())  
+// 3. Session context (created per connection)
+
+async fn handle_remote_shell(session: server::Session<RemoteShellProtocol>) {
+    let ctx = session.context(); // Auto-created session context
+    
+    // Spawned tasks inherit session's cancellation automatically
+    ctx.spawn(handle_stdout(session.send));
+    ctx.spawn(handle_stdin(session.recv));
+    
+    // When session ends or is cancelled, all spawned tasks stop
+}
+```
+
+### Status Tree Output
+
+```
+$ fastn status
+Application Context (45.2s uptime)
+├── Remote Access Listener (32.1s active, 2 connections)
+│   ├── alice@bv478gen... (12.3s, 2 streams active)
+│   │   ├── stdout handler (12.3s)
+│   │   └── stderr stream (8.1s)
+│   └── bob@p2nd7avq... (5.7s, 1 stream active)
+│       └── shell session (5.7s)
+├── HTTP Proxy Listener (45.2s active, 234 requests)
+│   └── connection pool (15 active connections)
+└── Chat Service (12.1s active, 3 users)
+    ├── alice chat (8.2s, text + audio)
+    └── bob chat (3.1s, text only)
+```
+
+**Recommendation**: Start with current Session/Request API, add Context as enhancement layer that threads through the existing design.

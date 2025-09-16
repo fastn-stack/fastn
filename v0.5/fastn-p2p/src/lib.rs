@@ -32,6 +32,7 @@
 extern crate self as fastn_p2p;
 
 mod client;
+mod command;
 mod coordination;
 mod globals;
 mod macros;
@@ -50,6 +51,9 @@ pub use globals::{graceful, pool};
 
 // Client API - clean, simple naming (only expose simple version)
 pub use client::{CallError, call};
+
+// Streaming API - P2P sessions with stdin/stdout streams and optional side channels
+pub use command::{Session, ConnectionError, connect};
 
 // Server API - clean, simple naming
 pub use server::{
