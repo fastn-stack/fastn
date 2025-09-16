@@ -3,6 +3,7 @@ members = [
     "clift",
     "fastn",
     "fastn-builtins",
+    "fastn-context",
     "fastn-core",
     "fastn-daemon",
     "fastn-ds",
@@ -89,6 +90,7 @@ enum-iterator = "0.6"
 enum-iterator-derive = "0.6"
 env_logger = "0.11"
 fastn-builtins.path = "fastn-builtins"
+fastn-context.path = "fastn-context"
 fastn-core.path = "fastn-core"
 fastn-ds.path = "fastn-ds"
 fastn-daemon.path = "fastn-daemon"
