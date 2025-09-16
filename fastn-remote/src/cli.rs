@@ -1,6 +1,6 @@
 #[derive(clap::Parser, Debug)]
 #[command(author, version, about, long_about = None)]
-#[command(name = "fastn-ssh")]
+#[command(name = "fastn-remote")]
 #[command(arg_required_else_help = true)]
 pub struct Cli {
     #[command(subcommand)]
@@ -9,7 +9,7 @@ pub struct Cli {
 
 #[derive(clap::Subcommand, Debug)]
 pub enum Commands {
-    /// Start SSH listener for incoming connections
+    /// Start remote access listener for incoming connections
     Listen {
         /// Private key content (hex string)
         #[arg(long = "private-key", required = true)]

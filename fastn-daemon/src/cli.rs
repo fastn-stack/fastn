@@ -13,7 +13,7 @@ pub struct Cli {
 
 #[derive(clap::Subcommand, Debug)]
 pub enum Commands {
-    /// Initialize fastn daemon (creates SSH folder in FASTN_HOME)
+    /// Initialize fastn daemon (creates remote-access folder in FASTN_HOME)
     Init,
     /// Run the fastn daemon service in foreground
     Run,
@@ -62,7 +62,7 @@ pub async fn handle_cli(cli: fastn_daemon::Cli) -> Result<(), Box<dyn std::error
 pub fn add_subcommands(app: clap::Command) -> clap::Command {
     app.subcommand(
         clap::Command::new("init")
-            .about("Initialize fastn daemon (creates SSH folder in FASTN_HOME)"),
+            .about("Initialize fastn daemon (creates remote-access folder in FASTN_HOME)"),
     )
     .subcommand(clap::Command::new("daemon").about("Run the fastn daemon service in foreground"))
     .subcommand(
