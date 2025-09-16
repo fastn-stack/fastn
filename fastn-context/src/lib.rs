@@ -1,8 +1,6 @@
 #![warn(unused_extern_crates)]
 #![deny(unused_crate_dependencies)]
 
-extern crate self as fastn_context;
-
 use tokio as _; // used by main macro
 
 /// Hierarchical context for task management and cancellation
@@ -84,7 +82,7 @@ impl Context {
     /// Check if this context is cancelled
     pub fn is_cancelled(&self) -> bool {
         self.cancelled.load(std::sync::atomic::Ordering::Relaxed) ||
-        self.parent.as_ref().map_or(false, |p| p.is_cancelled())
+        self.parent.as_ref().is_some_and(|p| p.is_cancelled())
     }
     
     /// Cancel this context and all children recursively
@@ -189,12 +187,12 @@ impl std::fmt::Display for Status {
         writeln!(f, "Snapshot: {:?}", self.timestamp)?;
         writeln!(f)?;
         
-        self.display_context(&self.global_context, f, 0)
+        Self::display_context(&self.global_context, f, 0)
     }
 }
 
 impl Status {
-    fn display_context(&self, ctx: &ContextStatus, f: &mut std::fmt::Formatter<'_>, depth: usize) -> std::fmt::Result {
+    fn display_context(ctx: &ContextStatus, f: &mut std::fmt::Formatter<'_>, depth: usize) -> std::fmt::Result {
         let indent = "  ".repeat(depth);
         let status_icon = if ctx.is_cancelled { "❌" } else { "✅" };
         
@@ -206,7 +204,7 @@ impl Status {
         )?;
         
         for child in &ctx.children {
-            self.display_context(child, f, depth + 1)?;
+            Self::display_context(child, f, depth + 1)?;
         }
         
         Ok(())
