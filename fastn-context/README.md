@@ -100,11 +100,35 @@ impl ContextBuilder {
 }
 ```
 
-### Global Access
+#### Global Access
 
 ```rust
 /// Get the global application context
 pub fn global() -> std::sync::Arc<Context>;
+```
+
+### Status Display
+
+```rust
+/// Get current status snapshot of entire context tree
+pub fn status() -> Status;
+
+#[derive(Debug, Clone)]
+pub struct Status {
+    pub global_context: ContextStatus,
+    pub timestamp: std::time::SystemTime,
+}
+
+#[derive(Debug, Clone)]
+pub struct ContextStatus {
+    pub name: String,
+    pub is_cancelled: bool,
+    pub children: Vec<ContextStatus>,
+}
+
+impl std::fmt::Display for Status {
+    // ANSI-formatted display with tree structure and status icons
+}
 ```
 
 
@@ -126,6 +150,22 @@ ctx.child("background-task")
         // Same result, different syntax
         println!("Running in context: {}", task_ctx.name);
     });
+```
+
+### Status Monitoring
+
+```rust
+// Get current context tree status
+let status = fastn_context::status();
+println!("{}", status);
+
+// Example output:
+// fastn Context Status
+// ✅ global (active)
+//   ✅ remote-access-listener (active)
+//     ✅ alice@bv478gen (active)
+//       ✅ stdout-handler (active)
+//   ✅ startup-task (active)
 ```
 
 ### Cancellation Handling
