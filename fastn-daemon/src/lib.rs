@@ -10,12 +10,12 @@ use tracing_subscriber as _; // used by main macro for logging // used by remote
 
 mod cli;
 mod init;
+mod remote;
 mod run;
-mod ssh;
 mod status;
 
 pub use cli::{Cli, Commands, add_subcommands, handle_cli, handle_daemon_commands};
 pub use init::init;
+pub use remote::{rexec, rshell};
 pub use run::run;
-pub use ssh::ssh;
 pub use status::status;

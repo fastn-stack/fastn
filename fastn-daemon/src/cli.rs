@@ -19,10 +19,19 @@ pub enum Commands {
     Run,
     /// Show daemon operational status and machine info
     Status,
-    /// Connect to remote machines via SSH
-    Ssh {
+    /// Interactive remote shell (PTY mode)
+    Rshell {
         /// Remote machine alias or id52
         target: String,
+        /// Optional command to execute
+        command: Option<String>,
+    },
+    /// Execute command with separate stdout/stderr streams
+    Rexec {
+        /// Remote machine alias or id52
+        target: String,
+        /// Command to execute
+        command: String,
     },
 }
 
@@ -39,7 +48,12 @@ pub async fn handle_cli(cli: fastn_daemon::Cli) -> Result<(), Box<dyn std::error
         Commands::Init => fastn_daemon::init(&fastn_home).await,
         Commands::Run => fastn_daemon::run(&fastn_home).await,
         Commands::Status => fastn_daemon::status(&fastn_home).await,
-        Commands::Ssh { target } => fastn_daemon::ssh(&fastn_home, &target).await,
+        Commands::Rshell { target, command } => {
+            fastn_daemon::rshell(&fastn_home, &target, command.as_deref()).await;
+        }
+        Commands::Rexec { target, command } => {
+            fastn_daemon::rexec(&fastn_home, &target, &command).await;
+        }
     };
 
     Ok(())
@@ -55,9 +69,16 @@ pub fn add_subcommands(app: clap::Command) -> clap::Command {
         clap::Command::new("status").about("Show daemon operational status and machine info"),
     )
     .subcommand(
-        clap::Command::new("ssh")
-            .about("Connect to remote machines via SSH")
-            .arg(clap::arg!(target: <TARGET> "Remote machine alias or id52").required(true)),
+        clap::Command::new("rshell")
+            .about("Interactive remote shell (PTY mode)")
+            .arg(clap::arg!(target: <TARGET> "Remote machine alias or id52").required(true))
+            .arg(clap::arg!(command: [COMMAND] "Optional command to execute")),
+    )
+    .subcommand(
+        clap::Command::new("rexec")
+            .about("Execute command with separate stdout/stderr streams")
+            .arg(clap::arg!(target: <TARGET> "Remote machine alias or id52").required(true))
+            .arg(clap::arg!(command: <COMMAND> "Command to execute").required(true)),
     )
     .arg(clap::arg!(--"home" <HOME> "Override the default FASTN_HOME directory").global(true))
 }
@@ -68,7 +89,8 @@ pub async fn handle_daemon_commands(
     if matches.subcommand_matches("init").is_some()
         || matches.subcommand_matches("daemon").is_some()
         || matches.subcommand_matches("status").is_some()
-        || matches.subcommand_matches("ssh").is_some()
+        || matches.subcommand_matches("rshell").is_some()
+        || matches.subcommand_matches("rexec").is_some()
     {
         let fastn_home = matches.get_one::<std::path::PathBuf>("home").cloned();
 
@@ -78,9 +100,14 @@ pub async fn handle_daemon_commands(
             Commands::Run
         } else if matches.subcommand_matches("status").is_some() {
             Commands::Status
-        } else if let Some(ssh_matches) = matches.subcommand_matches("ssh") {
-            let target = ssh_matches.get_one::<String>("target").unwrap().clone();
-            Commands::Ssh { target }
+        } else if let Some(rshell_matches) = matches.subcommand_matches("rshell") {
+            let target = rshell_matches.get_one::<String>("target").unwrap().clone();
+            let command = rshell_matches.get_one::<String>("command").cloned();
+            Commands::Rshell { target, command }
+        } else if let Some(rexec_matches) = matches.subcommand_matches("rexec") {
+            let target = rexec_matches.get_one::<String>("target").unwrap().clone();
+            let command = rexec_matches.get_one::<String>("command").unwrap().clone();
+            Commands::Rexec { target, command }
         } else {
             return Ok(());
         };
