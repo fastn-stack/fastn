@@ -9,34 +9,40 @@ async fn main() -> eyre::Result<()> {
     let global_ctx = fastn_context::global();
     println!("Global context created: {}", global_ctx.name);
     
-    // Test basic child creation
+    // Test basic child creation with builder pattern
     let service_ctx = global_ctx.child("test-service");
     println!("Service context created: {}", service_ctx.name);
     
-    // Test task spawning with context inheritance
-    service_ctx.spawn(async {
+    // Test simple task spawning with explicit context
+    let service_ctx_clone = service_ctx.clone();
+    service_ctx.spawn(async move {
         println!("Task 1 running in service context");
         
         // Simulate some work
         tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
         println!("Task 1 completed");
+        
+        // Context explicitly available
+        service_ctx_clone.add_metric("task1_completed", fastn_context::MetricValue::Counter(1));
     });
     
-    // Test nested contexts
-    let session_ctx = service_ctx.child("test-session");
-    session_ctx.spawn(async {
-        println!("Task 2 running in session context");
-        
-        // Test cancellation handling  
-        tokio::select! {
-            _ = fastn_context::current().wait() => {
-                println!("Task 2 cancelled by context");
+    // Test builder pattern with explicit context passing
+    service_ctx.child("test-session")
+        .with_data("session_type", serde_json::Value::String("test".to_string()))
+        .spawn(|task_ctx| async move {
+            println!("Task 2 running with explicit context: {}", task_ctx.name);
+            
+            // Test cancellation handling with explicit context
+            tokio::select! {
+                _ = task_ctx.wait() => {
+                    println!("Task 2 cancelled by explicit context");
+                }
+                _ = tokio::time::sleep(tokio::time::Duration::from_millis(200)) => {
+                    println!("Task 2 completed normally");
+                    task_ctx.set_data("completion_status", serde_json::Value::String("success".to_string()));
+                }
             }
-            _ = tokio::time::sleep(tokio::time::Duration::from_millis(200)) => {
-                println!("Task 2 completed normally");
-            }
-        }
-    });
+        });
     
     // Let tasks run briefly
     tokio::time::sleep(tokio::time::Duration::from_millis(300)).await;

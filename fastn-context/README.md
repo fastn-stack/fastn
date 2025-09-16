@@ -117,9 +117,6 @@ impl ContextBuilder {
 ```rust
 /// Get the global application context
 pub fn global() -> std::sync::Arc<Context>;
-
-/// Get current task's context (thread-local or task-local)
-pub fn current() -> std::sync::Arc<Context>;
 ```
 
 ### Metric Types
@@ -140,10 +137,12 @@ pub enum MetricValue {
 ### Simple Task Spawning
 
 ```rust
-// Inherit current context (no child creation)
-let ctx = fastn_context::current();
-ctx.spawn(async {
-    // Simple background task
+// Use explicit context (no child creation)
+let ctx = fastn_context::global(); // or passed as parameter
+let ctx_clone = ctx.clone();
+ctx.spawn(async move {
+    // Simple background task with explicit context
+    ctx_clone.add_metric("task_completed", fastn_context::MetricValue::Counter(1));
 });
 ```
 
