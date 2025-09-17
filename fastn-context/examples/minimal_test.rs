@@ -37,6 +37,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let status = fastn_context::status();
     println!("{}", status);
 
+    // Test persistence functionality
+    global_ctx.spawn_child("persist-test", |task_ctx| async move {
+        tokio::time::sleep(tokio::time::Duration::from_millis(30)).await;
+        task_ctx.complete_with_status(true, "Persistence test completed");
+    });
+
+    tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
+
+    // Test status with persisted contexts
+    println!("\n=== Status with Persisted Contexts ===");
+    let status_with_latest = fastn_context::status_with_latest();
+    println!("{}", status_with_latest);
+
     println!("Basic API test completed!");
     Ok(())
 }

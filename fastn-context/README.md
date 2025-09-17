@@ -83,6 +83,12 @@ impl Context {
     
     /// Cancel this context and all children recursively
     pub fn cancel(&self);
+    
+    /// Mark this context for persistence (distributed tracing)
+    pub fn persist(&self);
+    
+    /// Set completion status and persist (common pattern)
+    pub fn complete_with_status(&self, success: bool, message: &str);
 }
 ```
 
@@ -113,9 +119,13 @@ pub fn global() -> std::sync::Arc<Context>;
 /// Get current status snapshot of entire context tree
 pub fn status() -> Status;
 
+/// Get status including recent completed contexts (distributed tracing)
+pub fn status_with_latest() -> Status;
+
 #[derive(Debug, Clone)]
 pub struct Status {
     pub global_context: ContextStatus,
+    pub persisted_contexts: Option<Vec<PersistedContext>>, // Recent completed contexts
     pub timestamp: std::time::SystemTime,
 }
 
@@ -123,7 +133,18 @@ pub struct Status {
 pub struct ContextStatus {
     pub name: String,
     pub is_cancelled: bool,
+    pub duration: std::time::Duration,
     pub children: Vec<ContextStatus>,
+}
+
+#[derive(Debug, Clone)]
+pub struct PersistedContext {
+    pub name: String,
+    pub context_path: String,
+    pub duration: std::time::Duration,
+    pub completion_time: std::time::SystemTime,
+    pub success: bool,
+    pub message: String,
 }
 
 impl std::fmt::Display for Status {
@@ -161,11 +182,55 @@ println!("{}", status);
 
 // Example output:
 // fastn Context Status
-// ✅ global (active)
-//   ✅ remote-access-listener (active)
-//     ✅ alice@bv478gen (active)
-//       ✅ stdout-handler (active)
-//   ✅ startup-task (active)
+// ✅ global (2h 15m, active)
+//   ✅ remote-access-listener (1h 45m, active)
+//     ✅ alice@bv478gen (23m, active)
+//       ✅ stdout-handler (23m, active)
+//   ✅ startup-task (2h 15m, active)
+
+// With recent completed contexts:
+let status = fastn_context::status_with_latest();
+// Shows live contexts + recent completed ones
+```
+
+### Context Persistence (Distributed Tracing)
+
+```rust
+// P2P stream handler example
+async fn handle_p2p_stream(session: Session<Protocol>) {
+    let ctx = session.context(); // "global.p2p.alice@bv478gen.stream-456"
+    
+    let result = process_stream().await;
+    
+    // Persist completed context for tracing
+    ctx.complete_with_status(result.is_ok(), &format!("Processed {} bytes", result.bytes));
+    // -> Logs trace, adds to circular buffer, sends to external systems
+}
+
+// HTTP request handler example  
+async fn handle_http_request(request: HttpRequest) {
+    let ctx = request.context(); // "global.http.request-789"
+    
+    let result = process_request().await;
+    
+    // Persist with completion info
+    ctx.complete_with_status(result.status.is_success(), &result.summary);
+}
+```
+
+### Enhanced Status Display
+
+```
+$ fastn status --include-latest
+✅ global (2h 15m, active)
+  ✅ p2p-listener (1h 45m, active)
+    ✅ alice@bv478gen (23m, active, 3 live streams)
+
+Recent completed contexts (last 10):
+- global.p2p.alice@bv478gen.stream-455 (2.3s, success: "Processed 1.2MB")
+- global.p2p.bob@p2nd7avq.stream-454 (1.1s, success: "Processed 512KB") 
+- global.http.request-123 (0.8s, failed: "Database timeout")
+- global.p2p.alice@bv478gen.stream-453 (4.1s, success: "Processed 2.1MB")
 ```
 
 ### Cancellation Handling
