@@ -121,11 +121,10 @@ pub async fn process(
                     doc_id: doc.name.to_string(),
                     line_number,
                 })?;
-        if !req_config.request.query_string().is_empty() {
-            url.set_query(Some(req_config.request.query_string()));
-        }
         (url, mountpoint, conf)
     };
+
+    tracing::info!(?url);
 
     let mut body = serde_json::Map::new();
     for header in headers.0 {
