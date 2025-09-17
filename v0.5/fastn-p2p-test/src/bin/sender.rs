@@ -34,7 +34,7 @@ pub struct EchoError {
     pub error: String,
 }
 
-#[tokio::main]
+#[fastn_context::main]
 async fn main() -> eyre::Result<()> {
     println!("🔧 DEBUG SENDER: Starting main function");
 

@@ -25,11 +25,11 @@ tempfile = "3"
 
 [[bin]]
 name = "p2p_sender"
-path = "src/sender.rs"
+path = "src/bin/sender.rs"
 
 [[bin]]
 name = "p2p_receiver"
-path = "src/receiver.rs"
+path = "src/bin/receiver.rs"
 
 # Remote Shell Demo - High-quality reference implementations
 [[bin]]

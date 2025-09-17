@@ -35,7 +35,7 @@ pub struct EchoError {
     pub error: String,
 }
 
-#[tokio::main]
+#[fastn_context::main]
 async fn main() -> eyre::Result<()> {
     // Initialize tracing
     tracing_subscriber::fmt()
@@ -53,7 +53,7 @@ async fn main() -> eyre::Result<()> {
             }
             Err(e) => {
                 eprintln!("❌ Invalid secret key provided: {e}");
-                return Err(eyre::eyre!("Invalid secret key: {}", e));
+                std::process::exit(1);
             }
         }
     } else {
