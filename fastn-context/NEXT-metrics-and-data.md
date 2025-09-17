@@ -65,4 +65,57 @@ ctx.child("remote-shell-handler")
     });
 ```
 
-**Implementation**: After basic Context tree structure is working.
+## Automatic Request Tracking
+
+For contexts that call `.persist()`, automatic time-windowed counters will be maintained:
+
+```rust
+// Automatic counters for persisted contexts (no manual tracking needed)
+// Uses full dotted context path as key
+
+// When ctx.persist() is called on "global.p2p.alice@bv478gen.stream-123":
+// Auto-increments these counters:
+"global.p2p.alice@bv478gen.requests_since_start"     // Total ever
+"global.p2p.alice@bv478gen.requests_last_day"       // Last 24 hours  
+"global.p2p.alice@bv478gen.requests_last_hour"      // Last 60 minutes
+"global.p2p.alice@bv478gen.requests_last_minute"    // Last 60 seconds
+"global.p2p.alice@bv478gen.requests_last_second"    // Last 1 second
+
+// Hierarchical aggregation automatically available:
+"global.p2p.requests_last_hour"                     // All P2P requests
+"global.requests_last_hour"                         // All application requests
+```
+
+### Time Window Implementation
+
+```rust
+// Sliding window counters with efficient circular buffers
+// Updated automatically when any context calls persist()
+
+// Status display shows rates:
+✅ global.p2p.alice@bv478gen (23m, active)
+    Requests: 1,247 total | 234 last hour | 45 last minute | 2/sec current
+
+// Automatic rate calculation and trending
+```
+
+### Usage Pattern
+
+```rust
+// P2P stream handler
+async fn handle_stream(ctx: Arc<Context>) {
+    // Process stream...
+    ctx.persist(); // Automatically increments all time window counters
+    
+    // No manual counter management needed!
+    // All metrics tracked automatically by dotted context path
+}
+
+// HTTP request handler  
+async fn handle_request(ctx: Arc<Context>) {
+    // Process request...
+    ctx.persist(); // Auto-tracks "global.http.endpoint-xyz.requests_*"
+}
+```
+
+**Implementation**: After basic Context + counter storage foundation.
