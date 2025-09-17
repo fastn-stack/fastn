@@ -87,9 +87,9 @@ async fn main() -> eyre::Result<()> {
 
     // Send using fastn-p2p call with meaningful protocol name
     println!("🔧 DEBUG: About to call fastn_p2p::call");
-    let result: Result<EchoResponse, EchoError> = fastn_p2p::call(
+    let result: Result<EchoResponse, EchoError> = fastn_p2p::client::call(
         sender_key,
-        &receiver_public_key,
+        receiver_public_key,
         TestProtocol::Echo,
         request,
     )
