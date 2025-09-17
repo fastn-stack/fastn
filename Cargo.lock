@@ -1832,30 +1832,12 @@ dependencies = [
 [[package]]
 name = "fastn-context"
 version = "0.1.0"
-dependencies = [
- "fastn-context-macros 0.1.0",
- "tokio",
- "tokio-util",
-]
-
-[[package]]
-name = "fastn-context"
-version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4fb4d708d15b187e30d12f75dc5aedc4691074f056f12b3536a69effcea9dee4"
 dependencies = [
- "fastn-context-macros 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "fastn-context-macros",
  "tokio",
  "tokio-util",
-]
-
-[[package]]
-name = "fastn-context-macros"
-version = "0.1.0"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.106",
 ]
 
 [[package]]
@@ -2061,7 +2043,7 @@ version = "0.1.0"
 dependencies = [
  "async-stream",
  "eyre",
- "fastn-context 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "fastn-context",
  "fastn-id52",
  "fastn-net",
  "fastn-p2p-macros",

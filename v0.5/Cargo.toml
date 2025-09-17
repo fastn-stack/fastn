@@ -80,7 +80,6 @@ fastn-automerge-derive = { path = "fastn-automerge-derive" }
 fastn-automerge = { path = "fastn-automerge" }
 fastn-builtins = { path = "../fastn-builtins" }
 fastn-compiler = { path = "fastn-compiler" }
-fastn-context.workspace = true
 fastn-continuation = { path = "fastn-continuation" }
 fastn-fbr = { path = "fastn-fbr" }
 fastn-id52 = { path = "fastn-id52" }
