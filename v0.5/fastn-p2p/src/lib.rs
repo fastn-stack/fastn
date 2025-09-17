@@ -31,11 +31,13 @@
 
 extern crate self as fastn_p2p;
 
-mod client;
 mod coordination;
 mod globals;
 mod macros;
-mod server;
+
+// Export client and server modules (new modular API)
+pub mod client;
+pub mod server;
 
 // Re-export essential types from fastn-net that users need
 pub use fastn_net::{Graceful, Protocol};
@@ -48,12 +50,10 @@ pub use fastn_p2p_macros::main;
 pub use coordination::{cancelled, shutdown, spawn};
 pub use globals::{graceful, pool};
 
-// Client API - clean, simple naming (only expose simple version)
+// Legacy top-level exports (for backward compatibility)
 pub use client::{CallError, call};
-
-// Server API - clean, simple naming
 pub use server::{
     GetInputError, HandleRequestError, ListenerAlreadyActiveError, ListenerNotFoundError, Request,
     ResponseHandle, SendError, active_listener_count, active_listeners, is_listening, listen,
-    stop_listening,
+    stop_listening, Session,
 };

@@ -1975,6 +1975,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "fastn-context"
+version = "0.1.0"
+dependencies = [
+ "fastn-context-macros",
+ "tokio",
+ "tokio-util",
+]
+
+[[package]]
+name = "fastn-context-macros"
+version = "0.1.0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.106",
+]
+
+[[package]]
 name = "fastn-continuation"
 version = "0.1.0"
 dependencies = [
@@ -2117,6 +2135,7 @@ dependencies = [
  "async-stream",
  "enum-display-derive",
  "eyre",
+ "fastn-context",
  "fastn-id52",
  "fastn-net",
  "fastn-p2p-macros",

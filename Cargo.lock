@@ -2039,6 +2039,7 @@ version = "0.1.0"
 dependencies = [
  "async-stream",
  "eyre",
+ "fastn-context",
  "fastn-id52",
  "fastn-net",
  "fastn-p2p-macros",
