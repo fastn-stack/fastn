@@ -9,6 +9,7 @@
 
 use clap::Parser;
 use colored::*;
+use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 
 #[derive(Parser)]
@@ -30,6 +31,46 @@ struct Args {
     /// Command to execute on remote machine
     #[arg(trailing_var_arg = true)]
     command: Vec<String>,
+}
+
+/// Protocol for remote shell communication
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum RemoteShellProtocol {
+    Execute,
+}
+
+impl std::fmt::Display for RemoteShellProtocol {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            RemoteShellProtocol::Execute => write!(f, "remote-shell-execute"),
+        }
+    }
+}
+
+/// Request to execute a command on remote machine
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ExecuteRequest {
+    pub command: Vec<String>,
+}
+
+/// Response from remote command execution
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ExecuteResponse {
+    pub exit_code: i32,
+    pub stdout: String,
+    pub stderr: String,
+}
+
+/// Error responses for remote shell
+#[derive(Debug, Serialize, Deserialize)]
+pub enum RemoteShellError {
+    CommandFailed {
+        message: String,
+        exit_code: Option<i32>,
+    },
+    ExecutionError {
+        message: String,
+    },
 }
 
 #[fastn_context::main]
@@ -72,19 +113,54 @@ async fn main() -> eyre::Result<()> {
     println!("Command:     {}", command.join(" ").yellow());
     println!();
     
-    // TODO: Implement actual P2P streaming connection
-    // For now, just show what we would do
-    println!("{}", "🚧 TODO: Implement P2P streaming connection".bright_red());
-    println!("Would execute: {}", command.join(" "));
+    // Create execute request
+    let request = ExecuteRequest { command };
     
-    // Simulate connection attempt
-    tokio::time::sleep(std::time::Duration::from_secs(1)).await;
+    println!("{}", "🚀 Executing command over P2P...".green());
     
-    println!("{}", "✗ Not implemented yet - this is a prototype".red());
-    println!("{}", "Next steps:".green());
-    println!("  1. Implement client::connect() with actual iroh streaming");
-    println!("  2. Create remote shell protocol");
-    println!("  3. Wire up stdin/stdout/stderr streams");
+    // Make P2P call using fastn_p2p::client::call
+    let result: Result<Result<ExecuteResponse, RemoteShellError>, fastn_p2p::client::CallError> = 
+        fastn_p2p::client::call(
+            private_key,
+            target,
+            RemoteShellProtocol::Execute,
+            request
+        ).await;
     
-    std::process::exit(1);
+    match result {
+        Ok(Ok(response)) => {
+            // Success! Display output
+            if !response.stdout.is_empty() {
+                print!("{}", response.stdout);
+            }
+            if !response.stderr.is_empty() {
+                eprint!("{}", response.stderr);
+            }
+            std::process::exit(response.exit_code);
+        }
+        Ok(Err(shell_error)) => {
+            // Remote shell error
+            match shell_error {
+                RemoteShellError::CommandFailed { message, exit_code } => {
+                    eprintln!("{}: {}", "Command failed".red(), message);
+                    std::process::exit(exit_code.unwrap_or(1));
+                }
+                RemoteShellError::ExecutionError { message } => {
+                    eprintln!("{}: {}", "Execution error".red(), message);
+                    std::process::exit(1);
+                }
+            }
+        }
+        Err(call_error) => {
+            // P2P communication error
+            eprintln!("{}: {}", "P2P connection failed".red(), call_error);
+            eprintln!();
+            eprintln!("{}", "Possible causes:".yellow());
+            eprintln!("• Target machine is not running remote access daemon");
+            eprintln!("• Network connectivity issues");
+            eprintln!("• Incorrect target ID52");
+            eprintln!("• Firewall blocking P2P connections");
+            std::process::exit(1);
+        }
+    }
 }
