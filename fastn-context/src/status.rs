@@ -15,30 +15,19 @@ pub struct ContextStatus {
     pub children: Vec<ContextStatus>,
 }
 
-/// Persisted context for distributed tracing
-#[derive(Debug, Clone)]
-pub struct PersistedContext {
-    pub name: String,
-    pub context_path: String,
-    pub duration: std::time::Duration,
-    pub completion_time: std::time::SystemTime,
-    pub success: bool,
-    pub message: String,
-}
-
 /// Global storage for persisted contexts (circular buffer)
 static PERSISTED_CONTEXTS: std::sync::LazyLock<
-    std::sync::RwLock<std::collections::VecDeque<PersistedContext>>,
+    std::sync::RwLock<std::collections::VecDeque<ContextStatus>>,
 > = std::sync::LazyLock::new(|| std::sync::RwLock::new(std::collections::VecDeque::new()));
 
 /// Maximum number of persisted contexts to keep (configurable via env)
 const MAX_PERSISTED_CONTEXTS: usize = 10; // TODO: Make configurable via env var
 
 /// Add a context to the persisted contexts circular buffer
-pub fn add_persisted_context(persisted: PersistedContext) {
+pub fn add_persisted_context(context_status: ContextStatus) {
     if let Ok(mut contexts) = PERSISTED_CONTEXTS.write() {
         // Add to front
-        contexts.push_front(persisted.clone());
+        contexts.push_front(context_status.clone());
 
         // Keep only max number
         if contexts.len() > MAX_PERSISTED_CONTEXTS {
@@ -48,8 +37,8 @@ pub fn add_persisted_context(persisted: PersistedContext) {
 
     // Log as trace event
     println!(
-        "TRACE: {} completed in {:?} - {}",
-        persisted.context_path, persisted.duration, persisted.message
+        "TRACE: {} completed in {:?}",
+        context_status.name, context_status.duration
     );
 }
 
@@ -101,12 +90,12 @@ impl std::fmt::Display for Status {
                     format!("{:.1}s", ctx.duration.as_secs_f64())
                 };
 
-                let status_str = if ctx.success { "success" } else { "failed" };
-                writeln!(
-                    f,
-                    "- {} ({}, {}: \"{}\")",
-                    ctx.context_path, duration_str, status_str, ctx.message
-                )?;
+                let status_str = if ctx.is_cancelled {
+                    "cancelled"
+                } else {
+                    "completed"
+                };
+                writeln!(f, "- {} ({}, {})", ctx.name, duration_str, status_str)?;
             }
         }
 
