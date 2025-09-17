@@ -1835,6 +1835,7 @@ version = "0.1.0"
 dependencies = [
  "fastn-context-macros",
  "tokio",
+ "tokio-util",
 ]
 
 [[package]]
