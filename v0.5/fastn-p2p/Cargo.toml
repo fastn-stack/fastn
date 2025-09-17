@@ -6,6 +6,14 @@ description = "High-level, type-safe P2P communication for fastn"
 homepage.workspace = true
 license.workspace = true
 
+[[bin]]
+name = "fastn-p2p-rshell"
+path = "src/bin/rshell.rs"
+
+[[bin]]
+name = "fastn-p2p-remote-access-daemon"
+path = "src/bin/remote_access_daemon.rs"
+
 [dependencies]
 fastn-net = { path = "../fastn-net", version = "0.1.2" }
 fastn-id52 = { path = "../fastn-id52", version = "0.1.1" }
@@ -26,6 +34,11 @@ fastn-context.workspace = true
 
 # Re-export proc macros from separate crate
 fastn-p2p-macros = { path = "../fastn-p2p-macros", version = "0.1.0" }
+
+# CLI dependencies
+clap.workspace = true
+colored.workspace = true
+tokio-process = "0.2"
 
 [dev-dependencies]
 tokio-test = "0.4"
