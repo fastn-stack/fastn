@@ -6,6 +6,7 @@ pub mod handle;
 pub mod listener;
 pub mod management;
 pub mod request;
+pub mod session;
 
 // Public API exports - no use statements, direct qualification
 pub use handle::{ResponseHandle, SendError};
@@ -15,3 +16,4 @@ pub use management::{
     is_listening, stop_listening,
 };
 pub use request::{GetInputError, HandleRequestError, Request};
+pub use session::Session;

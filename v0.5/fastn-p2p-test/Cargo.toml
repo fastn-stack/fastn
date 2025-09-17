@@ -7,6 +7,7 @@ edition = "2021"
 fastn-p2p = { path = "../fastn-p2p" }
 fastn-net = { path = "../fastn-net" }
 fastn-id52 = { path = "../fastn-id52" }
+fastn-context.workspace = true
 tokio = { version = "1", features = ["full"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
@@ -15,15 +16,27 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 futures-util = "0.3"
 chrono = { version = "0.4", features = ["serde"] }
+clap = { version = "4", features = ["derive"] }
+colored = "3"
+atty = "0.2"
 
 [dev-dependencies]
 tempfile = "3"
 
 [[bin]]
 name = "p2p_sender"
-path = "src/sender.rs"
+path = "src/bin/sender.rs"
 
 [[bin]]
 name = "p2p_receiver"
-path = "src/receiver.rs"
+path = "src/bin/receiver.rs"
+
+# Remote Shell Demo - High-quality reference implementations
+[[bin]]
+name = "remote-shell-daemon"
+path = "src/bin/remote_shell/daemon.rs"
+
+[[bin]]
+name = "remote-shell-client"
+path = "src/bin/remote_shell/client.rs"
 

@@ -6,6 +6,7 @@ description = "High-level, type-safe P2P communication for fastn"
 homepage.workspace = true
 license.workspace = true
 
+
 [dependencies]
 fastn-net = { path = "../fastn-net", version = "0.1.2" }
 fastn-id52 = { path = "../fastn-id52", version = "0.1.1" }
@@ -21,8 +22,12 @@ tokio.workspace = true
 tokio-util.workspace = true
 tracing.workspace = true
 
+# Context integration
+fastn-context.workspace = true
+
 # Re-export proc macros from separate crate
 fastn-p2p-macros = { path = "../fastn-p2p-macros", version = "0.1.0" }
+
 
 [dev-dependencies]
 tokio-test = "0.4"

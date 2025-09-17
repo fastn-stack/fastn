@@ -1,46 +1,18 @@
-/// Error type for call function
-#[derive(Debug, thiserror::Error)]
-pub enum CallError {
-    #[error("Failed to establish P2P stream: {source}")]
-    Endpoint { source: eyre::Error },
-
-    #[error("Failed to establish P2P stream: {source}")]
-    Stream { source: eyre::Error },
-
-    #[error("Failed to serialize request: {source}")]
-    Serialization { source: serde_json::Error },
-
-    #[error("Failed to send request: {source}")]
-    Send { source: eyre::Error },
-
-    #[error("Failed to receive response: {source}")]
-    Receive { source: eyre::Error },
-
-    #[error("Failed to deserialize response: {source}")]
-    Deserialization { source: serde_json::Error },
-}
-
-/// Make a P2P call using global singletons
+/// Client-side P2P communication
 ///
-/// This is the main function end users should use. It automatically uses
-/// the global connection pool and graceful shutdown coordinator.
-///
-/// # Example
-///
-/// ```rust,ignore
-/// let result: Result<MyResponse, MyError> = fastn_p2p::call(
-///     secret_key, &target, protocol, request
-/// ).await?;
-/// ```
-pub async fn call<P, INPUT, OUTPUT, ERROR>(
-    sender: fastn_id52::SecretKey,
-    target: &fastn_id52::PublicKey,
-    protocol: P,
-    input: INPUT,
-) -> Result<Result<OUTPUT, ERROR>, CallError>
+/// This module provides client APIs for establishing both simple request/response
+/// connections and complex streaming sessions with remote P2P endpoints.
+
+/// Simple request/response communication (existing functionality)
+pub async fn call<PROTOCOL, REQUEST, RESPONSE, ERROR>(
+    our_key: fastn_id52::SecretKey,
+    target: fastn_id52::PublicKey,
+    protocol: PROTOCOL,
+    request: REQUEST
+) -> Result<Result<RESPONSE, ERROR>, CallError>
 where
-    P: serde::Serialize
-        + for<'de> serde::Deserialize<'de>
+    PROTOCOL: serde::Serialize 
+        + for<'de> serde::Deserialize<'de> 
         + Clone
         + PartialEq
         + std::fmt::Display
@@ -48,10 +20,84 @@ where
         + Send
         + Sync
         + 'static,
-    INPUT: serde::Serialize,
-    OUTPUT: for<'de> serde::Deserialize<'de>,
-    ERROR: for<'de> serde::Deserialize<'de>,
+    REQUEST: serde::Serialize + for<'de> serde::Deserialize<'de>,
+    RESPONSE: serde::Serialize + for<'de> serde::Deserialize<'de>,
+    ERROR: serde::Serialize + for<'de> serde::Deserialize<'de>,
 {
-    // Delegate to coordination module which has strict singleton access control
-    crate::coordination::internal_call(sender, target, protocol, input).await
+    // Delegate to existing coordination infrastructure (will be restored in Phase 5)
+    crate::coordination::internal_call(our_key, &target, protocol, request).await
+}
+
+/// Establish streaming P2P session (new functionality)
+pub async fn connect<PROTOCOL>(
+    our_key: fastn_id52::SecretKey,
+    target: fastn_id52::PublicKey, 
+    protocol: PROTOCOL
+) -> Result<Session, ConnectionError>
+where
+    PROTOCOL: serde::Serialize + for<'de> serde::Deserialize<'de> + std::fmt::Debug,
+{
+    // TODO: Implement streaming connection establishment
+    todo!("Connect to {target} with protocol {protocol:?} using {}", our_key.id52())
+}
+
+/// Client-side streaming session
+pub struct Session {
+    /// Input stream to server
+    pub stdin: iroh::endpoint::SendStream,
+    /// Output stream from server
+    pub stdout: iroh::endpoint::RecvStream,
+    // TODO: Add context integration
+    // context: std::sync::Arc<fastn_context::Context>,
+}
+
+impl Session {
+    /// Accept unidirectional stream back from server (e.g., stderr)
+    pub async fn accept_uni(&mut self) -> Result<iroh::endpoint::RecvStream, ConnectionError> {
+        // TODO: Accept incoming unidirectional stream from server
+        todo!("Accept unidirectional stream from server")
+    }
+    
+    /// Accept bidirectional stream back from server
+    pub async fn accept_bi(&mut self) -> Result<(iroh::endpoint::RecvStream, iroh::endpoint::SendStream), ConnectionError> {
+        // TODO: Accept incoming bidirectional stream from server
+        todo!("Accept bidirectional stream from server")
+    }
+}
+
+/// Errors for client operations
+#[derive(Debug, thiserror::Error)]
+pub enum CallError {
+    #[error("Connection failed: {source}")]
+    Connection { source: eyre::Error },
+    
+    #[error("Request/response error: {source}")]
+    RequestResponse { source: eyre::Error },
+    
+    #[error("Serialization error: {source}")]
+    Serialization { source: serde_json::Error },
+    
+    #[error("Endpoint error: {source}")]
+    Endpoint { source: eyre::Error },
+    
+    #[error("Stream error: {source}")]
+    Stream { source: eyre::Error },
+    
+    #[error("Send error: {source}")]
+    Send { source: eyre::Error },
+    
+    #[error("Receive error: {source}")]
+    Receive { source: eyre::Error },
+    
+    #[error("Deserialization error: {source}")]
+    Deserialization { source: serde_json::Error },
+}
+
+#[derive(Debug, thiserror::Error)]
+pub enum ConnectionError {
+    #[error("Failed to establish streaming connection: {source}")]
+    Connection { source: eyre::Error },
+    
+    #[error("Stream error: {source}")]
+    Stream { source: eyre::Error },
 }
