@@ -29,6 +29,9 @@ use serde::{Deserialize, Serialize};
 // Reference implementation modules
 pub mod remote_shell;
 
+// Shared protocols and utilities for all examples
+pub mod protocols;
+
 /// Test protocol with meaningful names
 #[derive(serde::Serialize, serde::Deserialize, Debug, Clone, PartialEq)]
 pub enum TestProtocol {
