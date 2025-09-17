@@ -95,7 +95,11 @@ impl Context {
         self.cancellation_token.cancel();
     }
 
-
+    /// Mark this context for persistence (distributed tracing)
+    pub fn persist(&self) {
+        let context_status = self.status();
+        crate::status::add_persisted_context(context_status);
+    }
 
     /// Get status information for this context and all children
     pub fn status(&self) -> crate::status::ContextStatus {
