@@ -50,8 +50,7 @@ pub use fastn_p2p_macros::main;
 pub use coordination::{cancelled, shutdown, spawn};
 pub use globals::{graceful, pool};
 
-// Legacy top-level exports (for backward compatibility)
-pub use client::{CallError, call};
+// Note: Legacy call() export removed - will be restored in Phase 5 migration
 pub use server::{
     GetInputError, HandleRequestError, ListenerAlreadyActiveError, ListenerNotFoundError, Request,
     ResponseHandle, SendError, active_listener_count, active_listeners, is_listening, listen,

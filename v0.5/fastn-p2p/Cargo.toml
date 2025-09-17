@@ -22,7 +22,7 @@ tokio-util.workspace = true
 tracing.workspace = true
 
 # Context integration
-fastn-context = { path = "../../fastn-context" }
+fastn-context.workspace = true
 
 # Re-export proc macros from separate crate
 fastn-p2p-macros = { path = "../fastn-p2p-macros", version = "0.1.0" }

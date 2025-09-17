@@ -11,13 +11,21 @@ pub async fn call<PROTOCOL, REQUEST, RESPONSE, ERROR>(
     request: REQUEST
 ) -> Result<Result<RESPONSE, ERROR>, CallError>
 where
-    PROTOCOL: serde::Serialize + for<'de> serde::Deserialize<'de> + std::fmt::Debug,
+    PROTOCOL: serde::Serialize 
+        + for<'de> serde::Deserialize<'de> 
+        + Clone
+        + PartialEq
+        + std::fmt::Display
+        + std::fmt::Debug
+        + Send
+        + Sync
+        + 'static,
     REQUEST: serde::Serialize + for<'de> serde::Deserialize<'de>,
     RESPONSE: serde::Serialize + for<'de> serde::Deserialize<'de>,
     ERROR: serde::Serialize + for<'de> serde::Deserialize<'de>,
 {
-    // TODO: Implement using existing fastn-p2p call infrastructure
-    todo!("Client call to {target} with protocol {protocol:?}")
+    // Delegate to existing coordination infrastructure (will be restored in Phase 5)
+    crate::coordination::internal_call(our_key, &target, protocol, request).await
 }
 
 /// Establish streaming P2P session (new functionality)
