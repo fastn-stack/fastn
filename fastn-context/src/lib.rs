@@ -7,7 +7,7 @@ mod context;
 mod status;
 
 pub use context::{Context, ContextBuilder, global};
-pub use status::{Status, ContextStatus, status};
+pub use status::{ContextStatus, PersistedContext, Status, status, status_with_latest};
 
 // Re-export main macro
 pub use fastn_context_macros::main;
