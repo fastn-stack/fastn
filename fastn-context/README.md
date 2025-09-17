@@ -78,17 +78,12 @@ impl Context {
         F: FnOnce(std::sync::Arc<Context>) -> Fut + Send + 'static,
         Fut: std::future::Future + Send + 'static;
     
-    /// Wait for cancellation signal
-    pub async fn wait(&self);
+    /// Wait for cancellation signal (returns Future for tokio::select!)
+    pub fn cancelled(&self) -> tokio_util::sync::WaitForCancellationFuture<'_>;
     
     /// Cancel this context and all children recursively
     pub fn cancel(&self);
     
-    /// Mark this context for persistence (distributed tracing)
-    pub fn persist(&self);
-    
-    /// Set completion status and persist (common pattern)
-    pub fn complete_with_status(&self, success: bool, message: &str);
 }
 ```
 
@@ -236,17 +231,20 @@ Recent completed contexts (last 10):
 ### Cancellation Handling
 
 ```rust
-// Task waits for context cancellation
+// Task waits for context cancellation (proper select pattern)
 ctx.spawn_child("shell-handler", |task_ctx| async move {
     println!("Shell handler starting: {}", task_ctx.name);
     
-    // Task waits for its own cancellation
+    // Proper cancellation in select (non-blocking)
     tokio::select! {
-        _ = task_ctx.wait() => {
+        _ = task_ctx.cancelled() => {
             println!("Shell handler cancelled");
         }
-        _ = handle_shell_session() => {
-            println!("Shell session completed");
+        result = handle_shell_session() => {
+            println!("Shell session completed: {:?}", result);
+        }
+        data = connection.accept() => {
+            println!("Got connection: {:?}", data);
         }
     }
 });

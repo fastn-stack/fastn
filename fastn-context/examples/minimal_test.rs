@@ -15,9 +15,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .spawn(|service_ctx| async move {
             println!("Service context created: {}", service_ctx.name);
 
-            // Test cancellation
+            // Test cancellation with proper select pattern
             tokio::select! {
-                _ = service_ctx.wait() => {
+                _ = service_ctx.cancelled() => {
                     println!("Service context cancelled");
                 }
                 _ = tokio::time::sleep(tokio::time::Duration::from_millis(100)) => {
@@ -40,7 +40,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Test persistence functionality
     global_ctx.spawn_child("persist-test", |task_ctx| async move {
         tokio::time::sleep(tokio::time::Duration::from_millis(30)).await;
-        task_ctx.complete_with_status(true, "Persistence test completed");
+        task_ctx.persist();
     });
 
     tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;

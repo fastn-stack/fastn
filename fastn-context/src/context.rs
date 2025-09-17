@@ -12,8 +12,8 @@ pub struct Context {
     /// Child contexts
     children: std::sync::Arc<std::sync::Mutex<Vec<std::sync::Arc<Context>>>>,
 
-    /// Simple cancellation flag
-    cancelled: std::sync::Arc<std::sync::atomic::AtomicBool>,
+    /// Cancellation token (proper async cancellation)
+    cancellation_token: tokio_util::sync::CancellationToken,
 }
 
 impl Context {
@@ -24,7 +24,7 @@ impl Context {
             created_at: std::time::Instant::now(),
             parent: None,
             children: std::sync::Arc::new(std::sync::Mutex::new(Vec::new())),
-            cancelled: std::sync::Arc::new(std::sync::atomic::AtomicBool::new(false)),
+            cancellation_token: tokio_util::sync::CancellationToken::new(),
         })
     }
 
@@ -35,7 +35,7 @@ impl Context {
             created_at: std::time::Instant::now(),
             parent: Some(std::sync::Arc::new(self.clone())),
             children: std::sync::Arc::new(std::sync::Mutex::new(Vec::new())),
-            cancelled: std::sync::Arc::new(std::sync::atomic::AtomicBool::new(false)),
+            cancellation_token: self.cancellation_token.child_token(),
         });
 
         // Add to parent's children list
@@ -68,76 +68,34 @@ impl Context {
         child_ctx.spawn(task)
     }
 
-    /// Wait for cancellation signal
+    /// Wait for cancellation signal (for use in tokio::select!)
     pub async fn wait(&self) {
-        // Simple polling approach for now
+        // Poll-based future that completes when cancelled
         loop {
             if self.is_cancelled() {
-                break;
+                return;
             }
-            tokio::time::sleep(tokio::time::Duration::from_millis(10)).await;
+            // Yield to allow other tasks to run, then check again
+            tokio::task::yield_now().await;
         }
+    }
+
+    /// Wait for cancellation signal (returns proper Future for tokio::select!)
+    pub fn cancelled(&self) -> tokio_util::sync::WaitForCancellationFuture<'_> {
+        self.cancellation_token.cancelled()
     }
 
     /// Check if this context is cancelled
     pub fn is_cancelled(&self) -> bool {
-        self.cancelled.load(std::sync::atomic::Ordering::Relaxed)
-            || self.parent.as_ref().is_some_and(|p| p.is_cancelled())
+        self.cancellation_token.is_cancelled()
     }
 
     /// Cancel this context and all children recursively
     pub fn cancel(&self) {
-        self.cancelled
-            .store(true, std::sync::atomic::Ordering::Relaxed);
-
-        // Cancel all children
-        if let Ok(children) = self.children.lock() {
-            for child in children.iter() {
-                child.cancel();
-            }
-        }
+        self.cancellation_token.cancel();
     }
 
-    /// Mark this context for persistence (distributed tracing)
-    pub fn persist(&self) {
-        let persisted = crate::status::PersistedContext {
-            name: self.name.clone(),
-            context_path: self.get_context_path(),
-            duration: self.created_at.elapsed(),
-            completion_time: std::time::SystemTime::now(),
-            success: !self.is_cancelled(),
-            message: if self.is_cancelled() {
-                "Cancelled".to_string()
-            } else {
-                "Completed".to_string()
-            },
-        };
 
-        crate::status::add_persisted_context(persisted);
-    }
-
-    /// Set completion status and persist (common pattern)
-    pub fn complete_with_status(&self, success: bool, message: &str) {
-        let persisted = crate::status::PersistedContext {
-            name: self.name.clone(),
-            context_path: self.get_context_path(),
-            duration: self.created_at.elapsed(),
-            completion_time: std::time::SystemTime::now(),
-            success,
-            message: message.to_string(),
-        };
-
-        crate::status::add_persisted_context(persisted);
-    }
-
-    /// Get full dotted path for this context
-    fn get_context_path(&self) -> String {
-        if let Some(parent) = &self.parent {
-            format!("{}.{}", parent.get_context_path(), self.name)
-        } else {
-            self.name.clone()
-        }
-    }
 
     /// Get status information for this context and all children
     pub fn status(&self) -> crate::status::ContextStatus {
@@ -163,7 +121,7 @@ impl Clone for Context {
             created_at: self.created_at,
             parent: self.parent.clone(),
             children: self.children.clone(),
-            cancelled: self.cancelled.clone(),
+            cancellation_token: self.cancellation_token.clone(),
         }
     }
 }

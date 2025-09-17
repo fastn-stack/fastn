@@ -2,7 +2,7 @@
 #[derive(Debug, Clone)]
 pub struct Status {
     pub global_context: ContextStatus,
-    pub persisted_contexts: Option<Vec<PersistedContext>>,
+    pub persisted_contexts: Option<Vec<ContextStatus>>,
     pub timestamp: std::time::SystemTime,
 }
 
