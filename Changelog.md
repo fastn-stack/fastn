@@ -1,5 +1,11 @@
 # `fastn` Change Log
 
+## 17 September 2025
+
+### fastn: 0.4.113
+
+- fix: Do not override query params of http processor's target url. PR #2209.
+
 ## 20 August 2025
 
 ### fastn: 0.4.112

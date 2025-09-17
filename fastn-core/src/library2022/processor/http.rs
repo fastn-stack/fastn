@@ -112,17 +112,14 @@ pub async fn process(
         req_config.config.package.clone()
     };
 
-    let (mut url, mountpoint, mut conf) = {
-        let (mut url, mountpoint, conf) =
-            fastn_core::config::utils::get_clean_url(&package, req_config, url.as_str())
-                .await
-                .map_err(|e| ftd::interpreter::Error::ParseError {
-                    message: format!("invalid url: {e:?}"),
-                    doc_id: doc.name.to_string(),
-                    line_number,
-                })?;
-        (url, mountpoint, conf)
-    };
+    let (mut url, mountpoint, mut conf) =
+        fastn_core::config::utils::get_clean_url(&package, req_config, url.as_str())
+            .await
+            .map_err(|e| ftd::interpreter::Error::ParseError {
+                message: format!("invalid url: {e:?}"),
+                doc_id: doc.name.to_string(),
+                line_number,
+            })?;
 
     tracing::info!(?url);
 
