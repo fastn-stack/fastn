@@ -31,8 +31,16 @@ const fastn = (function (fastn) {
         }
 
         update() {
+            if (typeof fastn_perf !== "undefined")
+                fastn_perf.mark("closure-update");
+            if (typeof fastn_perf !== "undefined")
+                fastn_perf.count("closure-updates");
+
             this.#cached_value = this.#formula();
             this.updateUi();
+
+            if (typeof fastn_perf !== "undefined")
+                fastn_perf.measure("closure-update");
         }
 
         getNode() {
@@ -64,6 +72,9 @@ const fastn = (function (fastn) {
         #closureInstance;
 
         constructor(val) {
+            if (typeof fastn_perf !== "undefined")
+                fastn_perf.count("mutable-created");
+
             this.#value = null;
             this.#old_closure = null;
             this.#closures = [];
@@ -131,9 +142,16 @@ const fastn = (function (fastn) {
         }
 
         set(value) {
-            this.setWithoutUpdate(value);
+            if (typeof fastn_perf !== "undefined")
+                fastn_perf.mark("mutable-set");
+            if (typeof fastn_perf !== "undefined")
+                fastn_perf.count("mutable-sets");
 
+            this.setWithoutUpdate(value);
             this.#closureInstance.update();
+
+            if (typeof fastn_perf !== "undefined")
+                fastn_perf.measure("mutable-set");
         }
 
         // we have to unlink all nodes, else they will be kept in memory after the node is removed from DOM

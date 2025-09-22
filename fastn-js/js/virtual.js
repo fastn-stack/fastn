@@ -28,6 +28,7 @@ class Node {
     #children;
     #attributes;
     constructor(id, tagName) {
+        if (typeof fastn_perf !== "undefined") fastn_perf.count("node_constructor");
         this.#tagName = tagName;
         this.#dataId = id;
         this.classList = new ClassList();

@@ -51,6 +51,25 @@ let fastn_utils = {
         return [node, css, attributes];
     },
     createStyle(cssClass, obj) {
+        // Use the benchmarkable CSS system if available
+        if (typeof fastn_css !== "undefined") {
+            const cssString = fastn_css.createStyle(cssClass, obj);
+
+            if (doubleBuffering) {
+                fastn_dom.styleClasses = `${fastn_dom.styleClasses}${cssString}\n`;
+            } else {
+                let styles = document.getElementById("styles");
+                let textNode = document.createTextNode(cssString);
+                if (styles.styleSheet) {
+                    styles.styleSheet.cssText = cssString;
+                } else {
+                    styles.appendChild(textNode);
+                }
+            }
+            return cssString;
+        }
+
+        // Fallback to original implementation
         if (doubleBuffering) {
             fastn_dom.styleClasses = `${
                 fastn_dom.styleClasses
