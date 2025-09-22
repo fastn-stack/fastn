@@ -1942,10 +1942,25 @@ class Node2 {
         );
         this.#mutables.push(ftd.dark_mode);
     }
+    createClonedNode() {
+        if (!doubleBuffering) {
+            let node = this.#node;
+            let clonedNode = node.cloneNode(true);
+            this.#node = clonedNode;
+            return node;
+        }
+    }
+
+    replaceNodeWithClonedNode(node) {
+        if (!doubleBuffering) {
+            node.parentNode.replaceChild(this.#node, node);
+        }
+    }
     setStaticProperty(kind, value, inherited) {
         // value can be either static or mutable
         let staticValue = fastn_utils.getStaticValue(value);
         if (kind === fastn_dom.PropertyKind.Children) {
+            let originalNode = this.createClonedNode();
             if (fastn_utils.isWrapperNode(this.#tagName)) {
                 let parentWithSibiling = this.#parent;
                 if (Array.isArray(staticValue)) {
@@ -1982,6 +1997,7 @@ class Node2 {
                     this.#children.push(staticValue(this, inherited));
                 }
             }
+            this.replaceNodeWithClonedNode(originalNode);
         } else if (kind === fastn_dom.PropertyKind.Id) {
             this.#node.id = staticValue;
         } else if (kind === fastn_dom.PropertyKind.BreakpointWidth) {
