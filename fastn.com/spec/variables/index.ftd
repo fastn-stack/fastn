@@ -1,0 +1,25 @@
+-- ds.page: Variables
+
+Variable declaration, scoping, and references in FTD
+
+-- ds.h1: Variable Declaration
+
+Variables store values that can be referenced throughout the document.
+
+-- ds.code: Basic Variables
+lang: ftd
+
+\-- string name: John Doe
+\-- integer age: 25
+\-- boolean active: true
+
+-- ds.h1: Variable References
+
+Variables are referenced using the `$` prefix.
+
+-- ds.code: Variable Usage
+lang: ftd
+
+\-- ftd.text: Hello $name
+\-- ftd.text: Age: $age
+visible: $active

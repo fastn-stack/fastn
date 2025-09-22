@@ -1,0 +1,18 @@
+-- ds.page: Components
+
+Component definition, invocation, and usage in FTD
+
+-- ds.h1: Component Definition
+
+Components are reusable building blocks defined with the `component` keyword.
+
+-- ds.h1: Component Usage
+
+Components are invoked like sections with optional captions and properties.
+
+-- ds.code: Component Examples
+lang: ftd
+
+\-- ftd.text: Hello World
+\-- custom-component: With Caption
+property: value
