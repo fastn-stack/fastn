@@ -98,12 +98,10 @@ impl fastn_core::Package {
             document = id,
             package = self.name
         );
-        Err(fastn_core::Error::PackageError {
-            message: format!(
-                "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
-                id, &self.name
-            ),
-        })
+        Err(fastn_core::Error::NotFound(format!(
+            "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
+            id, &self.name
+        )))
     }
 
     // #[cfg(feature = "use-config-json")]
@@ -187,12 +185,10 @@ impl fastn_core::Package {
                             file_path = file_path,
                             msg = "file_path error: can not get the dark"
                         );
-                        return Err(fastn_core::Error::PackageError {
-                            message: format!(
-                                "fs_fetch_by_file_name:: Corresponding file not found for file_path: {}. Package: {}",
-                                file_path, &self.name
-                            ),
-                        });
+                        return Err(fastn_core::Error::NotFound(format!(
+                            "fs_fetch_by_file_name:: Corresponding file not found for file_path: {}. Package: {}",
+                            file_path, &self.name
+                        )));
                     }
                 };
 
@@ -201,12 +197,10 @@ impl fastn_core::Package {
                         file_path = file_path,
                         msg = "file_path error: can not get the dark"
                     );
-                    return Err(fastn_core::Error::PackageError {
-                        message: format!(
-                            "fs_fetch_by_file_name:: Corresponding file not found for file_path: {}. Package: {}",
-                            file_path, &self.name
-                        ),
-                    });
+                    return Err(fastn_core::Error::NotFound(format!(
+                        "fs_fetch_by_file_name:: Corresponding file not found for file_path: {}. Package: {}",
+                        file_path, &self.name
+                    )));
                 }
 
                 new_file_path
@@ -255,12 +249,10 @@ impl fastn_core::Package {
                     }
                     _ => {
                         tracing::error!(id = id, msg = "id error: can not get the dark");
-                        return Err(fastn_core::Error::PackageError {
-                            message: format!(
-                                "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {} 1",
-                                id, &self.name
-                            ),
-                        });
+                        return Err(fastn_core::Error::NotFound(format!(
+                            "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {} 1",
+                            id, &self.name
+                        )));
                     }
                 };
 
