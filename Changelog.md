@@ -1,5 +1,11 @@
 # `fastn` Change Log
 
+## 13 October 2025
+
+### fastn: 0.4.114
+
+- feat: Support for catch-all 404/500 pages. PR #2214.
+
 ## 17 September 2025
 
 ### fastn: 0.4.113
