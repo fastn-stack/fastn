@@ -220,7 +220,7 @@ pub async fn serve(
 /// Handle [fastn_core::Error]. Possibly converting some of them to proper HTTP responses.
 ///
 /// Attempts to load 404.ftd/500.ftd if present.
-/// The actual error message is shown if env DEBUG=true.
+/// The actual error message is shown if env DEBUG is set.
 #[inline]
 async fn handle_error(
     res: fastn_core::Result<fastn_core::http::Response>,
