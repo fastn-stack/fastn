@@ -839,6 +839,8 @@ skip: true
     document: best-practices/self-referencing.ftd
   - Property: /book/property-guidelines/
     document: best-practices/property-guidelines.ftd  
+  - Error Handling: /book/error-handling/
+    document: best-practices/error-handling.ftd  
 
 
 ## Frontend: /ftd/data-modelling/
@@ -1003,6 +1005,8 @@ skip: true
     document: best-practices/self-referencing.ftd
   - Property: /property-guidelines/
     document: best-practices/property-guidelines.ftd
+  - Error Handling: /error-handling/
+    document: best-practices/error-handling.ftd  
 
 ## Fullstack: /dynamic-urls/
   document: backend/dynamic-urls.ftd
