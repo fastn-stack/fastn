@@ -196,14 +196,7 @@ pub async fn serve(
 
         return match res {
             Ok(v) => Ok(v),
-            Err(e) => {
-                handle_error(
-                    Err(fastn_core::Error::DSReadError(e)),
-                    &mut req_config,
-                    preview_session_id,
-                )
-                .await
-            }
+            Err(e) => handle_error(e.into(), &mut req_config, preview_session_id).await,
         };
     }
 
@@ -213,7 +206,7 @@ pub async fn serve(
 
     match res {
         Ok(v) => Ok(v),
-        Err(e) => handle_error(Err(e), &mut req_config, preview_session_id).await,
+        Err(e) => handle_error(e, &mut req_config, preview_session_id).await,
     }
 }
 
@@ -223,49 +216,44 @@ pub async fn serve(
 /// The actual error message is shown if env DEBUG is set.
 #[inline]
 async fn handle_error(
-    res: fastn_core::Result<fastn_core::http::Response>,
+    err: fastn_core::Error,
     req_config: &mut fastn_core::RequestConfig,
     preview_session_id: &Option<String>,
 ) -> fastn_core::Result<(fastn_core::http::Response, bool)> {
-    match res {
-        Err(err) => {
-            tracing::error!(?err, "handle_error");
+    tracing::error!(?err, "handle_error");
 
-            if req_config.config.ds.env("DEBUG").await.is_ok() {
-                tracing::info!("DEBUG mode is on, returning error as response");
-                return Err(err);
-            }
+    if req_config.config.ds.env("DEBUG").await.is_ok() {
+        tracing::info!("DEBUG mode is on, returning error as response");
+        return Err(err);
+    }
 
-            let (file_to_render, status_code) = match err {
-                fastn_core::Error::NotFound(_)
-                | fastn_core::Error::DSReadError(fastn_ds::ReadError::NotFound(_)) => {
-                    ("/404.ftd", fastn_core::http::StatusCode::NOT_FOUND)
-                }
-                _ => (
-                    "/500.ftd",
-                    fastn_core::http::StatusCode::INTERNAL_SERVER_ERROR,
-                ),
-            };
-
-            match serve_file(
-                req_config,
-                &camino::Utf8PathBuf::from(file_to_render),
-                false,
-                preview_session_id,
-            )
-            .await
-            {
-                Ok(mut res) => {
-                    *res.status_mut() = status_code;
-                    Ok((res, false)) // response is not cacheable
-                }
-                Err(e) => {
-                    tracing::info!(?e, "Failed to load 404.ftd/500.ftd");
-                    Err(err) // return the original error
-                }
-            }
+    let (file_to_render, status_code) = match err {
+        fastn_core::Error::NotFound(_)
+        | fastn_core::Error::DSReadError(fastn_ds::ReadError::NotFound(_)) => {
+            ("/404.ftd", fastn_core::http::StatusCode::NOT_FOUND)
         }
-        _ => unreachable!("This function is only called on error"),
+        _ => (
+            "/500.ftd",
+            fastn_core::http::StatusCode::INTERNAL_SERVER_ERROR,
+        ),
+    };
+
+    match serve_file(
+        req_config,
+        &camino::Utf8PathBuf::from(file_to_render),
+        false,
+        preview_session_id,
+    )
+    .await
+    {
+        Ok(mut res) => {
+            *res.status_mut() = status_code;
+            Ok((res, false)) // response is not cacheable
+        }
+        Err(e) => {
+            tracing::info!(?e, "Failed to load 404.ftd/500.ftd");
+            Err(err) // return the original error
+        }
     }
 }
 
