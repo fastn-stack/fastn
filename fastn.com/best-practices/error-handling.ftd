@@ -1,0 +1,19 @@
+-- import: bling.fifthtry.site/note
+
+-- ds.page: Error Handling
+
+`fastn` considers `404.ftd` and `500.ftd` in your fastn project folder as
+special files.
+
+If a fastn package contains a `404.ftd` file then visiting any 404 route (a
+route that does not exist) will render this 404.ftd file.
+
+For any other fastn error (error in syntax, calls to http processor failing
+etc), the 500.ftd in current fastn package will be rendered.
+
+When env `DEBUG` is set, the original error with a nicer message is shown
+instead to give the developer some more context. In production, the `fastn
+--trace serve` output should be considered around these 404/500 requests to
+know more about the cause.
+
+-- end: ds.page

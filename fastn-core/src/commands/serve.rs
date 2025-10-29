@@ -19,46 +19,25 @@ async fn serve_file(
     path: &camino::Utf8Path,
     only_js: bool,
     preview_session_id: &Option<String>,
-) -> fastn_core::http::Response {
-    if let Err(e) = config
+) -> fastn_core::Result<fastn_core::http::Response> {
+    config
         .config
         .package
-        .auto_import_language(config.request.cookie("fastn-lang"), None)
-    {
-        return if config.config.test_command_running {
-            fastn_core::http::not_found_without_warning(format!("fastn-Error: path: {path}, {e:?}"))
-        } else {
-            fastn_core::not_found!("fastn-Error: path: {}, {:?}", path, e)
-        };
-    }
+        .auto_import_language(config.request.cookie("fastn-lang"), None)?;
 
-    let f = match config
+    let f = config
         .get_file_and_package_by_id(path.as_str(), preview_session_id)
-        .await
-    {
-        Ok(f) => f,
-        Err(e) => {
-            tracing::error!(
-                msg = "fastn-error path not found",
-                path = path.as_str(),
-                error = %e
-            );
-            return if config.config.test_command_running {
-                fastn_core::http::not_found_without_warning(format!(
-                    "fastn-Error: path: {path}, {e:?}"
-                ))
-            } else {
-                fastn_core::not_found!("fastn-Error: path: {}, {:?}", path, e)
-            };
-        }
-    };
+        .await?;
 
     tracing::info!("file: {f:?}");
 
     if let fastn_core::File::Code(doc) = f {
         let path = doc.get_full_path().to_string();
         let mime = mime_guess::from_path(path).first_or_text_plain();
-        return fastn_core::http::ok_with_content_type(doc.content.into_bytes(), mime);
+        return Ok(fastn_core::http::ok_with_content_type(
+            doc.content.into_bytes(),
+            mime,
+        ));
     }
 
     let main_document = match f {
@@ -66,11 +45,13 @@ async fn serve_file(
         _ => {
             tracing::error!(msg = "unknown handler", path = path.as_str());
             tracing::info!("file: {f:?}");
-            return fastn_core::server_error!("unknown handler");
+            return Err(fastn_core::Error::GenericError(
+                "unknown handler".to_string(),
+            ));
         }
     };
 
-    match fastn_core::package::package_doc::read_ftd_(
+    let ftd_res = fastn_core::package::package_doc::read_ftd_(
         config,
         &main_document,
         "/",
@@ -79,81 +60,73 @@ async fn serve_file(
         only_js,
         preview_session_id,
     )
-    .await
-    {
-        Ok(val) => match val {
-            fastn_core::package::package_doc::FTDResult::Html(body) => {
-                fastn_core::http::ok_with_content_type(body, mime_guess::mime::TEXT_HTML_UTF_8)
-            }
-            fastn_core::package::package_doc::FTDResult::Response {
-                response,
-                status_code,
-                content_type,
-                headers,
-            } => {
-                use std::str::FromStr;
+    .await?;
 
-                let mut response = actix_web::HttpResponseBuilder::new(status_code)
-                    .content_type(content_type)
-                    .body(response);
-
-                for (header_name, header_value) in headers {
-                    let header_name =
-                        match actix_web::http::header::HeaderName::from_str(header_name.as_str()) {
-                            Ok(v) => v,
-                            Err(e) => {
-                                tracing::error!(
-                                    msg = "fastn-Error",
-                                    path = path.as_str(),
-                                    error = e.to_string()
-                                );
-                                continue;
-                            }
-                        };
-
-                    let header_value =
-                        match actix_web::http::header::HeaderValue::from_str(header_value.as_str())
-                        {
-                            Ok(v) => v,
-                            Err(e) => {
-                                tracing::error!(
-                                    msg = "fastn-Error",
-                                    path = path.as_str(),
-                                    error = e.to_string()
-                                );
-                                continue;
-                            }
-                        };
-
-                    response.headers_mut().insert(header_name, header_value);
-                }
-
-                response
-            }
-            fastn_core::package::package_doc::FTDResult::Redirect { url, code } => {
-                if Some(mime_guess::mime::APPLICATION_JSON) == config.request.content_type() {
-                    fastn_core::http::ok_with_content_type(
-                        // intentionally using `.unwrap()` as this should never fail
-                        serde_json::to_vec(&serde_json::json!({ "redirect": url })).unwrap(),
-                        mime_guess::mime::APPLICATION_JSON,
-                    )
-                } else {
-                    fastn_core::http::redirect_with_code(url, code)
-                }
-            }
-            fastn_core::package::package_doc::FTDResult::Json(json) => {
-                fastn_core::http::ok_with_content_type(json, mime_guess::mime::APPLICATION_JSON)
-            }
-        },
-        Err(e) => {
-            tracing::error!(
-                msg = "fastn-Error",
-                path = path.as_str(),
-                error = e.to_string()
-            );
-            fastn_core::server_error!("fastn-Error: path: {}, {:?}", path, e)
+    let res = match ftd_res {
+        fastn_core::package::package_doc::FTDResult::Html(body) => {
+            fastn_core::http::ok_with_content_type(body, mime_guess::mime::TEXT_HTML_UTF_8)
         }
-    }
+        fastn_core::package::package_doc::FTDResult::Response {
+            response,
+            status_code,
+            content_type,
+            headers,
+        } => {
+            use std::str::FromStr;
+
+            let mut response = actix_web::HttpResponseBuilder::new(status_code)
+                .content_type(content_type)
+                .body(response);
+
+            for (header_name, header_value) in headers {
+                let header_name =
+                    match actix_web::http::header::HeaderName::from_str(header_name.as_str()) {
+                        Ok(v) => v,
+                        Err(e) => {
+                            tracing::error!(
+                                msg = "fastn-Error",
+                                path = path.as_str(),
+                                error = e.to_string()
+                            );
+                            continue;
+                        }
+                    };
+
+                let header_value =
+                    match actix_web::http::header::HeaderValue::from_str(header_value.as_str()) {
+                        Ok(v) => v,
+                        Err(e) => {
+                            tracing::error!(
+                                msg = "fastn-Error",
+                                path = path.as_str(),
+                                error = e.to_string()
+                            );
+                            continue;
+                        }
+                    };
+
+                response.headers_mut().insert(header_name, header_value);
+            }
+
+            response
+        }
+        fastn_core::package::package_doc::FTDResult::Redirect { url, code } => {
+            if Some(mime_guess::mime::APPLICATION_JSON) == config.request.content_type() {
+                fastn_core::http::ok_with_content_type(
+                    // intentionally using `.unwrap()` as this should never fail
+                    serde_json::to_vec(&serde_json::json!({ "redirect": url })).unwrap(),
+                    mime_guess::mime::APPLICATION_JSON,
+                )
+            } else {
+                fastn_core::http::redirect_with_code(url, code)
+            }
+        }
+        fastn_core::package::package_doc::FTDResult::Json(json) => {
+            fastn_core::http::ok_with_content_type(json, mime_guess::mime::APPLICATION_JSON)
+        }
+    };
+
+    Ok(res)
 }
 
 fn guess_mime_type(path: &str) -> mime_guess::Mime {
@@ -212,7 +185,7 @@ pub async fn serve(
     }
 
     if fastn_core::utils::is_static_path(req.path()) {
-        return handle_static_route(
+        let res = handle_static_route(
             req.path(),
             config.package.name.as_str(),
             &config.ds,
@@ -220,11 +193,68 @@ pub async fn serve(
         )
         .await
         .map(|r| (r, true));
+
+        return match res {
+            Ok(v) => Ok(v),
+            Err(e) => handle_error(e.into(), &mut req_config, preview_session_id).await,
+        };
     }
 
-    serve_helper(&mut req_config, only_js, path, preview_session_id)
+    let res = serve_helper(&mut req_config, only_js, path, preview_session_id)
         .await
-        .map(|r| (r, req_config.response_is_cacheable))
+        .map(|r| (r, req_config.response_is_cacheable));
+
+    match res {
+        Ok(v) => Ok(v),
+        Err(e) => handle_error(e, &mut req_config, preview_session_id).await,
+    }
+}
+
+/// Handle [fastn_core::Error]. Possibly converting some of them to proper HTTP responses.
+///
+/// Attempts to load 404.ftd/500.ftd if present.
+/// The actual error message is shown if env DEBUG is set.
+#[inline]
+async fn handle_error(
+    err: fastn_core::Error,
+    req_config: &mut fastn_core::RequestConfig,
+    preview_session_id: &Option<String>,
+) -> fastn_core::Result<(fastn_core::http::Response, bool)> {
+    tracing::error!(?err, "handle_error");
+
+    if req_config.config.ds.env("DEBUG").await.is_ok() {
+        tracing::info!("DEBUG mode is on, returning error as response");
+        return Err(err);
+    }
+
+    let (file_to_render, status_code) = match err {
+        fastn_core::Error::NotFound(_)
+        | fastn_core::Error::DSReadError(fastn_ds::ReadError::NotFound(_)) => {
+            ("/404.ftd", fastn_core::http::StatusCode::NOT_FOUND)
+        }
+        _ => (
+            "/500.ftd",
+            fastn_core::http::StatusCode::INTERNAL_SERVER_ERROR,
+        ),
+    };
+
+    match serve_file(
+        req_config,
+        &camino::Utf8PathBuf::from(file_to_render),
+        false,
+        preview_session_id,
+    )
+    .await
+    {
+        Ok(mut res) => {
+            *res.status_mut() = status_code;
+            Ok((res, false)) // response is not cacheable
+        }
+        Err(e) => {
+            tracing::info!(?e, "Failed to load 404.ftd/500.ftd");
+            Err(err) // return the original error
+        }
+    }
 }
 
 #[tracing::instrument(skip_all)]
@@ -235,7 +265,7 @@ pub async fn serve_helper(
     preview_session_id: &Option<String>,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let mut resp = if req_config.request.path() == "/" {
-        serve_file(req_config, &path.join("/"), only_js, preview_session_id).await
+        serve_file(req_config, &path.join("/"), only_js, preview_session_id).await?
     } else {
         // url is present in config or not
         // If not present than proxy pass it
@@ -287,7 +317,7 @@ pub async fn serve_helper(
         }
 
         let file_response =
-            serve_file(req_config, path.as_path(), only_js, preview_session_id).await;
+            serve_file(req_config, path.as_path(), only_js, preview_session_id).await?;
 
         tracing::info!(
             "before executing proxy: file-status: {}, path: {}",
@@ -415,13 +445,14 @@ async fn handle_static_route(
     package_name: &str,
     ds: &fastn_ds::DocumentStore,
     session_id: &Option<String>,
-) -> fastn_core::Result<fastn_core::http::Response> {
+) -> Result<fastn_core::http::Response, fastn_ds::ReadError> {
     return match handle_static_route_(path, package_name, ds, session_id).await {
         Ok(r) => Ok(r),
         Err(fastn_ds::ReadError::NotFound(_)) => {
+            // try a dark variant if this is an image
             handle_not_found_image(path, package_name, ds, session_id).await
         }
-        Err(e) => Err(e.into()),
+        Err(e) => Err(e),
     };
 
     async fn handle_static_route_(
@@ -457,21 +488,15 @@ async fn handle_static_route(
         package_name: &str,
         ds: &fastn_ds::DocumentStore,
         session_id: &Option<String>,
-    ) -> fastn_core::Result<fastn_core::http::Response> {
+    ) -> Result<fastn_core::http::Response, fastn_ds::ReadError> {
         // todo: handle dark images using manifest
         if let Some(new_file_path) = generate_dark_image_path(path) {
-            return handle_static_route_(new_file_path.as_str(), package_name, ds, session_id)
-                .await
-                .or_else(|e| {
-                    if let fastn_ds::ReadError::NotFound(e) = e {
-                        Ok(fastn_core::http::not_found_without_warning(e))
-                    } else {
-                        Err(e.into())
-                    }
-                });
+            return handle_static_route_(&new_file_path, package_name, ds, session_id).await;
         }
 
-        Ok(fastn_core::http::not_found_without_warning("".to_string()))
+        Err(fastn_ds::ReadError::NotFound(format!(
+            "file not found: {path}"
+        )))
     }
 
     fn generate_dark_image_path(path: &str) -> Option<String> {

@@ -617,7 +617,8 @@ skip: true
 
 ## `fastn` Made Easy: /book/
 
-- Introduction: 
+- Introduction: /book/why-fastn/
+document: book/01-introduction/00-why-fastn.ftd
   - Why was `fastn` created?: /book/why-fastn/
     document: book/01-introduction/00-why-fastn.ftd
   - FifthTry Offerings: /book/fifthtry/
@@ -646,7 +647,8 @@ skip: true
       document: author/how-to/vscode.ftd  
   - First Program - Hello World: /book/hello-world/
     document: book/01-introduction/03-hello-world.ftd
-- FifthTry Online Editor (IDE)     
+- FifthTry Online Editor (IDE): /book/create-website/
+document: book/01-introduction/05-create-website.ftd
   - Develop and Preview in FifthTry IDE: /book/create-website/
     document: book/01-introduction/05-create-website.ftd
   - FifthTry Domain Setting and Hosting: /book/fifthtry-hosting/
@@ -815,9 +817,9 @@ skip: true
     document: best-practices/formatting.ftd
   - Import: /book/importing-packages/
     document: best-practices/import.ftd
-  - Auto-import: /auto-import/
+  - Auto-import: /book/auto-import/
     document: /book/best-practices/auto-import.ftd
-  - Device: /device-guidelines/
+  - Device: /book/device-guidelines/
     document: best-practices/device.ftd
   - Conditions: /book/how-to-use-conditions/
     document: best-practices/use-conditions.ftd
@@ -839,6 +841,8 @@ skip: true
     document: best-practices/self-referencing.ftd
   - Property: /book/property-guidelines/
     document: best-practices/property-guidelines.ftd  
+  - Error Handling: /book/error-handling/
+    document: best-practices/error-handling.ftd  
 
 
 ## Frontend: /ftd/data-modelling/
@@ -1003,6 +1007,8 @@ skip: true
     document: best-practices/self-referencing.ftd
   - Property: /property-guidelines/
     document: best-practices/property-guidelines.ftd
+  - Error Handling: /error-handling/
+    document: best-practices/error-handling.ftd  
 
 ## Fullstack: /dynamic-urls/
   document: backend/dynamic-urls.ftd
